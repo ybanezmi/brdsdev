@@ -1,0 +1,116 @@
+/*helper class*/
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+
+.help-center{
+  margin:0 auto;
+}
+
+.help-padding-10 {
+  padding:10px;
+}
+
+.help-textcenter {
+	text-align: center;
+}
+
+.help-textright {
+	text-align: right;
+}
+.help-textleft{
+	text-align: left;
+}
+
+.help-floatright {
+	float: right;
+}
+.help-floatleft{
+	float: left;
+}
+
+.help-dblock {
+	display:block;
+}
+
+a{
+	font-weight: inherit;
+	font-size: inherit;
+	text-decoration: none;
+	-webkit-transition: 250ms linear all;
+	-moz-transition: 250ms linear all;
+	transition: 250ms linear all;
+}
+
+
+.temp-button {
+    clear: both;
+    overflow: hidden;
+}
+
+.temp-button button {
+    float: none !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+.temp-button .submit-button {
+    float: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+    width: 60%;
+}
+
+
+.temp-button div {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.help-150{
+  margin-left:150px;
+}
+
+.dateclass{
+  margin-right:10px;
+}
+
+#ui-datepicker-div{
+    font-size: 14px
+}
+
+.help-10percent { width: 10%!important; }
+.help-20percent { width: 20%!important; }
+.help-30percent { width: 30%!important; }
+.help-40percent { width: 40%!important; }
+.help-50percent { width: 50%!important; }
+.help-60percent { width: 60%!important; }
+.help-70percent { width: 70%!important; }
+.help-80percent { width: 80%!important; }
+.help-90percent { width: 90%!important; }
+.help-100percent { width: 100%!important; }
+
+.help-15percent { width: 15%!important; }
+.help-25percent { width: 25%!important; }
+.help-35percent { width: 35%!important; }
+.help-45percent { width: 45%!important; }
+.help-55percent { width: 55%!important; }
+.help-65percent { width: 65%!important; }
+.help-75percent { width: 75%!important; }
+.help-85percent { width: 85%!important; }
+.help-95percent { width: 95%!important; }
+.help-5percent { width: 5%!important; }
+
+/*specific additional*/
+.help-44percent {
+   width: 44%!important;
+}
+
+
