@@ -8,8 +8,8 @@ use Yii;
  * This is the model class for table "mst_packaging".
  *
  * @property string $id
- * @property string $material_group
- * @property string $status
+ * @property string $pallet_type
+ * @property string $pallet_ind
  * @property string $creator_id
  * @property string $created_date
  * @property string $updater_id
@@ -31,11 +31,10 @@ class MstPackaging extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['material_group', 'creator_id', 'updater_id'], 'required'],
-            [['status'], 'string'],
+            [['pallet_type', 'pallet_ind', 'creator_id', 'updater_id'], 'required'],
             [['creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
-            [['material_group'], 'string', 'max' => 100]
+            [['pallet_type', 'pallet_ind'], 'string', 'max' => 32]
         ];
     }
 
@@ -46,8 +45,8 @@ class MstPackaging extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'material_group' => 'Material Group',
-            'status' => 'Status',
+            'pallet_type' => 'Pallet Type',
+            'pallet_ind' => 'Pallet Ind',
             'creator_id' => 'Creator ID',
             'created_date' => 'Created Date',
             'updater_id' => 'Updater ID',
