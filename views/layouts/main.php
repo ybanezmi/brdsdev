@@ -15,6 +15,8 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
+	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -32,12 +34,13 @@ AppAsset::register($this);
 	<![endif]-->
 </head>
 <body>
-
+<div class="wrap-page">
 <?php $this->beginBody() ?>
     <div class="wrap">
     		<div id="logo">
 				<a href="#" class="logo-img"></a>
 			</div>
+			
 			<section id="greetings">
 				<div class="g-body">
 					<?php if (isset(Yii::$app->user->identity->account_type) && Yii::$app->user->identity->account_type === 'admin') { ?>
@@ -114,7 +117,7 @@ AppAsset::register($this);
     <?php include 'footer.php'; ?>
     
     <?php include 'popupbox.php'; ?>
-	
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>
