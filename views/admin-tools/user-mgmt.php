@@ -31,8 +31,8 @@ $this->title = 'USER MANAGEMENT';
 					            'statusCount'	=> $trx_details_status_count,
 					            'user_list'		=> $user_list,
 						    ]);
-		$user_assignment_active = false;
-		$user_statistics_active = true;
+		$user_assignment_active = true;
+		$user_statistics_active = false;
 		if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')) {
 			$user_assignment_active = false;
 			$user_statistics_active = true;

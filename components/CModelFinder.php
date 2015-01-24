@@ -12,6 +12,7 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use app\models\MstAccount;
+use app\models\MstAllowedIp;
 use app\models\MstCustomer;
 use app\models\MstMaterial;
 use app\models\MstMaterialConversion;
@@ -280,5 +281,21 @@ class CModelFinder extends Component
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	
+	/**
+     * Finds the MstAllowedIp model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return MstAllowedIp the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function findAllowedIpModel($plant_location)
+    {
+        if (($model = MstAllowedIp::findOne($plant_location)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }	
  
 }

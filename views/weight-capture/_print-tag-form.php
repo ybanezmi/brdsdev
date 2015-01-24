@@ -62,7 +62,6 @@ use kartik\widgets\DatePicker;
 											  				    'class'	 	=> 'uborder help-44percent',
 											  				    'onchange' 	=> 'setFieldValueById("material", getFieldValueById("material_code"))',]) ?>
 					<?= Html::input('hidden', 'material_description', '', ['id' => 'material_description']) ?>
-					<?= Html::input('hidden', 'material_barcode', '', ['id' => 'material_barcode']) ?>
 				</td>
 			</tr>
 		</tbody>

@@ -48,8 +48,18 @@ class LoginForm extends Model
             }
 			
 			if ($user) {
-				$plant_location = Yii::$app->modelFinder->findPlantLocationModel($user->assignment);
-				if ($plant_location->allowed_ip !== Yii::$app->request->userIP) {
+				$plantLocation = Yii::$app->modelFinder->findAllowedIpModel($user->assignment);
+				
+				$allowedIP =  explode('.', $plantLocation->ip_address);
+				$userIP = explode('.', Yii::$app->request->userIP);
+				
+				unset($allowedIP[3]);
+				unset($userIP[3]);
+				
+				$allowedIP = implode('.', $allowedIP);
+				$userIP = implode('.', $userIP);
+				
+				if ($allowedIP !== $userIP) {
 					$this->addError($attribute, 'Login not allowed from this ip address.');
 				}
 			}

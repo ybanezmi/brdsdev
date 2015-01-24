@@ -9,7 +9,7 @@ use Yii;
  *
  * @property string $plant_location
  * @property string $storage_location
- * @property string $allowed_ip
+ * @property string $storage_name
  * @property string $status
  * @property string $creator_id
  * @property string $created_date
@@ -32,11 +32,12 @@ class MstPlantLocation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['plant_location', 'storage_location', 'allowed_ip', 'creator_id', 'updater_id'], 'required'],
+            [['plant_location', 'storage_location', 'storage_name', 'creator_id', 'updater_id'], 'required'],
             [['status'], 'string'],
             [['creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
-            [['plant_location', 'storage_location', 'allowed_ip'], 'string', 'max' => 32]
+            [['plant_location', 'storage_location'], 'string', 'max' => 32],
+            [['storage_name'], 'string', 'max' => 128]
         ];
     }
 
@@ -48,7 +49,7 @@ class MstPlantLocation extends \yii\db\ActiveRecord
         return [
             'plant_location' => 'Plant Location',
             'storage_location' => 'Storage Location',
-            'allowed_ip' => 'Allowed Ip',
+            'storage_name' => 'Storage Name',
             'status' => 'Status',
             'creator_id' => 'Creator ID',
             'created_date' => 'Created Date',
