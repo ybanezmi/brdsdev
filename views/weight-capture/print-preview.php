@@ -34,7 +34,8 @@
 	</table>
 	<div style="text-align: center; margin-bottom: 10px;">
 		<?php 
-			echo Yii::$app->DNS1D->getBarcodeSVG("4445645656", "C39", 3, 80);
+			$barcode = Yii::$app->request->post('material_code') . str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT) . 'KG';
+			echo Yii::$app->DNS1D->getBarcodeSVG($barcode, 'C39', 3, 80);
 		?>
 	</div>
 	<div style="float: left; width: 50%;">
