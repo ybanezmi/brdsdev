@@ -91,7 +91,7 @@ body.login {
     margin:0;
 }
 
-#container{
+.wrap-page{
 	width: 220px;
 	position: relative;
 }
@@ -116,7 +116,7 @@ body.login {
 }
 
 #logo a.logo-img {
-    background: url("../images/logoS.png") no-repeat;
+    background: url('../images/logoS.jpg') no-repeat;
     display: block;
     width:55px; 
     height:36px;
@@ -305,6 +305,7 @@ footer {
     clear: both;
     height: 40px;
     margin-left: 0;
+    position: relative;
 }
 footer  div {
     color: #fff;
@@ -506,8 +507,6 @@ input.uborder, textarea.uborder, select.uborder {
 }
 
 .scan-input-key{
-    float: right;
-    margin-right: 14px;
 }
 .two-column-button{
     margin: 0!important;
@@ -534,6 +533,22 @@ input.uborder, textarea.uborder, select.uborder {
     width: 100px!important;
     font-size: 11px!important;
 }
+#dropdownie6{
+    z-index: 9999;
+     width: 110px!important;
+     position: relative;
+}
+
+#greetings .g-body ul#dropdownie6 li a{
+    padding:0 10px;
+    font-size: 11px;
+
+}
+
+#greetings .g-body ul#dropdownie6 li a:hover{
+    color:#333!important;
+}
+
 
 /*width assign to ie6*/
 .help-10percent{
