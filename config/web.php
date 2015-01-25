@@ -9,6 +9,16 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+    	'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,   // do not publish the bundle
+                    'js' => [
+                        $params['APP_NAME'] . '/web/js/vendor/jquery-1.11.1.min.js',
+                    ]
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'a751d72e738f8639bf8f67566f73ed12',
@@ -18,7 +28,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\MstAccount',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
             'loginUrl' => ['site/login'],
         ],
         'errorHandler' => [
@@ -57,16 +67,16 @@ $config = [
                 'pdf' => [
                     'class' => 'robregonm\pdf\PdfResponseFormatter',
                     'mode' => '', // Optional
-                    'format' => 'A4',  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
+                    'format' => array(101.6, 50.8),  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
                     'defaultFontSize' => 0, // Optional
                     'defaultFont' => 'opensans', // Optional
-                    'marginLeft' => 15, // Optional
-                    'marginRight' => 15, // Optional
-                    'marginTop' => 16, // Optional
-                    'marginBottom' => 16, // Optional
-                    'marginHeader' => 9, // Optional
-                    'marginFooter' => 9, // Optional
-                    'orientation' => 'Landscape', // optional. This value will be ignored if format is a string value.
+                    'marginLeft' => 0, // Optional
+                    'marginRight' => 0, // Optional
+                    'marginTop' => 0, // Optional
+                    'marginBottom' => 0, // Optional
+                    'marginHeader' => 0, // Optional
+                    'marginFooter' => 0, // Optional
+                    'orientation' => 'Portrait', // optional. This value will be ignored if format is a string value.
                     'options' => [
                         // mPDF Variables
                         'fontdata' => [

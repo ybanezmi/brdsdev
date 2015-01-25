@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'APP_NAME'					=> 'brds',
     'adminEmail' 				=> 'admin@example.com',
     // Defaults
     'DEFAULT_PASSWORD'			=> 'password',

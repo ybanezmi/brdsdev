@@ -35,7 +35,9 @@ class AppAsset extends AssetBundle
     public $js = [
     	'js/vendor/modernizr.min.js',
     	'js/vendor/bootstrap.min.js',
-    	//'js/vendor/jquery-ui.min.js',
+    	//'js/vendor/jquery-1.11.1.min.js',
+    	'js/vendor/DD_belatedPNG_0.0.8a.js',
+    	'js/vendor/jquery-ui.min.js',
     	'js/plugins.js',
     	'js/app_master.js',
     ];
