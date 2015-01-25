@@ -165,7 +165,8 @@ use yii\bootstrap\Modal;
 				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 							   
 		<?= $form->field($transaction_detail_model, 'kitted_unit',
-				['inputOptions' => ['class' => 'uborder help-20percent'],
+				['inputOptions' => ['class' => 'uborder help-20percent',
+									'value' => 0,],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="kitted-unit">KG</span> </div></div>'				
 				])->textInput(['maxlength' => 10])->label('Kitted Unit') ?>
 							   
@@ -206,9 +207,11 @@ use yii\bootstrap\Modal;
 		</div>
 		<div class="submit-button ie6-submit-button">
 			<?= Html::submitButton('View Entries', ['class' 	=> 'btn btn-primary',
-        										  	 'name'		=> 'view-entries']) ?>
+        										  	 'name'		=> 'view-entries',
+        										  	 'onclick'	=> 'js: window.location = "view-entries?id='.$transaction_model->id.'"']) ?>
 			<?= Html::submitButton('Cancel', ['class' 			=> 'btn btn-primary',
-        								  	  'name'  			=> 'cancel']) ?>
+        								  	  'name'  			=> 'cancel',
+        								  	  'onclick'			=> 'js: window.location = "index"']) ?>
 		</div>
 	</div>
 
@@ -218,14 +221,14 @@ use yii\bootstrap\Modal;
 
 <script>
 var net_weight = document.getElementById("trxtransactiondetails-net_weight");
+var pallet_no = document.getElementById("trxtransactiondetails-pallet_no");
 net_weight.addEventListener("blur", catchWeight, true);
+pallet_no.addEventListener("blur", catchWeight, true);
 
 function catchWeight() {
-    var net_weight_value = document.getElementById("trxtransactiondetails-net_weight").value;
-    var total_weight_value = document.getElementsByClassName('totalweight')[0].value;
-    if ((parseInt(net_weight_value) + parseInt(total_weight_value)) > 1000 ) {
+    if (parseInt(getFieldValueById("trxtransactiondetails-pallet_weight")) > 1000 ) {
         alert('The weight exceeds the maximum allowed.');
-        document.getElementById("trxtransactiondetails-net_weight").value = 0;
+        setFieldValueById("trxtransactiondetails-net_weight", 0);
     }
 }
 

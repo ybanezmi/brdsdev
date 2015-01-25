@@ -8,6 +8,8 @@ use yii\bootstrap\Alert;
 /* @var $model app\models\TrxTransactions */
 
 $this->title = 'Receiving Menu';
+
+echo $scripts;
 ?>
 
 <div id="main-content">

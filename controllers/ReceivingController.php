@@ -371,6 +371,7 @@ class ReceivingController extends Controller
 					break;
 				}
 			}
+
 			// encode and initialize all js variables
 			// used for searching material list by barcode
 			$js_material_barcode = json_encode(ArrayHelper::map($material_model, 'barcode', 'item_code'));
@@ -388,14 +389,14 @@ class ReceivingController extends Controller
 			// retrieve transaction details by pallet_no
 			$js_transaction_details = json_encode($transaction_details);
 			
-			echo "<script type='text/javascript'> 
-					var material_list_barcode = " . $js_material_barcode . "; 
-					var material_list_desc = " . $js_material_desc . ";
-					var material_sled = " . $js_material_sled . ";
-					var material_pallet_ind = " . $js_material_pallet_ind . ";
-					var material_conversion = " . $js_material_conversion . ";
-					var transaction_details = " . $js_transaction_details . ";
-				  </script>";
+			$scripts = "<script type='text/javascript'> 
+							var material_list_barcode = " . $js_material_barcode . "; 
+							var material_list_desc = " . $js_material_desc . ";
+							var material_sled = " . $js_material_sled . ";
+							var material_pallet_ind = " . $js_material_pallet_ind . ";
+							var material_conversion = " . $js_material_conversion . ";
+							var transaction_details = " . $js_transaction_details . ";
+					  	</script>";
 			
 			// get total weight from trx_transaction_details
 			$total_weight = array_sum(ArrayHelper::map($transaction_details_model, 'id', 'total_weight'));
@@ -422,6 +423,7 @@ class ReceivingController extends Controller
 	        }
 			
 			$isPalletAdded = false;
+			
 	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->save()) {
 				
 				// add net weight of transaction_detail to the total weight of transaction
@@ -432,12 +434,11 @@ class ReceivingController extends Controller
 				$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
               
                 // get total weight
-				
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
-					return $this->redirect(['menu', 'id' => $transaction_model->id,
-													'pallet' => $transaction_detail_model->pallet_no,
-													'isPalletAdded' => $isPalletAdded,
+					$this->redirect(['menu', 'id' => $transaction_model->id,
+											 'pallet' => $transaction_detail_model->pallet_no,
+											 'isPalletAdded' => $isPalletAdded,
 		                ]);
 				} else {
 					return $this->render('menu', [
@@ -453,6 +454,7 @@ class ReceivingController extends Controller
 		                'isPalletAdded' 			=> $isPalletAdded,
 		                'isPalletClosed'			=> $isPalletClosed,
 		                'isPalletRejected'			=> $isPalletRejected,
+		                'scripts'					=> $scripts,
 		            ]);
 				}
 	        } else {
@@ -466,9 +468,10 @@ class ReceivingController extends Controller
 	                'total_weight'				=> $total_weight,
 	                'pallet_count'				=> $pallet_count,
 	                'pallet_no'					=> $pallet_no,
-	                'isPalletAdded' 	=> $isPalletAdded,
+	                'isPalletAdded' 			=> $isPalletAdded,
 	                'isPalletClosed'			=> $isPalletClosed,
 					'isPalletRejected'			=> $isPalletRejected,
+					'scripts'					=> $scripts,
 	            ]);
 	        }
     	}
@@ -585,7 +588,7 @@ class ReceivingController extends Controller
 
 	public function actionValidatePallet() {
 		
-		$return['valid'] = false;
+		$return['valid'] = true;
 		echo json_encode($return);
 	}
 	

@@ -42,13 +42,12 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //[['transaction_id', 'customer_code', 'material_code', 'batch', 'pallet_no', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'pallet_type', 'creator_id', 'updater_id'], 'required'],
-            [['transaction_id', 'customer_code', 'material_code', 'pallet_no'], 'required'],
+            [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'total_weight', 'pallet_no', 'kitted_unit', 'pallet_weight'], 'required'],
             [['transaction_id', 'batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
             [['manufacturing_date', 'expiry_date', 'created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
             [['customer_code', 'pallet_no', 'pallet_type'], 'string', 'max' => 10],
-            [['material_code'], 'string', 'max' => 32]
+            [['material_code'], 'string', 'max' => 32],
         ];
     }
 
