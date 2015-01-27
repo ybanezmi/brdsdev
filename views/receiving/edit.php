@@ -9,8 +9,10 @@ $this->title = 'Edit Receiving';
 			<h1 class="page-title">Edit Receiving</h1>
 			<div class="one-column help-bg-gray pdt-one-column" >
 			    <?= $this->render('_edit-form', [
-			        'customer_list'      => $customer_list,
-                    'transaction_list'	 => $transaction_list,
+			    	'customer_model'	=> $customer_model,
+			        'customer_list'     => $customer_list,
+			        'transaction_model' => $transaction_model,
+                    'transaction_list'	=> $transaction_list,
 			    ]) ?>
 			</div>
 		</div>

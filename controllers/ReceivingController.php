@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
 use app\models\MstAccount;
+use app\models\MstCustomer;
 use app\models\TrxTransactions;
 use app\models\TrxTransactionDetails;
 use app\models\TrxTransactionDetailsSearch;
@@ -487,15 +488,19 @@ class ReceivingController extends Controller
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('edit-receiving')) {
 	    	// route to edit receiving page
-	    	 $transaction_model = Yii::$app->modelFinder->findTransactionModel($_POST['transaction_list']);
-	    	 return $this->redirect(['menu', 'id' => $transaction_model->id, 'pallet_no' => $_POST['pallet_no']]);
+			$transaction_details = Yii::$app->request->post('TrxTransactionDetails');
+	    	return $this->redirect(['menu', 'id' => $transaction_details['transaction_id'], 'pallet_no' => $transaction_details['pallet_no']]);
 		} else {
 			// Get customer list
+			$customer_model = new MstCustomer();
     		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-			$transaction_list = [''];
+			$transaction_model = new TrxTransactionDetails();
+			$transaction_list = array();
 			$pallet_no = '';
 			return $this->render('edit', [
+				'customer_model'	=> $customer_model,
 				'customer_list'		=> $customer_list,
+				'transaction_model' => $transaction_model,
 				'transaction_list'	=> $transaction_list,
 				'pallet_no'         => $pallet_no,
 			]);

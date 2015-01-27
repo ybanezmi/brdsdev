@@ -34,10 +34,10 @@ use yii\widgets\ActiveForm;
 			<div class="control-group">
 				<div class="f-inline-size">
 				    <?= Html::label('SELECT TRANSACTION', 'transaction_list', ['class' => 'control-label-f']) ?>
-					<?= Html::dropDownList('transaction_list', null, [], ['id'		=> 'transaction-list',
+					<?= Html::dropDownList('transaction_list', null, [], ['id'		=> 'trxtransactiondetails-transaction_id',
 																		  'class'	=> 'uborder help-50percent',
 																		  'prompt'	=> '-- Select a transaction --',
-																		  'onchange'	=> 'getTransaction(getFieldValueById("transaction-list"))']); ?>
+																		  'onchange'	=> 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))']); ?>
 					<?= Html::button('Summary', ['class' => 'btn btn-primary help-20percent']) ?>
 				</div>
 			</div>

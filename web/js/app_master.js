@@ -316,10 +316,10 @@ function getTransactionPalletWeight() {
 /* function to retrieve transaction list */
 function getTransactionList(code){
 	load('get-transaction-list?id=' + code,function(xhr) {
-		document.getElementById('transaction-list').innerHTML='';
+		document.getElementById('trxtransactiondetails-transaction_id').innerHTML='';
 
 		var jsonData = JSON.parse(xhr.responseText);
-		var x  = document.getElementById('transaction-list');
+		var x  = document.getElementById('trxtransactiondetails-transaction_id');
 		//setFieldValueByName('transaction-list', ['']);
 		
 		// set prompt value
