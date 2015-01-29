@@ -351,15 +351,16 @@ function getTransaction(id) {
 		    	// set corresponding field values
 		    	setFieldValueByName("customer_name", jsonData.customer_name);
 		    	setFieldValueByName("customer_code", jsonData.customer_code);
-		    	setFieldValueByName("created_date", jsonData.created_date); // @TODO: incorrect date format
+		    	setFieldValueByName("created_date", jsonData.created_date_formatted); // @TODO: incorrect date format
 		    	setFieldValueByName("transaction_id", jsonData.id);
 		    	setFieldValueByName("sap_no", jsonData.sap_no);
 		    	setFieldValueByName("plant_location", jsonData.plant_location);
 		    	setFieldValueByName("storage_location", jsonData.storage_location);
-		    	setFieldValueByName("truck_van", jsonData.truck_van); // @TODO: add remarks onclick attribute
+		    	setFieldValueByName("truck_van", jsonData.truck_van);
 		    	setFieldValueByName("pallet_count", jsonData.pallet_count);
 		    	setFieldValueByName("total_weight", jsonData.total_weight);
 		    	
+		    	remarks = jsonData.remarks;
 		    } else {
 		    	// hide transaction details panel
 		    	hideHTMLById("trx-details");
@@ -467,5 +468,27 @@ function calculateNetWeight() {
 		setFieldValueById('net_weight', netWeight);
 	} else {
 		setFieldValueById('net_weight', '0');
+	}
+}
+
+/* function to view transaction summary */
+function viewTransactionSummary(transaction_id) {
+	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
+		window.location = "view-entries?id=" + transaction_id;
+	} else {
+		alert('Please select a transaction.');
+	}
+}
+
+/* function to view pallet details */
+function viewPalletDetails(transaction_id, pallet_no) {
+	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
+		if (null != pallet_no && "" != pallet_no) {
+			window.location = "view-entries?TrxTransactionDetailsSearch[pallet_no]=" + pallet_no + "&id=" + transaction_id;
+		} else {
+			alert('Please enter pallet no.');
+		}
+	} else {
+		alert('Please select a transaction.');
 	}
 }

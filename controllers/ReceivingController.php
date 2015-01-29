@@ -518,10 +518,16 @@ class ReceivingController extends Controller
 	    	$this->redirect(['menu', 'id' => Yii::$app->request->post('transaction_id')]);
 		} else {
 			// Get customer list
+			$customer_model = new MstCustomer();
     		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
+			$transaction_model = new TrxTransactionDetails();
+			$transaction_list = array();
 			
 			return $this->render('view-pallet', [
-				'customer_list'	=> $customer_list,
+				'customer_model' 	=> $customer_model,
+				'customer_list'		=> $customer_list,
+				'transaction_model' => $transaction_model,
+				'transaction_list'	=> $transaction_list,
 			]);
 		}
 	}
@@ -559,6 +565,7 @@ class ReceivingController extends Controller
 										        'plant_location',
 										        'storage_location',
 										        'truck_van',
+										        'remarks',
 										    ],
 										];
 
@@ -582,6 +589,8 @@ class ReceivingController extends Controller
 		
 		$transaction_header['pallet_count'] = $pallet_count;
 		$transaction_header['total_weight'] = $total_weight;
+		
+		$transaction_header['created_date_formatted'] = date('m/d/Y', strtotime($transaction_header['created_date']));
 		
 		echo json_encode($transaction_header);
 	}

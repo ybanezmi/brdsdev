@@ -25,15 +25,17 @@ use yii\widgets\ActiveForm;
 	
 	<?= $form->field($transaction_model, 'transaction_id', 
 						['template' 	=> '<div class="control-group">{label}<div>{input}
-											<button type="submit" class="btn btn-primary help-20percent" 
-											name="btn-transaction-summary" style="margin-bottom:10px;">Summary</button>
+											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
+											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --'])->label('SELECT TRANSACTION'); ?>
 
 	<?= $form->field($transaction_model, 'pallet_no',
 				['template' => '<div class="control-group">{label}<div>{input} 
-								<button type="submit" class="btn btn-primary help-20percent" name="btn-pallet-details" 
-								style="margin-bottom:10px;">Details</button> </div></div>'				
+								<button class="btn btn-primary help-20percent" 
+								onclick="js: viewPalletDetails(getFieldValueById(\'trxtransactiondetails-transaction_id\'), getFieldValueById(\'trxtransactiondetails-pallet_no\')); return false;" 
+								name="btn-pallet-details">
+								Details</button> </div></div>'				
 				])->textInput(['class'	 => 'uborder help-50percent'])->label('SCAN A PALLET NUMBER') ?>
 
     <div class="form-group">

@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
+
+$this->title = 'View Receiving Contents';
 ?>
 <div id="main-content">
 	
@@ -20,27 +22,19 @@ use yii\widgets\ActiveForm;
 		    	]
 		    ]); ?>
 		    
-		    <div class="control-group">
-		    	<div class="f-inline-size">
-				    <?= Html::label('SELECT CUSTOMER', 'customer_list', ['class' => 'control-label-f']) ?>
-					<?= Html::dropDownList('customer_list', null, $customer_list, ['id'        	=> 'customer-name',
-																				   'class'		=> 'uborder help-70percent',
-																		 		   'prompt'		=> '-- Select a customer --',
-																		 		   'onchange'	=> 'getTransactionList(getFieldValueById("customer-name"));
-																		 		   					hideHTMLById("trx-details");']); ?>
-				</div>
-			</div>
-			
-			<div class="control-group">
-				<div class="f-inline-size">
-				    <?= Html::label('SELECT TRANSACTION', 'transaction_list', ['class' => 'control-label-f']) ?>
-					<?= Html::dropDownList('transaction_list', null, [], ['id'		=> 'trxtransactiondetails-transaction_id',
-																		  'class'	=> 'uborder help-50percent',
-																		  'prompt'	=> '-- Select a transaction --',
-																		  'onchange'	=> 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))']); ?>
-					<?= Html::button('Summary', ['class' => 'btn btn-primary help-20percent']) ?>
-				</div>
-			</div>
+		    <?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-70percent',
+																 			 'prompt'	=> '-- Select a customer --',
+																 			 'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"));
+																 			 				hideHTMLById("trx-details");'])->label('SELECT CUSTOMER'); ?>
+		    
+		    <?= $form->field($transaction_model, 'transaction_id', 
+						['template' 	=> '<div class="control-group">{label}<div>{input}
+											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
+											name="btn-transaction-summary">Summary</button>
+											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
+																							  'prompt'	=> '-- Select a transaction --',
+																							  'onchange' => 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))'])->label('SELECT TRANSACTION'); ?>
+		    
 			
 			<div class="control-group">
 				<label class="control-label-f">TRANSACTION DETAILS</label>
@@ -61,7 +55,7 @@ use yii\widgets\ActiveForm;
 		            	<div class="control-group">
 		            		<?= Html::label('DATE', 'created_date', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
-		            			<?= Html::textInput('created_date', null, ['class' 	  => 'uborder disabled help-20percent',
+		            			<?= Html::textInput('created_date', null, ['class' 	  => 'uborder disabled help-40percent',
 		            									   		   		   'disabled' => 'disabled']); ?>
 		            		</div>
 		            	</div>
@@ -99,15 +93,17 @@ use yii\widgets\ActiveForm;
 		            			<?= Html::textInput('truck_van', null, ['class' 	=> 'uborder disabled help-20percent',
 		            									   		   		'disabled' => 'disabled']); ?>
 		            		</div>
-		            		<?= Html::button('Remarks', ['class' => 'btn btn-primary help-20percent']) ?>
+		            		<?= Html::button('Remarks', ['class' => 'btn btn-primary help-20percent',
+		            									 'onclick' => 'alert(remarks);']) ?>
 		            	</div>
 		            	<div class="control-group">
 		            		<?= Html::label('# Pallet(s)', 'pallet_count', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
 		            			<?= Html::textInput('pallet_count', null, ['class' 	=> 'uborder disabled help-20percent',
 		            									   		   			 'disabled' => 'disabled']); ?> PP
-								<?= Html::submitButton('View', ['class' => 'btn btn-primary help-20percent',
-															    'name'  => 'view-entries']) ?>
+								<?= Html::button('View', ['class' => 'btn btn-primary help-20percent',
+													      'name'  => 'view-entries',
+													      'onclick' => 'js: viewTransactionSummary(getFieldValueById("trxtransactiondetails-transaction_id")); return false;',]) ?>
 		            		</div>
 		            	</div>
 		            	<div class="control-group" style="margin-bottom: 10px;">
@@ -138,6 +134,7 @@ use yii\widgets\ActiveForm;
 
 <script type="text/javascript">
 	window.onload=function() {
+		var remarks;
 		getTransaction();
 	}
 </script>
