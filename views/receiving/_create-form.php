@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
     	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	]
     ]); ?>
     
@@ -26,11 +26,8 @@ use yii\widgets\ActiveForm;
 											  'disabled' => 'disabled',
 						 					  'class'	 => 'uborder disabled help-30percent']) ?>
 						 
-	<?= $form->field($model, 'truck_van', 
-				['inputOptions' => ['class' => 'uborder help-20percent'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>'				
-				])
-				->textInput(['maxlength' => 10])->label('T.PLATE #') ?>
+	<?= $form->field($model, 'truck_van')->textInput(['maxlength' => 10,
+													  'class' => 'uborder help-20percent'])->label('T.PLATE #') ?>
 
 	<?= $form->field($model, 'plant_location')->textInput(['value'	  => Yii::$app->user->identity->assignment,
 														   'readonly' => 'readonly',

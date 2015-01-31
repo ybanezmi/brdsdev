@@ -17,7 +17,7 @@ use yii\bootstrap\Modal;
     	$form = ActiveForm::begin([
 	    	'options' => ['class' => 'form-horizontal'],
 	    	'fieldConfig' => [
-	    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+	    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
 	    	]
    		]); ?>
 
@@ -52,7 +52,8 @@ use yii\bootstrap\Modal;
 									'disabled' 	=> 'disabled'],
                  
 				 'template' 	=> '<div class="control-group">{label}<div class="f-inline-size">{input}
-				 					<button class="btn btn-primary help-20percent" type="button" onclick="alert(\''.$transaction_model->remarks.'\')">Remarks</button></div></div>'	
+				 					<button class="btn btn-primary help-20percent" type="button" onclick="alert(\''.$transaction_model->remarks.'\')">Remarks</button>
+				 					</div><div class=\"col-lg-8\">{error}</div></div>'	
 				 /*'template' 	=> '<div class="control-group">{label}<div class="f-inline-size">{input}
 				 					<button class="btn btn-primary help-20percent" type="button" data-toggle="modal" data-target="#remarks">Remarks</button></div></div>'	*/			
 				])
@@ -76,12 +77,13 @@ use yii\bootstrap\Modal;
 									'disabled' 	=> 'disabled',
 									'value'		=> $pallet_count],
 				 'template' 	=> '<div class="control-group">{label}<div class="f-inline-size">{input} PP
-				 					<button type="submit" class="btn btn-primary help-20percent" name="view-entries">View</button></div></div>'
+				 					<button type="submit" class="btn btn-primary help-20percent" name="view-entries">View</button>
+				 					</div><div class=\"col-lg-8\">{error}</div></div>'
 				])->textInput(['maxlength' => 10])->label('# Pallet(s)') ?>
 
 		<?= $form->field($transaction_model, 'weight',
 				['inputOptions' => ['class' => 'disabled uborder help-20percent'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size" >{input} KG</div></div>'				
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size" >{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10,
 							   'disabled'  => 'disabled',
 							   'value'	   => $total_weight])->label('Total WT') ?>
@@ -111,7 +113,8 @@ use yii\bootstrap\Modal;
 		<?= $form->field($transaction_detail_model, 'batch',
 						['inputOptions' => ['class' => 'uborder help-20percent'],
 						 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} 
-						 				<button class="btn btn-primary help-15percent" onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());" type="button">INT</button></div></div>'				
+						 				<button class="btn btn-primary help-15percent" onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());" type="button">INT</button>
+						 				</div><div class=\"col-lg-8\">{error}</div></div>'				
 						])->input('number', ['maxlength' => 10])->label('Batch / Lot') ?>
 
 		<?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),['clientOptions' 	 => ['dateFormat' 	=> 'm/dd/yy',
@@ -141,13 +144,13 @@ use yii\bootstrap\Modal;
 				['inputOptions' => ['class' => 'uborder help-20percent',
 									'onchange' => 'setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
 												   setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()))'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="net-weight-unit">KG</span> </div></div> '				
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="net-weight-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div> '				
 				])->input('number', ['maxlength' => 10])->label('Net WT / Quantity') ?>
 							   
 		<?= $form->field($transaction_detail_model, 'total_weight',
 				['inputOptions' => ['class' => 'uborder disabled help-20percent totalweight',
 									'readonly' => 'readonly'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG</div></div>'				
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10])->label('Total WT') ?>
 							   
 		<?= $form->field($transaction_detail_model, 'pallet_no',
@@ -161,20 +164,20 @@ use yii\bootstrap\Modal;
 												   '],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} 
 				 					<input type="text" id="material-pallet_type" class="uborder disabled help-20percent" value="" disabled="disabled">
-				 				</div></div> '
+				 				</div><div class=\"col-lg-8\">{error}</div></div> '
 				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 							   
 		<?= $form->field($transaction_detail_model, 'kitted_unit',
 				['inputOptions' => ['class' => 'uborder help-20percent',
 									'value' => 0,],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="kitted-unit">KG</span> </div></div>'				
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="kitted-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10])->label('Kitted Unit') ?>
 							   
 		<?= $form->field($transaction_detail_model, 'pallet_weight',
 				['inputOptions' => ['class' => 'uborder disabled help-20percent',
 									'readonly' => 'readonly',
 									'value' => 0],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div></div>'				
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10])->label('Pallet WT') ?>
 
 	</div>
