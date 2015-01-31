@@ -14,7 +14,7 @@ html {
 
 body {
 	background:#fff;
-	/* overflow-x:hidden; // for horizontal scrollbar */ 
+	overflow-x:hidden;
 	font-family: inherit;
 	color:#000;
 	font-size: 100%;
@@ -93,7 +93,7 @@ a:hover, a:active, a:focus {
 }
 
 .form-box input[type="text"]{
-	/* margin-bottom: 10px; */
+	margin-bottom: 10px;
 
 }
 
@@ -178,9 +178,9 @@ a:hover, a:active, a:focus {
 
 
 /*administrator style*/
-#container {
+.wrap-page {
 	width: 100%;
-	height: auto;
+	height: 100%;
 }
 
 #logo {
@@ -282,9 +282,9 @@ header nav ul li a:hover, header nav ul li a:active, header nav ul li a:focus {
 }
 
 #main-content{
-	min-height: 300px;
 	width: 100%;
-	margin-bottom: 20px
+	padding-bottom: 10px;
+	min-height:500px;
 
 }
 
@@ -297,19 +297,21 @@ header nav ul li a:hover, header nav ul li a:active, header nav ul li a:focus {
 .content-logo{
 	width: 350px;
 	height: auto;
-	margin:100px auto 0;
+	margin:50px auto 100px;
 }
 .content-logo img{
 	width: 350px;
 	height: 123px;
 }
 
-footer{
-	background: #3E4095;
-	clear: both;
-	height: auto;
-	margin-left: 145px;
-	height: 40px;
+
+footer {
+    background: none repeat scroll 0 0 #3e4095;
+    bottom: 0;
+    clear: both;
+    height: 40px;
+    position: relative;
+    width: 100%;
 }
 
 footer > div{
@@ -377,8 +379,9 @@ footer > div{
 .control-group label{
 	font-weight: bold;
 	color:#444;
-	/* width: 20%!important; */
+	width: 20%!important;
 }
+
 
 input.uborder, textarea.uborder, select.uborder {
 	border: 1px solid #3E4095!important;
@@ -440,7 +443,6 @@ form h2.legend{
 
 .page-title-bt {
   margin-bottom: 15px;
-  color:#3E4095;
 }
 
 
@@ -451,23 +453,16 @@ form h2.legend{
 }
 
 
-.one-column .f-full-size .control-group {
-	padding: 5px 20px 0px 20px;
-	margin-bottom: 0px;
-}
-
-.one-column .form-horizontal .control-label {
+.one-column form .control-label {
     display: inline;
     float: none;
     padding-top: 5px;
     text-align: left;
-    width: 45%;
+    width: 120px!important;
     display: inline-block;
     text-transform: uppercase;
 }
-
-
-.one-column .form-horizontal .control-label-f {
+.one-column form .control-label-f {
     display: block;
     float: none;
     padding-top: 5px;
@@ -476,16 +471,9 @@ form h2.legend{
     width: 100% !important;
 }
 
-
-.one-column .form-horizontal .text-view {
-    padding: 4px;
-    width: 206px;
-}
-
-
-.one-column .f-full-size {
+.one-column .f-full-size{
     float: none;
-    width: 100%;
+    width: 90%;
 }
 
 
@@ -500,14 +488,13 @@ form h2.legend{
     width: 100%;
 }
 
-
 .two-column{
   width: 100%;
   clear: both;
   overflow: hidden;
 }
 
-.two-column .form-horizontal .control-label {
+.two-column form .control-label {
     float: left;
     padding-top: 5px;
     text-align: right;
@@ -515,7 +502,7 @@ form h2.legend{
 }
 
 
-.two-column .form-horizontal .text-view {
+.two-column form .text-view {
     background: none repeat scroll 0 0 #ccc;
     padding: 4px;
 }
@@ -533,18 +520,18 @@ form h2.legend{
     padding:5px 20px 20px 20px;
 }
 
-.two-column .form-horizontal .control-label {
+.two-column form .control-label {
     display: inline;
     float: none;
     padding-top: 5px;
     text-align: left;
-    /* width: 120px!important; */
+    width: 120px!important;
     display: inline-block;
     text-transform: uppercase;
 }
 
 
-.two-column .form-horizontal .control-label-f {
+.two-column form .control-label-f {
     display: block;
     float: none;
     padding-top: 5px;
@@ -586,6 +573,10 @@ form h2.legend{
 	cursor: pointer;
 }
 
+#net-wt-toogle, #kit-ui-toogle{
+	display: none;
+}
+
 /* MEDIA QUERIES START */
 @media only screen 
 and (min-width : 880px)
@@ -598,10 +589,10 @@ and (max-width : 1120px) {
 		font-size: 20px;
 		padding: 0px;
 	}
-	.two-column .form-horizontal label {
+	.two-column form label {
 		font-size: 0.8em;
 	}
-	.two-column .form-horizontal input, .two-column .form-horizontal textarea, .two-column .form-horizontal select {
+	.two-column form input, .two-column form textarea, .two-column form select {
 		font-size: 0.8em;
 	}
 	.two-column .col-2, .two-column .col-1 {
@@ -897,7 +888,7 @@ and (max-width : 550px) {
 	}
 	.content-logo {
 	    height: auto;
-	    margin: 100px auto 0;
+	    margin: 50px auto 100px;
 	    width: 250px;
 	}
 	.content-logo img {
@@ -954,10 +945,10 @@ and (max-width : 550px) {
 		font-size: 13px!important;
 	}
 
-	.two-column .form-horizontal label {
+	.two-column form label {
 		font-size: 0.9em;
 	}
-	.two-column .form-horizontal input, .two-column .form-horizontal textarea, .two-column .form-horizontal select {
+	.two-column form input, .two-column form textarea, .two-column form select {
 		font-size: 0.9em;
 	}
 	
@@ -1111,7 +1102,7 @@ and (max-width : 380px) {
 	}
 	.content-logo {
 	    height: auto;
-	    margin: 100px auto 0;
+	    margin: 50px auto 100px;
 	    width: 250px;
 	}
 	.content-logo img {
@@ -1171,10 +1162,10 @@ and (max-width : 380px) {
 		font-size: 13px!important;
 	}
 
-	.two-column .form-horizontal label {
+	.two-column form label {
 		font-size: 0.9em;
 	}
-	.two-column .form-horizontal input, .two-column .form-horizontal textarea, .two-column .form-horizontal select {
+	.two-column form input, .two-column form textarea, .two-column form select {
 		font-size: 0.9em;
 	}
 	
@@ -1200,7 +1191,7 @@ and (max-width : 380px) {
 		width: 45%;
 		font-size: 13px!important;
 	}
-	.two-column .form-horizontal .control-label {
+	.two-column form .control-label {
 		width: 100px!important;
 	}
 	.two-column .help-44percent {
@@ -1335,7 +1326,7 @@ and (max-width : 320px) {
 	}
 	.content-logo {
 	    height: auto;
-	    margin: 100px auto 0;
+	    margin: 50px auto 100px;
 	    width: 250px;
 	}
 	.content-logo img {
@@ -1395,11 +1386,11 @@ and (max-width : 320px) {
 		font-size: 13px!important;
 	}
 
-	.two-column .form-horizontal label, .one-column .form-horizontal label {
+	.two-column form label, .one-column form label {
 		font-size: 0.9em;
 	}
-	.two-column .form-horizontal input, .two-column .form-horizontal textarea, .two-column .form-horizontal select,
-	.one-column .form-horizontal input, .one-column .form-horizontal textarea, .one-column .form-horizontal select {
+	.two-column form input, .two-column form textarea, .two-column form select,
+	.one-column form input, .one-column form textarea, .one-column form select {
 		font-size: 0.9em;
 	}
 	
@@ -1425,7 +1416,7 @@ and (max-width : 320px) {
 		width: 45%;
 		font-size: 13px!important;
 	}
-	.two-column .form-horizontal .control-label, .one-column .form-horizontal .control-label {
+	.two-column form .control-label, .one-column form .control-label {
 		width: 100px!important;
 	}
 
@@ -1446,20 +1437,4 @@ and (max-width : 320px) {
 	    padding-left: 0;
 	    text-align: center;
 	}
-}
-
-.tare-weights {
-	border: 1px solid #aaaaaa;
-    border-radius: 10px;
-    width: 78%;
-    float: left;
-    margin-right: 10px;
-}
-
-
-.barcode {
-	border: 1px solid #000;
-	background: none repeat scroll 0 0 #3e4095;
-	width: 100%;
-	float: right;
 }

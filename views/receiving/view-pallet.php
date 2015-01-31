@@ -18,14 +18,14 @@ $this->title = 'View Receiving Contents';
 		    	$form = ActiveForm::begin([
 		    	'options' => ['class' => 'form-horizontal'],
 		    	'fieldConfig' => [
-		    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+		    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
 		    	]
 		    ]); ?>
 		    
 		    <?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-70percent',
 																 			 'prompt'	=> '-- Select a customer --',
 																 			 'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"));
-																 			 				hideHTMLById("trx-details");'])->label('SELECT CUSTOMER'); ?>
+																 			 				hideHTMLById("trx-details");'])->label('SELECT CUSTOMER', ['class' => 'control-label-f']); ?>
 		    
 		    <?= $form->field($transaction_model, 'transaction_id', 
 						['template' 	=> '<div class="control-group">{label}<div>{input}
@@ -33,12 +33,12 @@ $this->title = 'View Receiving Contents';
 											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --',
-																							  'onchange' => 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))'])->label('SELECT TRANSACTION'); ?>
+																							  'onchange' => 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
 		    
 			
 			<div class="control-group">
 				<label class="control-label-f">TRANSACTION DETAILS</label>
-	            <div class="f-full-size help-75percent" style="background:#ccc; height: 365px;">
+	            <div class="f-full-size help-75percent" style="background:#ccc; min-height: 365px; padding:20px;">
 	            	<div id="trx-details" style="display: none;">
 	            		<div class="control-group">
 		            		<div class="f-inline-size">

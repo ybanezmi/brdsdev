@@ -15,20 +15,20 @@ use yii\widgets\ActiveForm;
     	$form = ActiveForm::begin([
     	'options' => ['class' => 'form-horizontal'],
     	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
     	],
     ]); ?>
     
 	<?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-70percent',
 																 			 'prompt'	=> '-- Select a customer --',
-																 			 'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"))'])->label('SELECT CUSTOMER'); ?>
+																 			 'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"))'])->label('SELECT CUSTOMER', ['class' => 'control-label-f']); ?>
 	
 	<?= $form->field($transaction_model, 'transaction_id', 
 						['template' 	=> '<div class="control-group">{label}<div>{input}
 											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
 											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
-																							  'prompt'	=> '-- Select a transaction --'])->label('SELECT TRANSACTION'); ?>
+																							  'prompt'	=> '-- Select a transaction --'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
 
 	<?= $form->field($transaction_model, 'pallet_no',
 				['template' => '<div class="control-group">{label}<div>{input} 
@@ -36,18 +36,16 @@ use yii\widgets\ActiveForm;
 								onclick="js: viewPalletDetails(getFieldValueById(\'trxtransactiondetails-transaction_id\'), getFieldValueById(\'trxtransactiondetails-pallet_no\')); return false;" 
 								name="btn-pallet-details">
 								Details</button> </div></div>'				
-				])->textInput(['class'	 => 'uborder help-50percent'])->label('SCAN A PALLET NUMBER') ?>
-
-    <div class="form-group">
-    	<div class="one-column-button">
-			<div class="submit-button ie6-submit-button">
-        		<?= Html::submitButton('Edit Receiving', ['class' => 'btn btn-primary',
+				])->textInput(['class'	 => 'uborder help-50percent'])->label('SCAN A PALLET NUMBER', ['class' => 'control-label-f']) ?>
+	
+			<div class="one-column-button pdt-one-column-button">
+				<div class="submit-button ie6-submit-button">
+					<?= Html::submitButton('Edit Receiving', ['class' => 'btn btn-primary',
         												  'name'  => 'edit-receiving']) ?>
         		<?= Html::submitButton('Cancel', ['class' => 'btn btn-primary cancel-button',
         										  'name'  => 'cancel']) ?>
-        	</div>
-        </div>
-    </div>
+				</div>
+				</div>
 
     <?php ActiveForm::end(); ?>
 
