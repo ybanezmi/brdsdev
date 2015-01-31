@@ -60,6 +60,7 @@ echo $scripts;
 	                'material_list'				=> $material_list,
                     'material_conversion_model' => $material_conversion_model,
 	                'transaction_detail_model'	=> $transaction_detail_model,
+	                'transaction_details'		=> $transaction_details,
 	                'handling_unit_model' 		=> $handling_unit_model,
 	                'total_weight'				=> $total_weight,
 	                'pallet_count'				=> $pallet_count,

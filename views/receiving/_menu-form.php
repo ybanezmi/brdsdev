@@ -204,9 +204,11 @@ use yii\bootstrap\Modal;
 		<div class="submit-button ie6-submit-button">
 			<?= Html::submitButton('Add to Pallet', ['class' 	=> 'btn btn-primary',
         										  	 'name'		=> 'add-pallet']) ?>
-			<?= Html::button('Close Pallet', ['class' 	=> 'btn btn-primary',
-											  'onclick' => 'hideHTMLById("trx-details-panel");
-											  				showHTMLById("close-pallet-panel");']) ?>
+			<?php if (null != $transaction_details && count($transaction_details) > 0) { ?>
+				<?= Html::button('Close Pallet', ['class' 	=> 'btn btn-primary',
+												  'onclick' => 'hideHTMLById("trx-details-panel");
+												  				showHTMLById("close-pallet-panel");']) ?>
+			<?php } ?>
 		</div>
 		<div class="submit-button ie6-submit-button">
 			<?= Html::submitButton('View Entries', ['class' 	=> 'btn btn-primary',
