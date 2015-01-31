@@ -40,7 +40,7 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
     <div class="wrap">
     			<div id="logo">
-		<a href="" class="logo-img"></a>
+		<a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>" class="logo-img"></a>
 	</div>
 			
 			<header>
