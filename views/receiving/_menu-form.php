@@ -101,10 +101,10 @@ use yii\bootstrap\Modal;
 																							 						setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
 																							 						checkMaterialSled();'])->label('Customer Product'); ?>
 
-		<?= Html::textInput('material_code', '', ['id'		 => 'material_code',
-												  'readonly' => 'readonly',
-												  'class'	 => 'uborder disabled help-44percent',
-												  'onchange' => 'setFieldValueById("trxtransactiondetails-material_code", getFieldValueById("material_code"))']) ?>
+		<?= Html::textInput('material_code', Yii::$app->request->post('material_code'), ['id'		 => 'material_code',
+																					  	 'readonly'  => 'readonly',
+																					  	 'class'	 => 'uborder disabled help-44percent',
+																					  	 'onchange'  => 'setFieldValueById("trxtransactiondetails-material_code", getFieldValueById("material_code"))']) ?>
 
 		<?= Html::textInput('material_barcode', '', ['id'		 => 'material_barcode',
 						 					  	  	 'class'	 => 'uborder help-44percent',
@@ -135,7 +135,7 @@ use yii\bootstrap\Modal;
 																								   						 'dateFormat' 		=> 'm/dd/yy']])->label('Expiry Date') ?>
 																								   						 
 		<?= $form->field($transaction_detail_model, 'pallet_type')->textInput([
-																		'value'	   => '',
+																		'value'	   => Yii::$app->request->post('TrxTransactionDetails[pallet_type]'),
 																		'readonly' => 'readonly',
 												  						'class'	   => 'uborder disabled help-20percent',
 												  						'onchange' => 'validateTransactionPalletType();'])->label('Pallet Type') //@TODO: fix onchange executes multiple times ?>
@@ -152,7 +152,13 @@ use yii\bootstrap\Modal;
 									'readonly' => 'readonly'],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10])->label('Total WT') ?>
-							   
+		<?php 
+			// retrieve post pallet_no
+			// @TODO: fix pallet_no default value during post error
+			if (null != Yii::$app->request->post('TrxTransactionDetails[pallet_no]')) {
+				$pallet_no = Yii::$app->request->post('TrxTransactionDetails[pallet_no]');
+			}
+		?>
 		<?= $form->field($transaction_detail_model, 'pallet_no',
 				['inputOptions' => ['class' => 'uborder help-20percent',
 									'value' => $pallet_no,
@@ -163,7 +169,8 @@ use yii\bootstrap\Modal;
 												   validateTransactionPalletType();
 												   '],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} 
-				 					<input type="text" id="material-pallet_type" class="uborder disabled help-20percent" value="" disabled="disabled">
+				 					<input type="text" id="material-pallet_type" class="uborder disabled help-20percent" value="'. 
+				 					Yii::$app->request->post('TrxTransactionDetails[pallet_type]') . '" disabled="disabled">
 				 				</div><div class=\"col-lg-8\">{error}</div></div> '
 				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 							   

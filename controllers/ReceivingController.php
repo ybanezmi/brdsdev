@@ -261,7 +261,6 @@ class ReceivingController extends Controller
 	public function actionMenu($id)
     {
     	$this->initUser();
-		
     	if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('close-pallet')) {
@@ -445,7 +444,7 @@ class ReceivingController extends Controller
 			
 			$isPalletAdded = false;
 			
-	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->save()) {
+	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->validate() && $transaction_detail_model->save()) {
 				
 				// add net weight of transaction_detail to the total weight of transaction
 				$transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;

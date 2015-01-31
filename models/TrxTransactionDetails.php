@@ -44,10 +44,11 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
         return [
             [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'total_weight', 'pallet_no', 'kitted_unit', 'pallet_weight'], 'required'],
             [['transaction_id', 'batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
-            [['manufacturing_date', 'expiry_date', 'created_date', 'updated_date'], 'safe'],
+            [['created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
             [['customer_code', 'pallet_no', 'pallet_type'], 'string', 'max' => 10],
             [['material_code'], 'string', 'max' => 32],
+            [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates 
         ];
     }
 
@@ -77,4 +78,16 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             'updated_date' => 'Updated Date',
         ];
     }
+	
+	/**
+	 * manufacturing and expiry date validation
+	 */
+	public function checkManufacturingExpiryDate($attribute, $params)
+	{
+		if ($this->manufacturing_date >= $this->expiry_date) {
+			$this->addError('manufacturing_date', 'Manufacturing date should be less than the expiry date.');
+			$this->addError('expiry_date', 'Expiry date should be greater than the manufacturing date.');
+		}
+	}
+
 }
