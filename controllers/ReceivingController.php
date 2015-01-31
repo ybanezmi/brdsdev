@@ -72,37 +72,55 @@ class ReceivingController extends Controller
 		// active pallets
 		$params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
 		
+		// pallet status
+		$palletStatus = array();
+		
 		// open pallets
-		$isPalletOpened = false;
+		$palletStatus['open_success'] = false;
+		$palletStatus['open_error'] = false;
 		if(null !== Yii::$app->request->post('open-pallet')) {
-			TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_PROCESS'],
+			if (null !== Yii::$app->request->post('open_pallet_no') && "" !== Yii::$app->request->post('open_pallet_no')) {
+				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_PROCESS'],
 												  'updater_id'		=> Yii::$app->user->id,
 												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
 												 ['pallet_no' 		=> Yii::$app->request->post('open_pallet_no'),
 												  'status' 			=> $params]);
-			$isPalletOpened = true;
+				$palletStatus['open_success'] = true;
+			} else {
+				$palletStatus['open_error'] = true;
+			}
 		}	
 		
 		// close pallets
-		$isPalletClosed = false;
+		$palletStatus['close_success'] = false;
+		$palletStatus['close_error'] = false;
 		if(null !== Yii::$app->request->post('close-pallet')) {
-			TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_CLOSED'],
+			if (null !== Yii::$app->request->post('close_pallet_no') && "" !== Yii::$app->request->post('close_pallet_no')) {
+				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_CLOSED'],
 												  'updater_id'		=> Yii::$app->user->id,
 												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
 												 ['pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
 												  'status' 			=> $params]);
-			$isPalletClosed = true;
+				$palletStatus['close_success'] = true;
+			} else {
+				$palletStatus['close_error'] = true;
+			}
 		}
 
 		// reject pallets
-		$isPalletRejected = false;
+		$palletStatus['reject_success'] = false;
+		$palletStatus['reject_error'] = false;
 		if(null !== Yii::$app->request->post('reject-pallet')) {
-			TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_REJECTED'],
+			if (null !== Yii::$app->request->post('reject_pallet_no') && "" !== Yii::$app->request->post('reject_pallet_no')) {
+				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_REJECTED'],
 												  'updater_id'		=> Yii::$app->user->id,
 												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
 												 ['pallet_no' 		=> Yii::$app->request->post('reject_pallet_no'),
 												  'status' 			=> $params]);
-			$isPalletRejected = true;
+				$palletStatus['reject_success'] = true;
+			} else {
+				$palletStatus['reject_error'] = true;
+			}
 		}
 
 /*		
@@ -110,12 +128,14 @@ class ReceivingController extends Controller
             'query' => Yii::$app->modelFinder->getTransactionList(),
         ]);
 */
+
+		$transactionDetails = new TrxTransactionDetails(); 
+		
         return $this->render('index', [
             //'dataProvider' => $dataProvider,
             'isAccessReceiving' => $isAccessReceiving,
-            'isPalletOpened' => $isPalletOpened,
-            'isPalletClosed' => $isPalletClosed,
-            'isPalletRejected' => $isPalletRejected,
+            'palletStatus' => $palletStatus,
+            'transactionDetails' => $transactionDetails,
         ]);
     }
 
@@ -241,7 +261,6 @@ class ReceivingController extends Controller
 	public function actionMenu($id)
     {
     	$this->initUser();
-		
     	if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('close-pallet')) {
@@ -425,7 +444,7 @@ class ReceivingController extends Controller
 			
 			$isPalletAdded = false;
 			
-	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->save()) {
+	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->validate() && $transaction_detail_model->save()) {
 				
 				// add net weight of transaction_detail to the total weight of transaction
 				$transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;
@@ -448,6 +467,7 @@ class ReceivingController extends Controller
                         'material_conversion_model' => $material_conversion_model,
 		                'material_list'				=> $material_list,
 		                'transaction_detail_model'	=> $transaction_detail_model,
+		                'transaction_details'		=> $transaction_details,
 		                'handling_unit_model' 		=> $handling_unit_model,
 		                'total_weight'				=> $total_weight,
 		                'pallet_count'				=> $pallet_count,
@@ -465,6 +485,7 @@ class ReceivingController extends Controller
                     'material_conversion_model' => $material_conversion_model,
 	                'material_list'				=> $material_list,
 	                'transaction_detail_model'	=> $transaction_detail_model,
+	                'transaction_details'		=> $transaction_details,
 	                'handling_unit_model' 		=> $handling_unit_model,
 	                'total_weight'				=> $total_weight,
 	                'pallet_count'				=> $pallet_count,

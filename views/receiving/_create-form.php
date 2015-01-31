@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
     	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
+    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	]
     ]); ?>
     
@@ -30,13 +30,10 @@ use yii\widgets\ActiveForm;
 	</div>
 	</div>
 						 
-	<?= $form->field($model, 'truck_van', 
-				['inputOptions' => ['class' => 'uborder help-20percent'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>'				
-				])
-				->textInput(['maxlength' => 10])->label('T.PLATE #') ?>
+	<?= $form->field($model, 'truck_van', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['maxlength' => 10,
+													  'class' => 'uborder help-20percent'])->label('T.PLATE #') ?>
 
-	<?= $form->field($model, 'plant_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>'])->textInput(['value'	  => Yii::$app->user->identity->assignment,
+	<?= $form->field($model, 'plant_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['value'	  => Yii::$app->user->identity->assignment,
 														   'readonly' => 'readonly',
 														   'class'	  => 'uborder disabled help-40percent'])->label('P. Loc') ?>
 
@@ -45,7 +42,7 @@ use yii\widgets\ActiveForm;
 																		   'prompt'	=> '-- Select a location --'])->label('P. Loc'); ?>
 	 */ ?>
   
-  	<?= $form->field($model, 'storage_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>'])->dropDownList($storage_list, ['class'	=> 'uborder help-40percent',
+  	<?= $form->field($model, 'storage_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($storage_list, ['class'	=> 'uborder help-40percent',
 																			   'prompt'	=> '-- Select a storage --'])->label('S. Loc'); ?>
     <?php /*
 	<?= $form->field($model, 'plant_location',

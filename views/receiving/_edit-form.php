@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
     	$form = ActiveForm::begin([
     	'options' => ['class' => 'form-horizontal'],
     	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
+    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	],
     ]); ?>
     
@@ -27,15 +27,16 @@ use yii\widgets\ActiveForm;
 						['template' 	=> '<div class="control-group">{label}<div>{input}
 											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
 											name="btn-transaction-summary">Summary</button>
-											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
+											</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
+
 
 	<?= $form->field($transaction_model, 'pallet_no',
 				['template' => '<div class="control-group">{label}<div>{input} 
 								<button class="btn btn-primary help-20percent" 
 								onclick="js: viewPalletDetails(getFieldValueById(\'trxtransactiondetails-transaction_id\'), getFieldValueById(\'trxtransactiondetails-pallet_no\')); return false;" 
 								name="btn-pallet-details">
-								Details</button> </div></div>'				
+								Details</button> </div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['class'	 => 'uborder help-50percent'])->label('SCAN A PALLET NUMBER', ['class' => 'control-label-f']) ?>
 	
 			<div class="one-column-button pdt-one-column-button">

@@ -43,13 +43,14 @@ class TrxTransactions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_code', 'plant_location', 'storage_location', 'remarks', 'truck_van'], 'required'],
+            [['customer_code', 'plant_location', 'storage_location', 'truck_van'], 'required'],
             [['pallet_count', 'quantity', 'weight', 'packaging_id', 'creator_id', 'updater_id'], 'integer'],
             [['remarks', 'status'], 'string'],
             [['created_date', 'updated_date'], 'safe'],
             [['customer_code', 'truck_van'], 'string', 'max' => 10],
             [['inbound_no', 'sap_no', 'plant_location', 'storage_location', 'lower_hu'], 'string', 'max' => 32],
-            [['unit'], 'string', 'max' => 4]
+            [['unit'], 'string', 'max' => 4],
+            [['truck_van'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9_-]/', 'message' => 'Must contain alphanumeric, underscore (_) and dash (-) characters only.']
         ];
     }
 
