@@ -66,6 +66,5 @@ class WeightCaptureController extends Controller
             ]);
 
         $this->layout = '//print';
-        return 'HELLO WORLD';
     }
 }

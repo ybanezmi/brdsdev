@@ -82,9 +82,9 @@ $config = [
                         'fontdata' => [
                             // ... some fonts. http://mpdf1.com/manual/index.php?tid=454
                             'opensans' => [
-								'R' => "OpenSans-Regular.ttf",
-								'B' => "OpenSans-Bold.ttf",
-								'I' => "OpenSans-Italic.ttf",
+								'R'  => "OpenSans-Regular.ttf",
+								'B'  => "OpenSans-Bold.ttf",
+								'I'  => "OpenSans-Italic.ttf",
 								'BI' => "OpenSans-BoldItalic.ttf",
 							],
                         ]

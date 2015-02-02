@@ -3,7 +3,7 @@
 ?>
 <div class="barcode">
 	<p class="product-name"><?php echo Yii::$app->request->post('material_description'); ?></p>
-	<table style="width: 100%; display: inline; margin-bottom: 15px;" class="product-details">
+	<table style="width: 100%; display: inline; margin-bottom: 5px;" class="product-details">
 		<tr>
 			<td>
 				PALLET TARE:  
@@ -39,10 +39,10 @@
 		?>
 	</div>
 	<div style="float: left; width: 50%;">
-		<p style="margin: 0 0 15px 48px;"><?php echo Yii::$app->request->post('material_code'); ?></span>
+		<p style="margin: 0 0 15px 0;"><?php echo Yii::$app->request->post('material_code'); ?></span>
 	</div>
 	<div style="width: 40%;">
-		<p style="margin: 0 -15px 15px 0; text-align: right;"><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT); ?>KG</p>
+		<p style="margin: 0 -35px 15px 0; text-align: right;"><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT); ?>KG</p>
 	</div>	
 </div>
 
@@ -51,20 +51,21 @@
 		width: 100%;
 		text-align: center;
 		font-weight: bolder;
-		font-size: 15px;
+		font-size: 20px;
 		margin: 5px;
 	}
 	.product-details {
 		font-size: 12px;
 	}
 	.net-weight {
-		font-size: 20px;
+		font-size: 35px;
 	}
 	.barcode {
 		border: 2px solid #000;
 		width: 100%;
 		height: 100%;
 		margin-bottom: 20px;
+		padding: 5px 5px 5px 5px;
 	}
 	.red {
 		color: red;

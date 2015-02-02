@@ -14,7 +14,10 @@ use kartik\widgets\DatePicker;
 
     <?php 
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
-    	$form = ActiveForm::begin(); 
+    	$form = ActiveForm::begin([
+    	'fieldConfig' => [
+    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
+    	]]); 
     ?>
 
 	<table class="f-full-size">
