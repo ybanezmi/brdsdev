@@ -105,9 +105,18 @@ $this->title = 'Receiving';
 			<?php if (Yii::$app->user->identity->account_type === 'checker') { ?>
 				<li><a href="#openpallet" data-toggle="modal"> <span>Open Pallet</span></a></li>
 			<?php } ?>
-			<li><a href="#closepallet" data-toggle="modal"> <span>Close Pallet</span></a></li>
+			<li><a href="#closepallet" 
+			
+			
+data-toggle="modal"
+			
+			> <span>Close Pallet</span></a></li>
 			<?php if (Yii::$app->user->identity->account_type === 'checker') { ?>
-				<li><a href="#rejectpallet" data-toggle="modal"> <span>Reject Pallet</span></a></li>
+				<li><a href="#rejectpallet" 
+				
+				data-toggle="modal"
+				
+				> <span>Reject Pallet</span></a></li>
 			<?php } ?>
 			<li><a href="#createto" data-toggle="modal"> <span>Create TO</span></a></li>
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>

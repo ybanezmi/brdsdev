@@ -22,14 +22,16 @@ use yii\bootstrap\Modal;
    		]); ?>
 
     <div class="col-1 help-bg-gray">
-		<h2 class="legend">Transaction Header</h2>
+		<h2 class="legend" id="transaction-header" onclick="_toggleshow('toggle-div-1')">Transaction Header</h2>
+		<div id="toggle-div-1">
+
+				<?= $form->field($customer_model, 'name',
+						['inputOptions' => ['class' => 'text-view uborder help-100percent'],
+						 'options'   	=> ['style' => 'margin-bottom: 0']])->textInput(['disabled' => 'disabled'])->label(false) ?>
+				<?= $form->field($customer_model, 'code',
+						['inputOptions' => ['class' => 'text-view uborder help-100percent'],
+						 'options'   	=> ['style' => 'margin-bottom: 0']])->textInput(['disabled' => 'disabled'])->label(false) ?>
 		
-		<?= $form->field($customer_model, 'name',
-						['inputOptions' => ['class' => 'text-view'],
-						 'options'   	=> ['style' => 'margin-bottom: 0']])->textInput(['disabled' => 'disabled'])->label(false) ?>
-		<?= $form->field($customer_model, 'code',
-						['inputOptions' => ['class' => 'text-view'],
-						 'options'   	=> ['style' => 'margin-bottom: 0']])->textInput(['disabled' => 'disabled'])->label(false) ?>
 		
 		<?= $form->field($transaction_model, 'created_date')->textInput(['value'	=> date('m/d/Y', strtotime($transaction_model->created_date)),
 															 			 'disabled' => 'disabled',
@@ -45,7 +47,7 @@ use yii\bootstrap\Modal;
 												   		  				   'class'	  => 'uborder disabled help-20percent'])->label('WAREHOUSE') ?>
 												   		  
 		<?= $form->field($transaction_model, 'storage_location')->textInput(['disabled' => 'disabled',
-												   		  					 'class'	  => 'uborder disabled help-40percent'])->label('S. LOC') ?>
+												   		  					 'class'	  => 'uborder disabled help-20percent'])->label('S. LOC') ?>
 
 		<?= $form->field($transaction_model, 'truck_van', 
 				['inputOptions' => ['class' 	=> 'uborder disabled help-20percent',
@@ -87,35 +89,48 @@ use yii\bootstrap\Modal;
 				])->textInput(['maxlength' => 10,
 							   'disabled'  => 'disabled',
 							   'value'	   => $total_weight])->label('Total WT') ?>
-							   
+			
+		</div>
 	</div>
 
 	<div id="trx-details-panel" class="col-2 help-bg-gray" style="display: block;">
-		<h2 class="legend">Transaction Details</h2>
-
-		<?= $form->field($transaction_detail_model, 'material_code')->dropDownList($material_list, ['class'	=> 'uborder help-70percent',
+		<h2 class="legend" id="transaction-details" onclick="_toggleshow('toggle-div-2')">Transaction Details</h2>
+		<div id="toggle-div-2">
+		
+		<?= $form->field($transaction_detail_model, 'material_code',['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])->dropDownList($material_list, ['class'	=> 'uborder help-70percent',
 																							 		'prompt'	=> '-- Select a product --',
 																							 		'onchange'	=> 'setFieldValueById("material_code", getFieldValueById("trxtransactiondetails-material_code"));
 																							 						setFieldValueById("trxtransactiondetails-pallet_type", material_pallet_ind[getFieldValueById("trxtransactiondetails-material_code")]);
 																							 						setInnerHTMLById("net-weight-unit", getMaterialConversionUnit());
 																							 						setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
-																							 						checkMaterialSled();'])->label('Customer Product'); ?>
+																							 						checkMaterialSled();'])->label('Customer Product',['class' => 'control-label-f']); ?>
+	
+		<div class="control-group">
+	            	<div class="f-full-size ie6-padtop">
+	            				<?= Html::textInput('material_code', '', ['id'		 => 'material_code',
+												  'readonly' => 'readonly',
+												  'class'	 => 'uborder disabled help-44percent',
+												  'onchange' => 'setFieldValueById("trxtransactiondetails-material_code", getFieldValueById("material_code"))']) ?>
 
-		<?= Html::textInput('material_code', Yii::$app->request->post('material_code'), ['id'		 => 'material_code',
-																					  	 'readonly'  => 'readonly',
-																					  	 'class'	 => 'uborder disabled help-44percent',
-																					  	 'onchange'  => 'setFieldValueById("trxtransactiondetails-material_code", getFieldValueById("material_code"))']) ?>
 
 		<?= Html::textInput('material_barcode', '', ['id'		 => 'material_barcode',
 						 					  	  	 'class'	 => 'uborder help-44percent',
 						 					  	  	 'onchange'  => 'setFieldValueById("trxtransactiondetails-material_code", searchMaterial())']) ?>
+	            	</div>
+	          	</div>
+				
+
+													 
+													 
+													 
 												  
 		<?= $form->field($transaction_detail_model, 'batch',
-						['inputOptions' => ['class' => 'uborder help-20percent'],
+						['inputOptions' => ['class' => 'uborder help-25percent'],
 						 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} 
 						 				<button class="btn btn-primary help-15percent" onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());" type="button">INT</button>
 						 				</div><div class=\"col-lg-8\">{error}</div></div>'				
 						])->input('number', ['maxlength' => 10])->label('Batch / Lot') ?>
+						
 
 		<?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),['clientOptions' 	 => ['dateFormat' 	=> 'm/dd/yy',
 																										   						 'showOn'		=> 'button',
@@ -125,6 +140,8 @@ use yii\bootstrap\Modal;
 																										   						 'readonly'		=> 'readonly',
 																										   						 'dateFormat' 	=> 'm/dd/yy',
 																										   						 'onchange'		=> 'checkMaterialSled()']])->label('Manuf Date') ?>
+																																 
+																																 
 
 		<?= $form->field($transaction_detail_model,'expiry_date')->widget(DatePicker::className(),['clientOptions' 	 => ['dateFormat' 		=> 'm/dd/yy',
 																								   						 'showOn'			=> 'button',
@@ -145,7 +162,8 @@ use yii\bootstrap\Modal;
 									'onchange' => 'setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
 												   setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()))'],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="net-weight-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div> '				
-				])->input('number', ['maxlength' => 10])->label('Net WT / Quantity') ?>
+				])->input('number', ['maxlength' => 10])->label('Net WT') ?>
+
 							   
 		<?= $form->field($transaction_detail_model, 'total_weight',
 				['inputOptions' => ['class' => 'uborder disabled help-20percent totalweight',
@@ -186,7 +204,7 @@ use yii\bootstrap\Modal;
 									'value' => 0],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div><div class=\"col-lg-8\">{error}</div></div>'				
 				])->textInput(['maxlength' => 10])->label('Pallet WT') ?>
-
+		</div>
 	</div>
 	
 	<div id="close-pallet-panel" class="col-2 help-bg-gray" style="display: none;">
@@ -206,25 +224,25 @@ use yii\bootstrap\Modal;
 								    'onclick' 	=> 'hideHTMLById("close-pallet-panel");
 									      			showHTMLById("trx-details-panel");']) ?>
 	</div>
-
-	<div class="two-column-button">
-		<div class="submit-button ie6-submit-button">
-			<?= Html::submitButton('Add to Pallet', ['class' 	=> 'btn btn-primary',
+	
+	
+	<div class="two-column-button pdt-two-column-button">
+	<div class="submit-button ie6-submit-button">
+		<?= Html::submitButton('Add to Pallet', ['class' 	=> 'btn btn-primary',
         										  	 'name'		=> 'add-pallet']) ?>
-			<?php if (null != $transaction_details && count($transaction_details) > 0) { ?>
-				<?= Html::button('Close Pallet', ['class' 	=> 'btn btn-primary',
-												  'onclick' => 'hideHTMLById("trx-details-panel");
-												  				showHTMLById("close-pallet-panel");']) ?>
-			<?php } ?>
-		</div>
-		<div class="submit-button ie6-submit-button">
-			<?= Html::submitButton('View Entries', ['class' 	=> 'btn btn-primary',
+			<?= Html::button('Close Pallet', ['class' 	=> 'btn btn-primary',
+											  'onclick' => 'hideHTMLById("trx-details-panel");
+											  				showHTMLById("close-pallet-panel");']) ?>
+
+	</div>
+	<div class="submit-button ie6-submit-button">
+		<?= Html::submitButton('View Entries', ['class' 	=> 'btn btn-primary',
         										  	 'name'		=> 'view-entries',
         										  	 'onclick'	=> 'js: window.location = "view-entries?id='.$transaction_model->id.'"']) ?>
 			<?= Html::submitButton('Cancel', ['class' 			=> 'btn btn-primary',
         								  	  'name'  			=> 'cancel',
         								  	  'onclick'			=> 'js: window.location = "index"']) ?>
-		</div>
+	</div>
 	</div>
 
     <?php ActiveForm::end(); ?>

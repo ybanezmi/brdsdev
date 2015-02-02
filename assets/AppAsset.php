@@ -38,6 +38,7 @@ class AppAsset extends AssetBundle
     	//'js/vendor/jquery-1.11.1.min.js',
     	'js/vendor/DD_belatedPNG_0.0.8a.js',
     	'js/vendor/jquery-ui.min.js',
+		'js/vendor/native.js',
     	'js/plugins.js',
     	'js/app_master.js',
     ];

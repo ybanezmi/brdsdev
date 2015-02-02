@@ -348,13 +348,13 @@ footer  div {
 
 /*form reset to ie6*/
 
-.form-horizontal{
+form{
 	width: 100%;
 	padding:0;
 	margin:0;
 }
 
-.form-horizontal .control-group{
+form .control-group{
 	width: 100%;
 	padding:0;
 	margin:0;
@@ -372,7 +372,7 @@ footer  div {
     display: block;
 }
 
-.form-horizontal .control-group:before, .form-horizontal .control-group:after {
+form .control-group:before, form .control-group:after {
 	content: "";
 	display: none;
 	line-height: 0;
@@ -406,13 +406,13 @@ input.uborder, textarea.uborder, select.uborder {
     padding: 10px 0 10px 5px!important;
 }
 
-.pdt-one-column .form-horizontal br {
+.pdt-one-column form br {
    line-height: 0;
    padding:0;
    margin: 0;
 }
 
-.pdt-one-column .form-horizontal .control-label {
+.pdt-one-column form .control-label {
     display: inline;
     float: none;
     padding-top: 5px;
@@ -423,7 +423,7 @@ input.uborder, textarea.uborder, select.uborder {
     font-size: 11px;
 }
 
-.one-column .form-horizontal .control-label-f {
+.one-column form .control-label-f {
     display: block;
     float: none;
     padding-top: 5px;
@@ -466,7 +466,7 @@ input.uborder, textarea.uborder, select.uborder {
     margin-bottom:5px;
 }
 
-.pdt-two-column .form-horizontal .control-label {
+.pdt-two-column form .control-label {
     display: inline;
     float: none;
     padding-top: 5px;
@@ -477,7 +477,7 @@ input.uborder, textarea.uborder, select.uborder {
     font-size: 11px;
 }
 
-.pdt-two-column .form-horizontal .control-label-f {
+.pdt-two-column form .control-label-f {
     display: block;
     float: none;
     padding-top: 5px;
