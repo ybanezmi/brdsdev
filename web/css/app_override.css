@@ -21,3 +21,7 @@ margin-bottom: 10px;
 
 .has-error .help-block{
 font-size:12px; font-weight:bold; }
+
+.grid-view{
+	overflow: auto;
+}
