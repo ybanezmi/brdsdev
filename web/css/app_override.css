@@ -12,6 +12,8 @@ margin-bottom: 10px;
 
 .form-group {
 	margin-bottom: 0!important;
+	clear:both;
+	overflow:hidden;
 }
 
 .form-horizontal .form-group {
