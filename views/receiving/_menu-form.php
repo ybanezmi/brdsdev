@@ -218,9 +218,9 @@ use yii\bootstrap\Modal;
 			</div>
 		</div>
 				
-		<?= Html::submitButton('Use Pallet', ['class' 	=> 'btn',
+		<?= Html::submitButton('Use Pallet', ['class' 	=> 'btn btn-success',
         									  'name'	=> 'close-pallet']) ?>
-		<?= Html::button('Cancel', ['class' 	=> 'btn',
+		<?= Html::button('Cancel', ['class' 	=> 'btn btn-success',
 								    'onclick' 	=> 'hideHTMLById("close-pallet-panel");
 									      			showHTMLById("trx-details-panel");']) ?>
 	</div>
