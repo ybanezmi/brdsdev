@@ -457,10 +457,10 @@ function getMaterialList(code) {
 
 /* function to calculate net weight */
 function calculateNetWeight() {
-	var grossWeight = parseInt(getFieldValueById('gross_weight'));
-	var palletTare = parseInt(getFieldValueById('pallet_tare'));
-	var productTare = parseInt(getFieldValueById('product_tare_total'));
-	var palletPackagingTare = parseInt(getFieldValueById('pallet_packaging_tare'));
+	var grossWeight = parseFloat(getFieldValueById('gross_weight'));
+	var palletTare = parseFloat(getFieldValueById('pallet_tare'));
+	var productTare = parseFloat(getFieldValueById('product_tare_total'));
+	var palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
 	
 	var netWeight = grossWeight - (palletTare + productTare + palletPackagingTare);
 	
@@ -468,6 +468,19 @@ function calculateNetWeight() {
 		setFieldValueById('net_weight', netWeight);
 	} else {
 		setFieldValueById('net_weight', '0');
+	}
+}
+
+/* function to calculate total product tare */
+function calculateTotalProductTare() {
+	var productTare = getFieldValueById('product_tare');
+	var units = getFieldValueById('units');
+	
+	if (!isNaN(productTare) && null != productTare && productTare.length > 0 
+		&& !isNaN(units) && null != units && units.length > 0) {
+		setFieldValueById('product_tare_total', parseFloat(productTare) * parseFloat(units)); 
+	} else {
+		setFieldValueById('product_tare_total', '0');
 	}
 }
 

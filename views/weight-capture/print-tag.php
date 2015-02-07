@@ -7,7 +7,6 @@ use yii\helpers\Html;
 /* @var $model app\models\MstAccount */
 
 $this->title = 'Weighing';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="main-content">
 	<div class="user-create">
