@@ -27,3 +27,7 @@ font-size:12px; font-weight:bold; }
 .grid-view{
 	overflow: auto;
 }
+
+.autoModal.modal .modal-body{
+    max-height: 100%;
+}
