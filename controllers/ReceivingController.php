@@ -444,16 +444,21 @@ class ReceivingController extends Controller
 			
 			$isPalletAdded = false;
 			
-	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post()) && $transaction_detail_model->validate() && $transaction_detail_model->save()) {
-				
+	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post())) {
 				// add net weight of transaction_detail to the total weight of transaction
 				$transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;
 
 				// convert to correct date format
-				$transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));
-				$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
+				if (null != $transaction_detail_model->getAttribute('manufacturing_date')) {
+					$transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));	
+				}
+				
+				if (null != $transaction_detail_model->getAttribute('expiry_date')) {
+					$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
+				}
+
+				$transaction_detail_model->validate();
               
-                // get total weight
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
 					$this->redirect(['menu', 'id' => $transaction_model->id,
