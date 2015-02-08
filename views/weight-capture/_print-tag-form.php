@@ -62,9 +62,10 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label">M. Code: </label>
 		<div class="f-inline-size">
-			<?= Html::textInput('material_code', null, ['id'		=> 'material_code',
-											  				    'class'	 	=> 'uborder help-30percent',
-											  				    'onchange' 	=> 'setFieldValueById("material", getFieldValueById("material_code"))',]) ?>
+			<?= Html::textInput('material_code', null, ['id' 		=> 'material_code',
+														'readonly'	=> 'readonly',
+											  			'class'	 	=> 'uborder help-30percent',
+											  			'onchange' 	=> 'setFieldValueById("material", getFieldValueById("material_code"))',]) ?>
 		   <?= Html::input('hidden', 'material_description', '', ['id' => 'material_description']) ?>
 		</div>
 		<div class="col-lg-8"></div>
@@ -76,10 +77,11 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label" style="color:#000">GROSS WT: </label>
 		<div class="f-inline-size">
-			<?= Html::input('number', 'gross_weight', '', [   'id'		 => 'gross_weight',
-													  	  'class'	 => 'uborder help-32percent',
-													  	  'style'	 => 'height: 50px; text-align: right;',
-													  	  'onchange' => 'calculateNetWeight()']) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+			<?= Html::input('number', 'gross_weight', '', ['id'		 => 'gross_weight',
+														   'step'	 => 'any',
+													  	   'class'	 => 'uborder help-32percent',
+													  	   'style'	 => 'height: 50px; text-align: right;',
+													  	   'onchange' => 'calculateNetWeight()']) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -91,10 +93,11 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label">PALLET TARE: </label>
 		<div class="f-inline-size">
-			<?= Html::input('number', 'pallet_tare', '', [	'id'		=> 'pallet_tare',
-									'class'	 	=> 'uborder help-32percent',
-									'style'		=> 'text-align: right;',
-									'onchage'	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+			<?= Html::input('number', 'pallet_tare', '', ['id'			=> 'pallet_tare',
+														  'step'		=> 'any',
+														  'class'	 	=> 'uborder help-32percent',
+														  'style'		=> 'text-align: right;',
+														  'onchange'	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -104,8 +107,9 @@ use kartik\widgets\DatePicker;
 		<label class="control-label">PRODUCT TARE: </label>
 		<div class="f-inline-size">
 			<?= Html::input('number', 'product_tare', '', [	'id'	=> 'product_tare',
-									'style'	=> 'text-align: right;',
-									'class'	=> 'uborder help-32percent',]) ?> <span style="font-weight: bold;" class="page-title-bt">EA</span>
+															'onchange' => 'calculateTotalProductTare()',
+															'style'	=> 'text-align: right;',
+															'class'	=> 'uborder help-32percent',]) ?> <span style="font-weight: bold;" class="page-title-bt">EA</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -114,9 +118,11 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label"># OF UNITS: </label>
 		<div class="f-inline-size">
-			<?= Html::input('number', 'units', '', ['id'	=> 'units',
-									'style'	=> 'text-align: right;',
-									'class'	=> 'uborder help-32percent',]) ?>
+			<?= Html::input('number', 'units', '', ['id'		=> 'units',
+													'step'	 	=> 'any',
+													'style'		=> 'text-align: right;',
+													'class'		=> 'uborder help-32percent',
+													'onchange' 	=> 'calculateTotalProductTare()']) ?>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -125,10 +131,12 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label">TOTAL: </label>
 		<div class="f-inline-size">
-			<?= Html::input('number', 'product_tare_total', '', ['id'		=> 'product_tare_total',
-									'class'	 	=> 'uborder help-32percent disabled',
-									'style'	 	=> 'text-align: right;',
-									'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+			<?= Html::input('number', 'product_tare_total', '0', ['id'			=> 'product_tare_total',
+																  'step'	 	=> 'any',
+																  'readonly'	=> 'readonly',
+																  'class'	 	=> 'uborder help-32percent disabled',
+																  'style'	 	=> 'text-align: right;',
+																  'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -138,9 +146,10 @@ use kartik\widgets\DatePicker;
 		<label class="control-label">PALLET PACKAGING TARE: </label>
 		<div class="f-inline-size">
 				<?= Html::input('number', 'pallet_packaging_tare', '', ['id'		=> 'pallet_packaging_tare',
-										'class'	 	=> 'uborder help-32percent',
-										'style'	 	=> 'text-align: right;',
-										'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+																		'step'	 	=> 'any',
+																		'class'	 	=> 'uborder help-32percent',
+																		'style'	 	=> 'text-align: right;',
+																		'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -150,9 +159,10 @@ use kartik\widgets\DatePicker;
 		<label class="control-label" style="color:#000">NET WT: </label>
 		<div class="f-inline-size">
 			<?= Html::textInput('net_weight', '0', ['id'		=> 'net_weight',
-											   'readonly' 	=> 'readonly',
-											   'class'	 	=> 'uborder disabled help-32percent',
-											   'style'	 	=> 'height: 50px; text-align: right;',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+													'step'	 	=> 'any',
+												    'readonly' 	=> 'readonly',
+												    'class'	 	=> 'uborder disabled help-32percent',
+												    'style'	 	=> 'height: 50px; text-align: right;',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
