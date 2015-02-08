@@ -126,7 +126,7 @@ use kartik\widgets\DatePicker;
 		<label class="control-label">TOTAL: </label>
 		<div class="f-inline-size">
 			<?= Html::input('number', 'product_tare_total', '', ['id'		=> 'product_tare_total',
-									'class'	 	=> 'uborder help-32percent',
+									'class'	 	=> 'uborder help-32percent disabled',
 									'style'	 	=> 'text-align: right;',
 									'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
@@ -145,16 +145,6 @@ use kartik\widgets\DatePicker;
 		<div class="col-lg-8"></div>
 	</div>
 	</div>
-	<div class="one-column-button pdt-one-column-button">
-	<div class="submit-button ie6-submit-button">
-							  
-		<button class="btn btn-primary cancel-button" type="button" onclick="window.location = 'index'">CANCEL</button>
-		<?= Html::submitButton('PRINT', ['class' 	=> 'btn btn-primary',
-										 'style'	=> '',
-        								 'name'  	=> 'print']) ?>
-	</div>
-	</div>
-
 	<div class="form-group">
 	<div class="control-group">
 		<label class="control-label" style="color:#000">NET WT: </label>
@@ -167,6 +157,16 @@ use kartik\widgets\DatePicker;
 		<div class="col-lg-8"></div>
 	</div>
 	</div>
+	<div class="one-column-button pdt-one-column-button">
+	<div class="submit-button ie6-submit-button">
+							  
+		<button class="btn btn-primary cancel-button" type="button" onclick="window.location = 'index'">CANCEL</button>
+		<?= Html::submitButton('PRINT', ['class' 	=> 'btn btn-primary',
+										 'style'	=> '',
+        								 'name'  	=> 'print']) ?>
+	</div>
+	</div>
+
 	
     <?php ActiveForm::end(); ?>
 
