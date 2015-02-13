@@ -81,12 +81,14 @@ $config = [
                         // mPDF Variables
                         'fontdata' => [
                             // ... some fonts. http://mpdf1.com/manual/index.php?tid=454
-                            'opensans' => [
-								'R'  => "OpenSans-Regular.ttf",
-								'B'  => "OpenSans-Bold.ttf",
-								'I'  => "OpenSans-Italic.ttf",
-								'BI' => "OpenSans-BoldItalic.ttf",
-							],
+                           "dejavusanscondensed" => array(
+        'R' => "DejaVuSansCondensed.ttf",
+        'B' => "DejaVuSansCondensed-Bold.ttf",
+        'I' => "DejaVuSansCondensed-Oblique.ttf",
+        'BI' => "DejaVuSansCondensed-BoldOblique.ttf",
+        'useOTL' => 0xFF,
+        'useKashida' => 75,
+        )
                         ]
                     ]
                 ],

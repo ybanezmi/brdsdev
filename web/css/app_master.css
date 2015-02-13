@@ -577,6 +577,76 @@ form h2.legend{
 	display: none;
 }
 
+
+.desktop-only {
+	width: 80%;
+	padding:20px;
+	position: relative;
+}
+
+.weigh-page{
+	width: 850px;
+	height: auto;
+	padding-top:30px;
+}
+
+.weigh-page form .control-group{ 
+	clear:both;
+	overflow: hidden;
+
+}
+
+.weigh-page form div.control-field {
+	float: left;
+	width: 450px;
+}
+
+.weigh-page form label.control-label {
+	width: 220px!important;
+	float: left;
+	display: block;
+}
+
+.weigh-page form div.control-field select{
+	width:74%;
+}
+
+.desktop-box-tare {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	padding: 10px;
+	width: 550px;
+}
+
+.weigh-page form .desktop-box-tare div.control-field {
+	float: left;
+	width: auto;
+}
+
+.weigh-page form .desktop-box-tare label.control-label {
+	width: 210px!important;
+	float: left;
+	display: block;
+}
+
+.weigh-page form .desktop-only-weigh-capt {
+	position: absolute;
+	bottom: 70px;
+	right: 0;
+}
+.weigh-page form .desktop-only-weigh-capt button {
+	display: block;
+	width: 260px;
+	padding: 70px;
+	font-size: 30px;
+	margin: 10px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
 /* MEDIA QUERIES START */
 @media only screen 
 and (min-width : 880px)

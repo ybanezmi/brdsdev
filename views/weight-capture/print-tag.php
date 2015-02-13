@@ -13,7 +13,7 @@ $this->title = 'Weighing';
 		<div class="wrapper-150">
 			<h1 class="page-title">Weighing and Tagging</h1>
 			
-			<div class="one-column help-bg-gray pdt-one-column" >
+			<div class="help-bg-gray desktop-only weigh-page" >
 				<?= $this->render('_print-tag-form', [
 					//'model' => $model,
 					'customer_list' => $customer_list,
