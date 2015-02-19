@@ -46,8 +46,12 @@ class LoginForm extends Model
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
+
+			if(!$user->assignment) {
+				$this->addError($attribute, 'User assignment not set. Please contact your administrator.');
+			}
 			
-			if ($user) {
+			if ($user && $user->assignment) {
 				$plantLocation = Yii::$app->modelFinder->findAllowedIpModel($user->assignment);
 				
 				$allowedIP =  explode('.', $plantLocation->ip_address);

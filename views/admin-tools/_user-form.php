@@ -12,7 +12,14 @@ use yii\jui\DatePicker;
 
 <div class="mst-account-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php 
+    	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
+    	$form = ActiveForm::begin([
+    	'options' => ['class' => 'form-horizontal'],
+    	'fieldConfig' => [
+    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
+    	],
+    ]); ?>
 
 	<?= $form->field($model, 'first_name')->textInput(['maxlength' => 100]) ?>
     
@@ -59,7 +66,7 @@ use yii\jui\DatePicker;
 																   					 	 'dateFormat' 		=> 'mm/dd/yy']])->label('End Date') ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Register' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton(['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

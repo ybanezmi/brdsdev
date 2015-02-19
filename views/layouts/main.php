@@ -95,23 +95,18 @@ AppAsset::register($this);
 			</header>
 	        
 			
-			<section id="greetings">
-	<div class="g-body">
-		
-			
-			<?php if (isset(Yii::$app->user->identity->account_type) && Yii::$app->user->identity->account_type === 'admin') { ?>		
-						<a onclick="_togglehidden2('dropdownie6')" href="profile.php" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><?php echo Yii::$app->user->identity->first_name . ' ' . Yii::$app->user->identity->last_name ?> @ 
-							<?php echo Yii::$app->user->identity->assignment ?></a>
-						
-						<ul class="dropdown-menu omenu" role="menu" aria-labelledby="dLabel" id="dropdownie6">
-								<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/site/change-password"><i class="fa fa-fire"></i> Change password</a></li>
-							</ul>
-			<?php } ?>
-					
-	</div>
-	</section>
+		<section id="greetings">
+			<div class="g-body">
+				<a onclick="_togglehidden2('dropdownie6')" href="profile.php" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><?php echo Yii::$app->user->identity->first_name . ' ' . Yii::$app->user->identity->last_name ?> @ 
+					<?php echo Yii::$app->user->identity->assignment ?></a>
+				
+				<ul class="dropdown-menu omenu" role="menu" aria-labelledby="dLabel" id="dropdownie6">
+					<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/site/change-password"><i class="fa fa-fire"></i> Change password</a></li>
+				</ul>
+			</div>
+		</section>
 	
-	        <section class="blue-line"></section>
+		<section class="blue-line"></section>
 
         <div class="container" id="container">
             <?= Breadcrumbs::widget([
