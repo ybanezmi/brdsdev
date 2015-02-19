@@ -28,7 +28,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\MstAccount',
-            'enableAutoLogin' => false,
+            'enableAutoLogin' => true,
             'loginUrl' => ['site/login'],
         ],
         'errorHandler' => [

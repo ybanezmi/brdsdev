@@ -195,11 +195,11 @@ use yii\helpers\ArrayHelper;
 	    ],
         'exportConfig' => [
         	\kartik\grid\GridView::CSV => ['label' => 'Export CSV',
-        								   'filename' => '[BRDS] Transaction List'],
+        								   'filename' => '[BRDS] Transaction  Details List'],
         ],
         'panel' => [
 		        'type' => GridView::TYPE_PRIMARY,
-		        'heading' => 'TRANSACTION LIST',
+		        'heading' => 'TRANSACTION DETAILS LIST',
 		    ],
         /*
         'layout' => '{summary}<div class="pull-right">{export}&nbsp</div><div>{items}</div>{pager}',

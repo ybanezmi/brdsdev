@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\MstAccount;
 use app\models\MstAccountSearch;
+use app\models\TrxTransactions;
+use app\models\TrxTransactionsSearch;
 use app\models\TrxTransactionDetails;
 use app\models\TrxTransactionDetailsSearch;
 use yii\web\Controller;
@@ -130,23 +132,15 @@ class AdminToolsController extends Controller
 	    }
 		
         if ($account_model->load(Yii::$app->request->post())) {
-        	$account_model->password = md5($accountModel->password);
+        	$account_model->password = md5($account_model->password);
 			
 			// convert to correct date format
-			$account_model->start_date = Yii::$app->dateFormatter->convert($model->start_date);
-			$account_model->end_date = Yii::$app->dateFormatter->convert($model->end_date);
+			$account_model->start_date = Yii::$app->dateFormatter->convert($account_model->start_date);
+			$account_model->end_date = Yii::$app->dateFormatter->convert($account_model->end_date);
 			
 			$account_model->save();
-			return $this->render('user-mgmt', [
-				'account_search_model' 		=> $account_search_model,
-            	'account_data_provider' 	=> $account_data_provider,
-            	'trx_details_search_model'	=> $trx_details_search_model,
-            	'trx_details_data_provider'	=> $trx_details_data_provider,
-            	'trx_details_status_count'	=> $trx_details_status_count,
-                'account_model' 			=> $account_model,
-                'assignment_list' 			=> $assignment_list,
-                'user_list'					=> $user_list,
-            ]);
+			
+			return $this->redirect(['user-mgmt']);
         } else {
             return $this->render('user-mgmt', [
             	'account_search_model' 		=> $account_search_model,
@@ -347,43 +341,72 @@ class AdminToolsController extends Controller
 	              ];
 		}
 		
-		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction List')) {
+		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction Details List')) {
 			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
 			$searchModel = new TrxTransactionDetailsSearch();
         	$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $params);
 			$gridColumns = [
-            ['class' => 'kartik\grid\SerialColumn'], // @TODO: Remove id column
-            // 'account_type',
-            // 'first_name',
-            // 'last_name',
-            ['attribute' => 'updater_id',
-             'label'	 => 'User Name',
-             'value'	 => function($model) {
-             				$account = Yii::$app->modelFinder->findAccountModel($model->updater_id);
-							if ($account) {
-								return $account->first_name . ' ' . $account->last_name;
-							}
-						},
-             ],
-            ['attribute' => 'updated_date',
-             'label'	 => 'Date'],
-            ['attribute' => 'transaction_id',
-             'label'	 => 'Transaction'],
-            ['attribute' => 'customer_code',
-             'label'	 => 'Customer',
-             'value'	 => function($model) {
-							$customer = Yii::$app->modelFinder->findCustomerModel($model->customer_code);
-							if ($customer) {
-								return $customer->name;
-							}
-             			},
-             ],
-            ['attribute' => 'pallet_no',
-             'label'	 => 'Pallet No'],
-			['attribute' => 'status',
-             'label'	 => 'Status'],
-        ];
+	            ['class' => 'kartik\grid\SerialColumn'], // @TODO: Remove id column
+	            // 'account_type',
+	            // 'first_name',
+	            // 'last_name',
+	            ['attribute' => 'updater_id',
+	             'label'	 => 'User Name',
+	             'value'	 => function($model) {
+	             				$account = Yii::$app->modelFinder->findAccountModel($model->updater_id);
+								if ($account) {
+									return $account->first_name . ' ' . $account->last_name;
+								}
+							},
+	             ],
+	            ['attribute' => 'updated_date',
+	             'label'	 => 'Date'],
+	            ['attribute' => 'transaction_id',
+	             'label'	 => 'Transaction'],
+	            ['attribute' => 'customer_code',
+	             'label'	 => 'Customer',
+	             'value'	 => function($model) {
+								$customer = Yii::$app->modelFinder->findCustomerModel($model->customer_code);
+								if ($customer) {
+									return $customer->name;
+								}
+	             			},
+	             ],
+	            ['attribute' => 'pallet_no',
+	             'label'	 => 'Pallet No'],
+				['attribute' => 'status',
+	             'label'	 => 'Status'],
+	        ];
 		}
+		
+		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction History')) {
+			
+			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
+			$searchModel = new TrxTransactionsSearch();
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $params);
+		
+			$gridColumns = [['attribute' 	=> 'created_date',
+						 'label' 		=> 'DATE'],
+						['attribute' 	=> 'id',
+						 'label'		=> 'BRDS NO.'],
+						['attribute'	=> 'sap_no',
+						 'label'		=> 'SAP NO.'],
+						['attribute'	=> 'customer_code',
+						 'label'		=> 'CUSTOMER',
+						 'value'	 	=> function($model) {
+											$customer = Yii::$app->modelFinder->findCustomerModel($model->customer_code);
+											if ($customer) {
+												return $customer->name;
+											}
+				             			}],
+						['attribute'	=> 'pallet_count',
+						 'label'		=> 'NO. OF PALLET'],
+						['attribute'	=> 'weight',
+						 'label'		=> 'TOTAL WT.'],
+						['attribute'	=> 'status',
+						 'label'		=> 'STATUS']];
+		}
+		
 		
 		if ($searchModel && $dataProvider) {
 			ExcelView::widget([
@@ -394,5 +417,19 @@ class AdminToolsController extends Controller
 	            'columns' => $gridColumns,
 	        ]);
 		}
+    }
+
+	/**
+     * Lists all TrxTransaction models.
+     * @return mixed
+     */
+    public function actionViewTransaction() {
+		    	
+		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
+		$trxSearchModel = new TrxTransactionsSearch();
+		$trxDataProvider = $trxSearchModel->search(Yii::$app->request->queryParams, $params);
+		
+    	return $this->render('view-transaction', ['dataProvider' => $trxDataProvider,
+    											  'searchModel' => $trxSearchModel,]);
     }
 }

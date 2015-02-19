@@ -11,7 +11,6 @@ use yii\helpers\ArrayHelper;
 		$dateEditableOptions = [	'size' => 'md',
 									'inputType'=>\kartik\editable\Editable::INPUT_WIDGET,
 								    'widgetClass'=> 'kartik\datecontrol\DateControl',
-								        'valueIfNull'=>'churva',
 								        'options'=>[
 								            'type'=>\kartik\datecontrol\DateControl::FORMAT_DATE,
 								            'displayFormat'=>'MM/dd/yyyy',

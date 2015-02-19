@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-//use yii\jui\DatePicker;
-use kartik\widgets\DatePicker;
+use yii\jui\DatePicker;
+//use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\MstAccount */
@@ -40,23 +40,23 @@ use kartik\widgets\DatePicker;
 
     <?= $form->field($model, 'assignment')->dropDownList($assignment_list, ['prompt'	=> '-- Select assignment --']) ?>
 
-    <?= $form->field($model,'start_date')->widget(DatePicker::className(),['options' 	 => ['dateFormat' 	=> 'mm/dd/yy',
-																		   						 'showOn'		=> 'button',
-																								 'buttonImage'  => '../images/calendar.gif',
-																								 'buttonImageOnly' => 'true'],
-																							     'options' 		=> ['value'		=> date('m/d/Y', strtotime($model->start_date)),
-																							     					'class' 		=> 'uborder disabled dateclass',
-																							   						'readonly'		=> 'readonly',
-																							   					 	'dateFormat' 	=> 'mm/dd/yy']])->label('Start Date') ?>
+    <?= $form->field($model,'start_date')->widget(DatePicker::className(),['options' 	 => ['dateFormat' 		=> 'mm/dd/yy',
+																		   					 'showOn'			=> 'button',
+																							 'buttonImage'  	=> '../images/calendar.gif',
+																						     'buttonImageOnly' 	=> 'true',
+																							 'value'			=> date('m/d/Y', strtotime($model->start_date)),
+																		     				 'class' 			=> 'uborder disabled dateclass',
+																		   				   	 'readonly'			=> 'readonly',
+																		   					 'dateFormat' 		=> 'mm/dd/yy']])->label('Start Date') ?>
 
-    <?= $form->field($model,'end_date')->widget(DatePicker::className(),['options' 	 => ['dateFormat' 	=> 'm/dd/yy',
-																   						 'showOn'		=> 'button',
-																						 'buttonImage'  => '../images/calendar.gif',
-																						 'buttonImageOnly' => 'true'],
-																					     'options' 		=> ['value'		=> date('m/d/Y', strtotime($model->end_date)),
-																					     					'class' 		=> 'uborder disabled dateclass',
-																					   						'readonly'		=> 'readonly',
-																					   					 	'dateFormat' 	=> 'mm/dd/yy']])->label('End Date') ?>
+    <?= $form->field($model,'end_date')->widget(DatePicker::className(),['options' 	 => ['dateFormat' 		=> 'm/dd/yy',
+																   						 'showOn'			=> 'button',
+																						 'buttonImage'  	=> '../images/calendar.gif',
+																						 'buttonImageOnly' 	=> 'true',
+																						 'value'			=> date('m/d/Y', strtotime($model->end_date)),
+																     					 'class' 			=> 'uborder disabled dateclass',
+																   						 'readonly'			=> 'readonly',
+																   					 	 'dateFormat' 		=> 'mm/dd/yy']])->label('End Date') ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Register' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
