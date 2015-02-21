@@ -80,15 +80,15 @@ $config = [
                     'options' => [
                         // mPDF Variables
                         'fontdata' => [
-                            // ... some fonts. http://mpdf1.com/manual/index.php?tid=454
-                           "dejavusanscondensed" => array(
-        'R' => "DejaVuSansCondensed.ttf",
-        'B' => "DejaVuSansCondensed-Bold.ttf",
-        'I' => "DejaVuSansCondensed-Oblique.ttf",
-        'BI' => "DejaVuSansCondensed-BoldOblique.ttf",
-        'useOTL' => 0xFF,
-        'useKashida' => 75,
-        )
+						// ... some fonts. http://mpdf1.com/manual/index.php?tid=454
+						"dejavusanscondensed" => array(
+							'R' => "DejaVuSansCondensed.ttf",
+							'B' => "DejaVuSansCondensed-Bold.ttf",
+							'I' => "DejaVuSansCondensed-Oblique.ttf",
+							'BI' => "DejaVuSansCondensed-BoldOblique.ttf",
+							'useOTL' => 0xFF,
+							'useKashida' => 75,
+						)
                         ]
                     ]
                 ],

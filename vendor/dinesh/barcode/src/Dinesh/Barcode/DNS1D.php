@@ -54,7 +54,7 @@ class DNS1D {
         // print bars
         $x = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
-            $bw = round(($v['w'] * $w), 3);
+            $bw = round(($v['w'] * $w), 0);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);

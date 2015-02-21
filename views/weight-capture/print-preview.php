@@ -8,11 +8,12 @@ function truncate($str, $len) {
 }
 ?>
 <div class="barcode">
-	<p class="product-name"><b><?php echo truncate(Yii::$app->request->post('material_description'), 25); ?></b></p>
-	<table style="width: 100%; display: inline; margin-bottom: 5px;" class="product-details">
+	<p class="product-name"><b><?php echo truncate(Yii::$app->request->post('material_description'), 30); ?></b></p>
+	<table class="product-details">
 		<tr>
 			<td>
-				<b>PALLET TARE:</b></td>
+				<b>PALLET TARE:</b>
+			</td>
 			<td>
 				<b><?php echo number_format((float)Yii::$app->request->post('pallet_tare'), 2, '.', ','); ?>KG</b>
 			</td>
@@ -35,51 +36,52 @@ function truncate($str, $len) {
 			</td>
 		</tr>
 	</table>
-	<div style="text-align: center; margin-bottom: 6px; width:70%; margin-left:15%;">
+	<div class="code-bars-dns1d">
 		<?php 
-			$barcode = Yii::$app->request->post('material_code') . str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT) . 'KG';
-			echo Yii::$app->DNS1D->getBarcodeSVG($barcode, 'C39', 1, 100);
+			$barcode = Yii::$app->request->post('material_code') . str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT);
+			echo Yii::$app->DNS1D->getBarcodeSVG($barcode, 'C39',1,78);
 		?>
 	</div>
-	<div style="float: left; width: 70%;">
-		<p style="margin: 0 0 15px 0; font-size:12px;"><?php echo Yii::$app->request->post('material_code'); ?><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT); ?></span>
-	</div>
-	<div style="width: 20%;">
-		<p style="margin: 0 -35px 15px 0; text-align: right;">
-			<img src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/logoS.png" width="60" />
-		</p>
-	</div>	
+	<table class="footer-bar">
+		<tr>
+		<td align="left">
+			<b><?php echo Yii::$app->request->post('material_code'); ?><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT); ?></b>
+		</td>
+		<td align="right">
+			<b>Big <span style="background:#000; display:block; float:left; color:#fff;">&nbsp;Blue&nbsp;</span></b>
+		</td>
+	</table>
 </div>
 
 <style>
+	.barcode {
+		border: 2px solid #000;
+		width: 100%;
+		height: 100%;
+		padding: 2px 5px 2px 5px;
+		font-weight: bold;
+	}
 	.product-name {
 		width: 100%;
 		text-align: center;
 		font-weight: bolder;
-		font-size: 20px;
-		margin: 2px 5px;
+		font-size: 19px;
+		margin: 2px 5px 2px 5px;
 	}
 	.product-details {
 		font-size: 11px;
+		width:100%; 
+		display:inline; 
 	}
 	.net-weight {
 		font-size: 35px;
 	}
-	.barcode {
-		border: 3px solid #000;
-		width: 100%;
-		height: 100%;
-		margin-bottom: 20px;
-		padding: 2px 5px 2px 5px;
-		font-weight: bold;
+	.code-bars-dns1d{
+		width:90%; 
+		margin:3px auto;
 	}
-	.red {
-		color: red;
-	}
-	.underline {
-		text-decoration: underline;
-	}
-	.info div {
-		margin-bottom: 10px;
+	.footer-bar{
+		font-size:12px;
+		width:100%;
 	}
 </style>
