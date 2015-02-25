@@ -388,7 +388,7 @@ input.uborder, textarea.uborder, select.uborder {
 }
 
 input.disabled, textarea.disabled, select.disabled {
-	background-color: #6d77ff;
+	background-color: #6d77ff !important;
 	color:#fff;
 }
 

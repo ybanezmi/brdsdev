@@ -58,7 +58,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
     	if (Yii::$app->user->isGuest) {
-            //return $this->redirect(['site/login']);
+            return $this->redirect(['site/login']);
         }
 		
     	$this->layout='/main';
@@ -116,10 +116,10 @@ class SiteController extends Controller
 	{
 		$model = Yii::$app->user->identity;
 		
-		if(null !== Yii::$app->request->post('abort')) {
-			$this->redirect(['site/logout']);
-		} else if (null !== Yii::$app->request->post('confirm')) {
+		if (null !== Yii::$app->request->post('confirm')) {
 			$this->redirect(['site/index']);
+		} else if(null !== Yii::$app->request->post('abort')) {
+			$this->redirect(['site/logout']);
 		} else {
 			// display the successful page
 			return $this->render('successful', ['model' => $model]);

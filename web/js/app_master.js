@@ -1,5 +1,6 @@
 $(function() {
 	/*date picker*/
+	/*
 	if (jQuery().datePicker) {
 		$( "#datepicker-1, #datepicker-2" ).datepicker({
 			showOn: "button",
@@ -7,7 +8,7 @@ $(function() {
 			buttonImageOnly: true,
 			buttonText: "Select date"
 		});
-	}
+	}*/
 	
 	/*modal view*/
 	$("#forgotpassword, #openpallet, #closepallet, #rejectpallet, #createto").modal('hide');

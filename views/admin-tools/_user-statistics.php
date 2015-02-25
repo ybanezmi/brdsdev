@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
 		<div class="one-column pdt-one-column help-bg-gray">
 			<div class="control-group">
 				<label class="control-label-f">TRANSACTION DATE</label>
-				<div class="f-full-size">
+				<div class="f-full-size" style="margin-bottom: 10px;">
 					<?php 	echo DatePicker::widget([
 							'name'			=> 'start_date',
 							'name2'			=> 'end_date',

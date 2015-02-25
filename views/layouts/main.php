@@ -14,6 +14,17 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+	<?php 
+	
+		header('P3P: CP=”NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM”');
+	
+		header('Set-Cookie: SIDNAME=ronty; path=/; secure');
+		
+		header('Cache-Control: no-cache');
+		
+		header('Pragma: no-cache');
+	
+	?>	
     <meta charset="<?= Yii::$app->charset ?>"/>
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	

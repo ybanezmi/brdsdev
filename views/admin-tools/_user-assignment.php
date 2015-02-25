@@ -13,13 +13,11 @@ use yii\helpers\ArrayHelper;
 								    'widgetClass'=> 'kartik\datecontrol\DateControl',
 								        'options'=>[
 								            'type'=>\kartik\datecontrol\DateControl::FORMAT_DATE,
-								            'displayFormat'=>'MM/dd/yyyy',
 								            'saveFormat'=>'php:Y-m-d',
 								            'options' => [
 								                'pluginOptions' => [
 								                    'autoclose' => true,
 								                    'keyboardNavigation' => false, 
-								                    'format'=>'m/d/Y',
 								                ]
 								            ]
 								        ],

@@ -24,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="info-box-2">
 	    <p class="help-textcenter"><b>Please Verify</b></p>
 	    <div class="successfully-button">
-	    	<?= Html::submitButton('Confirm', ['class' => 'btn btn-primary successful-confirm', 'name' => 'confirm']) ?>
-	    	<?= Html::submitButton('Abort', ['class' => 'btn btn-primary successful-abort', 'name' => 'abort']) ?>
+	    	<?= Html::submitButton('Confirm', ['class' => 'btn btn-primary successful-confirm', 'name' => 'confirm', 'value' => 'confirm']) ?>
+	    	<?= Html::submitButton('Abort', ['class' => 'btn btn-primary successful-abort', 'name' => 'abort', 'value' => 'abort']) ?>
 		</div>
 	</div>
 <?php ActiveForm::end(); ?>

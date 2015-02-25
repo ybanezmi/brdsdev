@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
-//use kartik\widgets\DatePicker;
+//use yii\jui\DatePicker;
+use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\MstAccount */
@@ -66,7 +66,7 @@ use yii\jui\DatePicker;
 																   					 	 'dateFormat' 		=> 'mm/dd/yy']])->label('End Date') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Register', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

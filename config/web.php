@@ -9,6 +9,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+    	/*
     	'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
@@ -18,7 +19,7 @@ $config = [
                     ]
                 ],
             ],
-        ],
+        ],*/
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'a751d72e738f8639bf8f67566f73ed12',
