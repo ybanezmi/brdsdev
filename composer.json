@@ -32,7 +32,8 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "robregonm/yii2-pdf": "dev-master",
 		"laravel/framework": "4.0.*",
-		"dinesh/barcode": "dev-master"
+		"dinesh/barcode": "dev-master",
+        "miloschuman/yii2-highcharts-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
