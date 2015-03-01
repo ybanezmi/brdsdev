@@ -111,7 +111,7 @@ $this->title = 'Receiving';
 data-toggle="modal"
 			
 			> <span>Close Pallet</span></a></li>
-			<?php if (Yii::$app->user->identity->account_type === 'checker') { ?>
+			<?php if (Yii::$app->user->identity->account_type === 'admin' && Yii::$app->user->identity->account_type === 'checker') { ?>
 				<li><a href="#rejectpallet" 
 				
 				data-toggle="modal"
