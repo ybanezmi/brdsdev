@@ -8,7 +8,13 @@ $this->title = 'TRANSACTION HISTORY';
 
 ?>
 
+<style type="text/css">
+	.kv-panel-before .pull-right{
+		float: none!important;
+	}
+</style>
 <div>
+<div style="width:95%; margin:0 auto;">
 	<h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 	
 	<?php
@@ -54,4 +60,5 @@ $this->title = 'TRANSACTION HISTORY';
     ]);
 	
 	?>
+	</div>
 </div>
