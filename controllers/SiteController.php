@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\MstAccount;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\ChangePasswordForm;
 
 class SiteController extends Controller
 {
@@ -109,7 +110,16 @@ class SiteController extends Controller
 	
 	public function actionChangePassword()
     {
-        return $this->render('change-password');
+    	$this->layout='/main';
+		$changePasswordModel = new ChangePasswordForm();
+		$success = false;
+		if ($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword()) {
+			$success = true;
+			$changePasswordModel = new ChangePasswordForm();
+			return $this->render('change-password', ['model' => $changePasswordModel, 'success' => $success]);
+		} else {
+			return $this->render('change-password', ['model' => $changePasswordModel, 'success' => $success]);
+		}
     }
 	
 	public function actionSuccessful()

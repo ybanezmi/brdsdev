@@ -52,7 +52,7 @@ class LoginForm extends Model
                 
             }
 
-			if(!$user->assignment) {
+			if($user && !$user->assignment) {
 				if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
             		// if IE <= 6
             		echo 'alert("User assignment not set. Please contact your administrator.")';

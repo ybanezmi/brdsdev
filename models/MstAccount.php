@@ -49,7 +49,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
     public function rules()
     {
         return [
-            [['account_type', 'username', 'password', 'auth_key', 'first_name', 'middle_name', 'last_name', 'address', 'contact_no', 
+            [['account_type', 'username', 'password', 'first_name', 'middle_name', 'last_name', 'address', 'contact_no', 
               'notify', 'notify_conact_no', 'assignment', 'next_assignment', 'status', 'creator_id', 'updater_id'], 'required'],
             [['account_type', 'status'], 'string'],
             [['start_date', 'end_date', 'next_start_date', 'next_end_date', 'last_login_date', 'created_date', 'updated_date'], 'safe'],
