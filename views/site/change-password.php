@@ -36,13 +36,13 @@ use yii\bootstrap\Alert;
 			    ]); ?>
 			    
 			    	<?= $form->field($model, 'oldPassword')->textInput(['maxlength' => 32,
-													  	   			 'class' => 'uborder help-40percent'])->label('Old Password')->passwordInput() ?>
+													  	   			 'class' => 'uborder help-40percent'])->label('Old Password', ['class' => 'control-label-f'])->passwordInput() ?>
 					
 					<?= $form->field($model, 'newPassword')->textInput(['maxlength' => 32,
-													  	   			 'class' => 'uborder help-40percent'])->label('New Password')->passwordInput() ?>
+													  	   			 'class' => 'uborder help-40percent'])->label('New Password', ['class' => 'control-label-f'])->passwordInput() ?>
 													  	   			 
 					<?= $form->field($model, 'confirmNewPassword')->textInput(['maxlength' => 32,
-													  	   			 'class' => 'uborder help-40percent'])->label('Confirm New Password')->passwordInput() ?>
+													  	   			 'class' => 'uborder help-40percent'])->label('Confirm New Password', ['class' => 'control-label-f'])->passwordInput() ?>
 			    	
 			    	<div class="one-column-button pdt-one-column-button">
 						<div class="submit-button ie6-submit-button">
