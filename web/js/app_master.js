@@ -488,7 +488,7 @@ function calculateTotalProductTare() {
 /* function to view transaction summary */
 function viewTransactionSummary(transaction_id) {
 	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
-		window.location = "view-entries?id=" + transaction_id;
+		window.open("view-entries?id=" + transaction_id,'_blank');
 	} else {
 		alert('Please select a transaction.');
 	}

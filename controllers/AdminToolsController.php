@@ -177,8 +177,16 @@ class AdminToolsController extends Controller
      */
     public function actionUserProfile($id)
     {
+    	$accountModel = Yii::$app->modelFinder->findAccountModel($id);
+    	$params = ['creator_id' => $id,'status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+
+		// get user transaction detail list
+		$userTransactionDetailList = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+		$userTrxDetailStatusCount = array_count_values(ArrayHelper::getColumn($userTransactionDetailList, 'status'));
+		
         return $this->render('_user-profile', [
-            'model' => Yii::$app->modelFinder->findAccountModel($id),
+            'model' => $accountModel,
+            'statusCount' => $userTrxDetailStatusCount,
         ]);
     }
 

@@ -26,13 +26,13 @@ $this->title = 'USER MANAGEMENT';
 						        'assignment_list' 	=> $assignment_list,
 						    ]);
 		$user_statistics = $this->render('_user-statistics', [
-						        'searchModel'	=> $trx_details_search_model,
-					            'dataProvider' 	=> $trx_details_data_provider,
+						        'searchModel'	=> $account_search_model,
+					            'dataProvider' 	=> $account_data_provider,
 					            'statusCount'	=> $trx_details_status_count,
 					            'user_list'		=> $user_list,
 						    ]);
-		$user_assignment_active = true;
-		$user_statistics_active = false;
+		$user_assignment_active = false;
+		$user_statistics_active = true;
 		if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')) {
 			$user_assignment_active = false;
 			$user_statistics_active = true;
