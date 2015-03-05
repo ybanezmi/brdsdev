@@ -4,22 +4,27 @@ use kartik\datecontrol\Module;
 
 $params = require(__DIR__ . '/params.php');
 
+// jQuery for IE6
+$assetManager = array();
+
+if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
+	$assetManager =  [
+			            'bundles' => [
+			                'yii\web\JqueryAsset' => [
+			                    'sourcePath' => null,   // do not publish the bundle
+			                    'js' => [
+			                        $params['APP_NAME'] . '/web/js/vendor/jquery-1.11.1.min.js',
+			                    ]
+			                ],
+			            ]];
+}
+
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
-    	/*
-    	'assetManager' => [
-            'bundles' => [
-                'yii\web\JqueryAsset' => [
-                    'sourcePath' => null,   // do not publish the bundle
-                    'js' => [
-                        $params['APP_NAME'] . '/web/js/vendor/jquery-1.11.1.min.js',
-                    ]
-                ],
-            ],
-        ],*/
+    	'assetManager' => $assetManager,
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'a751d72e738f8639bf8f67566f73ed12',
