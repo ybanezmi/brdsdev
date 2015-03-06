@@ -39,17 +39,25 @@ use yii\helpers\ArrayHelper;
 			    						if ($model->password === md5(Yii::$app->params["DEFAULT_PASSWORD"])) {
 			    							return "DEFAULT";
 			    						} else {
-			    							return '********';
+			    							return "********";
 			    						}
 			    					},
 				'editableOptions' 	=> [
-										'preHeader' => '<i class="glyphicon glyphicon-lock"></i> Apply Default ',
 							            'header' 	=> 'Password',
-							            'inputType'	=> 'hiddenInput',
+							            'inputType'	=> 'passwordInput',
 							            'pluginEvents' => [
 								        	'editableSuccess'=>'function(event, val) {
-												document.getElementById(this.id + "-targ").innerHTML = "DEFAULT";
+								        		if (val == "password") {
+								        			document.getElementById(this.id + "-targ").innerHTML = "DEFAULT";
+								        		} else {	
+								        			document.getElementById(this.id + "-targ").innerHTML = "********";
+								        		}
 											}',
+								        ],
+								        'options' => [
+								        	'value' => '',
+								        	'maxlength' => '32',
+								        	'placeholder' => '********',
 								        ]
 							        ],
 			],

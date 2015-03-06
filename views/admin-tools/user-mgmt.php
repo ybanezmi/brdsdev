@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 //use yii\jui\Tabs;
 use yii\bootstrap\Tabs;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MstAccountSearch */
@@ -12,9 +13,20 @@ $this->title = 'USER MANAGEMENT';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mst-account-index">
-
     <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
-
+	<?php
+		if ($addUserSuccess) {
+			Alert::begin([
+			    'options' => [
+			        'class' => 'alert-success',
+			    ],
+			]);
+			
+			echo 'User <b>' . Yii::$app->request->post('MstAccount')['username'] . '</b> successfully registered.';
+			
+			Alert::end();
+		}
+	?>
 	<?php 
 		$user_assignment = $this->render('_user-assignment', [
 					            'searchModel' 		=> $account_search_model,

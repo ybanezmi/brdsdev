@@ -35,6 +35,8 @@ use yii\web\JsExpression;
 					    	//'dateFormat' => 'yyyy-MM-dd',
 							]); 
 					?>
+					<?= Html::submitButton('', ['class' => 'glyphicon glyphicon-search']) ?>
+					<a href="#"><span class="glyphicon glyphicon-search"></span></a>
 				</div>
 			</div>
 			<!--
