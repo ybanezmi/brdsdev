@@ -12,6 +12,12 @@ use yii\bootstrap\Alert;
 $this->title = 'USER MANAGEMENT';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<style type="text/css">
+	.kv-panel-before .pull-right{
+		float: none!important;
+	}
+</style>
 <div class="mst-account-index" style="width:95%; margin:0 auto;">
     <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 	<?php
