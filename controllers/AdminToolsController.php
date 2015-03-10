@@ -322,6 +322,14 @@ class AdminToolsController extends Controller
         ]);
 		echo $user_profile;
 	}
+	/**
+     * Database syncronized
+     * @return mixed
+     */
+    public function actionSynchronizedDatabase() {
+		
+    	return $this->render('synchronized-database');
+    }
 	
 	public function actionExport() {
 		$searchModel = null;
