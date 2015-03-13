@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 //use yii\jui\Tabs;
 use yii\bootstrap\Tabs;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MstAccountSearch */
@@ -11,10 +12,27 @@ use yii\bootstrap\Tabs;
 $this->title = 'USER MANAGEMENT';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mst-account-index">
 
+<style type="text/css">
+	.kv-panel-before .pull-right{
+		float: none!important;
+	}
+</style>
+<div class="mst-account-index" style="width:95%; margin:0 auto;">
     <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
-
+	<?php
+		if ($addUserSuccess) {
+			Alert::begin([
+			    'options' => [
+			        'class' => 'alert-success',
+			    ],
+			]);
+			
+			echo 'User <b>' . Yii::$app->request->post('MstAccount')['username'] . '</b> successfully registered.';
+			
+			Alert::end();
+		}
+	?>
 	<?php 
 		$user_assignment = $this->render('_user-assignment', [
 					            'searchModel' 		=> $account_search_model,
@@ -26,8 +44,8 @@ $this->title = 'USER MANAGEMENT';
 						        'assignment_list' 	=> $assignment_list,
 						    ]);
 		$user_statistics = $this->render('_user-statistics', [
-						        'searchModel'	=> $trx_details_search_model,
-					            'dataProvider' 	=> $trx_details_data_provider,
+						        'searchModel'	=> $account_search_model,
+					            'dataProvider' 	=> $account_data_provider,
 					            'statusCount'	=> $trx_details_status_count,
 					            'user_list'		=> $user_list,
 						    ]);

@@ -22,6 +22,11 @@ body {
 	padding: 0;
 }
 
+/*modal*/
+.modal-body {
+	max-height: 1000px;
+}
+
 /*login style*/
 body.login{
 	width: 100%;

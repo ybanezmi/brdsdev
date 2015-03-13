@@ -33,7 +33,12 @@ $this->title = 'TRANSACTION HISTORY';
 											}
 				             			}],
 						['attribute'	=> 'pallet_count',
-						 'label'		=> 'NO. OF PALLET'],
+						 'label'		=> 'NO. OF PALLET',
+						 'value'		=> function($model) {
+						 						$params = ['transaction_id' => $model->id, 'status' => Yii::$app->params['STATUS_PROCESS']];
+						 						$trxDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+												return count($trxDetailsModel);
+						 }],
 						['attribute'	=> 'weight',
 						 'label'		=> 'TOTAL WT.'],
 						['attribute'	=> 'status',

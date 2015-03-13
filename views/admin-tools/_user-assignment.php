@@ -39,17 +39,25 @@ use yii\helpers\ArrayHelper;
 			    						if ($model->password === md5(Yii::$app->params["DEFAULT_PASSWORD"])) {
 			    							return "DEFAULT";
 			    						} else {
-			    							return '********';
+			    							return "********";
 			    						}
 			    					},
 				'editableOptions' 	=> [
-										'preHeader' => '<i class="glyphicon glyphicon-lock"></i> Apply Default ',
 							            'header' 	=> 'Password',
-							            'inputType'	=> 'hiddenInput',
+							            'inputType'	=> 'passwordInput',
 							            'pluginEvents' => [
 								        	'editableSuccess'=>'function(event, val) {
-												document.getElementById(this.id + "-targ").innerHTML = "DEFAULT";
+								        		if (val == "password") {
+								        			document.getElementById(this.id + "-targ").innerHTML = "DEFAULT";
+								        		} else {	
+								        			document.getElementById(this.id + "-targ").innerHTML = "********";
+								        		}
 											}',
+								        ],
+								        'options' => [
+								        	'value' => '',
+								        	'maxlength' => '32',
+								        	'placeholder' => '********',
 								        ]
 							        ],
 			],
@@ -120,11 +128,7 @@ use yii\helpers\ArrayHelper;
             ['class' => 'yii\grid\ActionColumn',
              'buttons' =>
 		        ['view' => function ($url, $model, $key) {
-						        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '#profile', 
-												['id'			=> $key,
-												 'data-toggle'	=> 'modal',
-												 'data-target'	=> '#profile',
-												 'onclick'		=> 'getAccountInfo('.$key.');']);
+						        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'user-profile?id='.$key);
 						   },
 				 'update' => function ($url, $model, $key) {
 						        //return Html::a('<span class="glyphicon glyphicon-pencil"></span>', str_replace('update', 'update-user', $url));
@@ -163,12 +167,4 @@ use yii\helpers\ArrayHelper;
 		        'heading' => 'USER LIST',
 		    ],
     ]); 
-    
-		    Modal::begin([
-			    'header' 		=> '<button style="float: right; margin-right: 20px;" class="btn btn-primary help-20percent" type="button" data-dismiss="modal">CLOSE</button><h2>USER PROFILE</h2>',
-			    'id'	 		=> 'profile',
-			]);
-				echo "<div id='modal-content'></div>";
-			Modal::end();
 	
-    ?>

@@ -35,6 +35,8 @@ use yii\web\JsExpression;
 					    	//'dateFormat' => 'yyyy-MM-dd',
 							]); 
 					?>
+					<?= Html::submitButton('', ['class' => 'glyphicon glyphicon-search']) ?>
+					<a href="#"><span class="glyphicon glyphicon-search"></span></a>
 				</div>
 			</div>
 			<!--
@@ -101,7 +103,7 @@ use yii\web\JsExpression;
 				</tbody>
 			</table>
 	    </div>
-	    <div id="chart" style="width: 50%; float: left;">
+	    <div id="chart" style="width: 51%; float: left;">
 	    	<?php 
 	    		echo Highcharts::widget([
 			    'scripts' => [
@@ -150,74 +152,35 @@ use yii\web\JsExpression;
 	    <?php ActiveForm::end(); ?>
 	</div>
 
-	<div style="float: left;">
+	<div style="float: left; width: 100%;">
 		<?php
 			$gridColumns = [
 	            ['class' => 'kartik\grid\SerialColumn'], // @TODO: Remove id column
-	            // 'account_type',
-	            // 'first_name',
-	            // 'last_name',
-	            ['attribute' => 'updater_id',
-	             'label'	 => 'User Name',
-	             'value'	 => function($model) {
-	             				$account = Yii::$app->modelFinder->findAccountModel($model->updater_id);
-								if ($account) {
-									return $account->first_name . ' ' . $account->last_name;
-								}
-							},
-	             ],
-	            ['attribute' => 'updated_date',
-	             'label'	 => 'Date'],
-	            ['attribute' => 'transaction_id',
-	             'label'	 => 'Transaction'],
-	            ['attribute' => 'customer_code',
-	             'label'	 => 'Customer',
-	             'value'	 => function($model) {
-								$customer = Yii::$app->modelFinder->findCustomerModel($model->customer_code);
-								if ($customer) {
-									return $customer->name;
-								}
-	             			},
-	             ],
-	            ['attribute' => 'pallet_no',
-	             'label'	 => 'Pallet No'],
-	            [	'class'			=> 'kartik\grid\BooleanColumn',
-	             	'attribute' 	=> 'status',
+	            'username',
+	            'first_name',
+	            'last_name',
+	            [	'attribute' 	=> 'status',
 	             	'label'	 		=> 'Created',
-	             	'trueLabel'		=> 'Yes', 
-	        		'falseLabel' 	=> 'No',
-	        		'vAlign'		=>'middle',
 			        'value' 		=> function($model) {
-			        					if (Yii::$app->params['STATUS_PROCESS'] === $model->status) {
-			        						return true;
-			        					}
-										return false;
+			        					$params = ['creator_id' => $model->id, 'status' => Yii::$app->params['STATUS_PROCESS']];
+										$trx_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+										return count($trx_details_model);
 			        				},
 	        	],
-	            [	'class'			=> 'kartik\grid\BooleanColumn',
-	             	'attribute' 	=> 'status',
+	            [	'attribute' 	=> 'status',
 	             	'label'	 		=> 'Processed',
-	             	'trueLabel'		=> 'Yes', 
-	        		'falseLabel' 	=> 'No',
-	        		'vAlign'		=>'middle',
 			        'value' 		=> function($model) {
-			        					if (Yii::$app->params['STATUS_CLOSED'] === $model->status) {
-			        						return true;
-			        					}
-										return false;
+			        					$params = ['creator_id' => $model->id, 'status' => Yii::$app->params['STATUS_CLOSED']];
+										$trx_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+										return count($trx_details_model);
 			        				},
 	        	],
-	            [	'class'			=> 'kartik\grid\BooleanColumn',
-	             	'attribute' 	=> 'status',
+	            [	'attribute' 	=> 'status',
 	             	'label'	 		=> 'Rejected',
-	             	'trueLabel'		=> 'Yes', 
-	        		'falseLabel' 	=> 'No',
-	        		'vAlign'		=>'middle',
 			        'value' 		=> function($model) {
-			        					if (Yii::$app->params['STATUS_REJECTED'] === $model->status) {
-			        						return true;
-			        					}
-										return false;
+			        					$params = ['creator_id' => $model->id, 'status' => Yii::$app->params['STATUS_REJECTED']];
+										$trx_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+										return count($trx_details_model);
 			        				},
 	        	],        	
 	            // 'last_login_date',

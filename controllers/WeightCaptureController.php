@@ -10,7 +10,24 @@ class WeightCaptureController extends Controller
 {
     public function actionIndex()
     {
-        return $this->render('index');
+    	// Get customer list
+		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
+		
+		if (null !== Yii::$app->request->post('print')) {
+			Yii::$app->response->format = 'pdf';
+
+	        //Can you it if needed to rotate the page
+	        Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+	            'orientation' => 'Landscape', // This value will be ignored if format is a string value.
+	            'beforeRender' => function($mpdf, $data) {},
+	            ]);
+	        $this->layout = '//print';
+	        return $this->render('print-preview',[]);
+		} else {
+			return $this->render('index',[
+	        	'customer_list' => $customer_list,
+	        ]);
+		}
     }
 
     public function actionPrintTag()

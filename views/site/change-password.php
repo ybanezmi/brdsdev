@@ -1,11 +1,10 @@
 <?php
 /* @var $this yii\web\View */
-
-$this->title = 'Change Password';
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
+
+$this->title = 'Change Password';
 
 ?>
 <div id="main-content">

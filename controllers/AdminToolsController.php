@@ -55,23 +55,6 @@ class AdminToolsController extends Controller
 		$trx_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
 		$trx_details_status_count = array_count_values(ArrayHelper::getColumn($trx_details_model, 'status'));
 
-		$account_model = new MstAccount;
-		
-		$date = date('Y-m-d');
-		$datetime = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-		
-		// set defaults
-		$account_model->start_date		= $date;
-		$account_model->end_date		= $date;
-		
-		// @TODO: transfer updating of status/created/updated details to model
-		// set status, created and updated details
-		$account_model->status			= Yii::$app->params['STATUS_ACTIVE'];
-		$account_model->creator_id		= Yii::$app->user->id;
-		$account_model->created_date 	= $datetime;
-		$account_model->updater_id		= Yii::$app->user->id;
-		$account_model->updated_date	= $datetime;
-		
 		// get plant list
 		$plant_location_list = Yii::$app->modelFinder->getPlantList(null, ['status' => Yii::$app->params['STATUS_ACTIVE']], 'plant_location');
 		$assignment_list = ArrayHelper::map($plant_location_list, 'plant_location', 'plant_location');
@@ -101,8 +84,8 @@ class AdminToolsController extends Controller
 	        // load model like any single model validation
 	        if ($model->load($post)) {
 	        	// apply default password
-	        	if (isset($posted['password'])) {
-	        		$model->password = md5(Yii::$app->params['DEFAULT_PASSWORD']);
+	        	if (isset($posted['password']) && $posted['password'] !== "") {
+	        		$model->password = md5($posted['password']);
 	        	}
 				
 	            // can save model or do something before saving model
@@ -130,7 +113,10 @@ class AdminToolsController extends Controller
 	        echo $out;
 	        return;
 	    }
-		
+		$account_model = new MstAccount;
+		$account_model = $this->setAccountDefaults($account_model);
+			
+		$addUserSuccess = false;
         if ($account_model->load(Yii::$app->request->post())) {
         	$account_model->password = md5($account_model->password);
 			
@@ -138,22 +124,46 @@ class AdminToolsController extends Controller
 			$account_model->start_date = Yii::$app->dateFormatter->convert($account_model->start_date);
 			$account_model->end_date = Yii::$app->dateFormatter->convert($account_model->end_date);
 			
-			$account_model->save();
 			
-			return $this->redirect(['user-mgmt']);
-        } else {
-            return $this->render('user-mgmt', [
-            	'account_search_model' 		=> $account_search_model,
-            	'account_data_provider' 	=> $account_data_provider,
-            	'trx_details_search_model'	=> $trx_details_search_model,
-            	'trx_details_data_provider'	=> $trx_details_data_provider,
-            	'trx_details_status_count'	=> $trx_details_status_count,
-                'account_model' 			=> $account_model,
-                'assignment_list' 			=> $assignment_list,
-                'user_list'					=> $user_list,
-            ]);
+			
+			if ($account_model->save()) {
+				$addUserSuccess = true;
+				$account_model = new MstAccount;
+				$account_model = $this->setAccountDefaults($account_model);
+			}
         }
+		
+		return $this->render('user-mgmt', [
+        	'account_search_model' 		=> $account_search_model,
+        	'account_data_provider' 	=> $account_data_provider,
+        	'trx_details_search_model'	=> $trx_details_search_model,
+        	'trx_details_data_provider'	=> $trx_details_data_provider,
+        	'trx_details_status_count'	=> $trx_details_status_count,
+            'account_model' 			=> $account_model,
+            'assignment_list' 			=> $assignment_list,
+            'user_list'					=> $user_list,
+            'addUserSuccess'			=> $addUserSuccess,
+        ]);
     }
+
+	public function setAccountDefaults($account_model) {
+		$date = date('Y-m-d');
+		$datetime = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
+		
+		// set defaults
+		$account_model->start_date		= $date;
+		$account_model->end_date		= $date;
+		
+		// @TODO: transfer updating of status/created/updated details to model
+		// set status, created and updated details
+		$account_model->status			= Yii::$app->params['STATUS_ACTIVE'];
+		$account_model->creator_id		= Yii::$app->user->id;
+		$account_model->created_date 	= $datetime;
+		$account_model->updater_id		= Yii::$app->user->id;
+		$account_model->updated_date	= $datetime;
+		
+		return $account_model;
+	}
 
     /**
      * Lists all MstAccount models.
@@ -177,8 +187,16 @@ class AdminToolsController extends Controller
      */
     public function actionUserProfile($id)
     {
+    	$accountModel = Yii::$app->modelFinder->findAccountModel($id);
+    	$params = ['creator_id' => $id,'status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+
+		// get user transaction detail list
+		$userTransactionDetailList = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
+		$userTrxDetailStatusCount = array_count_values(ArrayHelper::getColumn($userTransactionDetailList, 'status'));
+		
         return $this->render('_user-profile', [
-            'model' => Yii::$app->modelFinder->findAccountModel($id),
+            'model' => $accountModel,
+            'statusCount' => $userTrxDetailStatusCount,
         ]);
     }
 
@@ -304,6 +322,14 @@ class AdminToolsController extends Controller
         ]);
 		echo $user_profile;
 	}
+	/**
+     * Database syncronized
+     * @return mixed
+     */
+    public function actionSynchronizedDatabase() {
+		
+    	return $this->render('synchronized-database');
+    }
 	
 	public function actionExport() {
 		$searchModel = null;

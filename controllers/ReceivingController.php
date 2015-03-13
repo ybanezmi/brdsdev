@@ -560,7 +560,34 @@ class ReceivingController extends Controller
 	
 	public function actionClose()
 	{
-		return $this->render('close');
+		$this->initUser();
+		
+		$success = false;
+		
+		// Get customer list
+		$customer_model = new MstCustomer();
+		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
+		$transaction_model = new TrxTransactionDetails();
+		$transaction_list = array();
+		$pallet_no = '';
+			
+		if(null !== Yii::$app->request->post('cancel')) {
+    		$this->redirect(['index']);
+    	} else if (null !== Yii::$app->request->post('close-receiving')) {
+	    	// close receiving
+	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
+			$transaction->status = Yii::$app->params['STATUS_CLOSED'];
+			$success = $transaction->update();
+		}
+		
+		return $this->render('close', [
+			'customer_model'	=> $customer_model,
+			'customer_list'		=> $customer_list,
+			'transaction_model' => $transaction_model,
+			'transaction_list'	=> $transaction_list,
+			'pallet_no'         => $pallet_no,
+			'success'			=> $success,
+		]);
 	}
 	
 	public function actionSynchronize()
