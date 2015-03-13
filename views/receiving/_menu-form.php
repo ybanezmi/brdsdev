@@ -132,10 +132,15 @@ use yii\bootstrap\Modal;
 						])->input('number', ['maxlength' => 10])->label('Batch / Lot') ?>
 						
 
-		<?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),['clientOptions' 	 => ['dateFormat' 	=> 'm/dd/yy',
+		<?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),[
+																											'language' => 'en-GB',
+																											
+
+																										  'clientOptions' 	 => ['dateFormat' 	=> 'm/dd/yy',
 																										   						 'showOn'		=> 'button',
 																																 'buttonImage'  => '../images/calendar.gif',
-																																 'buttonImageOnly' => 'true'],
+																																 'buttonImageOnly' => 'true',
+																																 ],
 																										   'options' 		 => ['class' 		=> 'uborder disabled help-20percent dateclass',
 																										   						 'readonly'		=> 'readonly',
 																										   						 'dateFormat' 	=> 'm/dd/yy',
@@ -143,7 +148,10 @@ use yii\bootstrap\Modal;
 																																 
 																																 
 
-		<?= $form->field($transaction_detail_model,'expiry_date')->widget(DatePicker::className(),['clientOptions' 	 => ['dateFormat' 		=> 'm/dd/yy',
+		<?= $form->field($transaction_detail_model,'expiry_date')->widget(DatePicker::className(),[
+																									'language' => 'en-GB',
+
+																									'clientOptions' 	 => ['dateFormat' 		=> 'm/dd/yy',
 																								   						 'showOn'			=> 'button',
 																														 'buttonImage'  	=> '../images/calendar.gif',
 																														 'buttonImageOnly' 	=> 'true'],
