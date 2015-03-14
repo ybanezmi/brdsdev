@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\MstAccount;
 use app\models\MstAccountSearch;
+use app\models\MstCustomer;
 use app\models\TrxTransactions;
 use app\models\TrxTransactionsSearch;
 use app\models\TrxTransactionDetails;
@@ -329,6 +330,25 @@ class AdminToolsController extends Controller
     public function actionSynchronizedDatabase() {
 		
     	return $this->render('synchronized-database');
+    }
+	
+	public function actionSynchronizedMaterials() {
+		if(null !== Yii::$app->request->post('back')) {
+    		$this->redirect(['synchronized-database']);
+    	} 
+		else if(null !== Yii::$app->request->post('synch_all')){
+			$customer_code = Yii::$app->request->post()['MstCustomer']['name'];
+			$this->redirect('http://192.168.1.125/materials_customer/'.$customer_code.'/bigblue');
+		}
+		else {
+			// Get customer list
+			$customer_model = new MstCustomer();
+			$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
+			return $this->render('synchronized-materials', [
+				'customer_model' 	=> $customer_model,
+				'customer_list'		=> $customer_list,
+			]);
+		}
     }
 	
 	public function actionExport() {
