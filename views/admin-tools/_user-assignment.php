@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\daterange\DateRangePicker;
 use kartik\editable\Editable;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
@@ -73,6 +74,7 @@ use yii\helpers\ArrayHelper;
             [	'class'				=> 'kartik\grid\EditableColumn',
             	'attribute' 		=> 'start_date',
              	'label'	 			=> 'Current Start Date',
+                'filterType'        => GridView::FILTER_DATE_RANGE,
              	'value'				=> function ($model) {
              							if (null != $model->start_date) {
              								return date('m/d/Y', strtotime($model->start_date));

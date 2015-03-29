@@ -47,17 +47,14 @@ class MstAccountSearch extends MstAccount
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-		
+
 		$query->where(['status' => Yii::$app->params['STATUS_ACTIVE']]);
-		
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-
         $query->andFilterWhere([
             'id' => $this->id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
             'last_login_date' => $this->last_login_date,
             'creator_id' => $this->creator_id,
             'created_date' => $this->created_date,
@@ -74,7 +71,38 @@ class MstAccountSearch extends MstAccount
             ->andFilterWhere(['like', 'last_name', $this->last_name])
             ->andFilterWhere(['like', 'assignment', $this->assignment])
             ->andFilterWhere(['like', 'status', $this->status]);
-			
+
+        // start date range filter
+        if (isset($this->start_date) && $this->start_date != null) {
+            $startDate = explode(' - ', $this->start_date);
+            $startDateFrom = Yii::$app->dateFormatter->convert($startDate[0]);
+            $startDateTo = Yii::$app->dateFormatter->convert($startDate[1]);
+            $query->andFilterWhere(['between', 'start_date', $startDateFrom, $startDateTo]);
+        }
+
+        // end date range filter
+        if (isset($this->end_date) && $this->end_date != null) {
+            $endDate = explode(' - ', $this->end_date);
+            $endDateFrom = Yii::$app->dateFormatter->convert($endDate[0]);
+            $endDateTo = Yii::$app->dateFormatter->convert($endDate[1]);
+            $query->andFilterWhere(['between', 'end_date', $endDateFrom, $endDateTo]);
+        }
+
+        // next start date range filter
+        if (isset($this->next_start_date) && $this->next_start_date != null) {
+            $nextStartDate = explode(' - ', $this->next_start_date);
+            $nextStartDateFrom = Yii::$app->dateFormatter->convert($nextStartDate[0]);
+            $nextStartDateTo = Yii::$app->dateFormatter->convert($nextStartDate[1]);
+            $query->andFilterWhere(['between', 'next_start_date', $nextStartDateFrom, $nextStartDateTo]);
+        }
+
+        // next end date range filter
+        if (isset($this->next_end_date) && $this->next_end_date != null) {
+            $nextEndDate = explode(' - ', $this->next_end_date);
+            $nextEndDateFrom = Yii::$app->dateFormatter->convert($nextEndDate[0]);
+            $nextEndDateTo = Yii::$app->dateFormatter->convert($nextEndDate[1]);
+            $query->andFilterWhere(['between', 'next_end_date', $nextEndDateFrom, $nextEndDateTo]);
+        }
 
         return $dataProvider;
     }
