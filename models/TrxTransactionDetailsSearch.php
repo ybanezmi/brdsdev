@@ -62,7 +62,6 @@ class TrxTransactionDetailsSearch extends TrxTransactionDetails
             'manufacturing_date' => $this->manufacturing_date,
             'expiry_date' => $this->expiry_date,
             'creator_id' => $this->creator_id,
-            'created_date' => $this->created_date,
             'updater_id' => $this->updater_id,
             'updated_date' => $this->updated_date,
         ]);
@@ -71,6 +70,14 @@ class TrxTransactionDetailsSearch extends TrxTransactionDetails
             ->andFilterWhere(['like', 'pallet_no', $this->pallet_no])
             ->andFilterWhere(['like', 'pallet_type', $this->pallet_type])
             ->andFilterWhere(['like', 'status', $this->status]);
+
+        // created date range filter
+        if (isset($this->start_date) && $this->start_date != null) {
+            $startDate = explode(' - ', $this->start_date);
+            $startDateFrom = Yii::$app->dateFormatter->convert($startDate[0]);
+            $startDateTo = Yii::$app->dateFormatter->convert($startDate[1]);
+            $query->andFilterWhere(['between', 'start_date', $startDateFrom, $startDateTo]);
+        }
 
         return $dataProvider;
     }

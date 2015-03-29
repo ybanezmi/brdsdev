@@ -51,7 +51,8 @@ $this->title = 'USER MANAGEMENT';
 						    ]);
 		$user_assignment_active = true;
 		$user_statistics_active = false;
-		if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')) {
+		if (null !== Yii::$app->request->get('TrxTransactionDetailsSearch')
+            || null !== Yii::$app->request->post('processTransactionDateFilter')) {
 			$user_assignment_active = false;
 			$user_statistics_active = true;
 		}

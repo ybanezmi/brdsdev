@@ -47,8 +47,23 @@ class AdminToolsController extends Controller
     {
         $account_search_model = new MstAccountSearch();
         $account_data_provider = $account_search_model->search(Yii::$app->request->queryParams);
-		
-		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+
+        $params = array();
+        $trxQueryParams = array();
+        if (null !== Yii::$app->request->post('processTransactionDateFilter')) {
+            // convert to correct date format
+            $trxDateFrom = Yii::$app->dateFormatter->convert(Yii::$app->request->post('trx_start_date'));
+            $trxDateTo = Yii::$app->dateFormatter->convert(Yii::$app->request->post('trx_end_date'));
+
+            $trxQueryParams = ['between', 'created_date', $trxDateFrom, $trxDateTo];
+        }
+
+		$statusParam = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+        if (count($trxQueryParams) > 0) {
+            $params = ['and', $statusParam, $trxQueryParams];
+        } else {
+            $params = $statusParam;
+        }
 		$trx_details_search_model = new TrxTransactionDetailsSearch();
 		$trx_details_data_provider = $trx_details_search_model->search(Yii::$app->request->queryParams, $params);
 

@@ -13,30 +13,26 @@ use yii\web\JsExpression;
 	<div class="user-statistics-form">
     <?php 
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
-    	$form = ActiveForm::begin([
-    	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
-    	]
-    ]); ?>
-		<div class="one-column pdt-one-column help-bg-gray" style="width: 49%; height: 400px; float: left;">
+    	$form = ActiveForm::begin([]); ?>
+		<div class="one-column pdt-one-column help-bg-gray" style="width: 50%; height: 400px; float: left;">
 			<div class="control-group">
 				<label class="control-label-f">TRANSACTION DATE</label>
 				<div class="f-full-size" style="margin-bottom: 10px;">
 					<?php 	echo DatePicker::widget([
-							'name'			=> 'start_date',
-							'name2'			=> 'end_date',
-							//'attribute'  	=> 'from_date',
-		    				//'attribute2' 	=> 'to_date',
-		    				'options' 		=> ['placeholder' => 'Start date'],
-		    				'options2'	 	=> ['placeholder' => 'End date'],
-		    				'type' => DatePicker::TYPE_RANGE,
-					    	//'value'  => $value,
-					    	//'language' => 'ru',
-					    	//'dateFormat' => 'yyyy-MM-dd',
+                                'name'			=> 'trx_start_date',
+                                'value'         => Yii::$app->request->post('trx_start_date'),
+                                'name2'			=> 'trx_end_date',
+                                'value2'        => Yii::$app->request->post('trx_end_date'),
+                                'options' 		=> ['placeholder' => 'Start date'],
+                                'options2'	 	=> ['placeholder' => 'End date'],
+                                'type' => DatePicker::TYPE_RANGE,
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                ]
 							]); 
 					?>
-					<?= Html::submitButton('', ['class' => 'glyphicon glyphicon-search']) ?>
-					<a href="#"><span class="glyphicon glyphicon-search"></span></a>
+					<?= Html::submitButton('', ['class' => 'glyphicon glyphicon-search',
+                                                'name'  => 'processTransactionDateFilter']) ?>
 				</div>
 			</div>
 			<!--
@@ -103,8 +99,8 @@ use yii\web\JsExpression;
 				</tbody>
 			</table>
 	    </div>
-	    <div id="chart" style="width: 51%; float: left;">
-	    	<?php 
+	    <div id="chart" style="width: 45%; float: left;">
+	    	<?php
 	    		echo Highcharts::widget([
 			    'scripts' => [
 			        'modules/exporting',
