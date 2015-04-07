@@ -638,13 +638,13 @@ form h2.legend{
 
 .weigh-page form .desktop-only-weigh-capt {
 	position: absolute;
-	bottom: 70px;
-	right: 0;
+	bottom: 150px;
+	right: 50px;
 }
 .weigh-page form .desktop-only-weigh-capt button {
 	display: block;
-	width: 260px;
-	padding: 70px;
+	width: 200px;
+	padding: 50px 0;
 	font-size: 30px;
 	margin: 10px;
 	-webkit-border-radius: 15px;
