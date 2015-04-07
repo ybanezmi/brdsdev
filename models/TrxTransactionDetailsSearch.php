@@ -71,12 +71,20 @@ class TrxTransactionDetailsSearch extends TrxTransactionDetails
             ->andFilterWhere(['like', 'pallet_type', $this->pallet_type])
             ->andFilterWhere(['like', 'status', $this->status]);
 
-        // created date range filter
+        // start date range filter
         if (isset($this->start_date) && $this->start_date != null) {
             $startDate = explode(' - ', $this->start_date);
             $startDateFrom = Yii::$app->dateFormatter->convert($startDate[0]);
             $startDateTo = Yii::$app->dateFormatter->convert($startDate[1]);
             $query->andFilterWhere(['between', 'start_date', $startDateFrom, $startDateTo]);
+        }
+
+        // created date range filter
+        if (isset($this->created_date) && $this->created_date != null) {
+            $createdDate = explode(' - ', $this->created_date);
+            $createdDateFrom = Yii::$app->dateFormatter->convert($createdDate[0]);
+            $createdDateTo = Yii::$app->dateFormatter->convert($createdDate[1]);
+            $query->andFilterWhere(['between', 'created_date', $createdDateFrom, $createdDateTo]);
         }
 
         return $dataProvider;

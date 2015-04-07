@@ -187,7 +187,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
     public function validateUsername($attribute, $params)
     {
         $userName = MstAccount::findByUsername($this->username);
-        if ($userName) {
+        if (!Yii::$app->request->post('hasEditable') && $userName) {
             $this->addError('username', 'Username is already taken.');
         }
     }

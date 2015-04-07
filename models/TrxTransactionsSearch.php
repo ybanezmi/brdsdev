@@ -62,7 +62,6 @@ class TrxTransactionsSearch extends TrxTransactions
             'weight' => $this->weight,
             'packaging_id' => $this->packaging_id,
             'creator_id' => $this->creator_id,
-            'created_date' => $this->created_date,
             'updater_id' => $this->updater_id,
             'updated_date' => $this->updated_date,
         ]);
@@ -77,6 +76,14 @@ class TrxTransactionsSearch extends TrxTransactions
             ->andFilterWhere(['like', 'remarks', $this->remarks])
             ->andFilterWhere(['like', 'truck_van', $this->truck_van])
             ->andFilterWhere(['like', 'status', $this->status]);
+
+        // created date range filter
+        if (isset($this->created_date) && $this->created_date != null) {
+            $createdDate = explode(' - ', $this->created_date);
+            $createdDateFrom = Yii::$app->dateFormatter->convert($createdDate[0]);
+            $createdDateTo = Yii::$app->dateFormatter->convert($createdDate[1]);
+            $query->andFilterWhere(['between', 'created_date', $createdDateFrom, $createdDateTo]);
+        }
 
         return $dataProvider;
     }

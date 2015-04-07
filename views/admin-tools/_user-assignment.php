@@ -17,9 +17,8 @@ use yii\helpers\ArrayHelper;
 								            'saveFormat'=>'php:Y-m-d',
 								            'options' => [
 								                'pluginOptions' => [
-								                    'autoclose' => true,
-								                    'keyboardNavigation' => false, 
-								                ]
+								                    'keyboardNavigation' => false,
+								                ],
 								            ]
 								        ],
 								        'pluginEvents' => [
@@ -31,6 +30,17 @@ use yii\helpers\ArrayHelper;
 											}',
 								        ]
 								    ];
+
+        $dateRangeFilterOptions = [ 'pluginOptions' => [
+                                        'autoclose' => true,
+                                    ],
+                                    'pluginEvents'      =>
+                                        ['apply.daterangepicker' =>
+                                            'function() {
+                                                $(".grid-view").yiiGridView("applyFilter");
+                                            }',
+                                        ],
+                                    ];
 	
 		$gridColumns = [
         	'username',
@@ -75,6 +85,7 @@ use yii\helpers\ArrayHelper;
             	'attribute' 		=> 'start_date',
              	'label'	 			=> 'Current Start Date',
                 'filterType'        => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => $dateRangeFilterOptions,
              	'value'				=> function ($model) {
              							if (null != $model->start_date) {
              								return date('m/d/Y', strtotime($model->start_date));
@@ -85,6 +96,8 @@ use yii\helpers\ArrayHelper;
             [	'class'				=> 'kartik\grid\EditableColumn',
             	'attribute' 		=> 'end_date',
              	'label'	 			=> 'Current End Date',
+                'filterType'        => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => $dateRangeFilterOptions,
              	'value'				=> function ($model) {
              							if (null != $model->end_date) {
              								return date('m/d/Y', strtotime($model->end_date));
@@ -95,6 +108,8 @@ use yii\helpers\ArrayHelper;
             [	'class'				=> 'kartik\grid\EditableColumn',
              	'attribute' 		=> 'next_assignment',
              	'label'		 		=> 'Next Location',
+                'filterType'        => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => $dateRangeFilterOptions,
              	'editableOptions' 	=> [
 							            'header' 	=> 'Next Location',
 							            'inputType'	=> 'dropDownList',
@@ -114,6 +129,8 @@ use yii\helpers\ArrayHelper;
             [	'class'				=> 'kartik\grid\EditableColumn',
             	'attribute' 		=> 'next_end_date',
              	'label'	 			=> 'Next End Date',
+                'filterType'        => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => $dateRangeFilterOptions,
              	'value'				=> function ($model) {
              							if (null != $model->next_end_date) {
              								return date('m/d/Y', strtotime($model->next_end_date));

@@ -3,6 +3,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\daterange\DateRangePicker;
 
 $this->title = 'TRANSACTION HISTORY';
 
@@ -18,8 +19,21 @@ $this->title = 'TRANSACTION HISTORY';
 	<h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 	
 	<?php
+        $dateRangeFilterOptions = [ 'pluginOptions' => [
+            'autoclose' => true,
+        ],
+            'pluginEvents'      =>
+                ['apply.daterangepicker' =>
+                    'function() {
+                                                    $(".grid-view").yiiGridView("applyFilter");
+                                                }',
+                ],
+        ];
+
 		$gridColumns = [['attribute' 	=> 'created_date',
-						 'label' 		=> 'DATE'],
+						 'label' 		=> 'DATE',
+                         'filterType'           => GridView::FILTER_DATE_RANGE,
+                         'filterWidgetOptions'  => $dateRangeFilterOptions,],
 						['attribute' 	=> 'id',
 						 'label'		=> 'BRDS NO.'],
 						['attribute'	=> 'sap_no',
