@@ -50,10 +50,16 @@ $this->title = 'USER MANAGEMENT';
 					            'user_list'		=> $user_list,
 						    ]);
 		$user_assignment_active = true;
+        $register_user_active = false;
 		$user_statistics_active = false;
-		if (null !== Yii::$app->request->get('TrxTransactionDetailsSearch')
+        if (null !== Yii::$app->request->post('MstAccount')) {
+            $user_assignment_active = false;
+            $register_user_active = true;
+            $user_statistics_active = false;
+        } else if (null !== Yii::$app->request->get('TrxTransactionDetailsSearch')
             || null !== Yii::$app->request->post('processTransactionDateFilter')) {
 			$user_assignment_active = false;
+            $register_user_active = false;
 			$user_statistics_active = true;
 		}
 	?>
@@ -67,7 +73,8 @@ $this->title = 'USER MANAGEMENT';
 			],
 			[
 				'label'		=> 'REGISTER USER',
-				'content'	=> '<h2 class="page-title">User Profile</h2><div class="one-column help-bg-gray pdt-one-column">' . $register_user . '</div>'
+				'content'	=> '<h2 class="page-title">User Profile</h2><div class="one-column help-bg-gray pdt-one-column">' . $register_user . '</div>',
+                'active' 	=> $register_user_active,
 			],
 			[
 				'label'		=> 'USER STATISTICS',
