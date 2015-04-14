@@ -1,18 +1,15 @@
 /*!
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @version   3.0.0
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
+ * @version   3.0.1
  *
  * Gridview widget styling and enhancements for Bootstrap.
  * Built for Yii Framework 2.0
  * Author: Kartik Visweswaran
- * Year: 2014
+ * Year: 2015
  * For more Yii related demos visit http://demos.krajee.com
  */
-.kv-grid-container {
-    overflow-x: hidden;
-}
 .kv-panel-pager {
     min-height: 34px;
 }
@@ -267,4 +264,8 @@
 .panel .table-responsive > .floatThead-wrapper > .table-bordered > tfoot > tr:last-child > th {
     border-bottom: 0;
     border-radius: 3px;
+}
+
+.kv-clear-radio {
+    float:none;
 }

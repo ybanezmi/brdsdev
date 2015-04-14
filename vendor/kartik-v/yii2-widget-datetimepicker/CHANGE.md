@@ -1,3 +1,16 @@
+version 1.4.1
+=============
+**Date:** 02-Mar-2015
+
+- (enh #14): Russian translations updated.
+- (enh #16): Improve validation to retrieve the right translation messages folder.
+
+version 1.4.0
+=============
+**Date:** 25-Jan-2015
+
+- (bug #12): Fix directory separator for assets path in setLanguage.
+
 version 1.3.0
 =============
 **Date:** 12-Jan-2015

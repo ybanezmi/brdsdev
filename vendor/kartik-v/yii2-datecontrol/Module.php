@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @package yii2-datecontrol
- * @version 1.9.0
+ * @package   yii2-datecontrol
+ * @author    Kartik Visweswaran <kartikv2@gmail.com>
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
+ * @version   1.9.1
  */
 
 namespace kartik\datecontrol;
@@ -21,6 +22,8 @@ use yii\helpers\FormatConverter;
  */
 class Module extends \yii\base\Module
 {
+    const MODULE = 'datecontrol';
+    
     const FORMAT_DATE = 'date';
     const FORMAT_TIME = 'time';
     const FORMAT_DATETIME = 'datetime';

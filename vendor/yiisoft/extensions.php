@@ -3,6 +3,33 @@
 $vendorDir = dirname(__DIR__);
 
 return array (
+  'arturoliveira/yii2-excelview' => 
+  array (
+    'name' => 'arturoliveira/yii2-excelview',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@arturoliveira' => $vendorDir . '/arturoliveira/yii2-excelview',
+    ),
+  ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.0.0-beta',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  'kartik-v/yii2-date-range' => 
+  array (
+    'name' => 'kartik-v/yii2-date-range',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range',
+    ),
+  ),
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
@@ -28,15 +55,6 @@ return array (
     'alias' => 
     array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
-    ),
-  ),
-  'arturoliveira/yii2-excelview' => 
-  array (
-    'name' => 'arturoliveira/yii2-excelview',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@arturoliveira' => $vendorDir . '/arturoliveira/yii2-excelview',
     ),
   ),
   'kartik-v/yii2-datecontrol' => 
@@ -264,15 +282,6 @@ return array (
       '@robregonm/pdf' => $vendorDir . '/robregonm/yii2-pdf',
     ),
   ),
-  'yiisoft/yii2-jui' => 
-  array (
-    'name' => 'yiisoft/yii2-jui',
-    'version' => '2.0.0.0-beta',
-    'alias' => 
-    array (
-      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
-    ),
-  ),
   'yiisoft/yii2-swiftmailer' => 
   array (
     'name' => 'yiisoft/yii2-swiftmailer',
@@ -325,15 +334,6 @@ return array (
     'alias' => 
     array (
       '@miloschuman/highcharts' => $vendorDir . '/miloschuman/yii2-highcharts-widget/src',
-    ),
-  ),
-  'kartik-v/yii2-date-range' => 
-  array (
-    'name' => 'kartik-v/yii2-date-range',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range',
     ),
   ),
 );

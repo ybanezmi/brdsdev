@@ -1,11 +1,40 @@
+version 1.4.2
+=============
+**Date:** 13-Apr-2015
+
+- (enh #32): Create new `checkboxButtonGroup` & `radioButtonGroup` in ActiveField.
+- (bug #33): Correct autoPlaceholder based attribute label generation for tabular inputs.
+- (enh #36): Prevent offset of checkbox/radio labels for horizontal forms when `enclosedByLabel` is `false`.
+- (enh #37): Scale inputs to full width in horizontal forms when `showLabels` is `ActiveForm:;SCREEN_READER`.
+- (enh #38): Fix `autoPlaceholder` property for INLINE forms when `showLabels` is `true`.
+- (enh #39): Change ActiveField private properties to protected.
+- (enh #40): Initialize ActiveField template more correctly.
+- (enh #41): New properties for adding or wrapping markup before LABEL, ERROR & HINT blocks.
+- (enh #42): New ActiveField property `skipFormLayout` to override and skip special form layout styling.
+- (bug #46): Bootstrap input group addons for horizontal forms.
+- (enh kartik-v/yii2-widgets#243): Enhance CSS style `kv-fieldset-inline`.
+- (enh #48): Various enhancements to Horizontal Form Layout Styles.
+
+version 1.4.1
+=============
+**Date:** 14-Feb-2015
+
+- (enh #30): Add `control-label` class to labels for Vertical form.
+- Set copyright year to current.
+
 version 1.4.0
 =============
-**Date:** 14-Jan-2015
+**Date:** 28-Jan-2015
 
 - (enh #19): Add new `showHints` property to ActiveField configuration.
 - (enh #20): Ability to add markup before and after ActiveField Input.
 - (enh #21): Prevent display of error and hint blocks for static input.
 - (enh #22): Enhance active field template for controlling labels, hints, & errors.
+- (enh #24): Allow static data forms through new `ActiveForm::staticOnly` property.
+- (enh #25): Default `showHints` to `true` for all form types in ActiveForm.
+- (enh #26): Enhance `ActiveField::staticInput` to include options to show error and hint.
+- (enh #27): New property `staticValue` in ActiveField.
+- (enh #28): Enhancements for error and hint display for horizontal forms.
 
 version 1.3.0
 =============

@@ -1,6 +1,33 @@
+Version 3.0.2
+=============
+**Date:** 05-Apr-2015
+
+1. (enh #261): Allow initialization of ExpandRowColumn cells even if they are hidden.
+2. (enh #263): Added fa-IR (Farsi) translations.
+
+Version 3.0.1
+=============
+**Date:** 14-Mar-2015
+
+1. (enh #176): Allow displayValue to be overridden for editable column.
+2. (enh kartik-v/yii2-dynagrid#47): Set a timeout for plugin reinitialization on pjax complete.
+3. (enh #229): Ability to set readonly rows in EditableColumn.
+4. (enh #237): Parse valueIfNull correctly within EditableColumn editableOptions.
+5. (enh #239): Updated Russian translations.
+6. (enh #245): Various enhancements to grid pagination toggle.
+7. (enh #247): Add ability to set `dropdownOptions` for `ActionColumn` dropdown.
+8. (enh #249): Add new properties `toggleDataContainer` and `exportDataContainer` for controlling button group options.
+9. (enh #250): Parse pjax setting in `toggleData` button to enable toggling pagination via pjax.
+10. (bug #251): Fix ExpandRowColumn bug with disabled closure and unnecessary check for title.
+11. (bug #252): Fix undefined `$filterInputOptions` in DataColumn.
+12. (enh #253): Enhance EditableColumn `refreshGrid` behavior for multiple editable columns on the grid.
+13. (enh #255): Enhance ExpandRowColumn to allow expand/collapse on row click.
+14. (enh #256): New property `extraData` for sending extra data to ExpandRowColumn via ajax load call.
+15. (enh #257): Fix for `detailOptions` to be set as Closure in ExpandRowColumn.
+
 Version 3.0.0
 =============
-**Date:** 18-Jan-2015
+**Date:** 13-Feb-2015
 
 1. (bug #178): Enhance CheckboxColumn to allow contentOptions to be set as Closure.
 2. (enh #178): New validation of contentOptions for all the extended grid Columns.
@@ -14,6 +41,22 @@ Version 3.0.0
 10. (enh #188): Eliminate filter row and all form inputs from export.
 11. (enh #189): Various performance enhancements to client script and plugin registrations.
 12. (bug #190): Allow editable beforeInput in EditableColumn to be passed as Closure.
+13. (bug #191): Correct Closure namespace for `value` validation in GridView.
+14. (bug #192): Correct value callback in `FormulaColumn`.
+15. (enh #198): Better container for initializing `resizableColumns`.
+16. (enh #200): Expand row loading indicator reset for ajax load.
+17. (enh #202, #203): Fix grid container overflow and responsive property.
+18. (enh #207): Fix EditableColumn to have absolute reference to Closure.
+19. (enh #209): Code cleanup and restructure for various JS lint changes (using JSHint Code cleanup library).
+20. (enh #213): Default `persistResize` to false to prevent client caching of column widths.
+21. (bug #214): Fix EditableColumn Closure use bug.
+22. (bug #215): Add Simplified Chinese message translations. 
+23. (bug #216): Fix resizable columns container identifier.
+24. (enh #218): Allow gridview to be used as a sub-module.
+25. (enh #221): Trim json exported fields by default.
+26. (enh #226): Updated Russian Translations.
+27. (enh #227): New grid column extension RadioColumn.
+28. Set copyright year to current.
 
 Version 2.9.0
 =============

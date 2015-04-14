@@ -4,7 +4,7 @@ bootstrap-popover-x
 Bootstrap Popover Extended - Popover with modal behavior, styling enhancements and more. This plugin is inspired by [BootstrapModalPopover](http://scruffles.github.io/BootstrapModalPopover/) 
 for Bootstrap 2.x. This plugin enhances and simplifies these concepts for Bootstrap 3.x, and incorporates various additional styling options.
 
-> NOTE: The latest version of the plugin v1.3.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/bootstrap-popover-x/blob/master/CHANGE.md) for details.
+> NOTE: The latest version of the plugin v1.4.1 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/bootstrap-popover-x/blob/master/CHANGE.md) for details.
 
 ## Features  
 
@@ -122,8 +122,14 @@ Defaults to `right`.
 #### keyboard
 _boolean_, when set to `true`, it closes the popover when escape key is pressed. Defaults to `true`.
 
+#### closeOtherPopovers
+_boolean_, when set to `true`, it closes all other popovers on the page after the current popover is shown. Defaults to `true`.
+
 #### show
 _boolean_, shows the popover when initialized. Defaults to `true`.
+
+#### useOffsetForPos
+_boolean_, use the offset method instead of position method to get the popover position. Defaults to `false`.
 
 ### Plugin Events
 The plugin supports these events:

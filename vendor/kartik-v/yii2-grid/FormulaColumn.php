@@ -3,8 +3,8 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @version   3.0.0
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
+ * @version   3.0.1
  */
 
 namespace kartik\grid;
@@ -45,7 +45,7 @@ class FormulaColumn extends DataColumn
      * - key: mixed the key associated with the data model
      * - index: integer the zero-based index of the data item among
      *   the item array returned by [[GridView::dataProvider]].
-     *
+     * - widget: the current column widget instance
      * @throws InvalidConfigException
      */
     public function col($i, $params = [])
@@ -83,7 +83,7 @@ class FormulaColumn extends DataColumn
     protected function getFooterCellContent()
     {
         if ($this->autoFooter) {
-            return call_user_func($this->value, null, self::FOOTER, $this);
+            return call_user_func($this->value, null, self::FOOTER, self::FOOTER, $this);
         }
         return parent::getFooterCellContent();
     }

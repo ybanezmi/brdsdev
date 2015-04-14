@@ -3,8 +3,8 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @version   1.7.0
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
+ * @version   1.7.2
  */
 
 namespace kartik\editable;
@@ -201,11 +201,32 @@ class Editable extends InputWidget
      * set to [[Editable::INPUT_WIDGET]]
      */
     public $widgetClass;
+    
+    /**
+     * @var boolean whether to auto guess the input type and set the editable input options. When 
+     * this is set to `true` the Editable widget will automatically detect the core input options
+     * for common input types (including HTML input types, krajee widgets and DateControl) and append 
+     * the `kv-editable-input` class to the input. You can set this to false to set the `kv-editable-input`
+     * class manually for any other custom/third party widgets. You would do this typically when you set 
+     * inputType to `Editable::INPUT_WIDGET`. Defaults to `true`.
+     */
+    public $autoGuessInput = true;
+
+    /**
+     * @var boolean additional ajax settings to pass to the plugin.
+     * @see http://api.jquery.com/jquery
+     */
+    public $ajaxSettings = [];
 
     /**
      * @var boolean whether to display any ajax processing errors. Defaults to `true`.
      */
     public $showAjaxErrors = true;
+
+    /**
+     * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
+     */
+    public $submitOnEnter = true;
 
     /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
@@ -305,7 +326,7 @@ class Editable extends InputWidget
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
         }
         Config::validateInputWidget($this->inputType);
-        $this->initI18N();
+        $this->initI18N(__DIR__);
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
         $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
@@ -332,23 +353,37 @@ class Editable extends InputWidget
     /**
      * Initializes the widget options.
      * This method sets the default values for various widget options.
+     *
+     * @throws InvalidConfigException
      */
     protected function initOptions()
     {
-        $css = empty($this->options['class']) ? ' form-control' : '';
-        Html::addCssClass($this->options, 'kv-editable-input' . $css);
         Html::addCssClass($this->inputContainerOptions, self::CSS_PARENT);
         if ($this->hasModel()) {
             $options = ArrayHelper::getValue($this->inputFieldConfig, 'options', []);
             Html::addCssClass($options, self::CSS_PARENT);
             $this->inputFieldConfig['options'] = $options;
         }
-        if (!Config::isHtmlInput($this->inputType) && empty($this->options['options']['id'])) {
-            $this->options['options']['id'] = $this->options['id'];
+        if (!Config::isHtmlInput($this->inputType) && $this->autoGuessInput) {
+            if ($this->widgetClass === 'kartik\datecontrol\DateControl') {
+                $options = ArrayHelper::getValue($this->options, 'options.options', []);
+                Html::addCssClass($options, 'kv-editable-input');
+                $this->options['options']['options'] = $options;
+            } elseif ($this->inputType !== self::INPUT_WIDGET) {
+                $options = ArrayHelper::getValue($this->options, 'options', []);
+                Html::addCssClass($options, 'kv-editable-input');
+                $this->options['options'] = $options;
+            }
+        } else {
+            $css = empty($this->options['class']) ? ' form-control' : '';
+            Html::addCssClass($this->options, 'kv-editable-input' . $css);
         }
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
+        if ($value === null && !empty($this->valueIfNull)) {
+            $value = $this->valueIfNull;
+        }
         if (!isset($this->displayValue)) {
             $this->displayValue = $value;
         }
@@ -358,7 +393,11 @@ class Editable extends InputWidget
         if ($this->displayValue === null || $this->displayValue === '') {
             $this->displayValue = $this->valueIfNull;
         }
-        if (is_array($this->displayValueConfig) && !empty($this->displayValueConfig[$value])) {
+        $hasDisplayConfig = is_array($this->displayValueConfig) && !empty($this->displayValueConfig);
+        if ($hasDisplayConfig && (is_array($this->value) || is_object($this->value))) {
+            throw new InvalidConfigException("Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value.");
+        }
+        if ($hasDisplayConfig && !empty($this->displayValueConfig[$value])) {
             $this->displayValue = $this->displayValueConfig[$value];
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
@@ -437,13 +476,15 @@ class Editable extends InputWidget
         $view = $this->getView();
         EditableAsset::register($view);
         $this->pluginOptions = [
-            'defaultValue' => $this->valueIfNull,
+            'valueIfNull' => $this->valueIfNull,
             'placement' => $this->placement,
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
-            'showAjaxErrors' => $this->showAjaxErrors
+            'showAjaxErrors' => $this->showAjaxErrors,
+            'ajaxSettings' => $this->ajaxSettings,
+            'submitOnEnter' => $this->submitOnEnter
         ];
-        $this->registerPlugin('editable');
+        $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
             EditablePjaxAsset::register($view);
             $toggleButton = $this->_popoverOptions['toggleButton']['id'];

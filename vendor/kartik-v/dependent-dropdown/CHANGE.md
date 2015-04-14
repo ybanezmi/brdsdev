@@ -1,9 +1,20 @@
-version 1.3.1
+version 1.4.1
 =============
-**Date:** 28-Nov-2014
+**Date:** 04-Mar-2015
+
+1. (enh #19): New `depdrop_all_params` that will be sent as an associative array (keys & values) to the server ajax action.
+2. (enh #20): Ability to configure `id` and `name` param names in json response.
+
+version 1.4.0
+=============
+**Date:** 01-Feb-2015
 
 1. Updated trigger of afterChange event
 2. Set composer minimum stability to stable.
+3. (enh #10): Enhance ability to use checkbox or radio as the first dependent parent.
+4. (enh #14): Code cleanup and restructure for various JS lint changes (using JSHint Code cleanup library).
+5. (enh #15): Implement reusable constructor for extending plugin if needed.
+6. (enh #16): Enhance Select2 dropdowns to show loading indicator.
 
 version 1.3.0
 =============

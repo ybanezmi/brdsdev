@@ -264,7 +264,22 @@ class Query extends Component implements QueryInterface
      */
     public function column($db = null)
     {
-        return $this->createCommand($db)->queryColumn();
+        if (!is_string($this->indexBy)) {
+            return $this->createCommand($db)->queryColumn();
+        }
+        if (is_array($this->select) && count($this->select) === 1) {
+            $this->select[] = $this->indexBy;
+        }
+        $rows = $this->createCommand($db)->queryAll();
+        $results = [];
+        foreach ($rows as $row) {
+            if (array_key_exists($this->indexBy, $row)) {
+                $results[$row[$this->indexBy]] = reset($row);
+            } else {
+                $results[] = reset($row);
+            }
+        }
+        return $results;
     }
 
     /**
@@ -370,7 +385,7 @@ class Query extends Component implements QueryInterface
         $this->limit = $limit;
         $this->offset = $offset;
 
-        if (empty($this->groupBy) && empty($this->union) && !$this->distinct) {
+        if (empty($this->groupBy) && empty($this->having) && empty($this->union) && !$this->distinct) {
             return $command->queryScalar();
         } else {
             return (new Query)->select([$selectExpression])

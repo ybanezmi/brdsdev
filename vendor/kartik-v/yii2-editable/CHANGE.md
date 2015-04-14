@@ -1,8 +1,29 @@
+version 1.7.2
+=============
+**Date:** 19-Mar-2015
+
+1. (enh #39): Better validation for `valueIfNull`.
+2. (enh #40): Enhanced styling for disabled editable button.
+3. (enh #41): Improve validation to retrieve the right translation messages folder.
+4. (enh #44): Revamp editable widget initialization and auto detection of input.
+5. (enh #47, #48): New property `submitOnEnter` to control save on ENTER key press.
+6. (bug #49): Throw exception when an array value is passed as key to `displayValueConfig`.
+7. (enh #53): Auto initialize `kv-editable-input` CSS for various input types and widgets.
+8. (enh #54): Auto guess input and set input options based on input type.
+
 version 1.7.1
 =============
-**Date:** 18-Jan-2015
+**Date:** 13-Feb-2015
 
 1. (bug #24): More correct `displayValueConfig` validation.
+2. (enh #32): Pass additional data to various editable events
+    - `editableSubmit`: pass the editable form jquery element in addition to editable input element value
+    - `editableSuccess`: pass ajax response data and editable form jquery element in addition to editable input element value
+    - `editableError`: pass ajax response data editable form jquery elementin addition to editable input element value 
+3. (enh #33): New `ajaxSettings` property that can be used to merge additional ajax settings/options for editable submission.
+4. (enh #34): Various enhancements to plugin code.
+5. (enh #35): Add French translations.
+6. Set copyright year to current.
 
 version 1.7.0
 =============

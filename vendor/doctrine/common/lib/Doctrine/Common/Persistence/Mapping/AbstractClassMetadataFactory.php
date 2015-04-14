@@ -192,7 +192,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
 
         // Check for namespace alias
         if (strpos($className, ':') !== false) {
-            list($namespaceAlias, $simpleClassName) = explode(':', $className);
+            list($namespaceAlias, $simpleClassName) = explode(':', $className, 2);
 
             $realClassName = $this->getFqcnFromAlias($namespaceAlias, $simpleClassName);
         } else {
@@ -225,9 +225,11 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
                 $this->loadMetadata($realClassName);
             }
         } catch (MappingException $loadingException) {
-            if (! $this->loadedMetadata[$realClassName] = $this->onNotFoundMetadata($realClassName)) {
+            if (! $fallbackMetadataResponse = $this->onNotFoundMetadata($realClassName)) {
                 throw $loadingException;
             }
+
+            $this->loadedMetadata[$realClassName] = $fallbackMetadataResponse;
         }
 
         if ($className !== $realClassName) {
@@ -393,7 +395,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
 
         // Check for namespace alias
         if (strpos($class, ':') !== false) {
-            list($namespaceAlias, $simpleClassName) = explode(':', $class);
+            list($namespaceAlias, $simpleClassName) = explode(':', $class, 2);
             $class = $this->getFqcnFromAlias($namespaceAlias, $simpleClassName);
         }
 

@@ -3,8 +3,8 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @version   3.0.0
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
+ * @version   3.0.1
  */
 
 namespace kartik\grid;
@@ -19,6 +19,7 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
 use yii\widgets\Pjax;
+use kartik\base\Config;
 
 /**
  * Enhances the Yii GridView widget with various options to include Bootstrap
@@ -290,39 +291,6 @@ HTML;
     ];
 
     /**
-     * @var boolean whether to enable toggling of grid data. Defaults to `true`.
-     */
-    public $toggleData = true;
-
-    /**
-     * @var array the settings for the toggle data button for the toggle data type. This will be setup as
-     * an associative array of $type => $options, where $type can be:
-     * - 'all': for showing all grid data
-     * - 'page': for showing first page data
-     * and $options is the HTML attributes for the button. The following special options are recognized:
-     * - icon: string the glyphicon suffix name. If not set or empty will not be displayed.
-     * - label: string the label for the button.
-     *
-     * This defaults to the following setting:
-     *      [
-     *          'all' => [
-     *              'icon' => 'resize-full',
-     *              'label' => 'All',
-     *              'class' => 'btn btn-default',
-     *              'title' => 'Show all data'
-     *          ],
-     *          'page' => [
-     *              'icon' => 'resize-small',
-     *              'label' => 'Page',
-     *              'class' => 'btn btn-default',
-     *              'title' => 'Show first page data'
-     *          ],
-     *      ]
-     */
-
-    public $toggleDataOptions = [];
-
-    /**
      * Tags to replace in the rendered layout. Enter this as `$key => $value` pairs, where:
      * - $key: string, defines the flag.
      * - $value: string|Closure, the value that will be replaced. You can set it as a callback
@@ -388,9 +356,9 @@ HTML;
 
     /**
      * @var boolean whether to store resized column state using local storage persistence
-     * (supported by most modern browsers)
+     * (supported by most modern browsers). Defaults to `false`.
      */
-    public $persistResize = true;
+    public $persistResize = false;
 
     /**
      * @var string resizable unique storage prefix to append to the grid id. If empty or not set
@@ -482,6 +450,50 @@ HTML;
      * @array the HTML attributes for the summary row
      */
     public $pageSummaryRowOptions = ['class' => 'kv-page-summary warning'];
+
+    /**
+     * @var boolean whether to enable toggling of grid data. Defaults to `true`.
+     */
+    public $toggleData = true;
+
+    /**
+     * @var array the settings for the toggle data button for the toggle data type. This will be setup as
+     * an associative array of $type => $options, where $type can be:
+     * - 'all': for showing all grid data
+     * - 'page': for showing first page data
+     * and $options is the HTML attributes for the button. The following special options are recognized:
+     * - icon: string the glyphicon suffix name. If not set or empty will not be displayed.
+     * - label: string the label for the button.
+     *
+     * This defaults to the following setting:
+     *      [
+     *          'all' => [
+     *              'icon' => 'resize-full',
+     *              'label' => 'All',
+     *              'class' => 'btn btn-default',
+     *              'title' => 'Show all data'
+     *          ],
+     *          'page' => [
+     *              'icon' => 'resize-small',
+     *              'label' => 'Page',
+     *              'class' => 'btn btn-default',
+     *              'title' => 'Show first page data'
+     *          ],
+     *      ]
+     */
+    public $toggleDataOptions = [];
+
+    /**
+     * @var array the HTML attributes for the toggle data button group container. By default 
+     * this will always have the `class = btn-group` automatically added.
+     */
+    public $toggleDataContainer = [];
+    
+    /**
+     * @var array the HTML attributes for the export button group container. By default 
+     * this will always have the `class = btn-group` automatically added.
+     */
+    public $exportContainer = [];
 
     /**
      * @array|boolean the grid export menu settings. Displays a Bootstrap dropdown menu that allows you to export the
@@ -603,12 +615,7 @@ HTML;
     /**
      * @var string the generated client script for the grid
      */
-    protected $_clientScript = '';
-
-    /**
-     * @var string the generated javascript for toggling grid data
-     */
-    protected $_jsToggleScript = '';
+    protected $_gridClientFunc = '';
 
     /**
      * @var Module the grid module.
@@ -643,23 +650,15 @@ HTML;
         } else {
             $config = $defaultExportConfig;
         }
-        foreach ($config as $format => $setting) {
-            $config[$format]['options']['data-pjax'] = false;
-        }
         return $config;
     }
-
+    
     /**
      * @inheritdoc
      */
     public function init()
     {
-        $this->_module = Yii::$app->getModule('gridview');
-        if ($this->_module == null || !$this->_module instanceof \kartik\grid\Module) {
-            throw new InvalidConfigException(
-                'The "gridview" module MUST be setup in your Yii configuration file and assigned to "\kartik\grid\Module" class.'
-            );
-        }
+        $this->_module = Config::initModule(Module::classname());
         if (empty($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
@@ -667,16 +666,11 @@ HTML;
             parent::init();
             return;
         }
-        $this->_toggleDataKey = $this->options['id'] . '-toggle-data';
-        if (isset($_POST[$this->_toggleDataKey])) {
-            $this->_isShowAll = $_POST[$this->_toggleDataKey];
-        } else {
-            $this->_isShowAll = false;
-        }
-        if ($this->_isShowAll == true) {
+        $this->_toggleDataKey = '_tog' . hash('crc32', $this->options['id']);
+        $this->_isShowAll = ArrayHelper::getValue($_GET, $this->_toggleDataKey, 'page') === 'all';
+        if ($this->_isShowAll) {
             $this->dataProvider->pagination = false;
         }
-        $this->_jsToggleScript = "kvToggleGridData('{$this->_toggleDataKey}');";
         parent::init();
     }
 
@@ -738,7 +732,7 @@ HTML;
         }
         return $content;
     }
-
+    
     /**
      * Renders the toggle data button
      *
@@ -749,15 +743,12 @@ HTML;
         if (!$this->toggleData) {
             return '';
         }
+        
         $tag = $this->_isShowAll ? 'page' : 'all';
-        $id = $this->_toggleDataKey;
         $label = ArrayHelper::remove($this->toggleDataOptions[$tag], 'label', '');
-        $input = Html::checkbox($id, $this->_isShowAll, ['id' => $id, 'style' => 'display:none']);
-        return '<div class="btn-group">' . Html::beginForm('', 'post', []) . Html::label(
-            $label,
-            $id,
-            $this->toggleDataOptions[$tag]
-        ) . $input . '</form></div>';
+        $url = Url::current([$this->_toggleDataKey => $tag]);
+        Html::addCssClass($this->toggleDataContainer, 'btn-group');
+        return Html::tag('div', Html::a($label, $url, $this->toggleDataOptions[$tag]), $this->toggleDataContainer);
     }
 
     /**
@@ -777,7 +768,7 @@ HTML;
         $options = $this->export['options'];
         $menuOptions = $this->export['menuOptions'];
         $title = ($icon == '') ? $title : "<i class='glyphicon glyphicon-{$icon}'></i> {$title}";
-        $action = Yii::$app->getModule('gridview')->downloadAction;
+        $action = $this->_module->downloadAction;
         if (!is_array($action)) {
             $action = [$action];
         }
@@ -789,8 +780,7 @@ HTML;
                 [
                     'class' => 'kv-export-form',
                     'style' => 'display:none',
-                    'target' => ($target == self::TARGET_POPUP) ? 'kvDownloadDialog' : $target,
-                    'data-pjax' => false
+                    'target' => ($target == self::TARGET_POPUP) ? 'kvDownloadDialog' : $target
                 ]
             ) . "\n" .
             Html::hiddenInput('export_filetype') . "\n" .
@@ -827,6 +817,7 @@ HTML;
                 'label' => $title,
                 'dropdown' => ['items' => $items, 'encodeLabels' => false, 'options' => $menuOptions],
                 'options' => $options,
+                'containerOptions' => $this->exportContainer,
                 'encodeLabel' => false
             ]
         ) . $form;
@@ -1092,7 +1083,7 @@ HTML;
                 'config' => [
                     'colHeads' => [],
                     'slugColHeads' => false,
-                    'jsonReplacer' => null,
+                    'jsonReplacer' => new JsExpression("function(k,v){return typeof(v)==='string'?$.trim(v):v}"),
                     'indentSpace' => 4
                 ]
             ],
@@ -1136,9 +1127,10 @@ HTML;
             $label = "<i class='glyphicon glyphicon-{$icon}'></i> " . $label;
         }
         $this->toggleDataOptions[$tag]['label'] = $label;
-        if (!isset($this->toggleDataOptions['title'])) {
-            $this->toggleDataOptions['title'] = $defaultOptions[$tag]['title'];
+        if (!isset($this->toggleDataOptions[$tag]['title'])) {
+            $this->toggleDataOptions[$tag]['title'] = $defaultOptions[$tag]['title'];
         }
+        $this->toggleDataOptions[$tag]['data-pjax'] = $this->pjax ? "true" : false;
     }
 
     /**
@@ -1189,7 +1181,7 @@ HTML;
         if ($this->resizableColumns && $this->persistResize) {
             $key = empty($this->resizeStorageKey) ? Yii::$app->user->id : $this->resizeStorageKey;
             $gridId = empty($this->options['id']) ? $this->getId() : $this->options['id'];
-            $this->options['data-resizable-columns-id'] = (empty($key) ? "kv-{$gridId}" : "kv-{$key}-{$gridId}");
+            $this->containerOptions['data-resizable-columns-id'] = (empty($key) ? "kv-{$gridId}" : "kv-{$key}-{$gridId}");
         }
         $export = $this->renderExport();
         $toggleData = $this->renderToggleData();
@@ -1211,7 +1203,7 @@ HTML;
         $this->layout = str_replace('{items}', Html::tag('div', '{items}', $this->containerOptions), $this->layout);
         if (is_array($this->replaceTags) && !empty($this->replaceTags)) {
             foreach ($this->replaceTags as $key => $value) {
-                if ($value instanceof Closure) {
+                if ($value instanceof \Closure) {
                     $value = call_user_func($value, $this);
                 }
                 $this->layout = str_replace($key, $value, $this->layout);
@@ -1232,21 +1224,25 @@ HTML;
             $this->pjaxSettings['options']['id'] = $this->options['id'] . '-pjax';
         }
         $container = 'jQuery("#' . $this->pjaxSettings['options']['id'] . '")';
+        $js = $container;
         if (ArrayHelper::getvalue($this->pjaxSettings, 'neverTimeout', true)) {
-            $view->registerJs("{$container}.on('pjax:timeout', function(e){e.preventDefault()});");
+            $js .= ".on('pjax:timeout', function(e){e.preventDefault()})";
         }
         $loadingCss = ArrayHelper::getvalue($this->pjaxSettings, 'loadingCssClass', 'kv-grid-loading');
-        $postPjaxJs = $this->_clientScript;
+        $postPjaxJs = "setTimeout({$this->_gridClientFunc}(), 2500);";
         if ($loadingCss !== false) {
             $grid = 'jQuery("#' . $this->containerOptions['id'] . '")';
             if ($loadingCss === true) {
                 $loadingCss = 'kv-grid-loading';
             }
-            $view->registerJs("{$container}.on('pjax:send', function(){{$grid}.addClass('{$loadingCss}')});");
-            $postPjaxJs .= "\n{$grid}.removeClass('{$loadingCss}');";
+            $js .= ".on('pjax:send', function(){{$grid}.addClass('{$loadingCss}')})";
+            $postPjaxJs .= "{$grid}.removeClass('{$loadingCss}');";
         }
         if (!empty($postPjaxJs)) {
-            $view->registerJs("{$container}.on('pjax:complete', function(){{$postPjaxJs}});");
+            $js .= ".on('pjax:complete', function(){{$postPjaxJs}})";
+        }
+        if ($js != $container) {
+            $view->registerJs("{$js};");
         }
         Pjax::begin($this->pjaxSettings['options']);
         echo ArrayHelper::getValue($this->pjaxSettings, 'beforeGrid', '');
@@ -1392,10 +1388,6 @@ HTML;
             GridViewAsset::register($view);
         }
         $gridId = $this->options['id'];
-        if ($this->toggleData) {
-            GridToggleDataAsset::register($view);
-            $script .= $this->_jsToggleScript;
-        }
         if ($this->export !== false && is_array($this->export) && !empty($this->export)) {
             GridExportAsset::register($view);
             $target = ArrayHelper::getValue($this->export, 'target', self::TARGET_POPUP);
@@ -1435,8 +1427,9 @@ HTML;
                 GridResizeStoreAsset::register($view);
                 $store = '';
             }
+            $contId = $this->containerOptions['id'];
             GridResizeColumnsAsset::register($view);
-            $script .= "$('#{$gridId}').resizableColumns({$store});";
+            $script .= "$('#{$contId}').resizableColumns({$store});";
         }
         if ($this->floatHeader) {
             GridFloatHeadAsset::register($view);
@@ -1450,7 +1443,8 @@ HTML;
             $opts = Json::encode($this->floatHeaderOptions);
             $script .= "$('#{$gridId} .kv-grid-table:first').floatThead({$opts});";
         }
-        $this->_clientScript = $script;
-        $view->registerJs("(function(\$){{$this->_clientScript}})(window.jQuery);");
+        $this->_gridClientFunc = 'kvGridInit_' . hash('crc32', $script);
+        $this->options['data-krajee-grid'] = $this->_gridClientFunc;
+        $view->registerJs("var {$this->_gridClientFunc}=function(){\n{$script}\n}\n{$this->_gridClientFunc}();");
     }
 }
