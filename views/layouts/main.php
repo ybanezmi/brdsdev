@@ -48,6 +48,7 @@ AppAsset::register($this);
 </head>
 <body>
 <div class="wrap-page">
+<div id="sync-bg"></div>
 <?php $this->beginBody() ?>
     <div class="wrap">
     			<div id="logo">

@@ -22,6 +22,15 @@ body {
 	padding: 0;
 }
 
+#sync-bg{
+  background: #fff;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: none;
+}
+
 /*modal*/
 .modal-body {
 	max-height: 1000px;
