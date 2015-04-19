@@ -44,7 +44,7 @@ class TrxTransactions extends \yii\db\ActiveRecord
     {
         return [
             [['customer_code', 'plant_location', 'storage_location', 'truck_van'], 'required'],
-            [['pallet_count', 'quantity', 'weight', 'packaging_id', 'creator_id', 'updater_id'], 'integer'],
+            [['id', 'pallet_count', 'quantity', 'weight', 'packaging_id', 'creator_id', 'updater_id'], 'integer'],
             [['remarks', 'status'], 'string'],
             [['created_date', 'updated_date'], 'safe'],
             [['customer_code', 'truck_van'], 'string', 'max' => 10],

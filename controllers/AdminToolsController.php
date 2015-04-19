@@ -488,8 +488,9 @@ class AdminToolsController extends Controller
 		    	
 		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 		$trxSearchModel = new TrxTransactionsSearch();
+
 		$trxDataProvider = $trxSearchModel->search(Yii::$app->request->queryParams, $params);
-		
+
     	return $this->render('view-transaction', ['dataProvider' => $trxDataProvider,
     											  'searchModel' => $trxSearchModel,]);
     }

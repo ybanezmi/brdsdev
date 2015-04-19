@@ -220,7 +220,7 @@ class CModelFinder extends Component
 
     /**
      * Finds the MstCustomer model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * If the model is not found, return null
      * @param string $id
      * @return MstCustomer the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -230,7 +230,7 @@ class CModelFinder extends Component
         if (($model = MstCustomer::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            return null;
         }
     }
 	

@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 /* @var $model app\models\MstAccount */
 
 $this->title = $model->first_name . ' ' . $model->last_name;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['user-management']];
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['user-mgmt']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

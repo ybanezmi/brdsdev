@@ -39,9 +39,9 @@ class TrxTransactionsSearch extends TrxTransactions
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $static_params)
     {
-        $query = TrxTransactions::find();
+        $query = TrxTransactions::find()->where($static_params);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
