@@ -365,6 +365,10 @@ class AdminToolsController extends Controller
 			]);
 		}
     }
+
+    public function actionPackagingMaterials() {
+			return $this->render('packaging-materials');
+    }
 	
 	public function actionExport() {
 		$searchModel = null;

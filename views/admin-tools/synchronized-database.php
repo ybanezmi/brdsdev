@@ -60,9 +60,9 @@ use yii\bootstrap\Alert;
 
 			<!-- <li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) pageload('/brdsapi/packaging_materials/ZCUS/bigblue');"> <span>Packaging Materials</span></a></li>  -->
 			
-			<li><a href="javascript:;" onclick="if( confirm('Synchronize plant location Data. Do you want to continue?') ) pageload('/brdsapi/plant_location/bigblue');"> <span>Plant Locations</span></a></li>
+			<li><a href="javascript:;" onclick="if( confirm('Synchronize plant location Data. Do you want to continue?') ) pageload('/brdsapi/plant_location/plant/bigblue');"> <span>Plant Locations</span></a></li>
 
-			<li><a href="javascript:;" onclick="if( confirm('Synchronize storage location Data. Do you want to continue?') ) pageload('/brdsapi/plant_location/bigblue');"> <span>Storage Locations</span></a></li>
+			<li><a href="javascript:;" onclick="if( confirm('Synchronize storage location Data. Do you want to continue?') ) pageload('/brdsapi/plant_location/storage/bigblue');"> <span>Storage Locations</span></a></li>
 
 		</ul>
 	</div>
