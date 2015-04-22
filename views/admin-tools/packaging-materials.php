@@ -10,18 +10,22 @@ $this->title = 'Synch Packaging Materials';
 ?>
 
 <style type="text/css">
-	#loading{
+	#sync-progress{
 		position: fixed;
 		z-index: 9999;
 		left:40%;
 		top:150px;
 		text-align: center;
-		visibility: hidden;
+		display: none;
 	}
 	.process-loading{
 		font-size:20px;
 		margin-bottom: 20px;
 		margin-top: 20px;
+	}
+	#sync-status{
+		padding-left: 20px;
+ 		padding-top: 10px;
 	}
 </style>
 
@@ -29,8 +33,9 @@ $this->title = 'Synch Packaging Materials';
 	<div class="create-receiving">
 		<div class="wrapper-150">
 			<h1 class="page-title">Synch Packaging Materials</h1>
-			<div id="ajaxstat"></div>
-		<div id="loading">
+
+		<div id="sync-status"></div>
+		<div id="sync-progress">
 			<div class="process-loading">Synchronize Database</div>
 			<img src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/loading.gif" />
 			<div class="process-loading" style="font-size:18px;">Please wait...</div>
@@ -38,7 +43,9 @@ $this->title = 'Synch Packaging Materials';
 
 		<div class="one-column help-bg-gray pdt-one-column" style="width:50%" >
 
-    
+    <div id="bar_blank">
+   <div id="bar_color"></div>
+  </div>
 																		 
 	<form action="#" id="w0" method="post">
 	<div class="form-group field-mstpackaging-name required">
@@ -64,38 +71,15 @@ $this->title = 'Synch Packaging Materials';
 	
 	
 	<script type="text/javascript">
-	var brdsapi_site_url = "http://192.168.1.122";
-
-	function ajax (url, method, params, container_id, loading_text) {
-	    try { // For: chrome, firefox, safari, opera, yandex, ...
-	    	xhr = new XMLHttpRequest();
-	    } catch(e) {
-		    try{ // for: IE6+
-		    	xhr = new ActiveXObject("Microsoft.XMLHTTP");
-		    } catch(e1) { // if not supported or disabled
-			    alert("Not supported!");
-			}
-		}
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState == 4) {
-				document.getElementById(container_id).innerHTML = xhr.responseText;
-			} else { 
-				document.getElementById(container_id).innerHTML = loading_text;
-			}
-		}
-		xhr.open(method, url, true);
-		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		xhr.send(params);
-	}		
-
-	function pullPackage() {
+	
+	function syncPackage() {
 		var pname=encodeURIComponent(document.getElementById("mstpackaging-name").value);
 		var url = brdsapi_site_url+"/brdsapi/packaging_materials/"+pname+"/bigblue";
 		var method = 'GET';
 		var params = '';
-		var container_id = 'ajaxstat' ;
+		var container_id = 'sync-status' ;
 		var loading_text = 'processing' ;
-		if(null == pname){
+		if(pname == ''){
 			alert('Please select packaging materials')
 		}else{
 			ajax (url, method, params, container_id, loading_text) ;
@@ -104,9 +88,8 @@ $this->title = 'Synch Packaging Materials';
 
 	document.getElementById("synch_all").addEventListener("click", function(e) {
 		e.preventDefault();
-		pullPackage();
+		syncPackage();
 	});
-
 
 	</script>
 

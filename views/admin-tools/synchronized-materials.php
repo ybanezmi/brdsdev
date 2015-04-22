@@ -8,43 +8,113 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 $this->title = 'Synch Materials';
 ?>
+<style type="text/css">
+	#sync-progress{
+		position: fixed;
+		z-index: 9999;
+		left:40%;
+		top:150px;
+		text-align: center;
+		display: none;
+	}
+	.process-loading{
+		font-size:20px;
+		margin-bottom: 20px;
+		margin-top: 20px;
+	}
+	#sync-status{
+		padding-left: 20px;
+ 		padding-top: 10px;
+	}
+</style>
 
 <div id="main-content">
 	<div class="create-receiving">
 		<div class="wrapper-150">
 			<h1 class="page-title">Synch Materials</h1>
-			<div class="one-column help-bg-gray pdt-one-column" style="width:50%" >
 
-       <?php 
-    	$js = 'function beforeValidate(form) {if ( form.data("back") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
-    	$form = ActiveForm::begin([
-    	'fieldConfig' => [
-    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
-    	]
-    ]); ?>
-    
-																		 
-	<?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-80percent',
+		<div id="sync-status"></div>
+		<div id="sync-progress">
+			<div class="process-loading">Synchronize Database</div>
+			<img src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/loading.gif" />
+			<div class="process-loading" style="font-size:18px;">Please wait...</div>
+		</div>
+
+			<div class="one-column help-bg-gray pdt-one-column" style="width:50%" >	
+
+	<?php 
+			$js = 'function beforeValidate(form) {if ( form.data("back") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
+			$form = ActiveForm::begin([
+			'fieldConfig' => [
+			'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
+			]
+			]); ?>
+
+																	 
+			<?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-80percent',
 			'prompt'	=> '-- Select a customer --',
 			'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"));
-			 hideHTMLById("trx-details");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
-	?>
+			hideHTMLById("trx-details");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
+			?>
 
-			
-			
-    	<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
+			<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
 			<div class="submit-button ie6-submit-button">
-				<button type="submit" class="btn btn-primary" style="width:35%;" name="synch_all">Sync All Materials</button>
-				<button class="btn btn-primary" style="width:35%;">View Details</button>
-				<button class="btn btn-primary" style="width:35%;">Material Only</button>
-				<button type="submit" class="btn btn-primary back cancel-button" style="width:35%;" name="back">Back To Main</button>
-
-        	</div>
-        </div>
-
-
+			<button class="btn btn-primary" style="width:35%;" id="syncAllMaterials">Sync All Materials</button>
+			<button class="btn btn-primary" style="width:35%;" id="view_details">View Details</button>
+			<button class="btn btn-primary" style="width:35%;" id="material_only">Material Only</button>
+			<button class="btn btn-primary back cancel-button" style="width:35%;" name="back">Back To Main</button>
+			</div>
+			</div>
     <?php ActiveForm::end(); ?>
+
+	<script type="text/javascript">
 	
+	function syncAllMaterials() {
+		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
+		var url = brdsapi_site_url+"/brdsapi/materials_customer/"+pname+"/bigblue";
+		var method = 'GET';
+		var params = '';
+		var container_id = 'sync-status' ;
+		var loading_text = 'processing' ;
+		if(pname == ''){
+			alert('Please select materials')
+		}else{
+			ajax (url, method, params, container_id, loading_text) ;
+		}
+	}
+
+	function syncMaterialOnly() {
+		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
+		var url = brdsapi_site_url+"/brdsapi/materials_customer/"+pname+"/bigblue";
+		var method = 'GET';
+		var params = '';
+		var container_id = 'sync-status' ;
+		var loading_text = 'processing' ;
+		if(pname == ''){
+			alert('Please select packaging materials')
+		}else{
+			ajax (url, method, params, container_id, loading_text) ;
+		}
+	}
+
+	document.getElementById("syncAllMaterials").addEventListener("click", function(e) {
+		e.preventDefault();
+		syncAllMaterials();
+	});
+
+	document.getElementById("material_only").addEventListener("click", function(e) {
+		e.preventDefault();
+		alert('under construction');
+		//syncMaterialOnly();
+	});
+
+	document.getElementById("view_details").addEventListener("click", function(e) {
+		e.preventDefault();
+		alert('under construction');
+		//syncMaterialOnly();
+	});
+
+	</script>
 				
 			</div>
 		</div>
