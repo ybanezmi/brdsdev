@@ -58,6 +58,7 @@ echo $scripts;
 	                'transaction_model' 		=> $transaction_model,
 	                'customer_model'			=> $customer_model,
 	                'material_list'				=> $material_list,
+	                'packaging_list'			=> $packaging_list,
                     'material_conversion_model' => $material_conversion_model,
 	                'transaction_detail_model'	=> $transaction_detail_model,
 	                'transaction_details'		=> $transaction_details,

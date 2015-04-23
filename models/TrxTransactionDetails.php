@@ -47,6 +47,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
             [['customer_code', 'pallet_no', 'pallet_type'], 'string', 'max' => 10],
+            [['pallet_no'], 'string', 'min' => 10],
             [['material_code'], 'string', 'max' => 32],
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates 
         ];

@@ -29,8 +29,25 @@ use yii\widgets\ActiveForm;
 											name="btn-transaction-summary">Summary</button>
 											</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
-
-
+																							  
+	<div class="control-group">
+	    <label class="control-label-f">SCAN A PALLET NUMBER</label>
+	    
+	        <?= Html::textInput('pallet_no', '', 
+	                            ['id'		 => 'pallet-number',
+							 	 'class'	 => 'uborder help-50percent',
+	                             'onchange'  =>'setFieldValueById("trxtransactiondetails-pallet_no", getFieldValueById("pallet-number"))']) 
+	        ?>
+	        
+	        <?= Html::submitButton('Details', 
+	                               ['class' => 'btn btn-primary help-20percent',
+	                                'style' => 'margin-bottom:10px;',
+	        						'name'  => 'btn-pallet-details',
+	        						]) 
+	        ?>
+	    
+	</div
+    
 	<?= $form->field($transaction_model, 'pallet_no',
 				['template' => '<div class="control-group">{label}<div>{input} 
 								<button class="btn btn-primary help-20percent" 

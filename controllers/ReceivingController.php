@@ -275,7 +275,7 @@ class ReceivingController extends Controller
 			$transaction_detail_list = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 																					    ['transaction_id' => $transaction_model->id,
 																						 'status' 		  => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
-																							   
+
 			// @TODO: use max param in getTransactionDetailList
 			$total_weight = array_sum(ArrayHelper::map($transaction_detail_list, 'id', 'total_weight'));
 			
@@ -296,11 +296,7 @@ class ReceivingController extends Controller
 			} else {
 				return $this->render('menu', [
 	                'transaction_model' 		=> $transaction_model,
-	                'customer_model'			=> $customer_model,
-	                'material_list'				=> $material_list,
                     'material_conversion_model' => $material_conversion_model,
-	                'transaction_detail_model'	=> $transaction_detail_model,
-	                'handling_unit_model' 		=> $handling_unit_model,
 	                'total_weight'				=> $total_weight,
 	            ]);
 			}
@@ -310,8 +306,10 @@ class ReceivingController extends Controller
 			$transaction_model = Yii::$app->modelFinder->findTransactionModel($id);
 			$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
 			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
+            $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
 			
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
+			$packaging_list = ArrayHelper::map($packaging_model, 'pallet_type', 'pallet_type');
 
 			// retrieve and convert sled in days unit
 			$material_sled_properties = [
@@ -471,6 +469,7 @@ class ReceivingController extends Controller
 		                'customer_model'			=> $customer_model,
                         'material_conversion_model' => $material_conversion_model,
 		                'material_list'				=> $material_list,
+		                'packaging_list'			=> $packaging_list,
 		                'transaction_detail_model'	=> $transaction_detail_model,
 		                'transaction_details'		=> $transaction_details,
 		                'handling_unit_model' 		=> $handling_unit_model,
@@ -489,6 +488,7 @@ class ReceivingController extends Controller
 	                'customer_model'			=> $customer_model,
                     'material_conversion_model' => $material_conversion_model,
 	                'material_list'				=> $material_list,
+	                'packaging_list'			=> $packaging_list,
 	                'transaction_detail_model'	=> $transaction_detail_model,
 	                'transaction_details'		=> $transaction_details,
 	                'handling_unit_model' 		=> $handling_unit_model,
@@ -515,7 +515,7 @@ class ReceivingController extends Controller
     	} else if (null !== Yii::$app->request->post('edit-receiving')) {
 	    	// route to edit receiving page
 			$transaction_details = Yii::$app->request->post('TrxTransactionDetails');
-	    	return $this->redirect(['menu', 'id' => $transaction_details['transaction_id'], 'pallet_no' => $transaction_details['pallet_no']]);
+	    	return $this->redirect(['menu', 'id' => $transaction_details['transaction_id'], 'pallet_no' => Yii::$app->request->post('pallet_no')]);
 		} else {
 			// Get customer list
 			$customer_model = new MstCustomer();

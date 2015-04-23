@@ -17,6 +17,7 @@ use app\models\MstCustomer;
 use app\models\MstMaterial;
 use app\models\MstMaterialConversion;
 use app\models\MstPlantlocation;
+use app\models\MstPackaging;
 use app\models\TrxTransactions;
 use app\models\TrxTransactionDetails;
 use app\models\TrxHandlingUnit;
@@ -129,8 +130,26 @@ class CModelFinder extends Component
 
 		return $material_conversion;
     }
-	
-	/**
+
+    /**
+     * Gets the packaging list from MstPackaging model.
+     * If the model is not found, return empty array.
+     * @return MstPackaging the loaded array
+     */
+    public function getPackagingList($index = null, $conditions = null, $groupBy = null)
+    {
+        // to retrieve all *active* material conversions by their index and order them by their ID:
+        $packing = MstPackaging::find()
+            ->where($conditions)
+            ->orderBy('id')
+            ->indexBy($index)
+			->groupBy($groupBy)
+            ->all();
+
+        return $packing;
+    }
+
+        /**
      * Gets the list from TrxTransactions model based on its status.
      * If the model is not found, return empty array.     
      * @return TrxTransactions the loaded array

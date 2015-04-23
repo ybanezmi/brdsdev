@@ -97,13 +97,17 @@ use yii\bootstrap\Modal;
 		<h2 class="legend" id="transaction-details" onclick="_toggleshow('toggle-div-2')">Transaction Details</h2>
 		<div id="toggle-div-2">
 		
-		<?= $form->field($transaction_detail_model, 'material_code',['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])->dropDownList($material_list, ['class'	=> 'uborder help-70percent',
-																							 		'prompt'	=> '-- Select a product --',
-																							 		'onchange'	=> 'setFieldValueById("material_code", getFieldValueById("trxtransactiondetails-material_code"));
-																							 						setFieldValueById("trxtransactiondetails-pallet_type", material_pallet_ind[getFieldValueById("trxtransactiondetails-material_code")]);
-																							 						setInnerHTMLById("net-weight-unit", getMaterialConversionUnit());
-																							 						setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
-																							 						checkMaterialSled();'])->label('Customer Product',['class' => 'control-label-f']); ?>
+		<?= $form->field($transaction_detail_model, 'material_code',
+			['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
+			->dropDownList($material_list, ['class'	=> 'uborder help-70percent',
+											'prompt'	=> '-- Select a product --',
+											'onchange'	=> 'setFieldValueById("material_code", 
+																getFieldValueById("trxtransactiondetails-material_code"));
+															setFieldValueById("trxtransactiondetails-pallet_type",
+																material_pallet_ind[getFieldValueById("trxtransactiondetails-material_code")]);
+															setInnerHTMLById("net-weight-unit", getMaterialConversionUnit());
+															setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
+															checkMaterialSled();'])->label('Customer Product',['class' => 'control-label-f']); ?>
 	
 		<div class="control-group">
 	            	<div class="f-full-size ie6-padtop">
@@ -159,11 +163,10 @@ use yii\bootstrap\Modal;
 																								   						 'readonly'			=> 'readonly',
 																								   						 'dateFormat' 		=> 'm/dd/yy']])->label('Expiry Date') ?>
 																								   						 
-		<?= $form->field($transaction_detail_model, 'pallet_type')->textInput([
-																		'value'	   => Yii::$app->request->post('TrxTransactionDetails[pallet_type]'),
-																		'readonly' => 'readonly',
-												  						'class'	   => 'uborder disabled help-20percent',
-												  						'onchange' => 'validateTransactionPalletType();'])->label('Pallet Type') //@TODO: fix onchange executes multiple times ?>
+		<?= $form->field($transaction_detail_model, 'pallet_type')
+					->dropDownList($packaging_list, ['class'	=> 'uborder help-20percent',
+													'value'	   => Yii::$app->request->post('TrxTransactionDetails[pallet_type]'),
+													'onchange'	=> 'validateTransactionPalletType();']); ?>
 
 		<?= $form->field($transaction_detail_model, 'net_weight',
 				['inputOptions' => ['class' => 'uborder help-20percent',

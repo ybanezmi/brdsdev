@@ -50,7 +50,7 @@ class TrxTransactions extends \yii\db\ActiveRecord
             [['customer_code', 'truck_van'], 'string', 'max' => 10],
             [['inbound_no', 'sap_no', 'plant_location', 'storage_location', 'lower_hu'], 'string', 'max' => 32],
             [['unit'], 'string', 'max' => 4],
-            [['truck_van'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9_-]/', 'message' => 'Must contain alphanumeric, underscore (_) and dash (-) characters only.']
+            [['truck_van'], 'match', 'not' => true, 'pattern' => '/[^a-z A-Z0-9_-]/', 'message' => 'Must contain alphanumeric, space, underscore (_) and dash (-) characters only.']
         ];
     }
 
