@@ -542,3 +542,26 @@ function toggleSync() {
     e.style.display = (e.style.display == "block") ? "none" : "block";
     m.style.display = (m.style.display == "block") ? "none" : "block";
 }
+
+
+function ajax_dispatch (url, method, params, container_id, loading_text) {
+    try { // For: chrome, firefox, safari, opera, yandex, ...
+    	xhr = new XMLHttpRequest();
+    } catch(e) {
+	    try{ // for: IE6+
+	    	xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	    } catch(e1) { // if not supported or disabled
+		    alert("Not supported!");
+		}
+	}
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4) {
+			document.getElementById(container_id).innerHTML = xhr.responseText;
+		} else { 
+			document.getElementById(container_id).innerHTML = loading_text;
+		}
+	}
+	xhr.open(method, url, true);
+	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	xhr.send(params);
+}	
