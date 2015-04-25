@@ -14,6 +14,7 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+
 	<?php 
 	
 		header('P3P: CP=”NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM”');
@@ -33,8 +34,8 @@ AppAsset::register($this);
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
     <?php $this->head() ?>
-    <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
+    <link href='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/font.css' rel='stylesheet' type='text/css'>
 	<!--[if lt IE 7]>
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie6.css">
 	<![endif]-->
@@ -133,6 +134,7 @@ AppAsset::register($this);
     <?php include 'popupbox.php'; ?>
 </div>
 <?php $this->endBody() ?>
+
 </body>
 </html>
 <?php $this->endPage() ?>
