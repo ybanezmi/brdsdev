@@ -41,10 +41,13 @@ $this->title = 'Dispatching';
 	</div>
 	</div>
 	</form>
-	
-	<div id="dispatch-status"></div>
+			</div>
+			<div id="dispatch-status"></div>
+		</div>
+	</div>
+</div>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	function pullDispatch() {
 		var pname=encodeURIComponent(document.getElementById("dispatch_number").value);
 		var url = brdsapi_site_url+"/brdsapi/dispatching/00"+pname+"/bigblue";
@@ -74,11 +77,6 @@ $this->title = 'Dispatching';
 
 	</script>
 
-				
-			</div>
-		</div>
-	</div>
-</div>
 
 
 
