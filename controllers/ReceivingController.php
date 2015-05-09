@@ -61,20 +61,20 @@ class ReceivingController extends Controller
     	$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
 		$account_model->access_token = null;
 		$account_model->save();
-		
+
 		// get access of users
 		$account_count = Yii::$app->modelFinder->getAccountList(null, ['access_token' => 'receiving'], 'id');
 		$isAccessReceiving = false;
     	if ($account_count > 0) {
     		$isAccessReceiving = true;
     	}
-		
+
 		// active pallets
 		$params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
-		
+
 		// pallet status
 		$palletStatus = array();
-		
+
 		// open pallets
 		$palletStatus['open_success'] = false;
 		$palletStatus['open_error'] = false;
@@ -89,8 +89,8 @@ class ReceivingController extends Controller
 			} else {
 				$palletStatus['open_error'] = true;
 			}
-		}	
-		
+		}
+
 		// close pallets
 		$palletStatus['close_success'] = false;
 		$palletStatus['close_error'] = false;
@@ -123,14 +123,14 @@ class ReceivingController extends Controller
 			}
 		}
 
-/*		
+/*
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->modelFinder->getTransactionList(),
         ]);
 */
 
-		$transactionDetails = new TrxTransactionDetails(); 
-		
+		$transactionDetails = new TrxTransactionDetails();
+
         return $this->render('index', [
             //'dataProvider' => $dataProvider,
             'isAccessReceiving' => $isAccessReceiving,
@@ -150,7 +150,7 @@ class ReceivingController extends Controller
             'model' => Yii::$app->modelFinder->findTransactionModel($id),
         ]);
     }
-	
+
     /**
      * Displays a list of TrxTransactionDetails model.
      * @param string $id
@@ -159,7 +159,7 @@ class ReceivingController extends Controller
     public function actionViewEntries($id)
     {
     	$data_provider = new ActiveDataProvider([
-							  						'query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null, 
+							  						'query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 							  																					['transaction_id' => $id,
 															   			  	 									 'status' 		=> [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]],
 																												true),
@@ -170,10 +170,10 @@ class ReceivingController extends Controller
 		if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')['pallet_no']) {
 			$params = ['transaction_id' => $id,
 					   'status' 		=> [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
-			
+
 			$data_provider = $search_model->search(Yii::$app->request->queryParams, $params);
 		}
-		
+
         return $this->render('view-entries', ['data_provider' => $data_provider,
         									  'search_model'  => $search_model,
         					]);
@@ -187,17 +187,17 @@ class ReceivingController extends Controller
     public function actionCreate()
     {
     	$this->initUser();
-		
+
     	if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else {
     		$model = new TrxTransactions();
             $model_plant_location = new MstPlantLocation();
 			$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-			
+
 			// set defaults
 			$model->id 	= strtotime(date("Ymdhis")); // @TODO should be set onBeforeSave in TrxTransactions model
-			
+
 			// @TODO: transfer updating of status/created/updated details to model
 			// set status, created and updated details
 			$model->status			= Yii::$app->params['STATUS_PROCESS'];
@@ -205,13 +205,13 @@ class ReceivingController extends Controller
 			$model->created_date 	= $date;
 			$model->updater_id		= Yii::$app->user->id;
 			$model->updated_date	= $date;
-			
+
 	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 	            return $this->redirect(['menu', 'id' => $model->id]);
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-                $plant_list = ArrayHelper::map(Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]), 
+                $plant_list = ArrayHelper::map(Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]),
 							'storage_location', 'plant_location');
                 $storage_list = array_combine(array_unique (array_keys($plant_list)),array_unique (array_keys($plant_list)));
                 $plant_list = array_combine(array_unique (array_values($plant_list)),array_unique (array_values($plant_list)));
@@ -257,7 +257,7 @@ class ReceivingController extends Controller
 
         return $this->redirect(['index']);
     }
-	
+
 	public function actionMenu($id)
     {
     	$this->initUser();
@@ -267,10 +267,10 @@ class ReceivingController extends Controller
     		$transaction_model = Yii::$app->modelFinder->findTransactionModel($id);
     	    $material_conversion_model = new MstMaterialConversion;
 			$date = date('Y-m-d H:i:s');
-			
+
 			// increment # of pallet
 			$transaction_model->weight 		 = 0;
-			
+
 			// get total weight from trx_transaction_details
 			$transaction_detail_list = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 																					    ['transaction_id' => $transaction_model->id,
@@ -278,19 +278,19 @@ class ReceivingController extends Controller
 
 			// @TODO: use max param in getTransactionDetailList
 			$total_weight = array_sum(ArrayHelper::map($transaction_detail_list, 'id', 'total_weight'));
-			
-			// set updated details 
+
+			// set updated details
 			$transaction_model->updater_id		= Yii::$app->user->id;
 			$transaction_model->updated_date	= $date;
-			
+
 			// close pallets
 			TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_CLOSED'],
 											  'updater_id'		=> Yii::$app->user->id,
-											  'updated_date'	=> $date], 
+											  'updated_date'	=> $date],
 											 ['transaction_id' 	=> $transaction_model->id,
 											  'pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
 											  'status' 			=> Yii::$app->params['STATUS_PROCESS']]);
-			
+
 			if ($transaction_model->save()) {
 				return $this->redirect(['menu', 'id' => $transaction_model->id]);
 			} else {
@@ -307,7 +307,7 @@ class ReceivingController extends Controller
 			$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
 			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
-			
+
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
 			$packaging_list = ArrayHelper::map($packaging_model, 'pallet_type', 'pallet_type');
 
@@ -319,10 +319,10 @@ class ReceivingController extends Controller
 										        'sled_unit',
 										    ],
 										];
-										
+
 			$material_sled = ArrayHelper::toArray($material_model, $material_sled_properties);
 			$material_sled_conv = array();
-			
+
 			foreach ($material_sled as $key => $value) {
 				switch(strtolower($value['sled_unit'])) {
 					case 'y':
@@ -339,9 +339,9 @@ class ReceivingController extends Controller
 						break;
 				}
 			}
-			
+
 			$material_conversion_model = Yii::$app->modelFinder->getMaterialConversionList('material_code');
-			
+
 			// retrieve unit_1, num_1, den_1 from material conversion list
 			$material_conversion_properties = [
 											    'app\models\MstMaterialConversion' => [
@@ -352,21 +352,21 @@ class ReceivingController extends Controller
 											];
 
 			$material_conversion = ArrayHelper::toArray($material_conversion_model, $material_conversion_properties);
-			
+
 			$transaction_detail_model = new TrxTransactionDetails();
 			$handling_unit_model = new TrxHandlingUnit();
-			
+
 			$date = date('Y-m-d H:i:s');
-			
+
 			// set transaction id
 			$transaction_detail_model->transaction_id = $transaction_model->id;
 			$handling_unit_model->transaction_id = $transaction_model->id;
-			
+
 			// retrieve all transaction details
 			$transaction_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 																						  ['transaction_id' => $transaction_model->id,
 																						   'status' 		=> [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]], false, null);
-                
+
 			$transaction_details = array();
 			// @TODO: Optimize
 			$isPalletClosed = false;
@@ -378,12 +378,12 @@ class ReceivingController extends Controller
 																			'status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]],false, null);
 				$transaction_details[$value['pallet_no']]['status'] = Yii::$app->modelFinder->getTransactionDetailList('status', null, null, ['id' => $value['id'],
 																			'status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]],false, null);
-																			
+
 				if (Yii::$app->params['STATUS_CLOSED'] === $transaction_details[$value['pallet_no']]['pallet_type']) {
 					$isPalletClosed = true;
 					break;
 				}
-				
+
 				if (Yii::$app->params['STATUS_REJECTED'] === $transaction_details[$value['pallet_no']]['pallet_type']) {
 					$isPalletRejected = true;
 					break;
@@ -394,31 +394,31 @@ class ReceivingController extends Controller
 			// used for searching material list by barcode
 			$js_material_barcode = json_encode(ArrayHelper::map($material_model, 'barcode', 'item_code'));
 			$js_material_desc = json_encode(ArrayHelper::map($material_model, 'description', 'item_code'));
-			
+
 			// converted material sled
 			$js_material_sled = json_encode($material_sled_conv);
-			
+
 			// retrieve pallet_ind for pallet_type
 			$js_material_pallet_ind = json_encode(ArrayHelper::map($material_model, 'item_code', 'pallet_ind'));
-			
+
 			// retrieve all material conversion
 			$js_material_conversion = json_encode($material_conversion);
-			
+
 			// retrieve transaction details by pallet_no
 			$js_transaction_details = json_encode($transaction_details);
-			
-			$scripts = "<script type='text/javascript'> 
-							var material_list_barcode = " . $js_material_barcode . "; 
+
+			$scripts = "<script type='text/javascript'>
+							var material_list_barcode = " . $js_material_barcode . ";
 							var material_list_desc = " . $js_material_desc . ";
 							var material_sled = " . $js_material_sled . ";
 							var material_pallet_ind = " . $js_material_pallet_ind . ";
 							var material_conversion = " . $js_material_conversion . ";
 							var transaction_details = " . $js_transaction_details . ";
 					  	</script>";
-			
+
 			// get total weight from trx_transaction_details
 			$total_weight = array_sum(ArrayHelper::map($transaction_details_model, 'id', 'total_weight'));
-			
+
 			// @TODO: transfer updating of status/created/updated details to model
 			// set status, created and updated details
 			$transaction_detail_model->status			= Yii::$app->params['STATUS_PROCESS'];
@@ -426,37 +426,37 @@ class ReceivingController extends Controller
 			$transaction_detail_model->created_date 	= $date;
 			$transaction_detail_model->updater_id		= Yii::$app->user->id;
 			$transaction_detail_model->updated_date		= $date;
-			
+
 			// set customer code
 			$transaction_detail_model->customer_code	= $transaction_model->customer_code;
-			
+
 			// get pallet count
 			$pallet_count = Yii::$app->modelFinder->getTransactionDetailList(null, 'id', null, ['transaction_id' => $transaction_model->id,
 																							   	'status' 		 => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]], false, 'pallet_no');
-			
+
 	        if(isset($_GET["pallet_no"])){
 	        	$pallet_no = htmlspecialchars($_GET["pallet_no"]);
 	        } else {
 	        	$pallet_no = '';
 	        }
-			
+
 			$isPalletAdded = false;
-			
+
 	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post())) {
 				// add net weight of transaction_detail to the total weight of transaction
 				$transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;
 
 				// convert to correct date format
 				if (null != $transaction_detail_model->getAttribute('manufacturing_date')) {
-					$transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));	
+					$transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));
 				}
-				
+
 				if (null != $transaction_detail_model->getAttribute('expiry_date')) {
 					$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
 				}
 
 				$transaction_detail_model->validate();
-              
+
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
 					$this->redirect(['menu', 'id' => $transaction_model->id,
@@ -503,13 +503,13 @@ class ReceivingController extends Controller
 	        }
     	}
     }
-  
-  
-	
+
+
+
 	public function actionEdit()
 	{
 		$this->initUser();
-		
+
 		if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('edit-receiving')) {
@@ -532,11 +532,11 @@ class ReceivingController extends Controller
 			]);
 		}
 	}
-	
+
 	public function actionViewPallet()
 	{
 		$this->initUser();
-		
+
 		if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('edit-receiving')) {
@@ -548,7 +548,7 @@ class ReceivingController extends Controller
     		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
 			$transaction_model = new TrxTransactionDetails();
 			$transaction_list = array();
-			
+
 			return $this->render('view-pallet', [
 				'customer_model' 	=> $customer_model,
 				'customer_list'		=> $customer_list,
@@ -557,20 +557,20 @@ class ReceivingController extends Controller
 			]);
 		}
 	}
-	
+
 	public function actionClose()
 	{
 		$this->initUser();
-		
+
 		$success = false;
-		
+
 		// Get customer list
 		$customer_model = new MstCustomer();
 		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
 		$transaction_model = new TrxTransactionDetails();
 		$transaction_list = array();
 		$pallet_no = '';
-			
+
 		if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('close-receiving')) {
@@ -579,7 +579,7 @@ class ReceivingController extends Controller
 			$transaction->status = Yii::$app->params['STATUS_CLOSED'];
 			$success = $transaction->update();
 		}
-		
+
 		return $this->render('close', [
 			'customer_model'	=> $customer_model,
 			'customer_list'		=> $customer_list,
@@ -589,12 +589,12 @@ class ReceivingController extends Controller
 			'success'			=> $success,
 		]);
 	}
-	
+
 	public function actionSynchronize()
 	{
 		return $this->render('synchronize');
 	}
-	
+
 	public function actionGetTransaction($id)
 	{
 		// if no transaction selected
@@ -608,7 +608,7 @@ class ReceivingController extends Controller
 		$transaction_details_model = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 																					  ['transaction_id' => $transaction_model->id,
 																					   'status' 		=> [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]], false, null);
-																						   
+
 		$transaction_model_properties = [
 										    'app\models\TrxTransactions' => [
 										        'id',
@@ -627,36 +627,74 @@ class ReceivingController extends Controller
 										        'customer_name' => 'name',
 										    ],
 										];
-		
+
 		// get pallet count
 		$pallet_count = Yii::$app->modelFinder->getTransactionDetailList(null, 'id', null, ['transaction_id' => $transaction_model->id,
 																						   	'status' 		 => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]], false, 'pallet_no');
-		
+
 		// get total weight from trx_transaction_details
 		$total_weight = array_sum(ArrayHelper::map($transaction_details_model, 'id', 'total_weight'));
 
 		$transaction_header = ArrayHelper::toArray($transaction_model, $transaction_model_properties);
 		$customer_name = ArrayHelper::toArray($customer_model, $customer_model_properties);
-		
+
 		$transaction_header = ArrayHelper::merge($transaction_header, $customer_name);
-		
+
 		$transaction_header['pallet_count'] = $pallet_count;
 		$transaction_header['total_weight'] = $total_weight;
-		
+
 		$transaction_header['created_date_formatted'] = date('m/d/Y', strtotime($transaction_header['created_date']));
-		
+
 		echo json_encode($transaction_header);
 	}
 
 	public function actionGetTransactionList($id) {
 		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, ['customer_code' => $id]), 'id');
-		echo json_encode($transactionlist);		
+		echo json_encode($transactionlist);
 	}
 
 	public function actionValidatePallet() {
-		
+
 		$return['valid'] = true;
 		echo json_encode($return);
 	}
-	
+
+    public function getSapNumber($customer, $trxTransaction, $trxTransactionDetails) {
+        $params = array();
+        if ($this->isEmpty($trxTransaction['sap_no'])) {
+            $params[SapConst::ZEX_VBELN] = $trxTransaction['sap_no'];
+        } else {
+            $params[SapConst::ZEX_VBELN] = SapConst::SapConst::HALF_WIDTH_SPACE;
+        }
+
+        $params[SapConst::KUNNR] = $customer['name'];
+        $params[SapConst::MATNR] = $customer['code'];
+        $params[SapConst::LFIMG] = $trxTransaction['quantity'];
+        $params[SapConst::CHARG] = $trxTransactionDetails['batch'];
+        $params[SapConst::WERKS] = $trxTransaction['plant_location'];
+        $params[SapConst::LFART] = SapConst::ZEL;
+        $params[SapConst::LGORT] = $trxTransaction['storage_location'];
+        $params[SapConst::XABLN] = 'ZXY12345'; //TODO
+        $params[SapConst::WADAT] = date('m/d/Y');
+        $params[SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
+        $params[SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
+        $params[SapConst::CRATES_IND] = SapConst::EMPTY_STRING;
+        $params[SapConst::EXIDV] = SapConst::EMPTY_STRING; //TODO
+        $params[SapConst::VHILM] = $trxTransactionDetails['pallet_type'];
+        $params[SapConst::VHILM2] = $trxTransactionDetails['pallet_type'];
+        $params[SapConst::REMARKS] = $trxTransaction['remarks'];
+        $params[SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+
+        Yii::$app->sapRfc->callFunction(SapConst::ZBAPI_RECEIVING, $params);
+    }
+
+    public function isEmpty($str) {
+        if (!isset($trxTransactions['sap_no']) && $trxTransactions['sap_no'] != SapConst::EMPTY_STRING) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
