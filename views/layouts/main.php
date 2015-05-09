@@ -33,6 +33,8 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
+    
+
     <?php $this->head() ?>
     <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
     <link href='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/font.css' rel='stylesheet' type='text/css'>
@@ -46,6 +48,8 @@ AppAsset::register($this);
 	  	DD_belatedPNG.fix('.png_bg');
 	</script>
 	<![endif]-->
+
+	
 </head>
 <body>
 <div class="wrap-page">
@@ -128,6 +132,12 @@ AppAsset::register($this);
             <?= $content ?>
         </div>
     </div>
+
+
+<script type="text/javascript">
+	var base_url = "<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>";
+</script>
+
 
     <?php include 'footer.php'; ?>
     

@@ -1,4 +1,10 @@
+
+var site_url = "/";
+
 $(function() {
+	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
+       // $("button[type=\"submit\"]").attr("disabled","disabled");
+    }); 
 	/*date picker*/
 	/*
 	if (jQuery().datePicker) {
@@ -54,11 +60,11 @@ function backto() {
 }
 
 function gotoMain() {
-    window.location = "/front-ends/bigblueui/converted/brds/admin.php";
+    window.location = base_url;
 }
 
 function gotoReceiving() {
-    window.location = "/front-ends/bigblueui/converted/brds/receiving.php";
+    window.location = "/";
 }
 
 /* function to set value to any HTML field by id */

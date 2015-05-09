@@ -49,7 +49,7 @@ use yii\bootstrap\Alert;
 
 			<li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) syncPackaging(); "> <span>Packaging</span></a></li>
 
-			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/admin-tools/packaging-materials"> <span>Packaging Materials</span></a></li>
+			<li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Material Data. Do you want to continue?') ) syncPackagingMaterials(); "> <span>Packaging Materials</span></a></li>
 
 			<!-- <li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) pageload('/brdsapi/packaging_materials/ZCUS/bigblue');"> <span>Packaging Materials</span></a></li>  -->
 			
@@ -85,6 +85,19 @@ function syncPackaging() {
 	var loading_text = 'processing...' ;
 	if(url == ''){
 		alert('Please select packaging')
+	}else{
+		ajax (url, method, params, container_id, loading_text) ;
+	}
+}
+
+function syncPackagingMaterials() {
+	var url = brdsapi_site_url+"/brdsapi/packaging_materials/VERP/bigblue";
+	var method = 'GET';
+	var params = '';
+	var container_id = 'sync-status' ;
+	var loading_text = 'processing...' ;
+	if(url == ''){
+		alert('Please select packaging materials') ;
 	}else{
 		ajax (url, method, params, container_id, loading_text) ;
 	}
