@@ -17,6 +17,7 @@ return array(
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'robregonm\\pdf\\' => array($vendorDir . '/robregonm/yii2-pdf'),
     'miloschuman\\highcharts\\' => array($vendorDir . '/miloschuman/yii2-highcharts-widget/src'),
+    'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),
     'kartik\\touchspin\\' => array($vendorDir . '/kartik-v/yii2-widget-touchspin'),

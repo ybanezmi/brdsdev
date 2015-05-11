@@ -19,11 +19,27 @@ use app\models\MstPlantLocation;
 use app\models\MstMaterial;
 use app\models\MstMaterialConversion;
 
+use app\constants\SapConst;
+
+use linslin\yii2\curl;
+
 /**
  * ReceivingController implements the CRUD actions for TrxTransactions model.
  */
 class ReceivingController extends Controller
 {
+    /**
+     * Yii action controller
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
+    
     public function behaviors()
     {
         return [
@@ -459,6 +475,7 @@ class ReceivingController extends Controller
 
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
+                    $this->getSapNumber($transaction_model, $transaction_detail_model, $total_weight);
 					$this->redirect(['menu', 'id' => $transaction_model->id,
 											 'pallet' => $transaction_detail_model->pallet_no,
 											 'isPalletAdded' => $isPalletAdded,
@@ -659,42 +676,49 @@ class ReceivingController extends Controller
 		echo json_encode($return);
 	}
 
-    public function getSapNumber($customer, $trxTransaction, $trxTransactionDetails) {
-        $params = array();
-        if ($this->isEmpty($trxTransaction['sap_no'])) {
-            $params[SapConst::ZEX_VBELN] = $trxTransaction['sap_no'];
-        } else {
-            $params[SapConst::ZEX_VBELN] = SapConst::SapConst::HALF_WIDTH_SPACE;
-        }
-
-        $params[SapConst::KUNNR] = $customer['name'];
-        $params[SapConst::MATNR] = $customer['code'];
-        $params[SapConst::LFIMG] = $trxTransaction['quantity'];
-        $params[SapConst::CHARG] = $trxTransactionDetails['batch'];
-        $params[SapConst::WERKS] = $trxTransaction['plant_location'];
-        $params[SapConst::LFART] = SapConst::ZEL;
-        $params[SapConst::LGORT] = $trxTransaction['storage_location'];
-        $params[SapConst::XABLN] = 'ZXY12345'; //TODO
-        $params[SapConst::WADAT] = date('m/d/Y');
-        $params[SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
-        $params[SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
-        $params[SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
-        $params[SapConst::CRATES_IND] = SapConst::EMPTY_STRING;
-        $params[SapConst::EXIDV] = SapConst::EMPTY_STRING; //TODO
-        $params[SapConst::VHILM] = $trxTransactionDetails['pallet_type'];
-        $params[SapConst::VHILM2] = $trxTransactionDetails['pallet_type'];
-        $params[SapConst::REMARKS] = $trxTransaction['remarks'];
-        $params[SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-
-        Yii::$app->sapRfc->callFunction(SapConst::ZBAPI_RECEIVING, $params);
-    }
-
     public function isEmpty($str) {
-        if (!isset($trxTransactions['sap_no']) && $trxTransactions['sap_no'] != SapConst::EMPTY_STRING) {
+        if (!isset($str) && $str != SapConst::EMPTY_STRING) {
             return false;
         } else {
             return true;
         }
+    }
+    
+    public function getSapNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
+        // Init curl
+        $curl = new curl\Curl();
+        
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_RECEIVING;
+        
+        // Post http://127.0.0.1/brdssap/sap/import
+        $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
+        $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
+        $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
+        $params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
+        $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
+        $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
+        $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
+        $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
+        $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
+        $params[SapConst::PARAMS][SapConst::WADAT] = date('m/d/Y');
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::PARAMS][SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
+        $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
+        $params[SapConst::PARAMS][SapConst::CRATES_IND] = SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::EXIDV] = SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = $trxTransactionDetails['pallet_no'] ? $trxTransactionDetails['pallet_no'] : SapConst::EMPTY_STRING; 
+        //$params[SapConst::PARAMS][SapConst::VHILM] = $trxTransactionDetails['pallet_type']; // TODO
+        //$params[SapConst::PARAMS][SapConst::VHILM2] = $trxTransactionDetails['pallet_type']; // TODO
+        $params[SapConst::PARAMS][SapConst::VHILM] = '';
+        $params[SapConst::PARAMS][SapConst::VHILM2] = '36';
+        $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
+        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;    
+
+        $response = $curl->setOption(
+            CURLOPT_POSTFIELDS, 
+            http_build_query($params))
+            ->post('http://192.168.1.121/brdssap/sap/import');
+        die;
     }
 
 }

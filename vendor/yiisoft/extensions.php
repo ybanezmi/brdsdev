@@ -336,4 +336,13 @@ return array (
       '@miloschuman/highcharts' => $vendorDir . '/miloschuman/yii2-highcharts-widget/src',
     ),
   ),
+  'linslin/yii2-curl' => 
+  array (
+    'name' => 'linslin/yii2-curl',
+    'version' => '1.0.3.0',
+    'alias' => 
+    array (
+      '@linslin/yii2/curl' => $vendorDir . '/linslin/yii2-curl',
+    ),
+  ),
 );

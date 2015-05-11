@@ -7,6 +7,7 @@ class SapConst
     // common
     const EMPTY_STRING = '';
     const HALF_WIDTH_SPACE = ' ';
+    const PARAMS = 'PARAMS';
 
     // config
     const ASHOST = 'ASHOST';
@@ -17,6 +18,7 @@ class SapConst
     const LANG = 'LANG';
 
     // functions
+    const RFC_FUNCTION = 'RFC_FUNCTION';
     const ZBAPI_RECEIVING = 'ZBAPI_RECEIVING';
 
     // RS_INPUT
@@ -52,6 +54,8 @@ class SapConst
     const CRATES_IND = 'CRATES_IND';
     // handling unit (range)
     const EXIDV = 'EXIDV';
+    // pallet number
+    const EXIDV_PAL = 'EXIDV_PAL';
     // packaging material (pack icon) select allowed material >> (hu) empty or same as vhilm2.
     const VHILM = 'VHILM';
     // packing material (always has an entry)

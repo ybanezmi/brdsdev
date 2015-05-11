@@ -1,7 +1,7 @@
 
 var site_url = "/";
 
-$(function() {
+$(function () {
 	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
        // $("button[type=\"submit\"]").attr("disabled","disabled");
     }); 
@@ -135,13 +135,22 @@ function showHTMLById(id) {
 	document.getElementById(id).style.display = "block";
 }
 
+// For todays date;
+Date.prototype.today = function () { 
+    return (((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) + ((this.getDate() < 10)?"0":"") + this.getDate() 
+        + this.getFullYear().toString().substring(2,4);
+}
+
+// For the time now
+Date.prototype.timeNow = function () {
+     return ((this.getMinutes() < 10)?"0":"") + this.getMinutes() + ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
+
 /* function to generate timestamp */
 function getTimestamp() {
-	if (!Date.now) {
-	    Date.now = function() { return new Date().getTime(); };
-	}
-	
-	return Date.now();
+    var currentDate = new Date();
+    var dateTime = currentDate.today() + currentDate.timeNow();
+	return dateTime;
 }
 
 /* function to check material sled */
