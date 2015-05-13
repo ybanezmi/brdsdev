@@ -24,31 +24,31 @@ echo $scripts;
 					]);
 					$pallet = (isset($_GET['pallet'])) ? $_GET['pallet'] : $pallet_no;
 					echo 'Successfully added transaction to pallet #' . $pallet;
-					
+
 					Alert::end();
 				}
-				
+
 				if ($isPalletClosed) {
 					Alert::begin([
 					    'options' => [
 					        'class' => 'alert-error',
 					    ],
 					]);
-					
+
 					echo 'Failed to add closed pallet #' . $pallet_no;
-					
+
 					Alert::end();
 				}
-				
+
 				if ($isPalletRejected) {
 					Alert::begin([
 					    'options' => [
 					        'class' => 'alert-error',
 					    ],
 					]);
-					
+
 					echo 'Failed to add rejected pallet #' . $pallet_no;
-					
+
 					Alert::end();
 				}
 			?>
@@ -58,7 +58,8 @@ echo $scripts;
 	                'transaction_model' 		=> $transaction_model,
 	                'customer_model'			=> $customer_model,
 	                'material_list'				=> $material_list,
-	                'packaging_list'			=> $packaging_list,
+	                'packaging_type_list'	    => $packaging_type_list,
+	                'kitting_type_list'         => $kitting_type_list,
                     'material_conversion_model' => $material_conversion_model,
 	                'transaction_detail_model'	=> $transaction_detail_model,
 	                'transaction_details'		=> $transaction_details,

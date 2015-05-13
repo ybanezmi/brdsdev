@@ -18,6 +18,7 @@ use app\models\MstMaterial;
 use app\models\MstMaterialConversion;
 use app\models\MstPlantlocation;
 use app\models\MstPackaging;
+use app\models\MstPackagingMaterials;
 use app\models\TrxTransactions;
 use app\models\TrxTransactionDetails;
 use app\models\TrxHandlingUnit;
@@ -26,7 +27,7 @@ class CModelFinder extends Component
 {
 	/**
      * Gets the account list from MstAccount model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return MstAccount the loaded array
      */
     public function getAccountList($index = null, $conditions = null, $count = null)
@@ -47,13 +48,13 @@ class CModelFinder extends Component
 				->indexBy($index)
 			    ->all();
 		}
-		
+
 		return $accounts;
-    }	
-	
+    }
+
 	/**
      * Gets the customer list from MstCustromer model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return MstCustomer the loaded array
      */
     public function getCustomerList($index = null)
@@ -74,13 +75,13 @@ class CModelFinder extends Component
 				->asArray()
 			    ->all();
         }
-		
+
 		return $customers;
     }
-  
+
 	/**
      * Gets the plant location list from MstPlantlocation model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return MstCustomer the loaded array
      */
     public function getPlantList($index = null, $conditions = null, $groupBy = null)
@@ -93,13 +94,13 @@ class CModelFinder extends Component
 			->groupBy($groupBy)
 			->asArray()
 		    ->all();
-		
+
 		return $plant_location;
     }
-	
+
 	/**
      * Gets the material list from MstMaterial model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return MstMaterial the loaded array
      */
     public function getMaterialList($index = null, $conditions = null)
@@ -110,13 +111,13 @@ class CModelFinder extends Component
 		    ->orderBy('item_code')
 			->indexBy($index)
 		    ->all();
- 
+
 		return $materials;
     }
-	
+
 	/**
      * Gets the material conversion list from MstMaterialConversion model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return MstMaterialConversion the loaded array
      */
     public function getMaterialConversionList($index = null, $conditions = null)
@@ -139,19 +140,38 @@ class CModelFinder extends Component
     public function getPackagingList($index = null, $conditions = null, $groupBy = null)
     {
         // to retrieve all *active* material conversions by their index and order them by their ID:
-        $packing = MstPackaging::find()
+        $packaging = MstPackaging::find()
             ->where($conditions)
             ->orderBy('id')
             ->indexBy($index)
 			->groupBy($groupBy)
             ->all();
 
-        return $packing;
+        return $packaging;
+    }
+
+    /**
+     * Gets the packaging material list from MstPackagingMaterial model.
+     * If the model is not found, return empty array.
+     * @return MstPackaging the loaded array
+     */
+    public function getPackagingMaterialList($index = null, $conditions = null, $groupBy = null)
+    {
+        // to retrieve all *active* material conversions by their index and order them by their ID:
+        $packagingMaterial = MstPackagingMaterials::find()
+            ->where($conditions)
+            ->orderBy('id')
+            ->indexBy($index)
+            ->groupBy($groupBy)
+            ->asArray()
+            ->all();
+
+        return $packagingMaterial;
     }
 
         /**
      * Gets the list from TrxTransactions model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return TrxTransactions the loaded array
      */
     public function getTransactionList($index = null, $conditions = null)
@@ -173,16 +193,16 @@ class CModelFinder extends Component
 				->orderBy('id')
 				->asArray()
 				->all();
-        }		
-		
+        }
+
 		return $transactions;
     }
-	
+
 	/**
      * Gets the list from TrxTransactionDetails model based on its status.
-     * If the model is not found, return empty array.     
+     * If the model is not found, return empty array.
      * @return TrxTransactionDetails the loaded array
-     */  
+     */
     public function getTransactionDetailList($max = null, $count = null, $index = null, $conditions = null, $data_provider = false, $groupBy = null)
     {
     	if (null != $max) {
@@ -216,8 +236,8 @@ class CModelFinder extends Component
 				    ->all();
 			}
     	}
-    	
-		
+
+
 		return $transaction_details;
     }
 
@@ -252,7 +272,7 @@ class CModelFinder extends Component
             return null;
         }
     }
-	
+
     /**
      * Finds the TrxTransactions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -268,7 +288,7 @@ class CModelFinder extends Component
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-	
+
 	/**
      * Finds the TrxHandlingUnit model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -300,7 +320,7 @@ class CModelFinder extends Component
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-	
+
 	/**
      * Finds the MstAllowedIp model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -315,6 +335,6 @@ class CModelFinder extends Component
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }	
- 
+    }
+
 }
