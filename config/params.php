@@ -12,4 +12,6 @@ return [
     'STATUS_REJECTED'			=> 'rejected',
     'STATUS_DELETED'		 	=> 'deleted',
     'STATUS_DELETED_BY_ADMIN' 	=> 'deleted_by_admin',
+    // Receiving
+    'PALLET'                    => 'PALLET',
 ];

@@ -8,6 +8,7 @@ class SapConst
     const EMPTY_STRING = '';
     const HALF_WIDTH_SPACE = ' ';
     const PARAMS = 'PARAMS';
+    const X = 'X';
 
     // config
     const ASHOST = 'ASHOST';

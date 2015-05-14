@@ -17,7 +17,6 @@ $this->title = 'Create Receiving';
 			    <?= $this->render('_create-form', [
 			        'model' => $model,
 			        'customer_list' => $customer_list,
-			        'plant_list' => $plant_list,
                     'storage_list' => $storage_list,
 			    ]) ?>
 			</div>

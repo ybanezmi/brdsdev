@@ -39,7 +39,7 @@ class ReceivingController extends Controller
             ],
         ];
     }
-    
+
     public function behaviors()
     {
         return [
@@ -227,15 +227,12 @@ class ReceivingController extends Controller
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-                $plant_list = ArrayHelper::map(Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]),
-							'storage_location', 'plant_location');
-                $storage_list = array_combine(array_unique (array_keys($plant_list)),array_unique (array_keys($plant_list)));
-                $plant_list = array_combine(array_unique (array_values($plant_list)),array_unique (array_values($plant_list)));
+                $plant_list = Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]);
+                $storage_list = ArrayHelper::map($plant_list, 'storage_location', 'storage_name');
 
 	            return $this->render('create', [
 	                'model' => $model,
 	                'customer_list' => $customer_list,
-                    'plant_list' => $plant_list,
                     'storage_list' => $storage_list,
 	            ]);
 	        }
@@ -323,9 +320,12 @@ class ReceivingController extends Controller
 			$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
 			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
+            $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['like', 'description', Yii::$app->params['PALLET']]);
+            $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['not like', 'description', Yii::$app->params['PALLET']]);
 
+            $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
+            $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
-			$packaging_list = ArrayHelper::map($packaging_model, 'pallet_type', 'pallet_type');
 
 			// retrieve and convert sled in days unit
 			$material_sled_properties = [
@@ -341,13 +341,19 @@ class ReceivingController extends Controller
 
 			foreach ($material_sled as $key => $value) {
 				switch(strtolower($value['sled_unit'])) {
-					case 'y':
+				    // years
+					case '3':
 						$material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'] * 12 * 30;
 						break;
-					case 'm':
+                    // months
+					case '2':
 						$material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'] * 30;
 						break;
-					case 'd':
+                    // weeks
+                    case '1':
+                        $material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'] * 7;
+                    // days
+					case ' ':
 						$material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'];
 						break;
 					default:
@@ -471,8 +477,6 @@ class ReceivingController extends Controller
 					$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
 				}
 
-				$transaction_detail_model->validate();
-
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
                     $this->getSapNumber($transaction_model, $transaction_detail_model, $total_weight);
@@ -486,7 +490,8 @@ class ReceivingController extends Controller
 		                'customer_model'			=> $customer_model,
                         'material_conversion_model' => $material_conversion_model,
 		                'material_list'				=> $material_list,
-		                'packaging_list'			=> $packaging_list,
+		                'packaging_type_list'		=> $packaging_type_list,
+		                'kitting_type_list'         => $kitting_type_list,
 		                'transaction_detail_model'	=> $transaction_detail_model,
 		                'transaction_details'		=> $transaction_details,
 		                'handling_unit_model' 		=> $handling_unit_model,
@@ -505,7 +510,8 @@ class ReceivingController extends Controller
 	                'customer_model'			=> $customer_model,
                     'material_conversion_model' => $material_conversion_model,
 	                'material_list'				=> $material_list,
-	                'packaging_list'			=> $packaging_list,
+	                'packaging_type_list'       => $packaging_type_list,
+                    'kitting_type_list'         => $kitting_type_list,
 	                'transaction_detail_model'	=> $transaction_detail_model,
 	                'transaction_details'		=> $transaction_details,
 	                'handling_unit_model' 		=> $handling_unit_model,
@@ -671,25 +677,50 @@ class ReceivingController extends Controller
 	}
 
 	public function actionValidatePallet() {
-
 		$return['valid'] = true;
-		echo json_encode($return);
 	}
 
+    public function actionGetPackagingType($id) {
+        $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and', ['pallet_type' => $id], ['like', 'description', Yii::$app->params['PALLET']]]);
+
+        $packaging_type_list['material_code'] = ArrayHelper::getColumn($packaging_type_model, 'material_code');
+        $packaging_type_list['description'] = ArrayHelper::getColumn($packaging_type_model, 'description');
+
+        echo json_encode($packaging_type_list);
+    }
+
+    public function actionGetKittingType($id) {
+        $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and', ['pallet_type' => $id], ['not like', 'description', Yii::$app->params['PALLET']]]);
+
+        $kitting_type_list['material_code'] = ArrayHelper::getColumn($kitting_type_model, 'material_code');
+        $kitting_type_list['description'] = ArrayHelper::getColumn($kitting_type_model, 'description');
+
+        echo json_encode($kitting_type_list);
+    }
+
+    public function actionGetMaterial($id, $desc) {
+        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
+
+        $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
+        $material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
+
+        echo json_encode($material_list);
+    }
+
     public function isEmpty($str) {
-        if (!isset($str) && $str != SapConst::EMPTY_STRING) {
-            return false;
-        } else {
+        if (isset($str) && $str != null && $str === SapConst::EMPTY_STRING) {
             return true;
+        } else {
+            return false;
         }
     }
-    
+
     public function getSapNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
         // Init curl
         $curl = new curl\Curl();
-        
+
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_RECEIVING;
-        
+
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
@@ -704,18 +735,18 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
-        $params[SapConst::PARAMS][SapConst::CRATES_IND] = SapConst::EMPTY_STRING;
-        $params[SapConst::PARAMS][SapConst::EXIDV] = SapConst::EMPTY_STRING;
-        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = $trxTransactionDetails['pallet_no'] ? $trxTransactionDetails['pallet_no'] : SapConst::EMPTY_STRING; 
-        //$params[SapConst::PARAMS][SapConst::VHILM] = $trxTransactionDetails['pallet_type']; // TODO
-        //$params[SapConst::PARAMS][SapConst::VHILM2] = $trxTransactionDetails['pallet_type']; // TODO
-        $params[SapConst::PARAMS][SapConst::VHILM] = '';
-        $params[SapConst::PARAMS][SapConst::VHILM2] = '000000000000000036';
+        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_type']) ? SapConst::X : SapConst::EMPTY_STRING;
+        // Packaging Type
+        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::EMPTY_STRING;
+        // Kitting Type
+        $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::EMPTY_STRING;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = '';    
+        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
 
         $response = $curl->setOption(
-            CURLOPT_POSTFIELDS, 
+            CURLOPT_POSTFIELDS,
             http_build_query($params))
             ->post('http://192.168.1.121/brdssap/sap/import');
         die;

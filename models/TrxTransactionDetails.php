@@ -20,6 +20,9 @@ use Yii;
  * @property string $manufacturing_date
  * @property string $expiry_date
  * @property string $pallet_type
+ * @property string $kitting_type
+ * @property string $packaging_code
+ * @property string $kitting_code
  * @property string $status
  * @property string $creator_id
  * @property string $created_date
@@ -42,14 +45,14 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'total_weight', 'pallet_no', 'kitted_unit', 'pallet_weight'], 'required'],
+            [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'total_weight', 'pallet_no', 'packaging_code', 'pallet_weight'], 'required'],
             [['transaction_id', 'batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
-            [['customer_code', 'pallet_no', 'pallet_type'], 'string', 'max' => 10],
-            [['pallet_no'], 'string', 'min' => 10],
-            [['material_code'], 'string', 'max' => 32],
-            [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates 
+            [['customer_code', 'pallet_no'], 'string', 'max' => 10],
+            [['pallet_no', 'kitted_unit'], 'string', 'min' => 10],
+            [['material_code', 'packaging_code', 'kitting_code'], 'string', 'max' => 32],
+            [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
         ];
     }
 
@@ -72,6 +75,9 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             'manufacturing_date' => 'Manufacturing Date',
             'expiry_date' => 'Expiry Date',
             'pallet_type' => 'Pallet Type',
+            'kitting_type' => 'Kitting Type',
+            'packaging_code' => 'Packaging Material Code',
+            'kitting_code' => 'Kitting Material Code',
             'status' => 'Status',
             'creator_id' => 'Creator ID',
             'created_date' => 'Created Date',
@@ -79,7 +85,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             'updated_date' => 'Updated Date',
         ];
     }
-	
+
 	/**
 	 * manufacturing and expiry date validation
 	 */

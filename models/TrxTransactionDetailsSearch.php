@@ -19,7 +19,7 @@ class TrxTransactionDetailsSearch extends TrxTransactionDetails
     {
         return [
             [['id', 'transaction_id', 'batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
-            [['customer_code', 'material_code', 'pallet_no', 'manufacturing_date', 'expiry_date', 'pallet_type', 'status', 'created_date', 'updated_date'], 'safe'],
+            [['customer_code', 'material_code', 'pallet_no', 'manufacturing_date', 'expiry_date', 'pallet_type', 'kitting_type', 'status', 'created_date', 'updated_date'], 'safe'],
         ];
     }
 

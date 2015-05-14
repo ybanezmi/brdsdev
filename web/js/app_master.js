@@ -4,7 +4,7 @@ var site_url = "/";
 $(function () {
 	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
        // $("button[type=\"submit\"]").attr("disabled","disabled");
-    }); 
+    });
 	/*date picker*/
 	/*
 	if (jQuery().datePicker) {
@@ -15,7 +15,7 @@ $(function () {
 			buttonText: "Select date"
 		});
 	}*/
-	
+
 	/*modal view*/
 	$("#forgotpassword, #openpallet, #closepallet, #rejectpallet, #createto").modal('hide');
 
@@ -27,7 +27,7 @@ $(function () {
 		e.preventDefault();
 		goBack();
 	});
-	
+
 	$( ".backto" ).click(function(e){
 		e.preventDefault();
 		goBack();
@@ -71,7 +71,7 @@ function gotoReceiving() {
 function setFieldValueById(id, value) {
 	if (document.getElementById(id)) {
 		document.getElementById(id).value = value;
-		
+
 		// trigger onchange event on change value of field
 		var ctrl = document.getElementById(id);
 		if (document.createEvent && ctrl.dispatchEvent) {
@@ -88,7 +88,7 @@ function setFieldValueById(id, value) {
 function setFieldValueByName(name, value) {
 	if (document.getElementsByName(name)[0]) {
 		document.getElementsByName(name)[0].value = value;
-		
+
 		// trigger onchange event on change value of field
 		var ctrl = document.getElementsByName(name)[0];
 		if (document.createEvent && ctrl.dispatchEvent) {
@@ -125,6 +125,16 @@ function getFieldValueByName(name) {
 	return document.getElementsByName(name)[0].value;
 }
 
+/* function to set field value to uppercase */
+function setFieldValueToUpperCaseById(id) {
+    setFieldValueById(id, getFieldValueById(id).toUpperCase());
+}
+
+/* function to filter non-numeric field value */
+function filterNonNumericFieldValue(id) {
+    setFieldValueById(id, getFieldValueById(id).replace(/\D/g,''));
+}
+
 /* function to hide HTML element by id */
 function hideHTMLById(id) {
 	document.getElementById(id).style.display = "none";
@@ -136,8 +146,8 @@ function showHTMLById(id) {
 }
 
 // For todays date;
-Date.prototype.today = function () { 
-    return (((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) + ((this.getDate() < 10)?"0":"") + this.getDate() 
+Date.prototype.today = function () {
+    return (((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) + ((this.getDate() < 10)?"0":"") + this.getDate()
         + this.getFullYear().toString().substring(2,4);
 }
 
@@ -171,31 +181,40 @@ function calculateDate(strDate, days, type) {
 	} else {
 		// do nothing
 	}
-	
+
 	var dd = newDate.getDate();
 	var mm = newDate.getMonth() + 1;
 	var y = newDate.getFullYear();
-	
+
 	var formattedDate = mm + '/' + dd + '/' + y;
-	
+
 	return formattedDate;
 }
 
 /* function to search material by barcode/description */
+/*
 function searchMaterial() {
 	var material_val = material_list_barcode[getFieldValueById("material_barcode")];
 	if (null == material_val) {
 		material_val = material_list_desc[getFieldValueById("material_barcode")];
 	}
-	
+
 	return material_val;
 }
+*/
 
 /* function to retrieve sled of material */
 function getMaterialSled() {
 	var material_sled_val = material_sled[getFieldValueById("trxtransactiondetails-material_code")];
-	
+
 	return material_sled_val;
+}
+
+/* function to retrieve pallet_ind of material */
+function getMaterialPalletInd() {
+    var material_pallet_ind_val = material_pallet_ind[getFieldValueById("trxtransactiondetails-material_code")];
+
+    return material_pallet_ind_val;
 }
 
 /* function to retrieve unit of material conversion */
@@ -207,8 +226,8 @@ function getMaterialConversionUnit() {
 			material_conv_unit = "QTY";
 		}
 	}
-	
-	
+
+
 	return material_conv_unit;
 }
 
@@ -218,7 +237,7 @@ function getMaterialTotalWeight() {
 	if (null != material_total_weight && material_total_weight.length > 0) {
 		switch(getMaterialConversionUnit()) {
 			case 'KG':
-				// do nothing 
+				// do nothing
 				break;
 			case 'CBM':
 			case 'BXS':
@@ -232,7 +251,7 @@ function getMaterialTotalWeight() {
 	} else {
 		material_total_weight = 0;
 	}
-	
+
 	return material_total_weight;
 }
 
@@ -242,7 +261,7 @@ function checkTransactionStatus() {
       return false;
     } else {
       return true;
-    } 
+    }
 }
 
 /* function to check existing pallet kitted unit of transaction detail */
@@ -250,14 +269,14 @@ function checkTransactionKittedUnit() {
     if (checkTransactionStatus()) {
       if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
           var trx_kitted_unit = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['kitted_unit'];
-          
+
           // set fixed value
           setFieldValueById("trxtransactiondetails-kitted_unit", trx_kitted_unit);
-          
+
       } else {
           // set to blank
           setFieldValueById("trxtransactiondetails-kitted_unit", "");
-          
+
       }
     } else {
       alert('Pallet ' + getFieldValueById("trxtransactiondetails-pallet_no") + ' is already closed.');
@@ -276,7 +295,7 @@ function checkTransactionPalletWeight() {
         }
         if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
             trx_pallet_weight = trx_pallet_weight + parseInt(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
-            
+
             // set initial value
             setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(trx_pallet_weight));
         } else {
@@ -306,6 +325,88 @@ function validateTransactionPalletType() {
 	}
 }
 
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  alert('Query Variable ' + variable + ' not found');
+}
+
+function searchMaterial(value) {
+    load('get-material?id=' + getQueryVariable('id') + '&desc=' + value, function(xhr) {
+        var jsonData = JSON.parse(xhr.responseText);
+
+        var x  = document.getElementById('trxtransactiondetails-packaging_code');
+
+        // clear options
+        x.options.length = 0;
+
+        // set prompt value
+        var promptOption = document.createElement('option');
+        promptOption.text = "-- Select a product --";
+        x.add(promptOption);
+
+        if(null != jsonData){
+            for(var i = 0; i < jsonData.material_code.length; i++){
+                var option  = document.createElement('option');
+                option.value = jsonData.item_code[i];
+                option.text = jsonData.description[i];
+                x.add(option, x[i+1]);
+            }
+        }
+    });
+}
+
+/* function to repopulate packaging type based on material pallet_ind */
+function populatePackagingType() {
+    load('get-packaging-type?id=' + getMaterialPalletInd(), function(xhr) {
+        var jsonData = JSON.parse(xhr.responseText);
+        var x  = document.getElementById('trxtransactiondetails-packaging_code');
+
+        // clear options
+        x.options.length = 0;
+
+        if(null != jsonData){
+            for(var i = 0; i < jsonData.material_code.length; i++){
+                var option  = document.createElement('option');
+                option.value = jsonData.material_code[i];
+                option.text = jsonData.description[i];
+                x.add(option, x[i+1]);
+            }
+        }
+    });
+}
+
+/* function to repopulate kitting type based on material pallet_ind */
+function populateKittingType() {
+    load('get-kitting-type?id=' + getMaterialPalletInd(), function(xhr) {
+        var jsonData = JSON.parse(xhr.responseText);
+        var x  = document.getElementById('trxtransactiondetails-kitting_code');
+
+        // clear options
+        x.options.length = 0;
+
+        // set prompt value
+        var promptOption = document.createElement('option');
+        promptOption.text = "-- Select a kitting type --";
+        x.add(promptOption);
+
+        if(null != jsonData){
+            for(var i = 0; i < jsonData.material_code.length; i++){
+                var option  = document.createElement('option');
+                option.value = jsonData.material_code[i];
+                option.text = jsonData.description[i];
+                x.add(option, x[i+1]);
+            }
+        }
+    });
+}
+
 /* function to validate pallet status */
 function validateTransactionPallet(id) {
 	load('validate-pallet?id=' + id, function(xhr) {
@@ -325,7 +426,7 @@ function getTransactionPalletWeight() {
 	if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
 		var trx_pallet_weight = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight'];
 	}
-	
+
 	return trx_pallet_weight;
 }
 
@@ -337,12 +438,12 @@ function getTransactionList(code){
 		var jsonData = JSON.parse(xhr.responseText);
 		var x  = document.getElementById('trxtransactiondetails-transaction_id');
 		//setFieldValueByName('transaction-list', ['']);
-		
+
 		// set prompt value
 		var promptOption = document.createElement('option');
 		promptOption.text = "-- Select a transaction --";
 		x.add(promptOption);
-		
+
 		if(null != jsonData){
 			for(var i = 0; i < jsonData.length; i++){
 				var option  = document.createElement('option');
@@ -359,11 +460,11 @@ function getTransaction(id) {
 	load("get-transaction?id=" + id, function(xhr) {
 		if (null != xhr.responseText && xhr.responseText.length > 0) {
 			var jsonData = JSON.parse(xhr.responseText);
-	    
+
 		    if (null != jsonData) {
 		    	// show transaction details panel
 		    	showHTMLById("trx-details");
-		    	
+
 		    	// set corresponding field values
 		    	setFieldValueByName("customer_name", jsonData.customer_name);
 		    	setFieldValueByName("customer_code", jsonData.customer_code);
@@ -375,7 +476,7 @@ function getTransaction(id) {
 		    	setFieldValueByName("truck_van", jsonData.truck_van);
 		    	setFieldValueByName("pallet_count", jsonData.pallet_count);
 		    	setFieldValueByName("total_weight", jsonData.total_weight);
-		    	
+
 		    	remarks = jsonData.remarks;
 		    } else {
 		    	// hide transaction details panel
@@ -385,23 +486,23 @@ function getTransaction(id) {
 			// hide transaction details panel
 	    	hideHTMLById("trx-details");
 		}
-	    
-	    
+
+
 	});
 }
 
 /* function used for ajax requests */
 function load(url, callback) {
     var xhr;
-     
+
     if(typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
     else {
-        var versions = ["MSXML2.XmlHttp.5.0", 
+        var versions = ["MSXML2.XmlHttp.5.0",
                         "MSXML2.XmlHttp.4.0",
-                        "MSXML2.XmlHttp.3.0", 
+                        "MSXML2.XmlHttp.3.0",
                         "MSXML2.XmlHttp.2.0",
                         "Microsoft.XmlHttp"]
- 
+
              for(var i = 0, len = versions.length; i < len; i++) {
                 try {
                     xhr = new ActiveXObject(versions[i]);
@@ -410,24 +511,24 @@ function load(url, callback) {
                 catch(e){}
              } // end for
         }
-         
+
         xhr.onreadystatechange = ensureReadiness;
-         
+
         function ensureReadiness() {
             if(xhr.readyState < 4) {
                 return;
             }
-             
+
             if(xhr.status !== 200) {
                 return;
             }
- 
-            // all is well  
+
+            // all is well
         if(xhr.readyState === 4) {
             callback(xhr);
-        }           
+        }
     }
-     
+
     xhr.open('GET', url, true);
     xhr.send('');
 }
@@ -450,16 +551,16 @@ function getMaterialList(code) {
 	load('get-material-list?item_code=' + code, function(xhr) {
 		var jsonData = JSON.parse(xhr.responseText);
 		var x  = document.getElementById('material');
-		
+
 		// clear options
 		x.options.length = 0;
-		
+
 		// set prompt value
 		var promptOption = document.createElement('option');
 		promptOption.value = "";
 		promptOption.innerHTML = "-- Select a material --";
 		x.add(promptOption);
-		
+
 		if(null != jsonData){
 			for(var i = 0; i < jsonData.length; i++){
 				var option  = document.createElement('option');
@@ -477,9 +578,9 @@ function calculateNetWeight() {
 	var palletTare = parseFloat(getFieldValueById('pallet_tare'));
 	var productTare = parseFloat(getFieldValueById('product_tare_total'));
 	var palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
-	
+
 	var netWeight = grossWeight - (palletTare + productTare + palletPackagingTare);
-	
+
 	if (!isNaN(netWeight)) {
 		setFieldValueById('net_weight', netWeight);
 	} else {
@@ -491,10 +592,10 @@ function calculateNetWeight() {
 function calculateTotalProductTare() {
 	var productTare = getFieldValueById('product_tare');
 	var units = getFieldValueById('units');
-	
-	if (!isNaN(productTare) && null != productTare && productTare.length > 0 
+
+	if (!isNaN(productTare) && null != productTare && productTare.length > 0
 		&& !isNaN(units) && null != units && units.length > 0) {
-		setFieldValueById('product_tare_total', parseFloat(productTare) * parseFloat(units)); 
+		setFieldValueById('product_tare_total', parseFloat(productTare) * parseFloat(units));
 	} else {
 		setFieldValueById('product_tare_total', '0');
 	}
@@ -539,7 +640,7 @@ function ajax (url, method, params, container_id, loading_text) {
 		if(xhr.readyState == 4) {
 			toggleSync();
 			document.getElementById(container_id).innerHTML = xhr.responseText;
-		} else { 
+		} else {
 			toggleSync();
 			document.getElementById(container_id).innerHTML = loading_text;
 
@@ -549,7 +650,7 @@ function ajax (url, method, params, container_id, loading_text) {
 	xhr.open(method, url, true);
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	xhr.send(params);
-}		
+}
 
 function toggleSync() {
     var e = document.getElementById("sync-progress");
@@ -572,11 +673,11 @@ function ajax_dispatch (url, method, params, container_id, loading_text) {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4) {
 			document.getElementById(container_id).innerHTML = xhr.responseText;
-		} else { 
+		} else {
 			document.getElementById(container_id).innerHTML = loading_text;
 		}
 	}
 	xhr.open(method, url, true);
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	xhr.send(params);
-}	
+}
