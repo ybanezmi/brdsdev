@@ -128,15 +128,22 @@ use app\models\DispatchModel;
 					</tbody>
 				</table>
 
-				
+    </div>
 
 
     </div>
-
-    </div>
     
-    <?php } ?>
     
+    
+    <div class="one-column-button pdt-one-column-button">
+		<div class="submit-button ie6-submit-button">
+		<?= Html::submitButton('Print', ['class' => 'btn btn-primary',
+												  'name'  => 'print-document']) ?>
+		<?= Html::submitButton('Clear', ['class' => 'btn btn-primary',
+										  'name'  => 'clear']) ?>
+		</div>
+	</div>
 
+	<?php } ?>
 
 </div>

@@ -694,7 +694,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        $params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
+        $params[SapConst::PARAMS][SapConst::LFIMG] = '5.000';
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
         $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
@@ -710,9 +710,9 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = $trxTransactionDetails['pallet_type']; // TODO
         //$params[SapConst::PARAMS][SapConst::VHILM2] = $trxTransactionDetails['pallet_type']; // TODO
         $params[SapConst::PARAMS][SapConst::VHILM] = '';
-        $params[SapConst::PARAMS][SapConst::VHILM2] = '36';
+        $params[SapConst::PARAMS][SapConst::VHILM2] = '000000000000000036';
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;    
+        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = '';    
 
         $response = $curl->setOption(
             CURLOPT_POSTFIELDS, 
