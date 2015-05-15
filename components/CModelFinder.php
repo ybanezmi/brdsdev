@@ -107,7 +107,8 @@ class CModelFinder extends Component
     {
         // to retrieve all *active* materials by their index and order them by their ID:
     	$materials = MstMaterial::find()
-		    ->where(ArrayHelper::merge($conditions, ['status' => Yii::$app->params['STATUS_ACTIVE']]))
+		    ->where($conditions)
+            ->andWhere(['status' => Yii::$app->params['STATUS_ACTIVE']])
 		    ->orderBy('item_code')
 			->indexBy($index)
 		    ->all();
@@ -127,6 +128,7 @@ class CModelFinder extends Component
 			    ->where($conditions)
 			    ->orderBy('material_code')
 				->indexBy($index)
+                ->asArray()
 			    ->all();
 
 		return $material_conversion;
@@ -239,6 +241,23 @@ class CModelFinder extends Component
 
 
 		return $transaction_details;
+    }
+
+    /**
+     * Gets the material conversion from MstMaterialConversion model based on its status.
+     * If the model is not found, return empty.
+     * @return MstMaterialConversion
+     */
+    public function getMaterialConversion($index = null, $conditions = null)
+    {
+        // to retrieve all *active* material conversions by their index and order them by their ID:
+            $material_conversion = MstMaterialConversion::find()
+                ->where($conditions)
+                ->orderBy('material_code')
+                ->indexBy($index)
+                ->one();
+
+        return $material_conversion;
     }
 
     /**

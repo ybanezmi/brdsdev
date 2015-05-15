@@ -14,4 +14,5 @@ return [
     'STATUS_DELETED_BY_ADMIN' 	=> 'deleted_by_admin',
     // Receiving
     'PALLET'                    => 'PALLET',
+    'UNIT_KG'                   => 'KG',
 ];

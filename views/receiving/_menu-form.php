@@ -109,7 +109,8 @@ use yii\bootstrap\Modal;
 															setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
 															checkMaterialSled();
 															populatePackagingType();
-															populateKittingType();'])->label('Customer Product',['class' => 'control-label-f']); ?>
+															populateKittingType();
+															getMaterialConversion();'])->label('Customer Product',['class' => 'control-label-f']); ?>
 
 		<div class="control-group">
 	            	<div class="f-full-size ie6-padtop">
@@ -121,7 +122,7 @@ use yii\bootstrap\Modal;
 
 		<?= Html::textInput('material_barcode', '', ['id'		 => 'material_barcode',
 						 					  	  	 'class'	 => 'uborder help-44percent',
-						 					  	  	 'onchange'  => 'setFieldValueById("trxtransactiondetails-material_code", searchMaterial(this.value))']) ?>
+						 					  	  	 'onchange'  => 'searchMaterial(this.value)']) ?>
 	            	</div>
 	          	</div>
 
@@ -162,6 +163,7 @@ use yii\bootstrap\Modal;
 																														 'buttonImage'  	=> '../images/calendar.gif',
 																														 'buttonImageOnly' 	=> 'true'],
 																								'options' 			 => ['class' 			=> 'uborder disabled help-20percent dateclass',
+																								                         'onchange'         => 'checkMaterialSled()',
 																								   						 'readonly'			=> 'readonly',
 																								   						 'dateFormat' 		=> 'm/dd/yy']])->label('Expiry Date') ?>
 
@@ -211,8 +213,7 @@ Yii::$app->request->post('TrxTransactionDetails[pallet_type]') . '" readonly="re
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
                                                     'onchange'  => 'validateTransactionPalletType();'])->label('KITTING TYPE'); ?>
 		<?= $form->field($transaction_detail_model, 'kitted_unit',
-				['inputOptions' => ['class' => 'uborder help-20percent',
-									'value' => 0,],
+				['inputOptions' => ['class' => 'uborder help-20percent'],
 				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="kitted-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div>'
 				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 

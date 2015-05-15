@@ -46,8 +46,7 @@ use yii\widgets\ActiveForm;
 
     	<div class="one-column-button pdt-one-column-button">
 			<div class="submit-button ie6-submit-button">
-        		<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary',
-        																		   'name'  => 'submit']) ?>
+        		<?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
         		<?= Html::submitButton('Cancel', ['class' => 'btn btn-primary cancel-button',
         										  'name'  => 'cancel']) ?>
         	</div>

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $plant_location
  * @property string $ip_address
+ * @property string $pallet_range
  */
 class MstAllowedIp extends \yii\db\ActiveRecord
 {
@@ -26,8 +27,9 @@ class MstAllowedIp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['plant_location', 'ip_address'], 'required'],
-            [['plant_location', 'ip_address'], 'string', 'max' => 32]
+            [['plant_location', 'ip_address', 'pallet_range'], 'required'],
+            [['plant_location', 'ip_address'], 'string', 'max' => 32],
+            [['pallet_range'], 'string', 'max' => 10]
         ];
     }
 
@@ -39,6 +41,7 @@ class MstAllowedIp extends \yii\db\ActiveRecord
         return [
             'plant_location' => 'Plant Location',
             'ip_address' => 'Ip Address',
+            'pallet_range' => 'Pallet Range',
         ];
     }
 }

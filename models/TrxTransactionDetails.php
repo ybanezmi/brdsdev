@@ -53,6 +53,8 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['pallet_no', 'kitted_unit'], 'string', 'min' => 10],
             [['material_code', 'packaging_code', 'kitting_code'], 'string', 'max' => 32],
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
+            [['pallet_no'], 'checkPackagingPalletNoRange'],
+            [['pallet_no'], 'checkKittingPalletNoRange'],
         ];
     }
 
@@ -96,5 +98,35 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
 			$this->addError('expiry_date', 'Expiry date should be greater than the manufacturing date.');
 		}
 	}
+
+    /**
+     * pallet_no for packaging type validation
+     */
+    public function checkPackagingPalletNoRange($attribute, $params) {
+        $user = Yii::$app->user->identity;
+
+        if ($user && $user->assignment) {
+            $plantLocation = Yii::$app->modelFinder->findAllowedIpModel($user->assignment);
+
+            if (substr($this->pallet_no, 0, 1) !== $plantLocation->pallet_range) {
+                $this->addError('pallet_no', 'Pallet no. is not in range ['.$plantLocation->pallet_range.'*********]');
+            }
+        }
+    }
+
+    /**
+     * pallet_no for kitting type validation
+     */
+    public function checkKittingPalletNoRange($attribute, $params) {
+        $user = Yii::$app->user->identity;
+
+        if ($this->kitted_unit && $user && $user->assignment) {
+            $plantLocation = Yii::$app->modelFinder->findAllowedIpModel($user->assignment);
+
+            if (substr($this->kitted_unit, 0, 1) !== $plantLocation->pallet_range) {
+                $this->addError('kitted_unit', 'Pallet no. is not in range ['.$plantLocation->pallet_range.'*********]');
+            }
+        }
+    }
 
 }

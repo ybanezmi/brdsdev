@@ -69,19 +69,21 @@ function gotoReceiving() {
 
 /* function to set value to any HTML field by id */
 function setFieldValueById(id, value) {
-	if (document.getElementById(id)) {
-		document.getElementById(id).value = value;
+    setTimeout(function() {
+    	if (document.getElementById(id)) {
+    		document.getElementById(id).value = value;
 
-		// trigger onchange event on change value of field
-		var ctrl = document.getElementById(id);
-		if (document.createEvent && ctrl.dispatchEvent) {
-		    var evt = document.createEvent("HTMLEvents");
-		    evt.initEvent("change", true, true);
-		    ctrl.dispatchEvent(evt); // for DOM-compliant browsers
-		} else if (ctrl.fireEvent) {
-		    ctrl.fireEvent("onchange"); // for IE
-		}
-	}
+    		// trigger onchange event on change value of field
+    		var ctrl = document.getElementById(id);
+    		if (document.createEvent && ctrl.dispatchEvent) {
+    		    var evt = document.createEvent("HTMLEvents");
+    		    evt.initEvent("change", true, true);
+    		    ctrl.dispatchEvent(evt); // for DOM-compliant browsers
+    		} else if (ctrl.fireEvent) {
+    		    ctrl.fireEvent("onchange"); // for IE
+    		}
+    	}
+    }, 100);
 }
 
 /* function to get value of any HTML field by name */
@@ -165,10 +167,17 @@ function getTimestamp() {
 
 /* function to check material sled */
 function checkMaterialSled() {
-	if (null != getMaterialSled() && getFieldValueById("trxtransactiondetails-manufacturing_date").length > 0) {
+	if (null != getMaterialSled() && getMaterialSled() != 0 && getFieldValueById("trxtransactiondetails-manufacturing_date").length > 0
+	   && getFieldValueById("trxtransactiondetails-expiry_date").length == 0) {
 		setFieldValueById("trxtransactiondetails-expiry_date",
 			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),getMaterialSled(),"add"));
 	}
+
+    if (null != getMaterialSled() && getMaterialSled() != 0 && getFieldValueById("trxtransactiondetails-expiry_date").length > 0
+       && getFieldValueById("trxtransactiondetails-manufacturing_date").length == 0) {
+        setFieldValueById("trxtransactiondetails-manufacturing_date",
+            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),getMaterialSled(),"add"));
+    }
 }
 
 /* function to add/subtract days in a date string */
@@ -337,11 +346,20 @@ function getQueryVariable(variable) {
   alert('Query Variable ' + variable + ' not found');
 }
 
+/* function to retrieve material conversion */
+function getMaterialConversion() {
+    load('get-material-conversion?id=' + getFieldValueById("trxtransactiondetails-material_code"), function(xhr) {
+        //var jsonData = JSON.parse(xhr.responseText);
+
+        //console.log(jsonData);
+    });
+}
+
 function searchMaterial(value) {
-    load('get-material?id=' + getQueryVariable('id') + '&desc=' + value, function(xhr) {
+    load('get-material?id=' + customer_code + '&desc=' + value, function(xhr) {
         var jsonData = JSON.parse(xhr.responseText);
 
-        var x  = document.getElementById('trxtransactiondetails-packaging_code');
+        var x  = document.getElementById('trxtransactiondetails-material_code');
 
         // clear options
         x.options.length = 0;
@@ -352,13 +370,16 @@ function searchMaterial(value) {
         x.add(promptOption);
 
         if(null != jsonData){
-            for(var i = 0; i < jsonData.material_code.length; i++){
+            for(var i = 0; i < jsonData.item_code.length; i++){
                 var option  = document.createElement('option');
                 option.value = jsonData.item_code[i];
                 option.text = jsonData.description[i];
                 x.add(option, x[i+1]);
             }
         }
+
+        // set initial value
+        setFieldValueById('trxtransactiondetails-material_code', jsonData.item_code[0]);
     });
 }
 

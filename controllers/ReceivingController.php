@@ -413,6 +413,9 @@ class ReceivingController extends Controller
 			}
 
 			// encode and initialize all js variables
+			// customer code
+			$js_customer_code = json_encode($transaction_model->customer_code);
+
 			// used for searching material list by barcode
 			$js_material_barcode = json_encode(ArrayHelper::map($material_model, 'barcode', 'item_code'));
 			$js_material_desc = json_encode(ArrayHelper::map($material_model, 'description', 'item_code'));
@@ -430,6 +433,7 @@ class ReceivingController extends Controller
 			$js_transaction_details = json_encode($transaction_details);
 
 			$scripts = "<script type='text/javascript'>
+			                var customer_code = " . $js_customer_code . ";
 							var material_list_barcode = " . $js_material_barcode . ";
 							var material_list_desc = " . $js_material_desc . ";
 							var material_sled = " . $js_material_sled . ";
@@ -475,6 +479,11 @@ class ReceivingController extends Controller
 
 				if (null != $transaction_detail_model->getAttribute('expiry_date')) {
 					$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
+				}
+
+				// set to null if no kitting_type selection
+				if ($transaction_detail_model->kitting_code === '-- Select a kitting type --') {
+				    $transaction_detail_model->kitting_code = null;
 				}
 
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
@@ -701,10 +710,52 @@ class ReceivingController extends Controller
     public function actionGetMaterial($id, $desc) {
         $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
 
+        if ($material_model == null || count($material_model) == 0) {
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
+        }
+
         $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
         $material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
 
         echo json_encode($material_list);
+    }
+
+    public function actionGetMaterialConversion($id) {
+        $material_conversion_model = Yii::$app->modelFinder->getMaterialConversion(null, ['material_code' => $id]);
+
+        if ($material_conversion_model != null && count($material_conversion_model) > 0) {
+            $material_conversion = array();
+            print_r($material_conversion_model);
+            die;
+            if ($material_conversion_model->unit_1 !== Yii::$app->params['UNIT_KG']) {
+                $material_conversion[$material_conversion_model->unit_1] = [
+                                                'app\models\MstMaterialConversion' => [
+                                                    'num_1',
+                                                    'den_1',
+                                                ],
+                                            ];
+            }
+
+            if ($material_conversion_model->unit_2 !== Yii::$app->params['UNIT_KG']) {
+                $material_conversion[$material_conversion_model->unit_2] = [
+                                                'app\models\MstMaterialConversion' => [
+                                                    'num_2',
+                                                    'den_2',
+                                                ],
+                                            ];
+            }
+
+            if ($material_conversion_model->unit_3 !== Yii::$app->params['UNIT_KG']) {
+                $material_conversion[$material_conversion_model->unit_3] = [
+                                                'app\models\MstMaterialConversion' => [
+                                                    'num_3',
+                                                    'den_3',
+                                                ],
+                                            ];
+            }
+
+            echo json_encode($material_conversion);
+        }
     }
 
     public function isEmpty($str) {
