@@ -14,6 +14,6 @@ use yii\widgets\ActiveForm;
     <p><b>Please contact administrator</b></p>
   </div>
   <div class="modal-footer" style="text-align:center;">
-    <button class="btn" data-dismiss="modal" aria-hidden="true" style="padding:20px;">Close</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" style="padding:8px 20px;">Close</button>
   </div>
 </div>

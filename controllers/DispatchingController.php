@@ -25,26 +25,47 @@ class DispatchingController extends \yii\web\Controller
 
         if(null !== Yii::$app->request->post('cancel')) {
             $this->redirect(['index']);
+
         } else {
-            
+          
+
             if (null !== Yii::$app->request->post('submit-document')) {
-                $document_num = Yii::$app->request->post('document_number');
-                $dismodel = new DispatchModel;
 
-                $dispatch_model_1 = $dismodel->getDispatchList($document_num);
-                $dispatch_model_2 = $dismodel->getDispatchItems($document_num);
-                
-                return $this->render('index', [
-                    'dispatch_model_1' => $dispatch_model_1,
-                    'dispatch_model_2' => $dispatch_model_2
-                ]);
+                if (null !== Yii::$app->request->post('submit-document')) {
+                    $document_num = '00'.Yii::$app->request->post('document_number');
+                    $dismodel = new DispatchModel;
 
-            } else {
+                    $dispatch_model_1 = $dismodel->getDispatchList($document_num);
+                    $dispatch_model_2 = $dismodel->getDispatchItems($document_num);
+                    
+                    return $this->render('index', [
+                        'dispatch_model_1' => $dispatch_model_1,
+                        'dispatch_model_2' => $dispatch_model_2
+                    ]);
+                } 
+            }
+
+            else if (null !== Yii::$app->request->post('print-document')) {
+                Yii::$app->response->format = 'pdfdispatch';
+
+                Yii::$container->set(Yii::$app->response->formatters['pdfdispatch']['class'], [
+                    'orientation' => 'Portrait', // This value will be ignored if format is a string value.
+                    'beforeRender' => function($mpdf, $data) {},
+                    ]);
+                $this->layout = '//print';
+                return $this->render('dispatch-print-preview.php',[]);
+            }
+           
+            else {
                  return $this->render('index', [
                     'dispatch_model_1' => $dispatch_model_1,
                     'dispatch_model_2' => $dispatch_model_2
                 ]);
             }
+
+
+
+
         }
     }
 
