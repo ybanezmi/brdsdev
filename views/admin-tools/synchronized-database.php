@@ -47,8 +47,8 @@ use yii\bootstrap\Alert;
 
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/admin-tools/synchronized-materials" > <span>Materials</span></a></li>
 
-			<li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) syncPackaging(); "> <span>Packaging</span></a></li>
-
+			<!-- <li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) syncPackaging(); "> <span>Packaging</span></a></li>
+ -->
 			<li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Material Data. Do you want to continue?') ) syncPackagingMaterials(); "> <span>Packaging Materials</span></a></li>
 
 			<!-- <li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) pageload('/brdsapi/packaging_materials/ZCUS/bigblue');"> <span>Packaging Materials</span></a></li>  -->

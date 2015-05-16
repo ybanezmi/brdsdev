@@ -10,7 +10,6 @@ use app\models\DispatchModel;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-
 <div class="dispatch-form">
     <?php 
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
@@ -111,7 +110,8 @@ use app\models\DispatchModel;
             </div>
             <div class="row">
                 <div class="disp-left">Date:</div>
-                <div class="disp-right"><?php echo  date("Y-m-d", strtotime($dispatch_model_1[0]->BLDAT)) ?></div>
+                <?php $dispatch_date = date("Y-m-d", strtotime($dispatch_model_1[0]->BLDAT))?>
+                <div class="disp-right"><?= $dispatch_date  ?></div>
             </div>
             <div class="row">
                 <div class="disp-left">Customer Request Number:</div>
@@ -146,26 +146,58 @@ use app\models\DispatchModel;
 				<tbody>
 				<?php
                 $i=1;
+                $totalweight=0;
 					foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {
 						
-						echo "<tr><td style='width:50px; vertical-align:top; padding-top:7px;'> <input type='text' class='uborder help-80percent' maxlength='3' onkeypress='return isNumberKey(event)'' id='quantity_".$i."' /></td><td style='padding-top:5px;'>" ;
+                        $totalweight = $totalweight + $dispatch_model_2_info->LFIMG;
+						
+
+                        echo "<tr><td style='width:50px; vertical-align:top; padding-top:7px;'> <input type='text' class='uborder help-80percent' maxlength='3' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\" )' /></td><td style='padding-top:5px;'>" ;
+
 							echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
 							echo "<br />";
-							echo $dispatch_model_2_info->UMVKZ.' / '.$dispatch_model_2_info->LFIMG;
-							echo "<br />";
+							
+                            echo '<span id="current_quantity_'.$i.'">'.$dispatch_model_2_info->UMVKZ.'</span> UN / <span id="weight_'.$i.'">'.round($dispatch_model_2_info->LFIMG, 2). '</span> KG';
+							
+                            echo "<br />";
 							echo $dispatch_model_2_info->CHARG.' / '.date("Y-m-d", strtotime($dispatch_model_2_info->VFDAT));
 						echo "<td></tr>";
                         $i++;
+
+                        $total_inc = $i;
 
 					}
 					?>
 					</tbody>
 				</table>
+
+                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?= $totalweight ?>" name="total_weight" />
+                <input type='hidden'  id="total_weight2" value="<?= $totalweight ?>" name="total_weight2" />
+                </p>
             </div>
     </div>
     </div>
-    
-    
+
+    <!-- customer_information-->
+    <input type="hidden" value="<?= $customer_data[0]->NAME1; ?>" name="customer_name">
+    <input type="hidden" value="<?= $dispatch_model_1[0]->KUNNR; ?>" name="customer_number">
+    <input type="hidden" value="<?= $customer_data[0]->NAME1; ?>" name="customer_address[name]">
+    <input type="hidden" value="<?= $customer_data[0]->STRAS; ?>" name="customer_address[street]">
+    <input type="hidden" value="<?= $customer_data[0]->ORT01; ?>" name="customer_address[town]">
+    <input type="hidden" value="<?= $customer_data[0]->LAND1; ?>" name="customer_address[country]">
+    <input type="hidden" value="<?= $customer_data[0]->PSTLZ; ?>" name="customer_address[zip]">
+    <input type="hidden" value="<?= $customer_data[0]->TELF1; ?>" name="customer_address[tel]">
+
+     <!-- shipping_information-->
+    <input type="hidden" value="<?= $dispatch_model_1[0]->VBELN; ?>" name="dispatch_number">
+    <input type="hidden" value="<?= $dispatch_date; ?>" name="dispatch_date">
+
+    <!-- conditions_information-->
+    <input type="hidden" value="<?= $dispatch_model_2[0]->VOLUM; ?>" name="total_volume">
+
+    <!-- shipping_details-->
+
     
     <div class="one-column-button pdt-one-column-button">
 		<div class="submit-button ie6-submit-button">
@@ -187,7 +219,7 @@ use app\models\DispatchModel;
     {
         var pname=encodeURIComponent(document.getElementById("document_number").value);
         if (pname == '')
-        { alert('Please enter document number');l
+        { alert('Please enter document number');
             return false;}
         else if (pname.length != 8)
         {alert('You must input 8 numeric numbers');return false;}
@@ -209,4 +241,39 @@ use app\models\DispatchModel;
           }
         }
     }
+    function func_total(){
+        return document.getElementById("total_weight2").value;
+    }
+    function updatetotalWeight(ish,qt,qt_1,qt_2){
+            var current_weight = document.getElementById("total_weight").value;
+            var weight = document.getElementById(qt_2).innerHTML;
+            var row_total = parseInt(ish) * parseInt(weight);
+            var total_weight = document.getElementById("total_weight").value;
+            total = func_total();
+
+
+        if( ish != 1){
+            document.getElementById("total_weight").value = parseInt(total) + parseInt(row_total);
+            document.getElementById(qt_1).innerHTML = ish;
+        } else if( ish == 1) {
+             document.getElementById(qt_1).innerHTML = ish;
+             document.getElementById("total_weight").value = parseInt(total);
+        } else {
+             document.getElementById(qt_1).innerHTML = ish;
+             document.getElementById("total_weight").value = parseInt(total) - parseInt(row_total);
+        }
+
+    }
+
+
+    function closestById(el, id) {
+        while (el.id != id) {
+            el = el.parentNode;
+            if (!el) {
+                return null;
+            }
+        }
+        return el;
+    }
+
 </script>

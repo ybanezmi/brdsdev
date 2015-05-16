@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;;
+use kartik\mpdf\Pdf;
 
 use app\models\DispatchModel;
 
@@ -46,14 +47,18 @@ class DispatchingController extends \yii\web\Controller
             }
 
             else if (null !== Yii::$app->request->post('print-document')) {
-                Yii::$app->response->format = 'pdfdispatch';
 
-                Yii::$container->set(Yii::$app->response->formatters['pdfdispatch']['class'], [
+                Yii::$app->response->format = 'pdf';
+
+                Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+                    'format' => 'A4',
                     'orientation' => 'Portrait', // This value will be ignored if format is a string value.
                     'beforeRender' => function($mpdf, $data) {},
                     ]);
                 $this->layout = '//print';
                 return $this->render('dispatch-print-preview.php',[]);
+
+
             }
            
             else {
@@ -76,6 +81,8 @@ class DispatchingController extends \yii\web\Controller
 
     public function actionPrint()
     {
+            echo Yii::$app->request->post('total_weight');
+            exit;
             Yii::$app->response->format = 'pdf';
 
             //Can you it if needed to rotate the page

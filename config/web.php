@@ -76,36 +76,6 @@ $config = [
                 'pdf' => [
                     'class' => 'robregonm\pdf\PdfResponseFormatter',
                     'mode' => '', // Optional
-                    'format' => 'A0',  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
-                    'defaultFontSize' => 0, // Optional
-                    'defaultFont' => 'opensans', // Optional
-                    'marginLeft' => 0, // Optional
-                    'marginRight' => 0, // Optional
-                    'marginTop' => 0, // Optional
-                    'marginBottom' => 0, // Optional
-                    'marginHeader' => 0, // Optional
-                    'marginFooter' => 0, // Optional
-                    'orientation' => 'Portrait', // optional. This value will be ignored if format is a string value.
-                    'options' => [
-                        // mPDF Variables
-                        'fontdata' => [
-						// ... some fonts. http://mpdf1.com/manual/index.php?tid=454
-						"dejavusanscondensed" => array(
-							'R' => "DejaVuSansCondensed.ttf",
-							'B' => "DejaVuSansCondensed-Bold.ttf",
-							'I' => "DejaVuSansCondensed-Oblique.ttf",
-							'BI' => "DejaVuSansCondensed-BoldOblique.ttf",
-							'useOTL' => 0xFF,
-							'useKashida' => 75,
-						)
-                        ]
-                    ]
-                ],
-
-                'pdfdispatch' => [
-                    'class' => 'robregonm\pdf\PdfResponseFormatter',
-                    'mode' => '', // Optional
-                    'format' => 'FORMAT_A4',  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
                     'defaultFontSize' => 0, // Optional
                     'defaultFont' => 'opensans', // Optional
                     'marginLeft' => 0, // Optional
