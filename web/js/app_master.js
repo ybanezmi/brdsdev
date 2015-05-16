@@ -68,37 +68,39 @@ function gotoReceiving() {
 }
 
 /* function to set value to any HTML field by id */
-function setFieldValueById(id, value) {
-    setTimeout(function() {
-    	if (document.getElementById(id)) {
-    		document.getElementById(id).value = value;
+function setFieldValueById(id, value, onchange) {
+	if (document.getElementById(id)) {
+		document.getElementById(id).value = value;
 
-    		// trigger onchange event on change value of field
-    		var ctrl = document.getElementById(id);
-    		if (document.createEvent && ctrl.dispatchEvent) {
-    		    var evt = document.createEvent("HTMLEvents");
-    		    evt.initEvent("change", true, true);
-    		    ctrl.dispatchEvent(evt); // for DOM-compliant browsers
-    		} else if (ctrl.fireEvent) {
-    		    ctrl.fireEvent("onchange"); // for IE
-    		}
-    	}
-    }, 100);
+		// trigger onchange event on change value of field
+		if (onchange) {
+		    var ctrl = document.getElementById(id);
+            if (document.createEvent && ctrl.dispatchEvent) {
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("change", true, true);
+                ctrl.dispatchEvent(evt); // for DOM-compliant browsers
+            } else if (ctrl.fireEvent) {
+                ctrl.fireEvent("onchange"); // for IE
+            }
+		}
+	}
 }
 
 /* function to get value of any HTML field by name */
-function setFieldValueByName(name, value) {
+function setFieldValueByName(name, value, onchange) {
 	if (document.getElementsByName(name)[0]) {
 		document.getElementsByName(name)[0].value = value;
 
 		// trigger onchange event on change value of field
-		var ctrl = document.getElementsByName(name)[0];
-		if (document.createEvent && ctrl.dispatchEvent) {
-		    var evt = document.createEvent("HTMLEvents");
-		    evt.initEvent("change", true, true);
-		    ctrl.dispatchEvent(evt); // for DOM-compliant browsers
-		} else if (ctrl.fireEvent) {
-		    ctrl.fireEvent("onchange"); // for IE
+		if (onchange) {
+		    var ctrl = document.getElementsByName(name)[0];
+            if (document.createEvent && ctrl.dispatchEvent) {
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("change", true, true);
+                ctrl.dispatchEvent(evt); // for DOM-compliant browsers
+            } else if (ctrl.fireEvent) {
+                ctrl.fireEvent("onchange"); // for IE
+            }
 		}
 	}
 }
@@ -128,8 +130,8 @@ function getFieldValueByName(name) {
 }
 
 /* function to set field value to uppercase */
-function setFieldValueToUpperCaseById(id) {
-    setFieldValueById(id, getFieldValueById(id).toUpperCase());
+function setFieldValueToUpperCaseById(id, value) {
+    setFieldValueById(id, value.toUpperCase());
 }
 
 /* function to filter non-numeric field value */
@@ -228,16 +230,11 @@ function getMaterialPalletInd() {
 
 /* function to retrieve unit of material conversion */
 function getMaterialConversionUnit() {
-	var material_conv_unit = "KG";
-	if (null != material_conversion[getFieldValueById("trxtransactiondetails-material_code")]) {
-		material_conv_unit = material_conversion[getFieldValueById("trxtransactiondetails-material_code")]['unit_1'];
-		if (material_conv_unit === "CBM" || material_conv_unit === "BXS") {
-			material_conv_unit = "QTY";
-		}
+	if (!material_conversion['conversion_flag']) {
+	    return 'KG';
+	} else {
+        return material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['unit'];
 	}
-
-
-	return material_conv_unit;
 }
 
 /* function to get total weight of material */
@@ -250,8 +247,8 @@ function getMaterialTotalWeight() {
 				break;
 			case 'CBM':
 			case 'BXS':
-				material_total_weight = Math.ceil(parseInt(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById("trxtransactiondetails-material_code")]['num_1'] /
-					   material_conversion[getFieldValueById("trxtransactiondetails-material_code")]['den_1']));
+				material_total_weight = Math.ceil(parseInt(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num'] /
+					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den']));
 				break;
 			default:
 				// do nothing
@@ -266,7 +263,8 @@ function getMaterialTotalWeight() {
 
 /* function to check if the pallet can be processed */
 function checkTransactionStatus() {
-	if (transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['status'] == 'closed') {
+	if (typeof transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")] != 'undefined'
+	   && transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['status'] == 'closed') {
       return false;
     } else {
       return true;
@@ -304,13 +302,8 @@ function checkTransactionPalletWeight() {
         }
         if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
             trx_pallet_weight = trx_pallet_weight + parseInt(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
-
-            // set initial value
-            setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(trx_pallet_weight));
-        } else {
-            // unset initial value
-            setFieldValueById("trxtransactiondetails-pallet_weight", 0);
         }
+        setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(trx_pallet_weight));
 	}
 }
 
@@ -349,9 +342,67 @@ function getQueryVariable(variable) {
 /* function to retrieve material conversion */
 function getMaterialConversion() {
     load('get-material-conversion?id=' + getFieldValueById("trxtransactiondetails-material_code"), function(xhr) {
-        //var jsonData = JSON.parse(xhr.responseText);
+        var jsonData = JSON.parse(xhr.responseText);
+        material_conversion = jsonData;
 
-        //console.log(jsonData);
+        if (!jsonData.conversion_flag) {
+            // remove select element
+            if (document.getElementById('trxtransactiondetails-net_unit')) {
+                document.getElementById('net-wt').removeChild(document.getElementById('trxtransactiondetails-net_unit'));
+            }
+
+            // add span element
+            if (!document.getElementById('net-unit')) {
+                var spanElem = document.createElement('span');
+                spanElem.id = "net-unit";
+                spanElem.innerHTML = "KG";
+
+                document.getElementById('net-wt').appendChild(spanElem);
+            }
+        } else {
+            // remove span element
+            if (document.getElementById('net-unit')) {
+                document.getElementById('net-unit').remove();
+            }
+
+            // add select element
+            var selectElem = document.getElementById('trxtransactiondetails-net_unit');
+            if (!selectElem) {
+                selectElem = document.createElement('select');
+                selectElem.id = "trxtransactiondetails-net_unit";
+                selectElem.setAttribute('name', 'TrxTransactionDetails[net_unit]');
+                selectElem.setAttribute('class', 'uborder help-20percent');
+
+                document.getElementById('net-wt').appendChild(selectElem);
+            }
+
+            // clear options
+            var i = 0;
+            selectElem.options.length = 0;
+            if (typeof jsonData.unit_1 != 'undefined' && jsonData.unit_1.unit != 'KG') {
+                var option  = document.createElement('option');
+                option.value = "unit_1";
+                option.text = jsonData.unit_1.unit;
+                selectElem.add(option, selectElem[i+1]);
+                i++;
+            }
+
+            if (typeof jsonData.unit_2 != 'undefined' && jsonData.unit_2.unit != 'KG') {
+                var option  = document.createElement('option');
+                option.value = "unit_2";
+                option.text = jsonData.unit_2.unit;
+                selectElem.add(option, selectElem[i+1]);
+                i++;
+            }
+
+            if (typeof jsonData.unit_3 != 'undefined' && jsonData.unit_3.unit != 'KG') {
+                var option  = document.createElement('option');
+                option.value = "unit_3";
+                option.text = jsonData.unit_3.unit;
+                selectElem.add(option, selectElem[i+1]);
+                i++;
+            }
+        }
     });
 }
 
@@ -379,7 +430,7 @@ function searchMaterial(value) {
         }
 
         // set initial value
-        setFieldValueById('trxtransactiondetails-material_code', jsonData.item_code[0]);
+        setFieldValueById('trxtransactiondetails-material_code', jsonData.item_code[0], true);
     });
 }
 
@@ -426,19 +477,6 @@ function populateKittingType() {
             }
         }
     });
-}
-
-/* function to validate pallet status */
-function validateTransactionPallet(id) {
-	load('validate-pallet?id=' + id, function(xhr) {
-		var jsonData = JSON.parse(xhr.responseText);
-		if (!jsonData.valid) {
-			document.getElementsByClassName("field-trxtransactiondetails-pallet_no")[0].className = "form-group field-trxtransactiondetails-pallet_no required has-error";
-			alert('Pallet # is already closed');
-		} else {
-			document.getElementsByClassName("field-trxtransactiondetails-pallet_no")[0].className = "form-group field-trxtransactiondetails-pallet_no required has-success";
-		}
-	});
 }
 
 /* function to retrieve pallet weight of transaction_detail */
@@ -603,7 +641,7 @@ function calculateNetWeight() {
 	var netWeight = grossWeight - (palletTare + productTare + palletPackagingTare);
 
 	if (!isNaN(netWeight)) {
-		setFieldValueById('net_weight', netWeight);
+		setFieldValueById('trxtransactiondetails-net_weight', netWeight);
 	} else {
 		setFieldValueById('net_weight', '0');
 	}

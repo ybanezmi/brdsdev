@@ -23,16 +23,16 @@ use yii\widgets\ActiveForm;
 																			 'onchange'	=> 'setFieldValueById("customer_code", getFieldValueById("trxtransactions-customer_code"))'])->label('Customer Product', ['class' => 'control-label-f']); ?>
 
 	<div class="control-group">
-	<div class="f-full-size">
-	<?= Html::textInput('customer_code', '', ['id'		 => 'customer_code',
-											  'disabled' => 'disabled',
-						 					  'class'	 => 'uborder disabled help-30percent']) ?>
-	</div>
+    	<div class="f-full-size">
+        	<?= Html::textInput('customer_code', '', ['id'		 => 'customer_code',
+        											  'disabled' => 'disabled',
+        						 					  'class'	 => 'uborder disabled help-30percent']) ?>
+    	</div>
 	</div>
 
 	<?= $form->field($model, 'truck_van', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['maxlength' => 10,
 													  'class' => 'uborder help-20percent',
-													  'onchange' => 'setFieldValueToUpperCaseById(this.id);'])->label('T.PLATE #') ?>
+													  'onchange' => 'setFieldValueToUpperCaseById(this.id, this.value);'])->label('T.PLATE #') ?>
 
 	<?= $form->field($model, 'plant_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['value'	  => Yii::$app->user->identity->assignment,
 														   'readonly' => 'readonly',

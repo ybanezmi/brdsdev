@@ -253,11 +253,24 @@ class CModelFinder extends Component
         // to retrieve all *active* material conversions by their index and order them by their ID:
             $material_conversion = MstMaterialConversion::find()
                 ->where($conditions)
-                ->orderBy('material_code')
-                ->indexBy($index)
                 ->one();
 
         return $material_conversion;
+    }
+
+    /**
+     * Gets the packaging material from MstPackagingMaterials model based on its status.
+     * If the model is not found, return empty.
+     * @return MstPackagingMaterials
+     */
+    public function getPackagingMaterial($conditions = null)
+    {
+        // to retrieve all *active* material conversions by their index and order them by their ID:
+            $packaging_material = MstPackagingMaterials::find()
+                ->where($conditions)
+                ->one();
+
+        return $packaging_material;
     }
 
     /**

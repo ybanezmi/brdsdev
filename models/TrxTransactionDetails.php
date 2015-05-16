@@ -14,6 +14,7 @@ use Yii;
  * @property string $batch
  * @property string $pallet_no
  * @property string $net_weight
+ * @property string $net_unit
  * @property string $total_weight
  * @property string $pallet_weight
  * @property string $kitted_unit
@@ -45,11 +46,11 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'total_weight', 'pallet_no', 'packaging_code', 'pallet_weight'], 'required'],
+            [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'net_unit', 'total_weight', 'pallet_no', 'packaging_code', 'pallet_weight'], 'required'],
             [['transaction_id', 'batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
-            [['customer_code', 'pallet_no'], 'string', 'max' => 10],
+            [['customer_code', 'pallet_no', 'net_unit'], 'string', 'max' => 10],
             [['pallet_no', 'kitted_unit'], 'string', 'min' => 10],
             [['material_code', 'packaging_code', 'kitting_code'], 'string', 'max' => 32],
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
@@ -71,6 +72,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             'batch' => 'Batch',
             'pallet_no' => 'Pallet No',
             'net_weight' => 'Net Weight',
+            'net_unit' => 'Net Weight Unit',
             'total_weight' => 'Total Weight',
             'pallet_weight' => 'Pallet Weight',
             'kitted_unit' => 'Kitted Unit',

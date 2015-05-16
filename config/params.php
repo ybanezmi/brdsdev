@@ -15,4 +15,7 @@ return [
     // Receiving
     'PALLET'                    => 'PALLET',
     'UNIT_KG'                   => 'KG',
+    'UNIT_1'                    => 'unit_1',
+    'UNIT_2'                    => 'unit_2',
+    'UNIT_3'                    => 'unit_3',
 ];

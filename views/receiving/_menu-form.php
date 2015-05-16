@@ -101,14 +101,8 @@ use yii\bootstrap\Modal;
 			['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
 			->dropDownList($material_list, ['class'	=> 'uborder help-70percent',
 											'prompt'	=> '-- Select a product --',
-											'onchange'	=> 'setFieldValueById("material_code",
-																getFieldValueById("trxtransactiondetails-material_code"));
-															setFieldValueById("trxtransactiondetails-pallet_type",
-																material_pallet_ind[getFieldValueById("trxtransactiondetails-material_code")]);
-															setInnerHTMLById("net-weight-unit", getMaterialConversionUnit());
-															setInnerHTMLById("kitted-unit", getMaterialConversionUnit());
-															checkMaterialSled();
-															populatePackagingType();
+											'onchange'	=> 'setFieldValueById("material_code",getFieldValueById("trxtransactiondetails-material_code"));
+											                populatePackagingType();
 															populateKittingType();
 															getMaterialConversion();'])->label('Customer Product',['class' => 'control-label-f']); ?>
 
@@ -116,8 +110,7 @@ use yii\bootstrap\Modal;
 	            	<div class="f-full-size ie6-padtop">
 	            				<?= Html::textInput('material_code', '', ['id'		 => 'material_code',
 												  'readonly' => 'readonly',
-												  'class'	 => 'uborder disabled help-44percent',
-												  'onchange' => 'setFieldValueById("trxtransactiondetails-material_code", getFieldValueById("material_code"))']) ?>
+												  'class'	 => 'uborder disabled help-44percent']) ?>
 
 
 		<?= Html::textInput('material_barcode', '', ['id'		 => 'material_barcode',
@@ -172,9 +165,10 @@ use yii\bootstrap\Modal;
 									'onchange' => 'filterNonNumericFieldValue(this.id);
 									               setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
 												   setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()))'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="net-weight-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div> '
+				 'template' => '<div class="control-group">{label}<div class="f-inline-size" id="net-wt">{input} <span id="net-unit">KG</span></div><div class=\"col-lg-8\">{error}</div></div> ',
+				 'labelOptions' => ['id' => 'net-weight',
+				                    'class' => 'control-label',],
 				])->textInput(['maxlength' => 10])->label('Net WT') ?>
-
 
 		<?= $form->field($transaction_detail_model, 'total_weight',
 				['inputOptions' => ['class' => 'uborder disabled help-20percent totalweight',
@@ -195,17 +189,12 @@ use yii\bootstrap\Modal;
 		<?= $form->field($transaction_detail_model, 'pallet_no',
 				['inputOptions' => ['class' => 'uborder help-20percent',
 									'value' => $pallet_no,
-									'onchange' => 'validateTransactionPallet();
-												   checkTransactionKittedUnit();
+									'onchange' => 'checkTransactionKittedUnit();
 												   checkTransactionPalletWeight();
 												   checkTransactionPalletType();
 												   validateTransactionPalletType();
 												   '],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}
-				 					<input type="text" id="trxtransactiondetails-pallet_type" name="TrxTransactionDetails[pallet_type]" class="uborder disabled help-20percent" value="'.
-Yii::$app->request->post('TrxTransactionDetails[pallet_type]') . '" readonly="readonly">
-				 				</div><div class=\"col-lg-8\">{error}</div></div> '
-				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
+				 ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
                     ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',
@@ -213,9 +202,7 @@ Yii::$app->request->post('TrxTransactionDetails[pallet_type]') . '" readonly="re
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
                                                     'onchange'  => 'validateTransactionPalletType();'])->label('KITTING TYPE'); ?>
 		<?= $form->field($transaction_detail_model, 'kitted_unit',
-				['inputOptions' => ['class' => 'uborder help-20percent'],
-				 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} <span id="kitted-unit">KG</span> </div><div class=\"col-lg-8\">{error}</div></div>'
-				])->textInput(['maxlength' => 10])->label('Pallet #') ?>
+				['inputOptions' => ['class' => 'uborder help-20percent']])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 
 		<?= $form->field($transaction_detail_model, 'pallet_weight',
 				['inputOptions' => ['class' => 'uborder disabled help-20percent',
@@ -277,7 +264,7 @@ pallet_no.addEventListener("blur", catchWeight, true);
 function catchWeight() {
     if (parseInt(getFieldValueById("trxtransactiondetails-pallet_weight")) > 1000 ) {
         alert('The weight exceeds the maximum allowed.');
-        setFieldValueById("trxtransactiondetails-net_weight", 0);
+        setFieldValueById("trxtransactiondetails-net_weight", 0, true);
     }
 }
 

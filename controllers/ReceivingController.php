@@ -481,9 +481,17 @@ class ReceivingController extends Controller
 					$transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
 				}
 
+				$packaging_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->packaging_code]);
+                $transaction_detail_model->pallet_type = $packaging_material->pallet_type;
+
 				// set to null if no kitting_type selection
 				if ($transaction_detail_model->kitting_code === '-- Select a kitting type --') {
 				    $transaction_detail_model->kitting_code = null;
+				} else {
+				    $kitting_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->kitting_code]);
+                    if ($kitting_material != null) {
+    				    $transaction_detail_model->kitting_type = $kitting_material->pallet_type;
+                    }
 				}
 
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
@@ -494,6 +502,8 @@ class ReceivingController extends Controller
 											 'isPalletAdded' => $isPalletAdded,
 		                ]);
 				} else {
+				    print_r($transaction_detail_model->getErrors());
+                    die;
 					return $this->render('menu', [
 		                'transaction_model' 		=> $transaction_model,
 		                'customer_model'			=> $customer_model,
@@ -685,10 +695,6 @@ class ReceivingController extends Controller
 		echo json_encode($transactionlist);
 	}
 
-	public function actionValidatePallet() {
-		$return['valid'] = true;
-	}
-
     public function actionGetPackagingType($id) {
         $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and', ['pallet_type' => $id], ['like', 'description', Yii::$app->params['PALLET']]]);
 
@@ -721,48 +727,51 @@ class ReceivingController extends Controller
     }
 
     public function actionGetMaterialConversion($id) {
-        $material_conversion_model = Yii::$app->modelFinder->getMaterialConversion(null, ['material_code' => $id]);
+        if ($this->isEmpty($id)) {
+            $material_conversion['conversion_flag'] = false;
+        } else {
+            $material_conversion_model = Yii::$app->modelFinder->getMaterialConversion(null, ['material_code' => $id]);
 
-        if ($material_conversion_model != null && count($material_conversion_model) > 0) {
-            $material_conversion = array();
-            print_r($material_conversion_model);
-            die;
-            if ($material_conversion_model->unit_1 !== Yii::$app->params['UNIT_KG']) {
-                $material_conversion[$material_conversion_model->unit_1] = [
-                                                'app\models\MstMaterialConversion' => [
-                                                    'num_1',
-                                                    'den_1',
-                                                ],
-                                            ];
+            if ($material_conversion_model != null && count($material_conversion_model) > 0) {
+                $material_conversion = array();
+                $material_conversion['conversion_flag'] = false;
+                if (!$this->isEmpty($material_conversion_model->unit_1)) {
+                    $material_conversion[Yii::$app->params['UNIT_1']]['unit'] = $material_conversion_model->unit_1;
+                    $material_conversion[Yii::$app->params['UNIT_1']]['num'] = $material_conversion_model->num_1;
+                    $material_conversion[Yii::$app->params['UNIT_1']]['den'] = $material_conversion_model->den_1;
+                    if (!$material_conversion['conversion_flag'] && $material_conversion_model->unit_1 !== Yii::$app->params['UNIT_KG']) {
+                        $material_conversion['conversion_flag'] = true;
+                    }
+                }
+
+                if (!$this->isEmpty($material_conversion_model->unit_2)) {
+                    $material_conversion[Yii::$app->params['UNIT_2']]['unit'] = $material_conversion_model->unit_2;
+                    $material_conversion[Yii::$app->params['UNIT_2']]['num'] = $material_conversion_model->num_2;
+                    $material_conversion[Yii::$app->params['UNIT_2']]['den'] = $material_conversion_model->den_2;
+                    if (!$material_conversion['conversion_flag'] && $material_conversion_model->unit_2 !== Yii::$app->params['UNIT_KG']) {
+                        $material_conversion['conversion_flag'] = true;
+                    }
+                }
+
+                if (!$this->isEmpty($material_conversion_model->unit_3)) {
+                    $material_conversion[Yii::$app->params['UNIT_3']]['unit'] = $material_conversion_model->unit_3;
+                    $material_conversion[Yii::$app->params['UNIT_3']]['num'] = $material_conversion_model->num_3;
+                    $material_conversion[Yii::$app->params['UNIT_3']]['den'] = $material_conversion_model->den_3;
+                    if (!$material_conversion['conversion_flag'] && $material_conversion_model->unit_3 !== Yii::$app->params['UNIT_KG']) {
+                        $material_conversion['conversion_flag'] = true;
+                    }
+                }
             }
-
-            if ($material_conversion_model->unit_2 !== Yii::$app->params['UNIT_KG']) {
-                $material_conversion[$material_conversion_model->unit_2] = [
-                                                'app\models\MstMaterialConversion' => [
-                                                    'num_2',
-                                                    'den_2',
-                                                ],
-                                            ];
-            }
-
-            if ($material_conversion_model->unit_3 !== Yii::$app->params['UNIT_KG']) {
-                $material_conversion[$material_conversion_model->unit_3] = [
-                                                'app\models\MstMaterialConversion' => [
-                                                    'num_3',
-                                                    'den_3',
-                                                ],
-                                            ];
-            }
-
-            echo json_encode($material_conversion);
         }
+        echo json_encode($material_conversion);
+
     }
 
     public function isEmpty($str) {
-        if (isset($str) && $str != null && $str === SapConst::EMPTY_STRING) {
-            return true;
-        } else {
+        if (isset($str) && $str != null && $str !== SapConst::EMPTY_STRING) {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -786,7 +795,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
-        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_type']) ? SapConst::X : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::EMPTY_STRING;
         // Packaging Type
         $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::EMPTY_STRING;
         $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::EMPTY_STRING;
