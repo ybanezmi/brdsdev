@@ -228,7 +228,10 @@ class ReceivingController extends Controller
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
                 $plant_list = Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]);
-                $storage_list = ArrayHelper::map($plant_list, 'storage_location', 'storage_name');
+                $storage_list = array();
+                foreach ($plant_list as $key => $value) {
+                    $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
+                }
 
 	            return $this->render('create', [
 	                'model' => $model,
@@ -352,6 +355,7 @@ class ReceivingController extends Controller
                     // weeks
                     case '1':
                         $material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'] * 7;
+                        break;
                     // days
 					case ' ':
 						$material_sled_conv[$value['item_code']] = $material_sled[$key]['sled'];
@@ -804,12 +808,14 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::EMPTY_STRING;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-
+        echo "<pre>";
+        print_r($params);
+        echo "</pre>";
+        die;
         $response = $curl->setOption(
             CURLOPT_POSTFIELDS,
             http_build_query($params))
             ->post('http://192.168.1.121/brdssap/sap/import');
-        die;
     }
 
 }
