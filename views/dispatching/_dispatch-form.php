@@ -153,7 +153,7 @@ use app\models\DispatchModel;
 						
 
                         echo "<tr><td style='width:50px; vertical-align:top; padding-top:7px;'> <input type='text' class='uborder help-80percent' maxlength='3' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\" )' /></td><td style='padding-top:5px;'>" ;
+                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->UMVKZ."\" /></td><td style='padding-top:5px;'>" ;
 
 							echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
 							echo "<br />";
@@ -165,15 +165,19 @@ use app\models\DispatchModel;
 						echo "<td></tr>";
                         $i++;
 
-                        $total_inc = $i;
+                        $total_inc = $i-1;
 
+                        echo "<input type='hidden' value='".$dispatch_model_2_info->MATNR."' name='material_number[]' />";
+                        echo "<input type='hidden' value='".$dispatch_model_2_info->ARKTX."' name='material_name[]' />";
+                        
 					}
+
+                    echo '<input type="hidden"  id="total_inc" value="'.$total_inc.'" name="total_inc" />';
 					?>
 					</tbody>
 				</table>
 
-                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?= $totalweight ?>" name="total_weight" />
-                <input type='hidden'  id="total_weight2" value="<?= $totalweight ?>" name="total_weight2" />
+                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?= $totalweight ?>" name="total_weight" /> KG
                 </p>
             </div>
     </div>
@@ -195,8 +199,6 @@ use app\models\DispatchModel;
 
     <!-- conditions_information-->
     <input type="hidden" value="<?= $dispatch_model_2[0]->VOLUM; ?>" name="total_volume">
-
-    <!-- shipping_details-->
 
     
     <div class="one-column-button pdt-one-column-button">
@@ -241,28 +243,29 @@ use app\models\DispatchModel;
           }
         }
     }
-    function func_total(){
-        return document.getElementById("total_weight2").value;
+
+    function func_totalcnt(){
+        return document.getElementById("total_inc").value;
     }
-    function updatetotalWeight(ish,qt,qt_1,qt_2){
-            var current_weight = document.getElementById("total_weight").value;
-            var weight = document.getElementById(qt_2).innerHTML;
-            var row_total = parseInt(ish) * parseInt(weight);
-            var total_weight = document.getElementById("total_weight").value;
-            total = func_total();
 
 
-        if( ish != 1){
-            document.getElementById("total_weight").value = parseInt(total) + parseInt(row_total);
-            document.getElementById(qt_1).innerHTML = ish;
-        } else if( ish == 1) {
-             document.getElementById(qt_1).innerHTML = ish;
-             document.getElementById("total_weight").value = parseInt(total);
-        } else {
-             document.getElementById(qt_1).innerHTML = ish;
-             document.getElementById("total_weight").value = parseInt(total) - parseInt(row_total);
+    function updatetotalWeight(ish,qt,qt_1,qt_2,cnt){
+        var total_inc = func_totalcnt();
+        var total_row = 0;
+
+        for (var i = 1; i <= total_inc; i++) {
+             var qat = document.getElementById("quantity_"+i+"").value;
+             var wt = document.getElementById("weight_"+i+"").innerHTML;
+            
+             total_row = parseInt(total_row) + parseInt(qat)*parseInt(wt) ;
         }
 
+        if(total_row <= 1000) {
+            document.getElementById("total_weight").value = total_row;
+        }else {
+            alert('total weight limit: 1000kg');
+            document.getElementById(qt).value = document.getElementById(qt_1).innerHTML;
+        }
     }
 
 

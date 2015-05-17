@@ -48,6 +48,29 @@ class DispatchingController extends \yii\web\Controller
 
             else if (null !== Yii::$app->request->post('print-document')) {
 
+               // $items = Yii::$app->request->post();
+
+               // echo "<pre>"; print_r($items);
+
+               // foreach($items as $row => $value){
+               //      //echo $value->total_weight;
+               // }
+
+               // exit;
+
+               // foreach ($items as $items_key => $items_key_info) {
+               //    foreach($items_key_info->material_name as $material_name_key => $material_name_key_info){
+               //          echo $material_name_key_info
+               //    }
+               //  }
+
+               //  foreach($resultArray as $row => $value){
+               //      foreach($value as $row2 => $value2)
+               //          echo $value2 . "<br/>";
+               //  }
+
+               //  exit;
+
                 Yii::$app->response->format = 'pdf';
 
                 Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [

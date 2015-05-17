@@ -53,7 +53,7 @@ function truncate($str, $len) {
 	</div>
 	<div class="right_column">
 		<p class="conditions">Weight - Volume</p>
-		<div class="row_weight"><b>Total Weight:</b> <?= Yii::$app->request->post('total_weight'); ?></div>
+		<div class="row_weight"><b>Total Weight:</b> <?= Yii::$app->request->post('total_weight'); ?> KG</div>
 		<div class="row_weight"><b>Total Volume:</b> <?= Yii::$app->request->post('total_volume'); ?></div>
 	</div>
 </div>
