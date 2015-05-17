@@ -18,6 +18,7 @@ class WeightCaptureController extends Controller
 
 	        //Can you it if needed to rotate the page
 	        Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+	        	'format' => array(101.6, 50.8),
 	            'orientation' => 'Landscape', // This value will be ignored if format is a string value.
 	            'beforeRender' => function($mpdf, $data) {},
 	            ]);
@@ -40,6 +41,7 @@ class WeightCaptureController extends Controller
 
 	        //Can you it if needed to rotate the page
 	        Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+	        	'format' => array(101.6, 50.8),
 	            'orientation' => 'Landscape', // This value will be ignored if format is a string value.
 	            'beforeRender' => function($mpdf, $data) {},
 	            ]);
@@ -78,6 +80,7 @@ class WeightCaptureController extends Controller
 
         //Can you it if needed to rotate the page
         Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+        	'format' => array(101.6, 50.8),
             'orientation' => 'Landscape', // This value will be ignored if format is a string value.
             'beforeRender' => function($mpdf, $data) {},
             ]);

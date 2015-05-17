@@ -104,4 +104,51 @@ class DispatchModel extends \yii\db\ActiveRecord
         }
     }
 
+     public function getSO($filter) {
+        $serverName = "QASV"; //serverName\instanceName
+        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
+        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+        if( $conn ) {
+
+            $stmt = "SELECT qas.VBFA.VBELV, qas.VBFA.ERDAT FROM qas.VBFA WHERE qas.VBFA.VBELN ='".$filter."'";
+
+            if(($result = sqlsrv_query($conn,$stmt)) !== false){
+                 $return_value = array();
+                while( $obj = sqlsrv_fetch_object( $result )) {
+                      array_push( $return_value, $obj);
+                }
+
+                return $return_value;
+            }
+        } else{
+            echo "Connection could not be established.<br />";
+            die( print_r( sqlsrv_errors(), true));
+        }
+    }
+
+     public function getPO($filter) {
+        $serverName = "QASV"; //serverName\instanceName
+        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
+        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+        if( $conn ) {
+
+            $stmt = "SELECT qas.VBAK.BSTNK, qas.VBAK.BSTDK
+                    FROM qas.VBAK WHERE qas.VBAK.VBELN ='".$filter."' AND qas.LIKP.MANDT = '400'";
+
+            if(($result = sqlsrv_query($conn,$stmt)) !== false){
+                 $return_value = array();
+                while( $obj = sqlsrv_fetch_object( $result )) {
+                      array_push( $return_value, $obj);
+                }
+
+                return $return_value;
+            }
+        } else{
+            echo "Connection could not be established.<br />";
+            die( print_r( sqlsrv_errors(), true));
+        }
+    }
+
 }

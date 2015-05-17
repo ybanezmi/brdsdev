@@ -212,7 +212,8 @@ class ReceivingController extends Controller
 			$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 
 			// set defaults
-			$model->id 	= strtotime(date("Ymdhis")); // @TODO should be set onBeforeSave in TrxTransactions model
+			// $model->id 	= strtotime(date("Ymdhis")); // @TODO should be set onBeforeSave in TrxTransactions model
+			$model->id 	= date("mdyhs"); // @TODO should be set onBeforeSave in TrxTransactions model
 
 			// @TODO: transfer updating of status/created/updated details to model
 			// set status, created and updated details
@@ -232,7 +233,7 @@ class ReceivingController extends Controller
                 foreach ($plant_list as $key => $value) {
                     $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
                 }
-
+               	print_r($model->getErrors());
 	            return $this->render('create', [
 	                'model' => $model,
 	                'customer_list' => $customer_list,
@@ -789,23 +790,28 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
+        //$params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
         $params[SapConst::PARAMS][SapConst::LFIMG] = '5.000';
-        $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
-        $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
+        //$params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
+        $params[SapConst::PARAMS][SapConst::CHARG] = 'WERS67';
+        //$params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
+        $params[SapConst::PARAMS][SapConst::WERKS] = 'BBL2';
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
-        $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
+        $params[SapConst::PARAMS][SapConst::LGORT] = 'B201';
+        //$params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
         $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
         $params[SapConst::PARAMS][SapConst::WADAT] = date('m/d/Y');
         $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
-        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
-        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::EMPTY_STRING;
-        $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::VHILM2] = '36';
         // Kitting Type
-        $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::EMPTY_STRING;
-        $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::EMPTY_STRING;
+        $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
         echo "<pre>";

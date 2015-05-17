@@ -76,7 +76,6 @@ $config = [
                 'pdf' => [
                     'class' => 'robregonm\pdf\PdfResponseFormatter',
                     'mode' => '', // Optional
-                    'format' => array(101.6, 50.8),  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
                     'defaultFontSize' => 0, // Optional
                     'defaultFont' => 'opensans', // Optional
                     'marginLeft' => 0, // Optional

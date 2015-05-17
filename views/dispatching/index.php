@@ -13,7 +13,7 @@ $this->title = 'Dispatching';
 		<div class="wrapper-150">
 			<h1 class="page-title">Dispatching</h1>
 			
-			<div class="help-bg-gray desktop-only" style="padding:20px 0" >
+			<div class="desktop-only" style="padding:20px 0" >
 				
 				<?= $this->render('_dispatch-form.php', [
 					'dispatch_model_1' => $dispatch_model_1,
