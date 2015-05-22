@@ -103,6 +103,10 @@ use app\models\DispatchModel;
         		</div>
         	</div>
         </td>
+
+        <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  ?>
+        <?php  $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
+
         <td style="padding-left:50px;">
             <div class="row">
                 <div class="disp-left">Dispatch Number:</div>
@@ -115,11 +119,11 @@ use app\models\DispatchModel;
             </div>
             <div class="row">
                 <div class="disp-left">Customer Request Number:</div>
-                <div class="disp-right">-</div>
+                <div class="disp-right"><?= $po_data[0]->BSTNK ?></div>
             </div>
             <div class="row">
                 <div class="disp-left">Date:</div>
-                <div class="disp-right">-</div>
+                <div class="disp-right"><?= date("Y-m-d", strtotime($po_data[0]->BSTDK)) ?></div>
             </div>
         </td>
     </tr>
@@ -132,9 +136,7 @@ use app\models\DispatchModel;
     </tr>
     </table>
 
-        <div>
-            <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  ?>
-        </div>
+       
     </div>
     </div>
 
@@ -197,8 +199,11 @@ use app\models\DispatchModel;
     <input type="hidden" value="<?= $dispatch_model_1[0]->VBELN; ?>" name="dispatch_number">
     <input type="hidden" value="<?= $dispatch_date; ?>" name="dispatch_date">
 
-    <!-- conditions_information-->
-    <input type="hidden" value="<?= $dispatch_model_2[0]->VOLUM; ?>" name="total_volume">
+     <!-- po_and_so information-->
+    <input type="hidden" value="<?= $so_data[0]->VBELN ?>" name="so_number">
+    <input type="hidden" value="<?= date("Y-m-d", strtotime($so_data[0]->ERDAT)) ?>" name="so_date">
+    <input type="hidden" value="<?= $po_data[0]->BSTNK ?>" name="po_number">
+    <input type="hidden" value="<?= date("Y-m-d", strtotime($po_data[0]->BSTDK)) ?>" name="po_date">
 
     
     <div class="one-column-button pdt-one-column-button">

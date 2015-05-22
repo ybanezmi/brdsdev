@@ -790,8 +790,8 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        //$params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
-        $params[SapConst::PARAMS][SapConst::LFIMG] = '5.000';
+        $params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
+        //$params[SapConst::PARAMS][SapConst::LFIMG] = '5.000';
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
         //$params[SapConst::PARAMS][SapConst::CHARG] = 'WERS67';
         //$params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
@@ -806,10 +806,10 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
         $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
-        //$params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
-        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = '6100000014';
-        //$params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
-        $params[SapConst::PARAMS][SapConst::VHILM2] = '36';
+        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::EXIDV_PAL] = '6200000002';
+        $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::VHILM2] = '36';
         // Kitting Type
         $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::EXIDV] = '36';

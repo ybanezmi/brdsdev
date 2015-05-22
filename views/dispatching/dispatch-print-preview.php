@@ -1,11 +1,10 @@
 <?php
-	//use Dinesh\Barcode\DNS1D;
-function truncate($str, $len) {
-  $tail = max(0, $len-10);
-  $trunk = substr($str, 0, $tail);
-  $trunk .= strrev(preg_replace('~^..+?[\s,:]\b|^...~', ' ...', strrev(substr($str, $tail, $len-$tail))));
-  return $trunk;
-}
+	function truncate($str, $len) {
+	  $tail = max(0, $len-10);
+	  $trunk = substr($str, 0, $tail);
+	  $trunk .= strrev(preg_replace('~^..+?[\s,:]\b|^...~', ' ...', strrev(substr($str, $tail, $len-$tail))));
+	  return $trunk;
+	}
 ?>
 
 <div class="dispatch">
@@ -34,10 +33,10 @@ function truncate($str, $len) {
 		<p class="shipping_title">Shipping Information</p>
 		<div class="row_ship"><b>Dispatch Number:</b> <?= Yii::$app->request->post('dispatch_number'); ?></div>
 		<div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('dispatch_date'); ?></div>
-		<div class="row_ship"><b>Customer Request No:</b> 888</div>
-		<div class="row_date"><b>Date:</b> 00/00/0000</div>
-		<div class="row_ship"><b>Sales Order Number:</b> 0000000009</div>
-		<div class="row_date"><b>Date:</b> 00/00/0000</div>
+		<div class="row_ship"><b>Customer Request No:</b> <?= Yii::$app->request->post('po_number'); ?></div>
+		<div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('po_date'); ?></div>
+		<div class="row_ship"><b>Sales Order Number:</b> <?= Yii::$app->request->post('so_number'); ?></div>
+		<div class="row_date"><b>Date:</b><?= Yii::$app->request->post('so_date'); ?></div>
 	</div>
 	
 </div>
@@ -54,7 +53,6 @@ function truncate($str, $len) {
 	<div class="right_column">
 		<p class="conditions">Weight - Volume</p>
 		<div class="row_weight"><b>Total Weight:</b> <?= Yii::$app->request->post('total_weight'); ?> KG</div>
-		<div class="row_weight"><b>Total Volume:</b> <?= Yii::$app->request->post('total_volume'); ?></div>
 	</div>
 </div>
 <br />
