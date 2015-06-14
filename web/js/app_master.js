@@ -633,15 +633,30 @@ function getMaterialList(code) {
 
 /* function to calculate net weight */
 function calculateNetWeight() {
-	var grossWeight = parseFloat(getFieldValueById('gross_weight'));
-	var palletTare = parseFloat(getFieldValueById('pallet_tare'));
-	var productTare = parseFloat(getFieldValueById('product_tare_total'));
-	var palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
+    var grossWeight = 0;
+    var palletTare = 0;
+    var productTare = 0;
+    var palletPackagingTare = 0;
+
+    if (!isNaN(parseFloat(getFieldValueById('gross_weight')))) {
+	    grossWeight = parseFloat(getFieldValueById('gross_weight'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_tare')))) {
+    	palletTare = parseFloat(getFieldValueById('pallet_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('product_tare_total')))) {
+        productTare = parseFloat(getFieldValueById('product_tare_total'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_packaging_tare')))) {
+        palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
+    }
 
 	var netWeight = grossWeight - (palletTare + productTare + palletPackagingTare);
-
 	if (!isNaN(netWeight)) {
-		setFieldValueById('trxtransactiondetails-net_weight', netWeight);
+		setFieldValueById('net_weight', netWeight);
 	} else {
 		setFieldValueById('net_weight', '0');
 	}
