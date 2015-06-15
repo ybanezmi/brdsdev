@@ -70,18 +70,20 @@ class DispatchingController extends \yii\web\Controller
                //  }
 
                //  exit;
+              $dismodel = new DispatchModel;
 
                 Yii::$app->response->format = 'pdf';
-
+                 $dn = Yii::$app->request->post('dispatch_number');
+                
+               
                 Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
                     'format' => 'A4',
                     'orientation' => 'Portrait', // This value will be ignored if format is a string value.
                     'beforeRender' => function($mpdf, $data) {},
                     ]);
                 $this->layout = '//print';
-                return $this->render('dispatch-print-preview.php',[]);
-
-
+                $dispatch_model_2 = $dismodel->getDispatchItems($dn);
+                return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
             }
            
             else {
