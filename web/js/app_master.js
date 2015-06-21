@@ -178,7 +178,7 @@ function checkMaterialSled() {
     if (null != getMaterialSled() && getMaterialSled() != 0 && getFieldValueById("trxtransactiondetails-expiry_date").length > 0
        && getFieldValueById("trxtransactiondetails-manufacturing_date").length == 0) {
         setFieldValueById("trxtransactiondetails-manufacturing_date",
-            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),getMaterialSled(),"add"));
+            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),getMaterialSled(),"subtract"));
     }
 }
 
@@ -193,11 +193,13 @@ function calculateDate(strDate, days, type) {
 		// do nothing
 	}
 
-	var dd = newDate.getDate();
-	var mm = newDate.getMonth() + 1;
+	var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+	var dd = ('0' + newDate.getDate()).slice(-2);
+	var mm = newDate.getMonth();
 	var y = newDate.getFullYear();
 
-	var formattedDate = mm + '/' + dd + '/' + y;
+	var formattedDate = dd + '-' + monthNames[mm] + '-' + y;
 
 	return formattedDate;
 }
