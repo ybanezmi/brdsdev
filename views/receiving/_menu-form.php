@@ -125,11 +125,17 @@ use yii\bootstrap\Modal;
 
 
 		<?= $form->field($transaction_detail_model, 'batch',
-						['inputOptions' => ['class' => 'uborder help-25percent'],
-						 'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}
-						 				<button class="btn btn-primary help-15percent" onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());" type="button">INT</button>
-						 				</div><div class=\"col-lg-8\">{error}</div></div>'
-						])->input('number', ['maxlength' => 10])->label('Batch / Lot') ?>
+                ['inputOptions' => ['class' => 'uborder help-20percent'],
+                 'template' => '<div class="control-group">{label}
+                                    <div class="f-inline-size">{input}
+                                    <button class="btn btn-primary help-15percent"
+                                        onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());"
+                                        type="button">INT</button>
+                                    </div>
+                                    <div class=\"col-lg-8\">{error}</div>
+                                </div>',
+                 ])->textInput(['maxlength' => 10])->label('Batch / Lot') ?>
+
 
 
 		<?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),[
@@ -185,8 +191,7 @@ use yii\bootstrap\Modal;
 
 		<?= $form->field($transaction_detail_model, 'packaging_code')
 					->dropDownList($packaging_type_list, ['class'	=> 'uborder help-70percent',
-													'value'	   => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>
-		<?= $form->field($transaction_detail_model, 'pallet_no',
+													'value'	   => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>		<?= $form->field($transaction_detail_model, 'pallet_no',
 				['inputOptions' => ['class' => 'uborder help-20percent',
 									'value' => $pallet_no,
 									'onchange' => 'checkTransactionKittedUnit();
@@ -195,6 +200,7 @@ use yii\bootstrap\Modal;
 												   validateTransactionPalletType();
 												   '],
 				 ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
+
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
                     ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',

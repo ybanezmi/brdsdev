@@ -47,7 +47,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     {
         return [
             [['transaction_id', 'customer_code', 'material_code', 'pallet_type', 'batch', 'net_weight', 'net_unit', 'total_weight', 'pallet_no', 'packaging_code', 'pallet_weight'], 'required'],
-            [['batch', 'net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
+            [['net_weight', 'total_weight', 'pallet_weight', 'kitted_unit', 'creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['status'], 'string'],
             [['customer_code', 'pallet_no', 'net_unit'], 'string', 'max' => 10],
@@ -56,6 +56,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
             [['pallet_no'], 'checkPackagingPalletNoRange'],
             [['pallet_no'], 'checkKittingPalletNoRange'],
+            [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9]/', 'message' => 'Must contain alphanumeric characters only.'],
         ];
     }
 

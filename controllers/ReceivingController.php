@@ -507,8 +507,6 @@ class ReceivingController extends Controller
 											 'isPalletAdded' => $isPalletAdded,
 		                ]);
 				} else {
-				    print_r($transaction_detail_model->getErrors());
-                    die;
 					return $this->render('menu', [
 		                'transaction_model' 		=> $transaction_model,
 		                'customer_model'			=> $customer_model,
