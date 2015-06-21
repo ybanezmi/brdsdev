@@ -57,7 +57,7 @@
 </div>
 <br />
 <p class="shipping_details">Shipping Details</p>
-	<p class="ship_info">Header Text test line 1<br />Header Text test line 1</p>
+	<p class="ship_info">SAP - Header Text test line 1<br /> SAP - Header Text test line 1</p>
 <table class="item-list">
 	<tr>
 		<td><b>Item</b></td>
@@ -68,24 +68,24 @@
 		<td><b>Batch</b></td>
 		<td><b>Expiry</b></td>
 	</tr>
-	<tr>
-		<td>0001</td>
-		<td>ALS MAT</td>
-		<td>TOOLS - TEST MATERIAL</td>
-		<td>1</td>
-		<td>0.5 KG</td>
-		<td>0080000001</td>
-		<td>2012-07-31</td>
-	</tr>
-	<tr>
-		<td>0001</td>
-		<td>ALS MAT</td>
-		<td>TOOLS - TEST MATERIAL</td>
-		<td>1</td>
-		<td>0.5 KG</td>
-		<td>0080000001</td>
-		<td>2012-07-31</td>
-	</tr>
+	<?php
+    
+    $i=1;
+    $x=0;
+	foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {	
+		echo '<tr>';
+			echo '<td>'.$i.'</td>';				
+			echo '<td>'.$dispatch_model_2_info->MATNR.'</td>';
+			echo '<td>'.$dispatch_model_2_info->ARKTX.'</td>';
+			echo '<td>'.Yii::$app->request->post('material_quantity')[$x].'</td>';
+			echo '<td>'.round($dispatch_model_2_info->LFIMG, 2).'KG </td>';
+			echo '<td>'.$dispatch_model_2_info->CHARG.'</td>';
+			echo '<td>'.date("Y-m-d", strtotime($dispatch_model_2_info->VFDAT)).'</td>';	                        
+		echo "</tr>";
+	    $i++;
+	    $x++;                    
+	}
+	?>
 </table>
 
 <br /><hr /><br /><br /><br />

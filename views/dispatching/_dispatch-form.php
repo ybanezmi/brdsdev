@@ -155,7 +155,7 @@ use app\models\DispatchModel;
 						
 
                         echo "<tr><td style='width:50px; vertical-align:top; padding-top:7px;'> <input type='text' class='uborder help-80percent' maxlength='3' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->UMVKZ."\" /></td><td style='padding-top:5px;'>" ;
+                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->UMVKZ."\" name='material_quantity[]' /></td><td style='padding-top:5px;'>" ;
 
 							echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
 							echo "<br />";
@@ -265,12 +265,16 @@ use app\models\DispatchModel;
              total_row = parseInt(total_row) + parseInt(qat)*parseInt(wt) ;
         }
 
+        document.getElementById("total_weight").value = total_row;
+
+        //use this if weight has limit
+        /*
         if(total_row <= 1000) {
             document.getElementById("total_weight").value = total_row;
         }else {
             alert('total weight limit: 1000kg');
             document.getElementById(qt).value = document.getElementById(qt_1).innerHTML;
-        }
+        }*/
     }
 
 
