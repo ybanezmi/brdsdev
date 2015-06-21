@@ -25,6 +25,8 @@ class ChangePasswordForm extends Model
             [['oldPassword', 'newPassword', 'confirmNewPassword'], 'string', 'max' => 32],
             // old password is validated by validateOldPassword()
             ['oldPassword', 'validateOldPassword'],
+            // new password is validated by validateNewPassword()
+            ['newPassword', 'validateNewPassword'],
             // confirm new password is validated by validateConfirmNewPassword()
             ['confirmNewPassword', 'validateConfirmNewPassword'],
         ];
@@ -48,6 +50,34 @@ class ChangePasswordForm extends Model
             	} else {
             		$this->addError($attribute, 'Incorrect password.');
             	}
+            }
+        }
+    }
+
+    /**
+     * Validates the new password.
+     * This method serves as the inline validation for new password.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateNewPassword($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            if ($this->newPassword === Yii::$app->params['DEFAULT_PASSWORD']) {
+                if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
+                    // if IE <= 6
+                    echo 'alert("New password should not use default password.")';
+                } else {
+                    $this->addError($attribute, 'New password should not use default password.');
+                }
+            } else if ($this->oldPassword === $this->newPassword) {
+                if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
+                    // if IE <= 6
+                    echo 'alert("New password should not be the same with old password.")';
+                } else {
+                    $this->addError($attribute, 'New password should not be the same with old password.');
+                }
             }
         }
     }

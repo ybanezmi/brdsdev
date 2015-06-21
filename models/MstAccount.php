@@ -49,7 +49,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
     public function rules()
     {
         return [
-            [['account_type', 'username', 'password', 'first_name', 'middle_name', 'last_name', 'address', 'contact_no', 
+            [['account_type', 'username', 'password', 'first_name', 'middle_name', 'last_name', 'address', 'contact_no',
               'notify', 'notify_conact_no', 'assignment', 'status', 'creator_id', 'updater_id'], 'required'],
             [['account_type', 'status'], 'string'],
             [['start_date', 'end_date', 'next_start_date', 'next_end_date', 'last_login_date', 'created_date', 'updated_date'], 'safe'],
@@ -110,7 +110,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
 		// update last login date
 		$account->last_login_date = date('Y-m-d H:i:s'); //@TODO change to global date format
 		$account->save();
-			
+
 		return isset($account) ? new static($account) : null;
     }
 
@@ -139,6 +139,23 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
 			    	->where(['username'	=> $username,
 			    		 	 'status' => Yii::$app->params['STATUS_ACTIVE']])
 			    	->one();
+
+        return $account;
+    }
+
+    /**
+     * Find unique user by username
+     *
+     * @param  string      $username
+     * @return static|null
+     */
+    public static function findUniqueUsername($username, $accountId)
+    {
+        $account = MstAccount::find()
+                    ->where(['username' => $username,
+                             'status' => Yii::$app->params['STATUS_ACTIVE']])
+                    ->andWhere(['not', ['id' => $accountId]])
+                    ->one();
 
         return $account;
     }
@@ -186,7 +203,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
      */
     public function validateUsername($attribute, $params)
     {
-        $userName = MstAccount::findByUsername($this->username);
+        $userName = MstAccount::findUniqueUsername($this->username, $this->id);
         if (!Yii::$app->request->post('hasEditable') && $userName) {
             $this->addError('username', 'Username is already taken.');
         }

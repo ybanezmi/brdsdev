@@ -14,7 +14,7 @@ use app\models\ChangePasswordForm;
 class SiteController extends Controller
 {
 	public $layout='/login';
-	
+
     public function behaviors()
     {
         return [
@@ -61,7 +61,7 @@ class SiteController extends Controller
     	if (Yii::$app->user->isGuest) {
             return $this->redirect(['site/login']);
         }
-		
+
     	$this->layout='/main';
         return $this->render('index');
     }
@@ -74,7 +74,12 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-        	$this->redirect(['site/successful']);
+            if (!Yii::$app->user->identity->last_login_date
+                || Yii::$app->user->identity->password === md5(Yii::$app->params['DEFAULT_PASSWORD'])) {
+                $this->redirect(['site/new-password']);
+            } else {
+                $this->redirect(['site/successful']);
+            }
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -89,25 +94,22 @@ class SiteController extends Controller
         return $this->redirect(['site/login']);
     }
 
-    public function actionContact()
+    public function actionNewPassword()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $newPasswordModel = new ChangePasswordForm();
+        $newPasswordParams = array();
+        if (isset(Yii::$app->request->post()['ChangePasswordForm'])) {
+            $newPasswordParams = Yii::$app->request->post();
+            $newPasswordParams['ChangePasswordForm']['oldPassword'] = Yii::$app->params['DEFAULT_PASSWORD'];
+        }
 
-            return $this->refresh();
+        if ($newPasswordModel->load($newPasswordParams) && $newPasswordModel->changePassword()) {
+            $this->redirect(['site/successful']);
         } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
+            return $this->render('new-password', ['model' => $newPasswordModel]);
         }
     }
 
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-	
 	public function actionChangePassword()
     {
     	$this->layout='/main';
@@ -116,16 +118,14 @@ class SiteController extends Controller
 		if ($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword()) {
 			$success = true;
 			$changePasswordModel = new ChangePasswordForm();
-			return $this->render('change-password', ['model' => $changePasswordModel, 'success' => $success]);
-		} else {
-			return $this->render('change-password', ['model' => $changePasswordModel, 'success' => $success]);
 		}
+        return $this->render('change-password', ['model' => $changePasswordModel, 'success' => $success]);
     }
-	
+
 	public function actionSuccessful()
 	{
 		$model = Yii::$app->user->identity;
-		
+
 		if (null !== Yii::$app->request->post('confirm')) {
 			$this->redirect(['site/index']);
 		} else if(null !== Yii::$app->request->post('abort')) {

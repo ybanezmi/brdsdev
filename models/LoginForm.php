@@ -49,7 +49,7 @@ class LoginForm extends Model
             	} else {
             		$this->addError($attribute, 'Incorrect username or password.');
             	}
-                
+
             }
 
 			if($user && !$user->assignment) {
@@ -60,19 +60,19 @@ class LoginForm extends Model
 					$this->addError($attribute, 'User assignment not set. Please contact your administrator.');
 				}
 			}
-			
+
 			if ($user && $user->assignment) {
 				$plantLocation = Yii::$app->modelFinder->findAllowedIpModel($user->assignment);
-				
+
 				$allowedIP =  explode('.', $plantLocation->ip_address);
 				$userIP = explode('.', Yii::$app->request->userIP);
-				
+
 				unset($allowedIP[3]);
 				unset($userIP[3]);
-				
+
 				$allowedIP = implode('.', $allowedIP);
 				$userIP = implode('.', $userIP);
-				
+
 				if ($allowedIP !== $userIP) {
 					$this->addError($attribute, 'Login not allowed from this ip address.');
 				}
@@ -87,6 +87,9 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
+            $model = Yii::$app->modelFinder->findAccountModel($this->getUser()->id);
+            $model->last_login_date = date('Y-m-d H:i:s');
+            $model->save();
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         } else {
             return false;
