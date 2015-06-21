@@ -657,7 +657,7 @@ function calculateNetWeight() {
     }
 
 	var netWeight = grossWeight - (palletTare + productTare + palletPackagingTare);
-	if (!isNaN(netWeight)) {
+	if (!isNaN(netWeight) && netWeight > 0) {
 		setFieldValueById('net_weight', netWeight);
 	} else {
 		setFieldValueById('net_weight', '0');
