@@ -361,6 +361,7 @@ function getMaterialConversion() {
 
                 document.getElementById('net-wt').appendChild(spanElem);
             }
+            document.getElementById('net-weight').innerHTML = "NET WT";
         } else {
             // remove span element
             if (document.getElementById('net-unit')) {
@@ -404,6 +405,8 @@ function getMaterialConversion() {
                 selectElem.add(option, selectElem[i+1]);
                 i++;
             }
+
+            document.getElementById('net-weight').innerHTML = "QUANTITY";
         }
     });
 }

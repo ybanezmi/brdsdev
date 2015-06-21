@@ -233,7 +233,6 @@ class ReceivingController extends Controller
                 foreach ($plant_list as $key => $value) {
                     $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
                 }
-               	print_r($model->getErrors());
 	            return $this->render('create', [
 	                'model' => $model,
 	                'customer_list' => $customer_list,

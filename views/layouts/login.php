@@ -8,23 +8,24 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-	
-	<?php 
-	
+
+	<?php
+
 		header('P3P: CP=”NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM”');
-	
+
 		header('Set-Cookie: SIDNAME=ronty; path=/; secure');
-		
+
 		header('Cache-Control: no-cache');
-		
+
 		header('Pragma: no-cache');
-	
-	?>		
-	
+
+	?>
+
 	<meta charset="<?= Yii::$app->charset ?>"/>
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <?= Html::csrfMetaTags() ?>
 	<title><?php echo Html::encode($this->title); ?></title>
+	<link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
 	<?php $this->head() ?>
 	    <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
@@ -45,7 +46,7 @@ AppAsset::register($this);
 		<div class="login-box">
 			<?php echo $content; ?>
 		</div>
-		
+
 		<div class="copy-logo">
 			Copyright &copy; Manten Kaitou 2014. All rights reserve.
 		</div>
