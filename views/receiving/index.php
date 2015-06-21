@@ -19,84 +19,84 @@ $this->title = 'Receiving';
 				        'class' => 'alert-error',
 				    ],
 				]);
-				
+
 				echo 'Pallet # is still being used by other account.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['open_success']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-success',
 				    ],
 				]);
-				
+
 				echo 'Pallet #' . Yii::$app->request->post("open_pallet_no") . ' successfully opened.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['open_error']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-error',
 				    ],
 				]);
-				
+
 				echo 'Failed to open pallet. Please enter pallet no.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['close_success']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-success',
 				    ],
 				]);
-				
+
 				echo 'Pallet #' . Yii::$app->request->post("close_pallet_no") . ' successfully closed.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['close_error']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-error',
 				    ],
 				]);
-				
+
 				echo 'Failed to close pallet. Please enter pallet no.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['reject_success']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-success',
 				    ],
 				]);
-				
+
 				echo 'Pallet #' . Yii::$app->request->post("reject_pallet_no") . ' successfully rejected.';
-				
+
 				Alert::end();
 			}
-			
+
 			if ($palletStatus['reject_error']) {
 				Alert::begin([
 				    'options' => [
 				        'class' => 'alert-error',
 				    ],
 				]);
-				
+
 				echo 'Failed to reject pallet. Please enter pallet no.';
-				
+
 				Alert::end();
 			}
-		?>		
+		?>
 		<div class="help-150"><h1 class="page-title page-title-bt">Receiving</h1></div>
 		<ul class="list-sub-menu">
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/create"> <span>Create Receiving</span></a></li>
@@ -105,21 +105,17 @@ $this->title = 'Receiving';
 			<?php if (Yii::$app->user->identity->account_type === 'checker') { ?>
 				<li><a href="#openpallet" data-toggle="modal"> <span>Open Pallet</span></a></li>
 			<?php } ?>
-			<li><a href="#closepallet" 
-			
-			
+			<li><a href="#closepallet"
+
+
 data-toggle="modal"
-			
+
 			> <span>Close Pallet</span></a></li>
-			<?php if (Yii::$app->user->identity->account_type === 'admin' && Yii::$app->user->identity->account_type === 'checker') { ?>
-				<li><a href="#rejectpallet" 
-				
-				data-toggle="modal"
-				
-				> <span>Reject Pallet</span></a></li>
+			<?php if (Yii::$app->user->identity->account_type === 'admin' || Yii::$app->user->identity->account_type === 'checker') { ?>
+				<li><a href="#rejectpallet" data-toggle="modal"> <span>Reject Pallet</span></a></li>
+			    <li><a href="#createto" data-toggle="modal"> <span>Create TO</span></a></li>
+			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>
 			<?php } ?>
-			<li><a href="#createto" data-toggle="modal"> <span>Create TO</span></a></li>
-			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>
 		</ul>
 	</div>
 </div>
@@ -133,7 +129,7 @@ data-toggle="modal"
   </div>
   <div class="modal-body">
       <h4>Scan Pallet to Process</h4>
-      <?php 
+      <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
 	    	'options' => ['class' => 'form-horizontal'],
@@ -148,7 +144,7 @@ data-toggle="modal"
         									  	  'name'	=> 'open-pallet']) ?>
         </div>
       <?php ActiveForm::end(); ?>
-    
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Open</button>
@@ -164,7 +160,7 @@ data-toggle="modal"
   </div>
   <div class="modal-body">
       <h4>Scan Pallet to Process</h4>
-      <?php 
+      <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
 	    	'options' => ['class' => 'form-horizontal'],
@@ -179,7 +175,7 @@ data-toggle="modal"
         									  	  'name'	=> 'close-pallet']) ?>
         </div>
       <?php ActiveForm::end(); ?>
-    
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -195,7 +191,7 @@ data-toggle="modal"
   </div>
   <div class="modal-body">
       <h4>Scan Pallet to Process</h4>
-      <?php 
+      <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
 	    	'options' => ['class' => 'form-horizontal'],
@@ -210,7 +206,7 @@ data-toggle="modal"
         									  	  'name'	=> 'reject-pallet']) ?>
         </div>
       <?php ActiveForm::end(); ?>
-    
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Reject</button>
@@ -232,7 +228,7 @@ data-toggle="modal"
             <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Use Pallet</button>
         </div>
       </form>
-    
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
