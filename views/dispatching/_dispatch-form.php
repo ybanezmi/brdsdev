@@ -114,16 +114,27 @@ use app\models\DispatchModel;
             </div>
             <div class="row">
                 <div class="disp-left">Date:</div>
-                <?php $dispatch_date = date("Y-m-d", strtotime($dispatch_model_1[0]->BLDAT))?>
+                <?php $dispatch_date = date("d-M-Y", strtotime($dispatch_model_1[0]->BLDAT))?>
                 <div class="disp-right"><?= $dispatch_date  ?></div>
             </div>
             <div class="row">
                 <div class="disp-left">Customer Request Number:</div>
-                <div class="disp-right"><?= $po_data[0]->BSTNK ?></div>
+                <div class="disp-right"><?php
+                    if(empty($po_data[0]->BSTNK)){
+                        echo 'empty'; }
+                    else{
+                        echo $po_data[0]->BSTNK; } ?>
+
+                </div>
             </div>
             <div class="row">
                 <div class="disp-left">Date:</div>
-                <div class="disp-right"><?= date("Y-m-d", strtotime($po_data[0]->BSTDK)) ?></div>
+                <div class="disp-right"><?php
+                    if(empty($po_data[0]->BSTDK)){
+                        echo 'empty'; }
+                    else{
+                        echo date("d-M-Y", strtotime($po_data[0]->BSTDK)); } ?>
+                </div>
             </div>
         </td>
     </tr>
@@ -151,19 +162,43 @@ use app\models\DispatchModel;
                 $totalweight=0;
 					foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {
 						
-                        $totalweight = $totalweight + $dispatch_model_2_info->LFIMG;
+                        
 						
-
-                        echo "<tr><td style='width:50px; vertical-align:top; padding-top:7px;'> <input type='text' class='uborder help-80percent' maxlength='3' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->UMVKZ."\" name='material_quantity[]' /></td><td style='padding-top:5px;'>" ;
-
+                        if($dispatch_model_2_info->VRKME == 'KG'){
+                         
+                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-60percent' onkeypress='/*return isNumberKey(event)*/' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->LFIMG."\" name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
+                                       
+                        }  else {                     
+                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-60percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".round($dispatch_model_2_info->LFIMG)."\" name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
+                        }    
 							echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
 							echo "<br />";
-							
-                            echo '<span id="current_quantity_'.$i.'">'.$dispatch_model_2_info->UMVKZ.'</span> UN / <span id="weight_'.$i.'">'.round($dispatch_model_2_info->LFIMG, 2). '</span> KG';
+							echo $dispatch_model_2_info->CHARG.' ('.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).')';
+                            echo "<br />";
+
+                            if($dispatch_model_2_info->VRKME == 'KG'){
+                              $gr_tot = $dispatch_model_2_info->LFIMG * $dispatch_model_2_info->UMVKZ;
+                              echo '<span style="display:none" id="umvkz_'.$i.'">'.$dispatch_model_2_info->UMVKZ.'</span>';
+                              echo '<span id="weight_'.$i.'">'.number_format((float)$gr_tot,3,'.','').'</span> '.$dispatch_model_2_info->VRKME;
+                              echo '<input type= "hidden" value="'.number_format((float)$gr_tot,3,'.','').'" name="temp_weight[]" id="temp_weight_'.$i.'"';
+                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->VRKME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
+                            }else {
+
+                              $gr_tot = $dispatch_model_2_info->LFIMG * $dispatch_model_2_info->UMVKZ;
+                              echo "<span id='umvkz_".$i."'>".number_format((float)$dispatch_model_2_info->UMVKZ,1,'.','')."</span> "; 
+                              echo $dispatch_model_2_info->VRKME;
+                              echo ' (<span id="weight_'.$i.'">'.number_format((float)$gr_tot,1,'.','').'</span> '.$dispatch_model_2_info->GEWEI.')';
+                              echo '<input type= "hidden" value="'.number_format((float)$gr_tot,3,'.','').'" name="temp_weight[]" id="temp_weight_'.$i.'"';
+                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->VRKME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
+
+                            }
+                            
+
 							
                             echo "<br />";
-							echo $dispatch_model_2_info->CHARG.' / '.date("Y-m-d", strtotime($dispatch_model_2_info->VFDAT));
+							
 						echo "<td></tr>";
                         $i++;
 
@@ -171,15 +206,17 @@ use app\models\DispatchModel;
 
                         echo "<input type='hidden' value='".$dispatch_model_2_info->MATNR."' name='material_number[]' />";
                         echo "<input type='hidden' value='".$dispatch_model_2_info->ARKTX."' name='material_name[]' />";
+                        (float) $totalweight = $totalweight + $gr_tot;
                         
 					}
 
                     echo '<input type="hidden"  id="total_inc" value="'.$total_inc.'" name="total_inc" />';
+                    echo '<input type="hidden"  id="total_unit" value="'.$dispatch_model_2_info->GEWEI.'" name="total_unit" />';
 					?>
 					</tbody>
 				</table>
 
-                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?= $totalweight ?>" name="total_weight" /> KG
+                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?php echo number_format((float)$totalweight,3,'.',''); ?>" name="total_weight" /> <?= $dispatch_model_2_info->GEWEI ?>
                 </p>
             </div>
     </div>
@@ -200,10 +237,36 @@ use app\models\DispatchModel;
     <input type="hidden" value="<?= $dispatch_date; ?>" name="dispatch_date">
 
      <!-- po_and_so information-->
-    <input type="hidden" value="<?= $so_data[0]->VBELN ?>" name="so_number">
-    <input type="hidden" value="<?= date("Y-m-d", strtotime($so_data[0]->ERDAT)) ?>" name="so_date">
-    <input type="hidden" value="<?= $po_data[0]->BSTNK ?>" name="po_number">
-    <input type="hidden" value="<?= date("Y-m-d", strtotime($po_data[0]->BSTDK)) ?>" name="po_date">
+     <?php if(empty($so_data[0]->VBELN)){
+        echo '<input type="hidden" value="empty" name="so_number">';
+    }
+    else{
+        echo '<input type="hidden" value="'.$so_data[0]->VBELN.'" name="so_number">'; 
+    } ?>
+     <?php if(empty($so_data[0]->ERDAT)){
+        echo '<input type="hidden" value="empty" name="so_date">';
+    }
+    else{
+        echo '<input type="hidden" value="'.date("d-M-Y", strtotime($so_data[0]->ERDAT)).'" name="so_date">'; 
+    } ?>
+     <?php if(empty($po_data[0]->BSTNK)){
+        echo '<input type="hidden" value="empty" name="po_number">'; 
+    }
+    else{
+        echo '<input type="hidden" value="'.$po_data[0]->BSTNK.'" name="po_number">'; 
+    } ?>
+     <?php if(empty($po_data[0]->BSTDK)){
+        echo '<input type="hidden" value="empty" name="po_date">'; 
+    }
+    else{
+        echo '<input type="hidden" value="'.date("d-M-Y", strtotime($po_data[0]->BSTDK)).'" name="po_date"> ';
+    } ?>
+
+    
+    
+
+    
+    
 
     
     <div class="one-column-button pdt-one-column-button">
@@ -244,7 +307,7 @@ use app\models\DispatchModel;
         var elements = document.getElementsByTagName("input");
         for (var ii=0; ii < elements.length; ii++) {
           if (elements[ii].type == "text") {
-            elements[ii].value = "";
+            elements[ii].value = "0";
           }
         }
     }
@@ -254,18 +317,27 @@ use app\models\DispatchModel;
     }
 
 
-    function updatetotalWeight(ish,qt,qt_1,qt_2,cnt){
+    function updatetotalWeight(ish,umvkz,qt,qt_1,qt_2,cnt){
         var total_inc = func_totalcnt();
         var total_row = 0;
+        var umvkzElem = "umvkz_"+cnt;
+        var wtElem = "weight_"+cnt;
+        var hidwtElem = "temp_weight_"+cnt;
+        var umvkzVal = document.getElementById(umvkzElem).innerHTML;
+
+
+        document.getElementById(wtElem).innerHTML = parseFloat(ish) * parseFloat(umvkzVal);
+        document.getElementById(hidwtElem).value = parseFloat(ish) * parseFloat(umvkzVal);
+
 
         for (var i = 1; i <= total_inc; i++) {
              var qat = document.getElementById("quantity_"+i+"").value;
              var wt = document.getElementById("weight_"+i+"").innerHTML;
             
-             total_row = parseInt(total_row) + parseInt(qat)*parseInt(wt) ;
+             total_row = parseFloat(total_row) + parseFloat(wt);
         }
 
-        document.getElementById("total_weight").value = total_row;
+        document.getElementById("total_weight").value = parseFloat(total_row);
 
         //use this if weight has limit
         /*
