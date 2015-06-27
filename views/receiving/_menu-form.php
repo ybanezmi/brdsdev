@@ -161,9 +161,7 @@ use yii\bootstrap\Modal;
 
         <?= $form->field($transaction_detail_model, 'net_weight',
                 ['inputOptions' => ['class' => 'uborder help-20percent',
-                                    'onchange' => 'filterNonNumericFieldValue(this.id);
-                                                   setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
-                                                   setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()))'],
+                                    'onchange' => 'calculateTotalWeight()'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size" id="net-wt">{input} <span id="net-unit">KG</span></div><div class=\"col-lg-8\">{error}</div></div> ',
                  'labelOptions' => ['id' => 'net-weight',
                                     'class' => 'control-label',],

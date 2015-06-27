@@ -375,6 +375,7 @@ function getMaterialConversion() {
                 selectElem.id = "trxtransactiondetails-net_unit";
                 selectElem.setAttribute('name', 'TrxTransactionDetails[net_unit]');
                 selectElem.setAttribute('class', 'uborder help-20percent');
+                selectElem.setAttribute('onchange', 'calculateTotalWeight()');
 
                 document.getElementById('net-wt').appendChild(selectElem);
             }
@@ -780,4 +781,10 @@ function clearAllFields() {
     setFieldValueById("trxtransactiondetails-pallet_no", "");
     setFieldValueById("trxtransactiondetails-kitted_unit", "");
     setFieldValueById("trxtransactiondetails-pallet_weight", "");
+}
+
+function calculateTotalWeight() {
+    filterNonNumericFieldValue('trxtransactiondetails-net_weight');
+    setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
+    setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()));
 }
