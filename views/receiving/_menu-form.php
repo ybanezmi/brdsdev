@@ -97,10 +97,7 @@ use yii\bootstrap\Modal;
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
             ->dropDownList($material_list, ['class'    => 'uborder help-70percent',
                                             'prompt'    => '-- Select a product --',
-                                            'onchange'    => 'setFieldValueById("material_code",getFieldValueById("trxtransactiondetails-material_code"));
-                                                            populatePackagingType();
-                                                            populateKittingType();
-                                                            getMaterialConversion();'])->label('Customer Product',['class' => 'control-label-f']); ?>
+                                            'onchange'    => 'onSelectMaterial()'])->label('Customer Product',['class' => 'control-label-f']); ?>
 
         <div class="control-group">
                     <div class="f-full-size ie6-padtop">
@@ -204,7 +201,7 @@ use yii\bootstrap\Modal;
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
                                                     'onchange'  => 'validateTransactionPalletType();'])->label('KITTING TYPE'); ?>
         <?= $form->field($transaction_detail_model, 'kitted_unit',
-                ['inputOptions' => ['class' => 'uborder help-20percent']])->textInput(['maxlength' => 10])->label('Pallet #') ?>
+                ['inputOptions' => ['class' => 'uborder help-20percent']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-20percent',
@@ -219,7 +216,7 @@ use yii\bootstrap\Modal;
         <h2 class="legend">Close Pallet</h2>
 
         <div class="control-group">
-            <label class="control-label" for="trxtransactiondetails-kitted_unit">Enter Pallet #:</label>
+            <label class="control-label" for="close-pallet-no">Enter Pallet #:</label>
             <div class="f-inline-size">
                 <?= Html::textInput('close_pallet_no', '', ['id'         => 'close-pallet-no',
                                                                  'class'          => 'uborder help-40percent']) ?>

@@ -760,3 +760,24 @@ function ajax_dispatch (url, method, params, container_id, loading_text) {
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	xhr.send(params);
 }
+
+function onSelectMaterial() {
+    clearAllFields();
+    if (getFieldValueById("trxtransactiondetails-material_code") != '-- Select a product --') {
+        setFieldValueById("material_code",getFieldValueById("trxtransactiondetails-material_code"));
+    }
+    populatePackagingType();
+    populateKittingType();
+    getMaterialConversion();
+}
+
+function clearAllFields() {
+    setFieldValueById("trxtransactiondetails-batch", "");
+    setFieldValueById("trxtransactiondetails-manufacturing_date", "");
+    setFieldValueById("trxtransactiondetails-expiry_date", "");
+    setFieldValueById("trxtransactiondetails-net_weight", "");
+    setFieldValueById("trxtransactiondetails-total_weight", "");
+    setFieldValueById("trxtransactiondetails-pallet_no", "");
+    setFieldValueById("trxtransactiondetails-kitted_unit", "");
+    setFieldValueById("trxtransactiondetails-pallet_weight", "");
+}
