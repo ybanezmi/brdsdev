@@ -52,7 +52,7 @@
 	</div>
 	<div class="right_column">
 		<p class="conditions">Weight - Volume</p>
-		<div class="row_weight"><b>Total Weight:</b> <?= Yii::$app->request->post('total_weight'); ?> KG</div>
+		<div class="row_weight"><b>Total Weight:</b> <?= Yii::$app->request->post('total_weight'); ?> <?= Yii::$app->request->post('total_unit'); ?></div>
 	</div>
 </div>
 <br />
@@ -74,13 +74,13 @@
     $x=0;
 	foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {	
 		echo '<tr>';
-			echo '<td>'.$i.'</td>';				
-			echo '<td>'.$dispatch_model_2_info->MATNR.'</td>';
-			echo '<td>'.$dispatch_model_2_info->ARKTX.'</td>';
+			echo '<td width="40">'.$i.'</td>';				
+			echo '<td >'.$dispatch_model_2_info->MATNR.'</td>';
+			echo '<td width="250">'.$dispatch_model_2_info->ARKTX.'</td>';
 			echo '<td>'.Yii::$app->request->post('material_quantity')[$x].'</td>';
-			echo '<td>'.round($dispatch_model_2_info->LFIMG, 2).'KG </td>';
+			echo '<td>'.Yii::$app->request->post('temp_weight')[$x].'KG </td>';
 			echo '<td>'.$dispatch_model_2_info->CHARG.'</td>';
-			echo '<td>'.date("Y-m-d", strtotime($dispatch_model_2_info->VFDAT)).'</td>';	                        
+			echo '<td>'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';	                        
 		echo "</tr>";
 	    $i++;
 	    $x++;                    

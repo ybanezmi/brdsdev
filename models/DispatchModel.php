@@ -43,7 +43,7 @@ class DispatchModel extends \yii\db\ActiveRecord
         $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
         if( $conn ) {
-            $stmt = "SELECT qas.LIPS.MATNR, qas.LIPS.ARKTX, qas.LIPS.CHARG, qas.LIPS.UMVKZ, qas.LIPS.VRKME, qas.LIPS.LFIMG, qas.LIPS.VFDAT, qas.LIPS.MEINS, qas.LIPS.VOLUM FROM qas.LIPS WHERE qas.LIPS.VBELN ='".$dr."' AND qas.LIPS.MANDT = '400'";
+            $stmt = "SELECT qas.LIPS.MATNR, qas.LIPS.ARKTX, qas.LIPS.CHARG, qas.LIPS.UMVKZ, qas.LIPS.GEWEI, qas.LIPS.VRKME, qas.LIPS.LFIMG, qas.LIPS.VFDAT, qas.LIPS.MEINS, qas.LIPS.VOLUM FROM qas.LIPS WHERE qas.LIPS.VBELN ='".$dr."' AND qas.LIPS.MANDT = '400'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                 $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
