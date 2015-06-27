@@ -34,7 +34,7 @@ use yii\bootstrap\Modal;
 
         <?= $form->field($transaction_model, 'created_date')->textInput(['value'    => date('m/d/Y', strtotime($transaction_model->created_date)),
                                                                           'disabled' => 'disabled',
-                                                                          'class'     => 'uborder disabled help-20percent'])->label('DATE') ?>
+                                                                          'class'     => 'uborder disabled help-25percent'])->label('DATE') ?>
 
         <?= $form->field($transaction_model, 'id')->textInput(['disabled' => 'disabled',
                                                                   'class'      => 'uborder disabled help-40percent'])->label('BRDS ID #') ?>
@@ -43,16 +43,16 @@ use yii\bootstrap\Modal;
                                                                          'class'      => 'uborder disabled help-40percent'])->label('SAP #') ?>
 
         <?= $form->field($transaction_model, 'plant_location')->textInput(['disabled' => 'disabled',
-                                                                                'class'      => 'uborder disabled help-20percent'])->label('WAREHOUSE') ?>
+                                                                                'class'      => 'uborder disabled help-25percent'])->label('WAREHOUSE') ?>
 
         <?= $form->field($transaction_model, 'storage_location')->textInput(['disabled' => 'disabled',
-                                                                                  'class'      => 'uborder disabled help-20percent'])->label('S. LOC') ?>
+                                                                                  'class'      => 'uborder disabled help-25percent'])->label('S. LOC') ?>
 
         <?= $form->field($transaction_model, 'truck_van',
-                ['inputOptions' => ['class'     => 'uborder disabled help-20percent',
+                ['inputOptions' => ['class'     => 'uborder disabled help-25percent',
                                     'disabled'     => 'disabled'],
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input}
-                                     <button class="btn btn-primary help-20percent" type="button" onclick="alert(\''.$transaction_model->remarks.'\')">Remarks</button>
+                                     <button class="btn btn-primary help-25percent" type="button" onclick="alert(\''.$transaction_model->remarks.'\')">Remarks</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])
                 ->textInput(['maxlength' => 10])->label('T.PLATE #') ?>
@@ -71,16 +71,16 @@ use yii\bootstrap\Modal;
         ?>
 
         <?= $form->field($transaction_model, 'pallet_count',
-                ['inputOptions' => ['class'     => 'disabled uborder help-20percent',
+                ['inputOptions' => ['class'     => 'disabled uborder help-25percent',
                                     'disabled'     => 'disabled',
                                     'value'        => $pallet_count],
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input} PP
-                                     <button type="submit" class="btn btn-primary help-20percent" name="view-entries">View</button>
+                                     <button type="submit" class="btn btn-primary help-25percent" name="view-entries">View</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10])->label('# Pallet(s)') ?>
 
         <?= $form->field($transaction_model, 'weight',
-                ['inputOptions' => ['class' => 'disabled uborder help-20percent'],
+                ['inputOptions' => ['class' => 'disabled uborder help-25percent'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size" >{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10,
                                'disabled'  => 'disabled',
@@ -118,7 +118,7 @@ use yii\bootstrap\Modal;
 
 
         <?= $form->field($transaction_detail_model, 'batch',
-                ['inputOptions' => ['class' => 'uborder help-20percent'],
+                ['inputOptions' => ['class' => 'uborder help-25percent'],
                  'template' => '<div class="control-group">{label}
                                     <div class="f-inline-size">{input}
                                     <button class="btn btn-primary help-15percent"
@@ -140,7 +140,7 @@ use yii\bootstrap\Modal;
                                                                                                                                  'buttonImage'  => '../images/calendar.gif',
                                                                                                                                  'buttonImageOnly' => 'true',
                                                                                                                                  ],
-                                                                                                           'options'          => ['class'         => 'uborder disabled help-20percent dateclass',
+                                                                                                           'options'          => ['class'         => 'uborder disabled help-25percent dateclass',
                                                                                                                                     'readonly'        => 'readonly',
                                                                                                                                     'dateFormat'     => 'dd-M-yy',
                                                                                                                                     'onchange'        => 'checkMaterialSled()']])->label('Manuf Date') ?>
@@ -154,13 +154,13 @@ use yii\bootstrap\Modal;
                                                                                                                             'showOn'            => 'button',
                                                                                                                          'buttonImage'      => '../images/calendar.gif',
                                                                                                                          'buttonImageOnly'     => 'true'],
-                                                                                                'options'              => ['class'             => 'uborder disabled help-20percent dateclass',
+                                                                                                'options'              => ['class'             => 'uborder disabled help-25percent dateclass',
                                                                                                                          'onchange'         => 'checkMaterialSled()',
                                                                                                                             'readonly'            => 'readonly',
                                                                                                                             'dateFormat'         => 'm/dd/yy']])->label('Expiry Date') ?>
 
         <?= $form->field($transaction_detail_model, 'net_weight',
-                ['inputOptions' => ['class' => 'uborder help-20percent',
+                ['inputOptions' => ['class' => 'uborder help-25percent',
                                     'onchange' => 'calculateTotalWeight()'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size" id="net-wt">{input} <span id="net-unit">KG</span></div><div class=\"col-lg-8\">{error}</div></div> ',
                  'labelOptions' => ['id' => 'net-weight',
@@ -168,7 +168,7 @@ use yii\bootstrap\Modal;
                 ])->textInput(['maxlength' => 10])->label('Net WT') ?>
 
         <?= $form->field($transaction_detail_model, 'total_weight',
-                ['inputOptions' => ['class' => 'uborder disabled help-20percent totalweight',
+                ['inputOptions' => ['class' => 'uborder disabled help-25percent totalweight',
                                     'readonly' => 'readonly'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10])->label('Total WT') ?>
@@ -182,27 +182,34 @@ use yii\bootstrap\Modal;
 
         <?= $form->field($transaction_detail_model, 'packaging_code')
                     ->dropDownList($packaging_type_list, ['class'    => 'uborder help-70percent',
+                                                    'style' => 'font-size: 16px',
                                                     'value'       => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>        <?= $form->field($transaction_detail_model, 'pallet_no',
-                ['inputOptions' => ['class' => 'uborder help-20percent',
+                ['inputOptions' => ['class' => 'uborder help-25percent',
                                     'value' => $pallet_no,
+                                    'style' => 'font-size: 16px',
                                     'onchange' => 'checkTransactionKittedUnit();
                                                    checkTransactionPalletWeight();
                                                    checkTransactionPalletType();
                                                    validateTransactionPalletType();
                                                    '],
+                 'labelOptions' => ['class' => 'control-label',
+                    'style' => 'font-size: 16px',],
                  ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
 
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
                     ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',
+                                                    'style' => 'font-size: 16px',
                                                     'prompt'    => '-- Select a kitting type --',
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
                                                     'onchange'  => 'validateTransactionPalletType();'])->label('KITTING TYPE'); ?>
         <?= $form->field($transaction_detail_model, 'kitted_unit',
-                ['inputOptions' => ['class' => 'uborder help-20percent']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
+                ['inputOptions' => ['class' => 'uborder help-25percent'],
+                'labelOptions' => ['class' => 'control-label',
+                    'style' => 'font-size: 16px']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
-                ['inputOptions' => ['class' => 'uborder disabled help-20percent',
+                ['inputOptions' => ['class' => 'uborder disabled help-25percent',
                                     'readonly' => 'readonly',
                                     'value' => 0],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div><div class=\"col-lg-8\">{error}</div></div>'
