@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $material_code
+ * @property string $plant_location
  * @property string $pallet_type
  * @property string $pallet_ind
  * @property string $description
@@ -34,10 +35,10 @@ class MstPackagingMaterials extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['material_code', 'pallet_type', 'pallet_ind', 'description', 'material_type', 'creator_id', 'created_date', 'updater_id', 'updated_date'], 'required'],
+            [['material_code', 'plant_location', 'pallet_type', 'pallet_ind', 'description', 'material_type', 'creator_id', 'created_date', 'updater_id', 'updated_date'], 'required'],
             [['creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
-            [['material_code', 'pallet_type', 'pallet_ind'], 'string', 'max' => 32],
+            [['material_code', 'plant_location', 'pallet_type', 'pallet_ind'], 'string', 'max' => 32],
             [['description'], 'string', 'max' => 250],
             [['material_type'], 'string', 'max' => 4]
         ];
@@ -51,6 +52,7 @@ class MstPackagingMaterials extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'material_code' => 'Material Code',
+            'plant_location' => 'Plant Location',
             'pallet_type' => 'Pallet Type',
             'pallet_ind' => 'Pallet Ind',
             'description' => 'Description',

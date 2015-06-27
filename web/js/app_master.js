@@ -441,7 +441,7 @@ function searchMaterial(value) {
 
 /* function to repopulate packaging type based on material pallet_ind */
 function populatePackagingType() {
-    load('get-packaging-type?id=' + getMaterialPalletInd(), function(xhr) {
+    load('get-packaging-type?id=' + getMaterialPalletInd() + '&plant_location=' + plant_location, function(xhr) {
         var jsonData = JSON.parse(xhr.responseText);
         var x  = document.getElementById('trxtransactiondetails-packaging_code');
 
@@ -461,7 +461,7 @@ function populatePackagingType() {
 
 /* function to repopulate kitting type based on material pallet_ind */
 function populateKittingType() {
-    load('get-kitting-type?id=' + getMaterialPalletInd(), function(xhr) {
+    load('get-kitting-type?id=' + getMaterialPalletInd() + '&plant_location=' + plant_location, function(xhr) {
         var jsonData = JSON.parse(xhr.responseText);
         var x  = document.getElementById('trxtransactiondetails-kitting_code');
 
