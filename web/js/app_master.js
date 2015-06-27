@@ -249,8 +249,8 @@ function getMaterialTotalWeight() {
 				break;
 			case 'CBM':
 			case 'BXS':
-				material_total_weight = Math.ceil(parseInt(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num'] /
-					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den']));
+				material_total_weight = Math.ceil(parseInt(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
+					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']));
 				break;
 			default:
 				// do nothing
