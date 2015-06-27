@@ -13,7 +13,10 @@ $this->title = 'Change Password';
 	<?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
-    	'id' => 'login-form',
+            'id' => 'login-form',
+            'fieldConfig' => [
+                'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
+            ],
     ]); ?>
 
 		<?= $form->field($model, 'newPassword')->textInput(['maxlength' => 32,
@@ -28,6 +31,6 @@ $this->title = 'Change Password';
 												'name'  => 'submit']) ?>
         	</div>
         </div>
-
+    
     <?php ActiveForm::end(); ?>
 </div>

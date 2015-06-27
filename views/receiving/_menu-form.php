@@ -14,10 +14,7 @@ use yii\bootstrap\Modal;
     <?php
         $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
         $form = ActiveForm::begin([
-            'options' => ['class' => 'form-horizontal'],
-            'fieldConfig' => [
-                'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
-            ]
+            'options' => ['class' => 'form-horizontal']
            ]); ?>
 
     <div class="col-1 help-bg-gray">
@@ -183,7 +180,8 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_detail_model, 'packaging_code')
                     ->dropDownList($packaging_type_list, ['class'    => 'uborder help-70percent',
                                                     'style' => 'font-size: 16px',
-                                                    'value'       => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>        <?= $form->field($transaction_detail_model, 'pallet_no',
+                                                    'value'       => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>
+        <?= $form->field($transaction_detail_model, 'pallet_no',
                 ['inputOptions' => ['class' => 'uborder help-25percent',
                                     'value' => $pallet_no,
                                     'style' => 'font-size: 16px',

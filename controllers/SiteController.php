@@ -101,6 +101,7 @@ class SiteController extends Controller
         if (isset(Yii::$app->request->post()['ChangePasswordForm'])) {
             $newPasswordParams = Yii::$app->request->post();
             $newPasswordParams['ChangePasswordForm']['oldPassword'] = Yii::$app->params['DEFAULT_PASSWORD'];
+            $newPasswordParams['ChangePasswordForm']['shouldValidateOldPassword'] = false;
         }
 
         if ($newPasswordModel->load($newPasswordParams) && $newPasswordModel->changePassword()) {

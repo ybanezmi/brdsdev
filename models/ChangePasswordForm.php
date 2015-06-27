@@ -10,6 +10,7 @@ use yii\base\Model;
  */
 class ChangePasswordForm extends Model
 {
+    public $shouldValidateOldPassword = true;
     public $oldPassword;
 	public $newPassword;
 	public $confirmNewPassword;
@@ -43,7 +44,7 @@ class ChangePasswordForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = Yii::$app->user->identity;
-            if (!$user || !$user->validatePassword($this->oldPassword)) {
+            if (!$user && shouldValidateOldPassword || !$user->validatePassword($this->oldPassword)) {
             	if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
             		// if IE <= 6
             		echo 'alert("Incorrect password.")';
@@ -114,6 +115,8 @@ class ChangePasswordForm extends Model
 			$user->password = md5($this->newPassword);
 			return $user->save();
         } else {
+            echo "<pre />";
+            print_r($this);
             return false;
         }
     }
