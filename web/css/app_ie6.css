@@ -8,15 +8,15 @@ body.login {
     margin:0;
 }
 .login-box{
-	width:220px;
-	margin: 0;
+    width:220px;
+    margin: 0;
 }
 
 .login-logo {
-	background: url('../images/BBlogo6.png') no-repeat left top;
-	margin: 20px auto 30px;
-	width: 200px;
-	height: 70px;
+    background: url('../images/BBlogo6.png') no-repeat left top;
+    margin: 20px auto 30px;
+    width: 200px;
+    height: 70px;
 }
 
 .info-box div p b {
@@ -90,10 +90,14 @@ body.login {
     width: 47%;
     margin:0;
 }
+.wrap {
+    width:220px;
+    height: auto;
+}
 
 .wrap-page{
-	width: 220px;
-	position: relative;
+    width: 220px;
+    position: relative;
 }
 
 #logo {
@@ -121,16 +125,16 @@ body.login {
     width:55px; 
     height:36px;
 }
-	
+    
 header {
-	background: #3E4095;
-	clear: both;
-	height: auto;
-	margin-left: 0;
-	width: inherit;
-	overflow: hidden;
-	margin-top:40px;
-	position: relative;
+    background: #3E4095;
+    clear: both;
+    height: auto;
+    margin-left: 0;
+    width: inherit;
+    overflow: hidden;
+    margin-top:40px;
+    position: relative;
 }
 
 header nav {
@@ -161,17 +165,17 @@ header nav ul li a {
     text-align: center;
 }
 header nav ul li a:hover, header nav ul li a:active, header nav ul li a:focus {
-	color:#333;
-	text-decoration: none!important;
-	background: #fff;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+    color:#333;
+    text-decoration: none!important;
+    background: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
 
 header nav ul li a span {
-	display: none;
+    display: none;
 }
 
 header nav ul li a i.fa-download {
@@ -207,17 +211,15 @@ header nav ul li a i.fa-sign-out {
     width: 50%;
 }
 
-#greetings .g-body a{
+.g-body-a{
     color:#fff;
     font-size: 11px;
 }
 
-#greetings .g-body ul {
-    padding: 5px 0;
-    margin: 0;
+.g-body-ul {
 }
 
-#greetings .g-body ul li a {
+.g-body-ul-li-a {
     color:#333;
     font-size: 13px;
     text-align: center;
@@ -236,7 +238,7 @@ header nav ul li a i.fa-sign-out {
 }
 
 .blue-line{
-	display: none;
+    display: none;
 }
 
 .content-logo {
@@ -245,16 +247,16 @@ header nav ul li a i.fa-sign-out {
     width: 250px;
 }
 
-.content-logo img {
+.content-logo {
     height: auto;
-    width: 250px;
+    width: 220px;
 }
 
 
 #main-content{
-	min-height: auto;
-	width: 220px;
-	margin: 0;
+    min-height: auto;
+    width: 220px;
+    margin: 0;
 }
 
 .page-title {
@@ -282,9 +284,9 @@ header nav ul li a i.fa-sign-out {
 }
 
 .list-sub-menu li a {
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
     color: #fff;
     display: block;
     font-size: 17px;
@@ -292,12 +294,12 @@ header nav ul li a i.fa-sign-out {
     padding: 5px 0;
     text-align: center;
     width: 100%;
-	background: #424593; /* Old browsers */
+    background: #424593; /* Old browsers */
 
 }
 
 .list-sub-menu li a:active, .list-sub-menu li a:hover, .list-sub-menu li a:focus {
-		text-decoration: none;
+        text-decoration: none;
 }
 
 footer {
@@ -317,26 +319,23 @@ footer  div {
 
 
 .content-logo {
-    height: auto;
-    margin: 20px auto 20px;
-    width: 80%;
-    text-align: center;
+    padding: 5px;
+    float: left;
 }
 
-.content-logo img{
-	width: 80%;
-    margin: 0 auto;
-    text-align: center;
+.content-logo-img{
+    width: 200px;
+    height:70px;
 }
 
 .list-sub-menu li a:active, .list-sub-menu li a:hover, .list-sub-menu li a:focus {
-		text-decoration: none;
-		background: #005580;
-		color:#fff;
+        text-decoration: none;
+        background: #005580;
+        color:#fff;
 }
 
 .wrapper-150{
-	margin: 0;
+    margin: 0;
 }
 
 .pdt-help-floatright {
@@ -349,21 +348,21 @@ footer  div {
 /*form reset to ie6*/
 
 form{
-	width: 100%;
-	padding:0;
-	margin:0;
+    width: 100%;
+    padding:0;
+    margin:0;
 }
 
 form .control-group{
-	width: 100%;
-	padding:0;
-	margin:0;
+    width: 100%;
+    padding:0;
+    margin:0;
 }
 
 .row{
-	width: 100%;
-	padding:0;
-	margin:0;
+    width: 100%;
+    padding:0;
+    margin:0;
 }
 
 .control-group .f-full-size {
@@ -373,15 +372,15 @@ form .control-group{
 }
 
 form .control-group:before, form .control-group:after {
-	content: "";
-	display: none;
-	line-height: 0;
+    content: "";
+    display: none;
+    line-height: 0;
 }
 
 .row:before, .row:after {
-	content: "";
-	display: none;
-	line-height: 0;
+    content: "";
+    display: none;
+    line-height: 0;
 }
 
 input.uborder, textarea.uborder, select.uborder {
@@ -539,6 +538,11 @@ input.uborder, textarea.uborder, select.uborder {
      position: relative;
 }
 
+.greetings {
+    padding:0 10px;
+    font-size: 11px;
+}
+
 #greetings .g-body ul#dropdownie6 li a{
     padding:0 10px;
     font-size: 11px;
@@ -582,4 +586,34 @@ input.uborder, textarea.uborder, select.uborder {
 }
 .ie6-details-width{
     width: 200px!important;
+}
+
+/* 
+    
+    IE - 6 HEADER
+
+*/
+#logo {
+         z-index: -1;
+        left: 0px;
+        position: absolute;
+        top: 0%;
+        background: #3E4095;
+        width: 100%;
+        display: block;
+    }
+.logo{
+    background: url('../images/logo.png') no-repeat;
+    display: block;
+    width: 277px;
+    height: 112px;
+}
+
+.footer {
+    background-color: #3E4095;
+    color: #fff;
+}
+
+.nav {
+    
 }

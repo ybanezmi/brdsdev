@@ -222,7 +222,7 @@ class ReceivingController extends Controller
 			$model->created_date 	= $date;
 			$model->updater_id		= Yii::$app->user->id;
 			$model->updated_date	= $date;
-
+            
 	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 	            return $this->redirect(['menu', 'id' => $model->id]);
 	        } else {
@@ -564,7 +564,7 @@ class ReceivingController extends Controller
     	} else if (null !== Yii::$app->request->post('edit-receiving')) {
 	    	// route to edit receiving page
 			$transaction_details = Yii::$app->request->post('TrxTransactionDetails');
-	    	return $this->redirect(['menu', 'id' => $transaction_details['transaction_id'], 'pallet_no' => Yii::$app->request->post('pallet_no')]);
+	    	return $this->redirect(['menu', 'id' => $transaction_details['transaction_id'], 'pallet_no' => $transaction_details['pallet_no']]);
 		} else {
 			// Get customer list
 			$customer_model = new MstCustomer();
