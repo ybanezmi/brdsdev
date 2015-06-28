@@ -46,7 +46,8 @@ use yii\widgets\ActiveForm;
 
     	<div class="one-column-button pdt-one-column-button">
 			<div class="submit-button ie6-submit-button">
-        		<?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
+        		<?= Html::submitButton('Create', ['class' => 'btn btn-primary',
+        		                                  'name' => 'create']) ?>
         		<?= Html::submitButton('Cancel', ['class' => 'btn btn-primary cancel-button',
         										  'name'  => 'cancel']) ?>
         	</div>

@@ -204,9 +204,7 @@ class ReceivingController extends Controller
     {
     	$this->initUser();
 
-    	if(null !== Yii::$app->request->post('cancel')) {
-    		$this->redirect(['index']);
-    	} else {
+    	if(null !== Yii::$app->request->post('create')) {
     		$model = new TrxTransactions();
             $model_plant_location = new MstPlantLocation();
 			$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
@@ -222,7 +220,7 @@ class ReceivingController extends Controller
 			$model->created_date 	= $date;
 			$model->updater_id		= Yii::$app->user->id;
 			$model->updated_date	= $date;
-            
+
 	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 	            return $this->redirect(['menu', 'id' => $model->id]);
 	        } else {
@@ -239,6 +237,8 @@ class ReceivingController extends Controller
                     'storage_list' => $storage_list,
 	            ]);
 	        }
+    	} else {
+    	    $this->redirect(['index']);
     	}
     }
 
