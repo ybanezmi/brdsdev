@@ -43,22 +43,11 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-            	if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
-            		// if IE <= 6
-            		echo 'alert("Incorrect username or password.")';
-            	} else {
-            		$this->addError($attribute, 'Incorrect username or password.');
-            	}
-
+                $this->addError($attribute, 'Incorrect username or password.');
             }
 
 			if($user && !$user->assignment) {
-				if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
-            		// if IE <= 6
-            		echo 'alert("User assignment not set. Please contact your administrator.")';
-            	} else {
-					$this->addError($attribute, 'User assignment not set. Please contact your administrator.');
-				}
+                $this->addError($attribute, 'User assignment not set. Please contact your administrator.');
 			}
 
 			if ($user && $user->assignment) {
