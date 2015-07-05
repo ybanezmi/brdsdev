@@ -18,4 +18,6 @@ return [
     'UNIT_1'                    => 'unit_1',
     'UNIT_2'                    => 'unit_2',
     'UNIT_3'                    => 'unit_3',
+    // BRDS SAP API
+    'SAP_API_URL'               => 'http://192.168.1.121/brdssap/sap/import',
 ];

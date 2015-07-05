@@ -16,6 +16,28 @@ echo $scripts;
 	<div class="receiving-menu">
 		<div class="wrapper-150">
 			<?php
+			    if (isset($_GET['$sapNoFlag']) && $_GET['$sapNoFlag']) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-success',
+                        ],
+                    ]);
+                    echo 'Successfully retrieved SAP Inbound No.: ' . $transaction_model->sap_no;
+
+                    Alert::end();
+                }
+
+                if (isset($_GET['sapError'])) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-error',
+                        ],
+                    ]);
+                    echo $_GET['sapError'];
+
+                    Alert::end();
+                }
+
 				if ($isPalletAdded || isset($_GET['isPalletAdded'])) {
 					Alert::begin([
 					    'options' => [
