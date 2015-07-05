@@ -9,6 +9,7 @@ class SapConst
     const HALF_WIDTH_SPACE = ' ';
     const PARAMS = 'PARAMS';
     const X = 'X';
+    const DEFAULT_NET_UNIT = 'unit_1';
 
     // config
     const ASHOST = 'ASHOST';

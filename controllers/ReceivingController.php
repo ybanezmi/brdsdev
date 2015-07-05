@@ -503,6 +503,11 @@ class ReceivingController extends Controller
                     }
 				}
 
+                // set to default value if net_unit is not set
+                if (null == $transaction_detail_model->getAttribute('net_unit')) {
+                    $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
+                }
+
 				if ($transaction_model->save() && $transaction_detail_model->save()) {
 					$isPalletAdded = true;
                     $this->getSapNumber($transaction_model, $transaction_detail_model, $total_weight);
@@ -796,7 +801,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        $params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
+        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxDetailsTotalWeight, 3, '.', '');
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
         $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
@@ -806,24 +811,25 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
-        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
         $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::EXIDV_PAL] = '6200000002';
         $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM2] = '36';
         // Kitting Type
-        $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::EXIDV] = '36';
-        $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM] = '36';
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+        //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
 
         $response = $curl->setOption(
             CURLOPT_POSTFIELDS,
             http_build_query($params))
             ->post('http://192.168.1.121/brdssap/sap/import');
+        die;
     }
 
 }
