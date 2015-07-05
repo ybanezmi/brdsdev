@@ -803,9 +803,6 @@ class ReceivingController extends Controller
     }
 
     public function getSapInboundNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
-        // Init curl
-        $curl = new curl\Curl();
-
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_RECEIVING;
 
         // Post http://127.0.0.1/brdssap/sap/import
@@ -836,10 +833,18 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
 
-        $response = json_decode($curl->setOption(
-            CURLOPT_POSTFIELDS,
-            http_build_query($params))
-            ->post(Yii::$app->params['SAP_API_URL']), true);
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
 
         return $response;
     }
