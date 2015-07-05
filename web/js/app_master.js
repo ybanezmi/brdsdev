@@ -1,5 +1,6 @@
 
 var site_url = "/";
+var decimalPlaces = 3;
 
 $(function () {
 	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
@@ -136,7 +137,24 @@ function setFieldValueToUpperCaseById(id, value) {
 
 /* function to filter non-numeric field value */
 function filterNonNumericFieldValue(id) {
-    setFieldValueById(id, getFieldValueById(id).replace(/\D/g,''));
+    setFieldValueById(id, getFieldValueById(id).replace(/[^\d.-]/g,''));
+}
+
+/* function to convert to decimal format */
+function convertToDecimalFormat(value, numberOfDecimals) {
+    var decimal = '.';
+
+    for (var i = 0; i < numberOfDecimals; i++) {
+        decimal = decimal + '0';
+    }
+    /* if the user didn't add a dot, we add one with 3 zeros */
+    if (value.indexOf('.') == -1) value += decimal;
+    /* Otherwise, we check how many numbers there are after the dot
+       and make sure there's at least 3*/
+    if (value.substring(value.indexOf('.') + 1).length < numberOfDecimals)
+        while (value.substring(value.indexOf('.') + 1).length < numberOfDecimals)
+            value += '0';
+    return value;
 }
 
 /* function to hide HTML element by id */
@@ -245,19 +263,23 @@ function getMaterialTotalWeight() {
 	if (null != material_total_weight && material_total_weight.length > 0) {
 		switch(getMaterialConversionUnit()) {
 			case 'KG':
-				// do nothing
+			    material_total_weight = convertToDecimalFormat(material_total_weight, decimalPlaces);
+                setFieldValueById("trxtransactiondetails-net_weight", material_total_weight);
 				break;
+		    case 'PCS':
 			case 'CBM':
 			case 'BXS':
-				material_total_weight = Math.ceil(parseInt(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
-					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']));
+				material_total_weight = parseFloat(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
+					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']);
+			    material_total_weight = material_total_weight.toFixed(decimalPlaces);
 				break;
 			default:
-				// do nothing
+				material_total_weight = convertToDecimalFormat(material_total_weight, decimalPlaces);
+                setFieldValueById("trxtransactiondetails-net_weight", material_total_weight);
 				break;
 		}
 	} else {
-		material_total_weight = 0;
+		material_total_weight = "0.000";
 	}
 
 	return material_total_weight;
@@ -290,22 +312,24 @@ function checkTransactionKittedUnit() {
     } else {
       alert('Pallet ' + getFieldValueById("trxtransactiondetails-pallet_no") + ' is already closed.');
       document.getElementById("trxtransactiondetails-kitted_unit").value = "";
-      document.getElementById("trxtransactiondetails-pallet_weight").value = "0";
+      document.getElementById("trxtransactiondetails-pallet_weight").value = "0.000";
     }
 }
 
 /* function to check pallet weight of transaction_detail */
 function checkTransactionPalletWeight() {
     if (checkTransactionStatus()) {
-        var trx_pallet_weight = 0;
+        var trx_pallet_weight = "0.000";
         // add current net weight
         if (null != getMaterialTotalWeight()) {
-            trx_pallet_weight = trx_pallet_weight + parseInt(getMaterialTotalWeight());
+            trx_pallet_weight = parseFloat(trx_pallet_weight) + parseFloat(getMaterialTotalWeight());
         }
+
+        console.log(trx_pallet_weight);
         if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
-            trx_pallet_weight = trx_pallet_weight + parseInt(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
+            trx_pallet_weight = parseFloat(trx_pallet_weight) + parseFloat(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
         }
-        setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(trx_pallet_weight));
+        setFieldValueById("trxtransactiondetails-pallet_weight", parseFloat(trx_pallet_weight));
 	}
 }
 
@@ -487,11 +511,10 @@ function populateKittingType() {
 
 /* function to retrieve pallet weight of transaction_detail */
 function getTransactionPalletWeight() {
-	var trx_pallet_weight = 0;
+	var trx_pallet_weight = '0.000';
 	if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
-		var trx_pallet_weight = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight'];
+		var trx_pallet_weight = parseFloat(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
 	}
-
 	return trx_pallet_weight;
 }
 
@@ -784,7 +807,8 @@ function clearAllFields() {
 }
 
 function calculateTotalWeight() {
-    filterNonNumericFieldValue('trxtransactiondetails-net_weight');
+    filterNonNumericFieldValue("trxtransactiondetails-net_weight");
     setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
-    setFieldValueById("trxtransactiondetails-pallet_weight", parseInt(getMaterialTotalWeight()) + parseInt(getTransactionPalletWeight()));
+    var palletWeight = parseFloat(getMaterialTotalWeight()) + parseFloat(getTransactionPalletWeight());
+    setFieldValueById("trxtransactiondetails-pallet_weight", palletWeight.toFixed(decimalPlaces));
 }

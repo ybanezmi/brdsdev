@@ -204,7 +204,9 @@ class ReceivingController extends Controller
     {
     	$this->initUser();
 
-    	if(null !== Yii::$app->request->post('create')) {
+    	if (null !== Yii::$app->request->post('cancel')) {
+            $this->redirect(['index']);
+        } else {
     		$model = new TrxTransactions();
             $model_plant_location = new MstPlantLocation();
 			$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
@@ -237,8 +239,6 @@ class ReceivingController extends Controller
                     'storage_list' => $storage_list,
 	            ]);
 	        }
-    	} else {
-    	    $this->redirect(['index']);
     	}
     }
 
@@ -797,19 +797,15 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
         $params[SapConst::PARAMS][SapConst::LFIMG] = $trxDetailsTotalWeight;
-        //$params[SapConst::PARAMS][SapConst::LFIMG] = '5.000';
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
-        //$params[SapConst::PARAMS][SapConst::CHARG] = 'WERS67';
-        //$params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
-        $params[SapConst::PARAMS][SapConst::WERKS] = 'BBL2';
+        $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
-        $params[SapConst::PARAMS][SapConst::LGORT] = 'B201';
-        //$params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
+        $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
         $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
-        $params[SapConst::PARAMS][SapConst::WADAT] = date('m/d/Y');
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y', strtotime($trxTransactionDetails['created_date']));
-        $params[SapConst::PARAMS][SapConst::HSDAT] = date('m/d/Y', strtotime($trxTransactionDetails['manufacturing_date']));
-        $params[SapConst::PARAMS][SapConst::VFDAT] = date('m/d/Y', strtotime($trxTransactionDetails['expiry_date']));
+        $params[SapConst::PARAMS][SapConst::WADAT] = date('Ymd');
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
+        $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
         $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
         $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
@@ -828,7 +824,6 @@ class ReceivingController extends Controller
             CURLOPT_POSTFIELDS,
             http_build_query($params))
             ->post('http://192.168.1.121/brdssap/sap/import');
-        die;
     }
 
 }

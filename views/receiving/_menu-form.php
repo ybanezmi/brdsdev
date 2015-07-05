@@ -209,7 +209,7 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_detail_model, 'pallet_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-25percent',
                                     'readonly' => 'readonly',
-                                    'value' => 0],
+                                    'value' => '0.000'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10])->label('Pallet WT') ?>
         </div>
