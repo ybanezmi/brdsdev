@@ -508,13 +508,15 @@ class ReceivingController extends Controller
                     $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
                 }
 
-				if ($transaction_model->save() && $transaction_detail_model->save()) {
-					$isPalletAdded = true;
-                    $this->getSapNumber($transaction_model, $transaction_detail_model, $total_weight);
-					$this->redirect(['menu', 'id' => $transaction_model->id,
-											 'pallet' => $transaction_detail_model->pallet_no,
-											 'isPalletAdded' => $isPalletAdded,
-		                ]);
+				if ($transaction_detail_model->save()) {
+                    $transaction_model->sap_no = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
+                    if ($transaction_model->save()) {
+    					$isPalletAdded = true;
+    					$this->redirect(['menu', 'id' => $transaction_model->id,
+    											 'pallet' => $transaction_detail_model->pallet_no,
+    											 'isPalletAdded' => $isPalletAdded,
+    		                ]);
+                    }
 				} else {
 					return $this->render('menu', [
 		                'transaction_model' 		=> $transaction_model,
@@ -791,7 +793,7 @@ class ReceivingController extends Controller
         }
     }
 
-    public function getSapNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
+    public function getSapInboundNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
         // Init curl
         $curl = new curl\Curl();
 
@@ -825,11 +827,12 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
 
-        $response = $curl->setOption(
+        $response = json_decode($curl->setOption(
             CURLOPT_POSTFIELDS,
             http_build_query($params))
-            ->post('http://192.168.1.121/brdssap/sap/import');
-        die;
+            ->post('http://192.168.1.121/brdssap/sap/import'));
+
+        return $response['sap_inbound_number'];
     }
 
 }
