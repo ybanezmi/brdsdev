@@ -16,7 +16,7 @@ echo $scripts;
 	<div class="receiving-menu">
 		<div class="wrapper-150">
 			<?php
-			    if (isset($_GET['$sapNoFlag']) && $_GET['$sapNoFlag']) {
+			    if (isset($_GET['sapNoFlag']) && $_GET['sapNoFlag']) {
                     Alert::begin([
                         'options' => [
                             'class' => 'alert-success',
