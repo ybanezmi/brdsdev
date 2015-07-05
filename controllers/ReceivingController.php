@@ -510,6 +510,7 @@ class ReceivingController extends Controller
 
 				if ($transaction_detail_model->save()) {
 				    $sapNoFlag = false;
+                    $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
                     if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] <> "") {
                         $sapNoFlag = true;
@@ -519,7 +520,6 @@ class ReceivingController extends Controller
                     }
                     $transaction_model->save();
                     $isPalletAdded = true;
-                    $sapInboundNumberError = $sapInboundNumber['error'];
 					$this->redirect(['menu', 'id'            => $transaction_model->id,
 											 'pallet'        => $transaction_detail_model->pallet_no,
 											 'isPalletAdded' => $isPalletAdded,
@@ -839,7 +839,7 @@ class ReceivingController extends Controller
         $response = json_decode($curl->setOption(
             CURLOPT_POSTFIELDS,
             http_build_query($params))
-            ->post(Yii::$app->params['SAP_API_URL']));
+            ->post(Yii::$app->params['SAP_API_URL']), true);
 
         return $response;
     }
