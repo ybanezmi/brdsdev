@@ -12,12 +12,8 @@ use kartik\mpdf\Pdf;
 
 use app\models\DispatchModel;
 
-/**
- * ReceivingController implements the CRUD actions for TrxTransactions model.
- */
 class DispatchingController extends \yii\web\Controller
 {
-
 
     public function actionIndex()
     {
@@ -106,10 +102,9 @@ class DispatchingController extends \yii\web\Controller
 
     public function actionPrint()
     {
-            echo Yii::$app->request->post('total_weight');
-            exit;
-            Yii::$app->response->format = 'pdf';
-
+          echo Yii::$app->request->post('total_weight');
+          exit;
+          Yii::$app->response->format = 'pdf';
             //Can you it if needed to rotate the page
             Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
                 'orientation' => 'Landscape', // This value will be ignored if format is a string value.
