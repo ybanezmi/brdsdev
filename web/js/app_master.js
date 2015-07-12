@@ -543,6 +543,34 @@ function getTransactionList(code){
 	});
 }
 
+/* function to retrieve transaction list */
+function getMateriaList(code){
+    load('get-material-list?id=' + code,function(xhr) {
+      
+        // document.getElementById('material-list_id').innerHTML='';
+
+        // var jsonData = JSON.parse(xhr.responseText);
+        // var x  = document.getElementById('material-list_id');
+        // //setFieldValueByName('transaction-list', ['']);
+
+        // // set prompt value
+        // var promptOption = document.createElement('option');
+        // promptOption.text = "-- Select a transaction --";
+        // x.add(promptOption);
+
+        // if(null != jsonData){
+        //     for(var i = 0; i < jsonData.length; i++){
+        //         var option  = document.createElement('option');
+        //         option.text = jsonData[i];
+        //         x.add(option, x[i+1]);
+        //     }
+        // }
+
+
+
+    });
+}
+
 /* function to retrieve transaction */
 function getTransaction(id) {
 	load("get-transaction?id=" + id, function(xhr) {

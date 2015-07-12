@@ -51,11 +51,20 @@ $this->title = 'Synch Materials';
 			]); ?>
 
 																	 
-			<?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-80percent',
+			<?= $form->field($customer_model, 'name')->dropDownList($customer_list, 
+			['class'	=> 'uborder help-80percent',
 			'prompt'	=> '-- Select a customer --',
-			'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"));
-			hideHTMLById("trx-details");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
+			'onchange'	=> 'getMateriaList(getFieldValueById("mstcustomer-name"));
+			hideHTMLById("material-details");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
 			?>
+
+			<!-- 
+			material-list_id
+			onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;"
+			-->
+			
+
+		    
 
 			<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
 			<div class="submit-button ie6-submit-button">
@@ -108,11 +117,11 @@ $this->title = 'Synch Materials';
 		//syncMaterialOnly();
 	});
 
-	document.getElementById("view_details").addEventListener("click", function(e) {
-		e.preventDefault();
-		alert('under construction');
-		//syncMaterialOnly();
-	});
+	// document.getElementById("view_details").addEventListener("click", function(e) {
+	// 	e.preventDefault();
+	// 	alert('under construction');
+	// 	//syncMaterialOnly();
+	// });
 
 	</script>
 				

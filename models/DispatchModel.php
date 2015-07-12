@@ -126,7 +126,6 @@ class DispatchModel extends \yii\db\ActiveRecord
                 while( $obj = sqlsrv_fetch_object( $result )) {
                       array_push( $return_value, $obj);
                 }
-
                 return $return_value;
             }
         } else{

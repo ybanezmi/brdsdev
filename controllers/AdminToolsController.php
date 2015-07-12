@@ -366,6 +366,11 @@ class AdminToolsController extends Controller
 		}
     }
 
+    public function actionGetTransactionList($id) {
+		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, ['customer_code' => $id]), 'id');
+		echo json_encode($transactionlist);
+	}
+
     public function actionPackagingMaterials() {
 			return $this->render('packaging-materials');
     }
