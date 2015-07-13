@@ -1,27 +1,21 @@
 <?php
 namespace app\models;
+use app\lib\SapConfig;
 use Yii;
-
-
-
 
 class DispatchModel extends \yii\db\ActiveRecord
 {
-    public static function tableName()
-    {
-        return 'dispatch_table';
-    }
 
     public function getDispatchList($dr)
     {
-        //MSSQL Credentials
-        $serverName = "QASV";
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT qas.LIKP.VBELN, qas.LIKP.KUNNR,  qas.LIKP.KUNAG, qas.LIKP.BLDAT, qas.LIKP.XABLN  
-                     FROM qas.LIKP  WHERE qas.LIKP.VBELN ='".$dr."' AND qas.LIKP.MANDT = '400'";
+            $stmt = "SELECT $tn.LIKP.VBELN, $tn.LIKP.KUNNR,  $tn.LIKP.KUNAG, $tn.LIKP.BLDAT, $tn.LIKP.XABLN  
+                     FROM $tn.LIKP  WHERE $tn.LIKP.VBELN ='".$dr."' AND $tn.LIKP.MANDT = $fnumb";
+
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                 $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
@@ -37,13 +31,12 @@ class DispatchModel extends \yii\db\ActiveRecord
 
     public function getDispatchItems($dr)
     {
-        //MSSQL Credentials
-        $serverName = "QASV";
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT qas.LIPS.MATNR, qas.LIPS.ARKTX, qas.LIPS.CHARG, qas.LIPS.UMVKZ, qas.LIPS.GEWEI, qas.LIPS.VRKME, qas.LIPS.LFIMG, qas.LIPS.VFDAT, qas.LIPS.MEINS, qas.LIPS.VOLUM FROM qas.LIPS WHERE qas.LIPS.VBELN ='".$dr."' AND qas.LIPS.MANDT = '400'";
+            $stmt = "SELECT $tn.LIPS.MATNR, $tn.LIPS.ARKTX, $tn.LIPS.CHARG, $tn.LIPS.UMVKZ, $tn.LIPS.GEWEI, $tn.LIPS.VRKME, $tn.LIPS.LFIMG, $tn.LIPS.VFDAT, $tn.LIPS.MEINS, $tn.LIPS.VOLUM FROM $tn.LIPS WHERE $tn.LIPS.VBELN ='".$dr."' AND $tn.LIPS.MANDT = $fnumb";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                 $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
@@ -58,14 +51,12 @@ class DispatchModel extends \yii\db\ActiveRecord
     }
 
     public static function getKUNNR($filter) {
-        $serverName = "QASV"; //serverName\instanceName
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-
-            $stmt = "SELECT qas.KNA1.NAME1 FROM qas.KNA1 WHERE qas.KNA1.KUNNR ='".$filter."'";
-
+            $stmt = "SELECT $tn.KNA1.NAME1 FROM $tn.KNA1 WHERE $tn.KNA1.KUNNR ='".$filter."'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                  $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
@@ -81,15 +72,13 @@ class DispatchModel extends \yii\db\ActiveRecord
     }
 
      public function getCustomerData($filter) {
-        $serverName = "QASV"; //serverName\instanceName
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-
-            $stmt = "SELECT qas.KNA1.NAME1, qas.KNA1.STRAS, qas.KNA1.ORT01, qas.KNA1.LAND1, qas.KNA1.PSTLZ, qas.KNA1.TELF1 
-                    FROM qas.KNA1 WHERE qas.KNA1.KUNNR ='".$filter."'";
-
+            $stmt = "SELECT $tn.KNA1.NAME1, $tn.KNA1.STRAS, $tn.KNA1.ORT01, $tn.KNA1.LAND1, $tn.KNA1.PSTLZ, $tn.KNA1.TELF1 
+                    FROM $tn.KNA1 WHERE $tn.KNA1.KUNNR ='".$filter."'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                  $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
@@ -105,14 +94,12 @@ class DispatchModel extends \yii\db\ActiveRecord
     }
 
      public function getSO($filter) {
-        $serverName = "QASV"; //serverName\instanceName
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-
-            $stmt = "SELECT qas.VBFA.VBELN, qas.VBFA.ERDAT FROM qas.VBFA WHERE qas.VBFA.VBELV ='".$filter."' AND qas.VBFA.VBTYP_N = 'Q'";
-
+            $stmt = "SELECT $tn.VBFA.VBELN, $tn.VBFA.ERDAT FROM $tn.VBFA WHERE $tn.VBFA.VBELV ='".$filter."' AND $tn.VBFA.VBTYP_N = 'Q'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                  $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
@@ -128,20 +115,17 @@ class DispatchModel extends \yii\db\ActiveRecord
     }
 
     public function getPO($filter) {
-        $serverName = "QASV"; //serverName\instanceName
-        $connectionInfo = array( "Database"=>"QAS", "UID"=>"Manten", "PWD"=>"@kaitou2");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-
-            $stmt = "SELECT qas.VBAK.BSTNK, qas.VBAK.BSTDK FROM qas.VBAK WHERE qas.VBAK.VBELN ='".$filter."' AND qas.VBAK.MANDT = '400'";
-
+            $stmt = "SELECT $tn.VBAK.BSTNK, $tn.VBAK.BSTDK FROM $tn.VBAK WHERE $tn.VBAK.VBELN ='".$filter."' AND $tn.VBAK.MANDT = $fnumb";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                  $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
                       array_push( $return_value, $obj);
                 }
-
                 return $return_value;
             }
         } else{

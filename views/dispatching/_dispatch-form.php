@@ -66,7 +66,10 @@ use app\models\DispatchModel;
     .emptyr{ color:#000;}
     .disp-left { float:left; font-weight: bold; }
     .disp-right { float:left; margin-left: 10px; }
-
+    .red-col{
+        color: #cc0000;
+        font-weight: bold;
+    }
     </style>
     <?php if(empty($dispatch_model_1) && empty($dispatch_model_2)) { echo '<b class="emptyr">Dispatch record is empty</b>'; } else { 
     	$dismodel = new DispatchModel; 
@@ -84,6 +87,8 @@ use app\models\DispatchModel;
     <h1>Shipping Information</h1>
     <div style="padding:0 20px;">
     <h3><?php echo $customer_data[0]->NAME1; ?></h3>
+
+    
     <table class="tablelist">
     <tr>
         <td>
@@ -105,7 +110,9 @@ use app\models\DispatchModel;
         </td>
 
         <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  ?>
-        <?php  $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
+        <?php // $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
+
+        <?php $po_data = (empty($so_data[0]->VBELN)) ? 'Empty' : $dismodel->getPO($so_data[0]->VBELN); ?>
 
         <td style="padding-left:50px;">
             <div class="row">
@@ -121,7 +128,7 @@ use app\models\DispatchModel;
                 <div class="disp-left">Customer Request Number:</div>
                 <div class="disp-right"><?php
                     if(empty($po_data[0]->BSTNK)){
-                        echo 'empty'; }
+                        echo '<span class="red-col">empty</span>'; }
                     else{
                         echo $po_data[0]->BSTNK; } ?>
 
@@ -131,7 +138,7 @@ use app\models\DispatchModel;
                 <div class="disp-left">Date:</div>
                 <div class="disp-right"><?php
                     if(empty($po_data[0]->BSTDK)){
-                        echo 'empty'; }
+                        echo '<span class="red-col">empty</span>'; }
                     else{
                         echo date("d-M-Y", strtotime($po_data[0]->BSTDK)); } ?>
                 </div>
@@ -140,9 +147,9 @@ use app\models\DispatchModel;
     </tr>
     <tr>
         <td colspan="5">
-            <div class="control-group" style="width:100%; margin:20px 0 0">
+           <!--  <div class="control-group" style="width:100%; margin:20px 0 0">
                 <?= Html::textInput('scanner', '', ['id'  => 'scanner','class' => 'uborder help-100percent']) ?>
-            </div>
+            </div> -->
         </td>
     </tr>
     </table>
