@@ -15,12 +15,25 @@ $this->title = 'Close Receiving';
 					        'class' => 'alert-success',
 					    ],
 					]);
-					
+
 					echo 'Transaction #' . Yii::$app->request->post('transaction_id') . ' successfully closed.';
-					
+
 					Alert::end();
 				}
-			?>			
+			?>
+		    <?php
+                if ($error) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-error',
+                        ],
+                    ]);
+
+                    echo $error;
+
+                    Alert::end();
+                }
+            ?>
 			<div class="one-column help-bg-gray pdt-one-column" >
 			    <?= $this->render('_close-form', [
 			    	'customer_model'	=> $customer_model,

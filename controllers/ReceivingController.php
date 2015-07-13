@@ -139,6 +139,58 @@ class ReceivingController extends Controller
 			}
 		}
 
+        // create transfer order
+        $palletStatus['create_to_success'] = false;
+        $palletStatus['create_to_error'] = false;
+        if (null !== Yii::$app->request->post('create-to')) {
+            if (null !== Yii::$app->request->post('create_to_pallet_no') && "" !== Yii::$app->request->post('create_to_pallet_no')) {
+                $createTO = $this->createTO(Yii::$app->request->post('create_to_pallet_no'));
+                $model = new TrxHandlingUnit();
+                $date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
+
+                // set defaults
+                // @TODO: transfer updating of status/created/updated details to model
+                // set status, created and updated details
+                $model->status          = Yii::$app->params['STATUS_PROCESS'];
+                $model->creator_id      = Yii::$app->user->id;
+                $model->created_date    = $date;
+                $model->updater_id      = Yii::$app->user->id;
+                $model->updated_date    = $date;
+
+                $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['pallet_no' => Yii::$app->request->post('create_to_pallet_no'),
+                                                                                   'status' => Yii::$app->params['STATUS_PROCESS']]);
+
+                $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel->transaction_id);
+
+                $model->transaction_id = $transactionModel->id;
+                $model->customer_code = $transactionModel->customer_code;
+                $model->inbound_no = $transactionModel->inbound_no;
+                $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
+                $model->plant_location = $transactionModel->plant_location;
+                $model->storage_location = $transactionModel->storage_location;
+                $model->packaging_code = $transactionModel->packaging_code;
+                $model->pallet_weight = $transactionDetailsModel->pallet_weight;
+
+                $model->transfer_order = $createTO['export']['TONumber'];
+                $model->storage_type = $createTO['export']['DestinationSType'];
+                $model->storage_section = $createTO['export']['DestinationSSect'];
+                $model->storage_bin = $createTO['export']['DestinationSBin'];
+                $model->inbound_status = $createTO['export']['DestinationSPost'];
+
+                if ($model->save) {
+                    $palletStatus['create_to_success'] = true;
+                    $palletStatus['to_number'] = $createTO['export']['TONumber'];
+                } else {
+                    $palletStatus['create_to_error'] = true;
+                    $palletStatus['to_error'] = $createTO['error'];
+                }
+
+            } else {
+                $palletStatus['create_to_error'] = true;
+                $palletStatus['to_error'] = 'Please enter pallet no.';
+            }
+        }
+
 /*
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->modelFinder->getTransactionList(),
@@ -512,9 +564,9 @@ class ReceivingController extends Controller
 				    $sapNoFlag = false;
                     $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
-                    if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] <> "") {
+                    if (isset($sapInboundNumber['export']['sn']) && $sapInboundNumber['export']['sn'] <> "") {
                         $sapNoFlag = true;
-                        $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
+                        $transaction_model->inbound_no = $sapInboundNumber['sap_inbound_no'];
                     } else {
                         $sapError = $sapInboundNumber['error'];
                     }
@@ -628,6 +680,7 @@ class ReceivingController extends Controller
 		$this->initUser();
 
 		$success = false;
+        $error = false;
 
 		// Get customer list
 		$customer_model = new MstCustomer();
@@ -639,10 +692,17 @@ class ReceivingController extends Controller
 		if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
     	} else if (null !== Yii::$app->request->post('close-receiving')) {
+
 	    	// close receiving
 	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
-			$transaction->status = Yii::$app->params['STATUS_CLOSED'];
-			$success = $transaction->update();
+
+    	    $closeReceiving = $this->closeReceiving($transactionModel);
+            if (isset($closeReceiving['export']['POSTED_IND']) && $closeReceiving['export']['POSTED_IND'] <> "") {
+                $transaction->status = Yii::$app->params['STATUS_CLOSED'];
+                $success = $transaction->update();
+            } else {
+                $error = $closeReceiving['error'];
+            }
 		}
 
 		return $this->render('close', [
@@ -652,6 +712,7 @@ class ReceivingController extends Controller
 			'transaction_list'	=> $transaction_list,
 			'pallet_no'         => $pallet_no,
 			'success'			=> $success,
+			'error'             => $error,
 		]);
 	}
 
@@ -806,32 +867,77 @@ class ReceivingController extends Controller
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_RECEIVING;
 
         // Post http://127.0.0.1/brdssap/sap/import
-        $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
-        $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
-        $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxDetailsTotalWeight, 3, '.', '');
-        $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
-        $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
-        $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
-        $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
-        $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
-        $params[SapConst::PARAMS][SapConst::WADAT] = date('Ymd');
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
-        $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
-        $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::ZEX_VBELN] = $trxTransaction['id'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::MATNR] = $trxTransactionDetails['material_code'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::LFIMG] = number_format((float)$trxDetailsTotalWeight, 3, '.', '');
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::CHARG] = $trxTransactionDetails['batch'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::WERKS] = $trxTransaction['plant_location'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::LFART] = SapConst::ZEL;
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::LGORT] = $trxTransaction['storage_location'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::XABLN] = $trxTransaction['truck_van'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::WADAT] = date('Ymd');
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
         //$params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
-        $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::EXIDV_PAL] = '6200000002';
-        $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM2] = '36';
         // Kitting Type
         //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::EXIDV] = '36';
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM] = '36';
-        $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
+        $params[SapConst::PARAMS][SapConst::IMPORT][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function createTO($pallet_no) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_CTO_PPTAG;
+
+        $params['import']['I_LENUM'] = $pallet_no;
+        $params['import']['I_BWLVS'] = '501';
+        $params['import']['I_BWLVS'] = 'X';
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function closeReceiving($transactionModel) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_POST_GR;
+
+        $params['import']['VBELN'] = $transactionModel->inbound_no;
+        $params['import']['WDATU'] = date('m/d/Y');
 
         $ch = curl_init();
 

@@ -10,7 +10,6 @@ use Yii;
  * @property string $id
  * @property string $customer_code
  * @property string $inbound_no
- * @property string $sap_no
  * @property string $plant_location
  * @property string $storage_location
  * @property string $pallet_count
@@ -49,7 +48,7 @@ class TrxTransactions extends \yii\db\ActiveRecord
             [['remarks', 'status'], 'string'],
             [['created_date', 'updated_date'], 'safe'],
             [['id','customer_code', 'truck_van'], 'string', 'max' => 10],
-            [['inbound_no', 'sap_no', 'plant_location', 'storage_location', 'lower_hu'], 'string', 'max' => 32],
+            [['inbound_no', 'plant_location', 'storage_location', 'lower_hu'], 'string', 'max' => 32],
             [['unit'], 'string', 'max' => 4],
             [['truck_van'], 'match', 'not' => true, 'pattern' => '/[^a-z A-Z0-9_-]/', 'message' => 'Must contain alphanumeric, space, underscore (_) and dash (-) characters only.']
         ];
@@ -64,7 +63,6 @@ class TrxTransactions extends \yii\db\ActiveRecord
             'id' => 'ID',
             'customer_code' => 'Customer Code',
             'inbound_no' => 'Inbound No',
-            'sap_no' => 'SAP No',
             'plant_location' => 'Plant Location',
             'storage_location' => 'Storage Location',
             'pallet_count' => 'Pallet Count',

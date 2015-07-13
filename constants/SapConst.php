@@ -8,6 +8,7 @@ class SapConst
     const EMPTY_STRING = '';
     const HALF_WIDTH_SPACE = ' ';
     const PARAMS = 'PARAMS';
+    const IMPORT = 'import';
     const X = 'X';
     const DEFAULT_NET_UNIT = 'unit_1';
 
@@ -22,6 +23,8 @@ class SapConst
     // functions
     const RFC_FUNCTION = 'RFC_FUNCTION';
     const ZBAPI_RECEIVING = 'ZBAPI_RECEIVING';
+    const ZBAPI_CTO_PPTAG = 'ZBAPI_CTO_PPTAG';
+    const ZBAPI_POST_GR = 'ZBAPI_POST_GR';
 
     // RS_INPUT
     const RS_INPUT = 'RS_INPUT';

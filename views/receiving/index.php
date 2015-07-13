@@ -96,6 +96,31 @@ $this->title = 'Receiving';
 
 				Alert::end();
 			}
+
+            if ($palletStatus['create_to_success']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-success',
+                    ],
+                ]);
+
+                echo 'Pallet #' . Yii::$app->request->post("create_to_pallet_no") . ' successfully created with Transfer Order.';
+                echo '<br />T.O.: ' . $palletStatus['TONumber'];
+
+                Alert::end();
+            }
+
+            if ($palletStatus['create_to_error']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-error',
+                    ],
+                ]);
+
+                echo 'Failed to reject pallet. ' . $palletStatus['to_error'];
+
+                Alert::end();
+            }
 		?>
 		<div class="help-150"><h1 class="page-title page-title-bt">Receiving</h1></div>
 		<ul class="list-sub-menu">
@@ -222,13 +247,21 @@ data-toggle="modal"
   </div>
   <div class="modal-body">
       <h4>Scan Pallet to Process</h4>
-      <form action="receiving_menu.php" method="post" class="form-horizontal" role="form">
+      <?php
+        $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
+        $form = ActiveForm::begin([
+            'options' => ['class' => 'form-horizontal'],
+            'fieldConfig' => [
+                'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+            ]
+        ]); ?>
         <div class="control-group">
-            <input type="text" class="uborder help-40percent" />
-            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Use Pallet</button>
+            <?= Html::textInput('create_to_pallet_no', '', ['id'    => 'create-to-pallet-no',
+                                                            'class'     => 'uborder help-40percent']) ?>
+            <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
+                                                  'name'    => 'create-to']) ?>
         </div>
-      </form>
-
+      <?php ActiveForm::end(); ?>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

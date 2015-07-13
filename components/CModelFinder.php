@@ -273,6 +273,17 @@ class CModelFinder extends Component
         return $packaging_material;
     }
 
+    public function getTransactionDetails($conditions = null)
+    {
+        // to retrieve all *active* material conversions by their index and order them by their ID:
+            $model = TrxTransactionDetails::find()
+                ->where($conditions)
+                ->one();
+
+        return $model;
+    }
+
+
     /**
      * Finds the MstAccount model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
