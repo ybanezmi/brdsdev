@@ -376,10 +376,10 @@ class ReceivingController extends Controller
 			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
             $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-                ['like', 'description', Yii::$app->params['PALLET']]);
+                ['like', 'description', Yii::$app->params['PALLET']]]);
                 //['plant_location' => $transaction_model->plant_location]]);
             $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-                ['not like', 'description', Yii::$app->params['PALLET']]);
+                ['not like', 'description', Yii::$app->params['PALLET']]]);
                 //['plant_location' => $transaction_model->plant_location]]);
 
             $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
@@ -781,7 +781,7 @@ class ReceivingController extends Controller
 
     public function actionGetPackagingType() {
         $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-            ['pallet_type' => Yii::$app->request->get('id'),
+            ['pallet_type' => Yii::$app->request->get('id')],
             //'plant_location' => Yii::$app->request->get('plant_location')],
             ['like', 'description', Yii::$app->params['PALLET']]]);
 
@@ -793,7 +793,7 @@ class ReceivingController extends Controller
 
     public function actionGetKittingType($id) {
         $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-            ['pallet_type' => Yii::$app->request->get('id'),
+            ['pallet_type' => Yii::$app->request->get('id')],
             //'plant_location' => Yii::$app->request->get('plant_location')],
             ['not like', 'description', Yii::$app->params['PALLET']]]);
 
