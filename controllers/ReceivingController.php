@@ -325,10 +325,10 @@ class ReceivingController extends Controller
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
             $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
                 ['like', 'description', Yii::$app->params['PALLET']]]);
-                // ['plant_location' => $transaction_model->plant_location]]);
+                //['plant_location' => $transaction_model->plant_location]]);
             $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
                 ['not like', 'description', Yii::$app->params['PALLET']]]);
-                // ['plant_location' => $transaction_model->plant_location]]);
+                //['plant_location' => $transaction_model->plant_location]]);
 
             $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
             $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
@@ -721,7 +721,7 @@ class ReceivingController extends Controller
     public function actionGetPackagingType() {
         $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
             ['pallet_type' => Yii::$app->request->get('id')],
-            // 'plant_location' => Yii::$app->request->get('plant_location')],
+            //'plant_location' => Yii::$app->request->get('plant_location')],
             ['like', 'description', Yii::$app->params['PALLET']]]);
 
         $packaging_type_list['material_code'] = ArrayHelper::getColumn($packaging_type_model, 'material_code');
@@ -733,7 +733,7 @@ class ReceivingController extends Controller
     public function actionGetKittingType($id) {
         $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
             ['pallet_type' => Yii::$app->request->get('id')],
-            // 'plant_location' => Yii::$app->request->get('plant_location')],
+            //'plant_location' => Yii::$app->request->get('plant_location')],
             ['not like', 'description', Yii::$app->params['PALLET']]]);
 
         $kitting_type_list['material_code'] = ArrayHelper::getColumn($kitting_type_model, 'material_code');
