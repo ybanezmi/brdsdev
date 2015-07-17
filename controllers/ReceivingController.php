@@ -512,9 +512,9 @@ class ReceivingController extends Controller
 				    $sapNoFlag = false;
                     $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
-                    if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] <> "") {
+                    if (isset($sapInboundNumber['export']['sn']) && $sapInboundNumber['export']['sn'] <> "") {
                         $sapNoFlag = true;
-                        $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
+                        $transaction_model->sap_no = $sapInboundNumber['export']['sn'];
                     } else {
                         $sapError = $sapInboundNumber['error'];
                     }
