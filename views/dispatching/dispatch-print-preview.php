@@ -6,16 +6,13 @@
 	  return $trunk;
 	}
 ?>
-
 <div class="dispatch">
-
 <table class="head_logo">
 		<tr>
 			<td style="width:50%"></td>
 			<td style="width:45%"><div style="font-size:70px;">DISPATCH</div></td>
 		<tr>
 </table>
-
 <div class="two_column">
 	<div class="left_column">
 		<div class="row_1_title"><b><?= Yii::$app->request->post('customer_name'); ?><b/></div>
@@ -37,8 +34,7 @@
 		<div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('po_date'); ?></div>
 		<div class="row_ship"><b>Sales Order Number:</b> <?= Yii::$app->request->post('so_number'); ?></div>
 		<div class="row_date"><b>Date:</b><?= Yii::$app->request->post('so_date'); ?></div>
-	</div>
-	
+	</div>	
 </div>
 <br />
 <div class="two_column">
@@ -77,7 +73,15 @@
 			echo '<td width="40">'.$i.'</td>';				
 			echo '<td >'.$dispatch_model_2_info->MATNR.'</td>';
 			echo '<td width="250">'.$dispatch_model_2_info->ARKTX.'</td>';
-			echo '<td>'.Yii::$app->request->post('material_quantity')[$x].'</td>';
+			$current = $dispatch_model_2_info->LFIMG;
+			$updated = Yii::$app->request->post('material_quantity')[$x];
+
+			if($current == $updated){
+				echo '<td>'.Yii::$app->request->post('material_quantity')[$x].'</td>';
+			} else {
+				echo '<td><u>'.Yii::$app->request->post('material_quantity')[$x].'</u></td>';
+			}
+
 			echo '<td>'.Yii::$app->request->post('temp_weight')[$x].'KG </td>';
 			echo '<td>'.$dispatch_model_2_info->CHARG.'</td>';
 			echo '<td>'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';	                        
