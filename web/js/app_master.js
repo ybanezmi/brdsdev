@@ -579,6 +579,7 @@ function getMateriaList(code){
             }
             x.style.display = "block";
             promptOption.text = "-- Select a materials --";
+            promptOption.value = "";
             promptOption.selected = true;
             x.add(promptOption, x[0]);
         } else {

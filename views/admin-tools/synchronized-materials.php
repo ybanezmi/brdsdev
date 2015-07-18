@@ -68,7 +68,7 @@ $this->title = 'Synch Materials';
 			<button class="btn btn-primary" style="width:35%;" id="syncAllMaterials">Sync All Materials</button>
 			<button class="btn btn-primary" style="width:35%;" id="view_materials" name="view_materials">View Details</button>
 			<button class="btn btn-primary" style="width:35%;" id="material_only">Material Only</button>
-			<button class="btn btn-primary back cancel-button" style="width:35%;" name="back">Back To Main</button>
+			<button class="btn btn-primary" style="width:35%;" id="back_to_sync">Back To Main</button>
 			</div>
 			</div>
 
@@ -82,6 +82,7 @@ $this->title = 'Synch Materials';
 
 	function view_materials() {
 		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
+		var pmat=encodeURIComponent(document.getElementById("material-list_id").value);
 		var url = window.location.origin+'/brdsdev/web/admin-tools/get-material-by?id='+pname;
 		var method = 'GET';
 		var params = '';
@@ -135,7 +136,11 @@ $this->title = 'Synch Materials';
 	document.getElementById("view_materials").addEventListener("click", function(e) {
 		e.preventDefault();
 		view_materials();
+	});
 
+	document.getElementById("back_to_sync").addEventListener("click", function(e) {
+		e.preventDefault();
+		window.location.assign(window.location.origin+"/brdsdev/web/admin-tools/synchronized-database")
 	});
 
 	</script>

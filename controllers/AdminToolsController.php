@@ -224,7 +224,6 @@ class AdminToolsController extends Controller
     public function actionCreateUser()
     {
         $model = new MstAccount();
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -272,7 +271,6 @@ class AdminToolsController extends Controller
     public function actionUpdateUser($id)
     {
         $model = Yii::$app->modelFinder->findAccountModel($id);
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -317,7 +315,6 @@ class AdminToolsController extends Controller
         //Yii::$app->modelFinder->findAccountModel($id)->delete();
         $model = Yii::$app->modelFinder->findAccountModel($id);
 		$model->status = Yii::$app->params['STATUS_DELETED'];
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -399,7 +396,7 @@ class AdminToolsController extends Controller
 	}
 
     public function actionPackagingMaterials() {
-			return $this->render('packaging-materials');
+		return $this->render('packaging-materials');
     }
 	
 	public function actionExport() {
@@ -477,7 +474,6 @@ class AdminToolsController extends Controller
 		}
 		
 		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction History')) {
-			
 			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 			$searchModel = new TrxTransactionsSearch();
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $params);
@@ -504,7 +500,6 @@ class AdminToolsController extends Controller
 						 'label'		=> 'STATUS']];
 		}
 		
-		
 		if ($searchModel && $dataProvider) {
 			ExcelView::widget([
 	            'dataProvider' => $dataProvider,
@@ -520,11 +515,9 @@ class AdminToolsController extends Controller
      * Lists all TrxTransaction models.
      * @return mixed
      */
-    public function actionViewTransaction() {
-		    	
+    public function actionViewTransaction() {	    	
 		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 		$trxSearchModel = new TrxTransactionsSearch();
-
 		$trxDataProvider = $trxSearchModel->search(Yii::$app->request->queryParams, $params);
 
     	return $this->render('view-transaction', ['dataProvider' => $trxDataProvider,
