@@ -68,9 +68,7 @@ class WeightCaptureController extends Controller
 	public function actionGetMaterialList($item_code)
 	{
 		$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $item_code]);
-			
 		$material_list = ArrayHelper::toArray($material_model);
-		
 		echo json_encode($material_list);
 	}
 

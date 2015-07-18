@@ -200,6 +200,20 @@ class CModelFinder extends Component
 		return $transactions;
     }
 
+
+     public function getMaterialBy($index = null, $conditions = null)
+    {
+        // to retrieve all *active* materials by their index and order them by their ID:
+        $materials = MstMaterial::find()
+            ->where($conditions)
+            ->andWhere(['status' => Yii::$app->params['STATUS_ACTIVE']])
+            ->orderBy('item_code')
+            ->indexBy($index)
+            ->all();
+
+        return $materials;
+    }
+
 	/**
      * Gets the list from TrxTransactionDetails model based on its status.
      * If the model is not found, return empty array.

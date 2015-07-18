@@ -543,33 +543,57 @@ function getTransactionList(code){
 	});
 }
 
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return true;
+    }
+    return false;
+}
+
+function removeOptions(selectbox)
+{
+    var i;
+    for(i=selectbox.options.length-1;i>=0;i--)
+    {
+        selectbox.remove(i);
+    }
+}
+
+
 /* function to retrieve transaction list */
 function getMateriaList(code){
     load('get-material-list?id=' + code,function(xhr) {
-      
-        // document.getElementById('material-list_id').innerHTML='';
+      if (null != xhr.responseText && xhr.responseText.length > 0) {
+        var jsonData = JSON.parse(xhr.responseText);
+        var x  = document.getElementById('material-list_id');
+        var promptOption = document.createElement('option');
+        removeOptions(x);
 
-        // var jsonData = JSON.parse(xhr.responseText);
-        // var x  = document.getElementById('material-list_id');
-        // //setFieldValueByName('transaction-list', ['']);
-
-        // // set prompt value
-        // var promptOption = document.createElement('option');
-        // promptOption.text = "-- Select a transaction --";
-        // x.add(promptOption);
-
-        // if(null != jsonData){
-        //     for(var i = 0; i < jsonData.length; i++){
-        //         var option  = document.createElement('option');
-        //         option.text = jsonData[i];
-        //         x.add(option, x[i+1]);
-        //     }
-        // }
+        if(isEmpty(jsonData)){
+            for(var i = 0; i < jsonData.length; i++){
+                var option  = document.createElement('option');
+                option.value = jsonData[i].item_code;
+                option.text = jsonData[i].description;
+                x.add(option, x[i+1]);
+            }
+            x.style.display = "block";
+            promptOption.text = "-- Select a materials --";
+            promptOption.selected = true;
+            x.add(promptOption, x[0]);
+        } else {
+            x.style.display = "none";
+        } 
+    } else {
+        document.getElementById.style.display = "none";
+    }
 
 
 
     });
 }
+
+/*determine if obj is empty*/
 
 /* function to retrieve transaction */
 function getTransaction(id) {
@@ -755,6 +779,7 @@ function viewPalletDetails(transaction_id, pallet_no) {
 }
 
 /* synchronize js*/
+var brdsdev_site_url = "http://192.168.1.121";
 var brdsapi_site_url = "http://192.168.1.122";
 
 function ajax (url, method, params, container_id, loading_text) {
@@ -781,6 +806,33 @@ function ajax (url, method, params, container_id, loading_text) {
 	xhr.open(method, url, true);
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	xhr.send(params);
+}
+
+function ajax_view (url, method, params, container_id, loading_text) {
+    try { // For: chrome, firefox, safari, opera, yandex, ...
+        xhr = new XMLHttpRequest();
+    } catch(e) {
+        try{ // for: IE6+
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch(e1) { // if not supported or disabled
+            alert("Not supported!");
+        }
+    }
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4) {
+            document.getElementById(container_id).style.display = 'block';
+            document.getElementById(container_id).innerHTML = xhr.responseText;
+        } else {
+
+            document.getElementById(container_id).style.display = 'block';
+            document.getElementById(container_id).innerHTML = loading_text;
+
+
+        }
+    }
+    xhr.open(method, url, true);
+    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    xhr.send(params);
 }
 
 function toggleSync() {

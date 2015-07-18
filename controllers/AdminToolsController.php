@@ -338,6 +338,16 @@ class AdminToolsController extends Controller
         ]);
 		echo $user_profile;
 	}
+
+	public function actionGetMaterialInfo($id)
+	{
+		$user_profile = $this->renderPartial('_user-profile', [
+            'model' => Yii::$app->modelFinder->findAccountModel($id),
+        ]);
+		echo $user_profile;
+	}
+
+
 	/**
      * Database syncronized
      * @return mixed
@@ -365,6 +375,23 @@ class AdminToolsController extends Controller
 			]);
 		}
     }
+
+
+	public function actionGetMaterialBy($id)
+	{
+		$material_model_by = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $id]);			
+		$material_model_list = Yii::$app->modelFinder->getMaterialConversionList(null, ['like', 'material_code', $id]);			
+		$material_by = ArrayHelper::toArray($material_model_by);		
+		$material_conv = ArrayHelper::toArray($material_model_list);		
+		return $this->renderPartial('view_material_details', ['materal_list' => $material_by, 'material_conv' => $material_conv]);
+	}
+
+	public function actionGetMaterialList($id) {
+		$material_list = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $id]);			
+		$material_list_result = ArrayHelper::toArray($material_list);	
+
+		echo json_encode($material_list_result);
+	}
 
     public function actionGetTransactionList($id) {
 		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, ['customer_code' => $id]), 'id');
