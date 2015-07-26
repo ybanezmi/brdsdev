@@ -258,6 +258,15 @@ class CModelFinder extends Component
         return $material_conversion;
     }
 
+    public function getTransactionDetails($conditions = null)
+    {
+            $packaging_material = TrxTransactionDetails::find()
+                ->where($conditions)
+                ->one();
+
+        return $packaging_material;
+    }
+
     /**
      * Gets the packaging material from MstPackagingMaterials model based on its status.
      * If the model is not found, return empty.

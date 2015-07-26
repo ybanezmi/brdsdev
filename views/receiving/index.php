@@ -229,6 +229,22 @@ data-toggle="modal"
         </div>
       </form>
 
+      <?php
+        $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
+        $form = ActiveForm::begin([
+            'options' => ['class' => 'form-horizontal'],
+            'fieldConfig' => [
+                'template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div></div>',
+            ]
+        ]); ?>
+        <div class="control-group">
+            <?= Html::textInput('create_to_pallet_no', '', ['id'        => 'create-to-pallet-no',
+                                                            'class'     => 'uborder help-40percent']) ?>
+            <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
+                                                  'name'    => 'create-to-pallet']) ?>
+        </div>
+      <?php ActiveForm::end(); ?>
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

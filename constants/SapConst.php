@@ -22,6 +22,8 @@ class SapConst
     // functions
     const RFC_FUNCTION = 'RFC_FUNCTION';
     const ZBAPI_RECEIVING = 'ZBAPI_RECEIVING';
+    const L_TO_CREATE_MOVE_SU = 'L_TO_CREATE_MOVE_SU';
+    const ZBAPI_POST_GR = 'ZBAPI_POST_GR';
 
     // RS_INPUT
     const RS_INPUT = 'RS_INPUT';
@@ -73,6 +75,10 @@ class SapConst
     // ET_PALLETS
     const ET_PALLETS = 'ET_PALLETS';
     const ET_PALLETS_W_TO = 'ET_PALLETS_W_TO';
+
+    // Create TO
+    // pallet number
+    const I_LENUM = 'I_LENUM';
 
     // export
     const VBELN = 'VBELN';

@@ -139,6 +139,56 @@ class ReceivingController extends Controller
 			}
 		}
 
+        // create transfer order
+        $palletStatus['create_to_success'] = false;
+        $palletStatus['create_to_error'] = false;
+        if (null !== Yii::$app->request->post('create-to')) {
+            if (null !== Yii::$app->request->post('create_to_pallet_no') && "" !== Yii::$app->request->post('create_to_pallet_no')) {
+                $createTO = $this->createTO(Yii::$app->request->post('create_to_pallet_no'));
+                if (isset($createTO['error'])) {
+                    $palletStatus['create_to_error'] = true;
+                    $palletStatus['to_error'] = $createTO['error'];
+                } else {
+                    $model = new TrxHandlingUnit();
+                    $date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
+                    // set defaults
+                    // @TODO: transfer updating of status/created/updated details to model
+                    // set status, created and updated details
+                    $model->status          = Yii::$app->params['STATUS_PROCESS'];
+                    $model->creator_id      = Yii::$app->user->id;
+                    $model->created_date    = $date;
+                    $model->updater_id      = Yii::$app->user->id;
+                    $model->updated_date    = $date;
+                    $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['pallet_no' => Yii::$app->request->post('create_to_pallet_no'),
+                                                                                              'status' => Yii::$app->params['STATUS_PROCESS']]);
+                    $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel->transaction_id);
+                    $model->transaction_id = $transactionModel->id;
+                    $model->customer_code = $transactionModel->customer_code;
+                    $model->inbound_no = $transactionModel->inbound_no;
+                    $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
+                    $model->plant_location = $transactionModel->plant_location;
+                    $model->storage_location = $transactionModel->storage_location;
+                    $model->packaging_code = $transactionModel->packaging_code;
+                    $model->pallet_weight = $transactionDetailsModel->pallet_weight;
+                    $model->transfer_order = $createTO['export']['transfer_order'];
+                    $model->storage_type = $createTO['export']['storage_type'];
+                    $model->storage_section = $createTO['export']['storage_section'];
+                    $model->storage_bin = $createTO['export']['storage_bin'];
+                    $model->inbound_status = $createTO['export']['storage_position'];
+                    if ($model->save) {
+                        $palletStatus['create_to_success'] = true;
+                        $palletStatus['to_number'] = $createTO['export']['transfer_order'];
+                    } else {
+                        $palletStatus['create_to_error'] = true;
+                        $palletStatus['to_error'] = $createTO['error'];
+                    }
+                }
+            } else {
+                $palletStatus['create_to_error'] = true;
+                $palletStatus['to_error'] = 'Please enter pallet no.';
+            }
+        }
+
 /*
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->modelFinder->getTransactionList(),
@@ -641,8 +691,14 @@ class ReceivingController extends Controller
     	} else if (null !== Yii::$app->request->post('close-receiving')) {
 	    	// close receiving
 	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
-			$transaction->status = Yii::$app->params['STATUS_CLOSED'];
-			$success = $transaction->update();
+
+            $closeReceiving = $this->closeReceiving($transactionModel->inbound_no);
+            if (isset($closeReceiving['success']) && $closeReceiving['success'] <> 0) {
+                $transaction->status = Yii::$app->params['STATUS_CLOSED'];
+                $success = $transaction->update();
+            } else {
+                $error = $closeReceiving['error'];
+            }
 		}
 
 		return $this->render('close', [
@@ -834,6 +890,51 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = '36';
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function createTO($palletNo) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::L_TO_CREATE_MOVE_SU;
+
+        // Post http://127.0.0.1/brdssap/sap/import
+        $params[SapConst::PARAMS][SapConst::I_LENUM] = $palletNo;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function closeReceiving($inboundNo) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_POST_GR;
+
+        // Post http://127.0.0.1/brdssap/sap/import
+        $params[SapConst::PARAMS][SapConst::VBELN] = $inboundNo;
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y');
 
         $ch = curl_init();
 
