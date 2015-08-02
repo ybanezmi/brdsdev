@@ -54,7 +54,7 @@ class DispatchingController extends \yii\web\Controller
                   'orientation' => 'Portrait', // This value will be ignored if format is a string value.
                   'beforeRender' => function($mpdf, $data) {},
                   ]);
-            $this->layout = '//print';
+            $this->layout = '//print_dispatch';
             $dispatch_model_2 = $dismodel->getDispatchItems($dispatch_id);
             return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
 
@@ -78,7 +78,7 @@ class DispatchingController extends \yii\web\Controller
                 'orientation' => 'Landscape', // This value will be ignored if format is a string value.
                 'beforeRender' => function($mpdf, $data) {},
                 ]);
-            $this->layout = '//print';
+            $this->layout = '//print_dispatch';
             return $this->render('print-preview',[]);
     }
 
