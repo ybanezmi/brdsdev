@@ -222,13 +222,6 @@ data-toggle="modal"
   </div>
   <div class="modal-body">
       <h4>Scan Pallet to Process</h4>
-      <form action="receiving_menu.php" method="post" class="form-horizontal" role="form">
-        <div class="control-group">
-            <input type="text" class="uborder help-40percent" />
-            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Use Pallet</button>
-        </div>
-      </form>
-
       <?php
         $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
         $form = ActiveForm::begin([
@@ -241,7 +234,7 @@ data-toggle="modal"
             <?= Html::textInput('create_to_pallet_no', '', ['id'        => 'create-to-pallet-no',
                                                             'class'     => 'uborder help-40percent']) ?>
             <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
-                                                  'name'    => 'create-to-pallet']) ?>
+                                                  'name'    => 'create-to']) ?>
         </div>
       <?php ActiveForm::end(); ?>
 

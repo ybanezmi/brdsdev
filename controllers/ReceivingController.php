@@ -164,7 +164,7 @@ class ReceivingController extends Controller
                     $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel->transaction_id);
                     $model->transaction_id = $transactionModel->id;
                     $model->customer_code = $transactionModel->customer_code;
-                    $model->inbound_no = $transactionModel->inbound_no;
+                    $model->inbound_no = $transactionModel->sap_no;
                     $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
                     $model->plant_location = $transactionModel->plant_location;
                     $model->storage_location = $transactionModel->storage_location;
@@ -562,11 +562,14 @@ class ReceivingController extends Controller
 				    $sapNoFlag = false;
                     $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
-                    if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] <> "") {
+                    
+                    if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
                         $sapNoFlag = true;
                         $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
                     } else {
-                        $sapError = $sapInboundNumber['error'];
+                        if (isset($sapInboundNumber['error'])) {
+                            $sapError = $sapInboundNumber['error'];
+                        }
                     }
                     $transaction_model->save();
                     $isPalletAdded = true;
@@ -692,7 +695,7 @@ class ReceivingController extends Controller
 	    	// close receiving
 	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
 
-            $closeReceiving = $this->closeReceiving($transactionModel->inbound_no);
+            $closeReceiving = $this->closeReceiving($transaction->sap_no);
             if (isset($closeReceiving['success']) && $closeReceiving['success'] <> 0) {
                 $transaction->status = Yii::$app->params['STATUS_CLOSED'];
                 $success = $transaction->update();
@@ -891,21 +894,12 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
 
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-
-        // receive server response ...
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = json_decode(curl_exec($ch), true);
-
-        curl_close($ch);
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;
     }
+
+    
 
     public function createTO($palletNo) {
         $params[SapConst::RFC_FUNCTION] = SapConst::L_TO_CREATE_MOVE_SU;
@@ -913,18 +907,15 @@ class ReceivingController extends Controller
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::I_LENUM] = $palletNo;
 
-        $ch = curl_init();
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
-        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        echo "<pre /> params";
+        print_r($params);
 
-        // receive server response ...
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        echo "<pre /> response";
+        print_r($response);
 
-        $response = json_decode(curl_exec($ch), true);
-
-        curl_close($ch);
+        die;
 
         return $response;
     }
@@ -936,20 +927,34 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::VBELN] = $inboundNo;
         $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y');
 
-        $ch = curl_init();
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
-        curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SAP_API_URL']);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        echo "<pre /> params";
+        print_r($params);
 
-        // receive server response ...
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = json_decode(curl_exec($ch), true);
-
-        curl_close($ch);
+        echo "<pre /> response";
+        print_r($response);
 
         return $response;
     }
 
+    function curl($url, $cookie = false, $post = false, $header = false, $follow_location = false, $referer=false, $proxy=false) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_REFERER, $referer);
+        curl_setopt($ch, CURLOPT_HEADER, $header);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $follow_location);
+        if ($cookie) {
+            curl_setopt ($ch, CURLOPT_COOKIE, $cookie);
+        }
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        return $response;
+    }
 }
