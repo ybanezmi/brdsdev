@@ -8,7 +8,7 @@
 ?>
 
 <htmlpagefooter name="DispatchFooter" style="display:none">
-    <div style="text-align:center; position:relative; bottom:10px; font-size:11px;">Page {PAGENO} of {nbpg}</div><br />
+    <div style="text-align:center; position:relative; bottom:0px; font-size:11px;">Page {PAGENO} of {nbpg}</div><br /><br />
 </htmlpagefooter>
 <sethtmlpagefooter name="DispatchFooter" page="O" value="on" show-this-page="1" />
 <sethtmlpagefooter name="DispatchFooter" page="E" value="on" />
@@ -17,7 +17,9 @@
 <div class="page-header">
 <table class="head_logo">
         <tr>
-            <td style="width:60%"></td>
+            <td style="width:60%">
+                <img src='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/dispatch_header.jpg' width="60%" />
+            </td>
             <td style="width:40%"><div style="font-size:75px; text-align:right">DISPATCH</div></td>
         <tr>
 </table>

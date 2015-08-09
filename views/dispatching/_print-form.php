@@ -88,8 +88,14 @@ use app\models\DispatchModel;
             </div>
         </td>
 
-        <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  ?>
-        <?php // $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
+        <?php  
+        // echo $dispatch_model_1[0]->VBELN;
+        // echo '<br />';
+        $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  
+        // echo $so_data[0]->VBELN;
+        // echo '<br />';
+        ?>
+        <?php  $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
 
         <?php $po_data = (empty($so_data[0]->VBELN)) ? 'Empty' : $dismodel->getPO($so_data[0]->VBELN); ?>
 
