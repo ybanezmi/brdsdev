@@ -905,7 +905,7 @@ class ReceivingController extends Controller
         $params[SapConst::RFC_FUNCTION] = SapConst::L_TO_CREATE_MOVE_SU;
 
         // Post http://127.0.0.1/brdssap/sap/import
-        $params[SapConst::PARAMS][SapConst::I_LENUM] = str_pad($palletNo, 20, '0', STR_PAD_RIGHT);
+        $params[SapConst::PARAMS][SapConst::I_LENUM] = str_pad($palletNo, 20, '0', STR_PAD_LEFT);
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
