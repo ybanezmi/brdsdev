@@ -88,19 +88,19 @@ class SapConst
     const VOLUME_CAP_ERROR = 'VOLUME_CAP_ERROR';
     const OTHER_ERROR = 'OTHER_ERROR';
 
-    // Dispatch 
+    // Dispatch function
     const READ_TEXT = 'READ_TEXT';
-    
+
     // Dispatch Import
-    const CLIENT = 'CLIENT';
-    const ID = 'ID';
-    const LANGUAGE = 'LANGUAGE';
-    const NAME = 'NAME';
+    const DIS_CLIENT = 'CLIENT';
+    const DIS_ID = 'ID';
+    const DIS_LANGUAGE = 'LANGUAGE';
+    const DIS_NAME = 'NAME';
     const DIS_OBJECT = 'OBJECT';
-    const ARCHIVE_HANDLE = 'ARCHIVE_HANDLE';
-    const LOCAL_CAT = 'LOCAL_CAT';
+    const DIS_ARCHIVE_HANDLE = 'ARCHIVE_HANDLE';
+    const DIS_LOCAL_CAT = 'LOCAL_CAT';
 
     // Dispatch Export
-    const HEADER = 'HEADER';
+    const DIS_HEADER = 'HEADER';
 
 }

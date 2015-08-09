@@ -216,6 +216,13 @@ class AdminToolsController extends Controller
         ]);
     }
 
+    public function actionEditProfile($id)
+    {
+    	$accountModel = Yii::$app->modelFinder->findAccountModel($id);
+    	
+        return $this->render('_edit-profile', ['model' => $accountModel]);
+    }
+
     /**
      * Creates a new MstAccount model.
      * If creation is successful, the browser will be redirected to the 'view' page.

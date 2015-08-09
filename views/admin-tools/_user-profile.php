@@ -15,11 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1><?= Html::encode($this->title) ?></h1>
 
+<a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl().'/admin-tools/edit-profile?id='.$model->id ?>" class="btn btn-primary" style="float:right; position:relative; right:10px; top:-20px;">EDIT PROFILE</a>
+
 <div class="help-bg-gray">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'id',
             'account_type',
             'username',
             //'password',
