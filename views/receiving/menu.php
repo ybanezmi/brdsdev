@@ -22,7 +22,7 @@ echo $scripts;
                             'class' => 'alert-success',
                         ],
                     ]);
-                    echo 'Successfully retrieved SAP Inbound No.: ' . $transaction_model->inbound_no;
+                    echo 'Successfully retrieved SAP Inbound No.: ' . $transaction_model->sap_no;
 
                     Alert::end();
                 }
