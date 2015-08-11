@@ -89,18 +89,15 @@ class SapConst
     const OTHER_ERROR = 'OTHER_ERROR';
 
     // Dispatch function
-    const READ_TEXT = 'READ_TEXT';
+    const ZRFC_READTEXT = 'ZRFC_READTEXT';
 
     // Dispatch Import
-    const DIS_CLIENT = 'CLIENT';
-    const DIS_ID = 'ID';
-    const DIS_LANGUAGE = 'LANGUAGE';
-    const DIS_NAME = 'NAME';
-    const DIS_OBJECT = 'OBJECT';
-    const DIS_ARCHIVE_HANDLE = 'ARCHIVE_HANDLE';
-    const DIS_LOCAL_CAT = 'LOCAL_CAT';
+    const DIS_VBELN = 'VBELN';
 
     // Dispatch Export
-    const DIS_HEADER = 'HEADER';
+    const HEADER = 'HEADER';
+
+    // Dispatch table
+    const LINES = 'LINES';
 
 }

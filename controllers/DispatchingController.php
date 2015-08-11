@@ -23,10 +23,7 @@ class DispatchingController extends \yii\web\Controller
         $dispatch_model_1 = array();
         $dispatch_model_2 = array();
         $dispatch_id = Yii::$app->request->post('document_number');
-        //$sap_dispatch = $this->getSapDispatch();
 
-        // print_r($sap_dispatch);
-        // exit;
          if (isset($dispatch_id)) {
             //Yii::app()->session['dispatch_id'] = $dispatch_id;
 
@@ -34,6 +31,7 @@ class DispatchingController extends \yii\web\Controller
             $dismodel = new DispatchModel;
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
             $dispatch_model_2 = $dismodel->getDispatchItems($full_dispatch_id);
+            $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
 
             return $this->render('dispatch-print-form', [
                 'dispatch_model_1' => $dispatch_model_1,
@@ -68,19 +66,9 @@ class DispatchingController extends \yii\web\Controller
         }
     }
 
-    public function getSapDispatch() {
-        $params[SapConst::RFC_FUNCTION] = SapConst::READ_TEXT;
-
-        // Post http://127.0.0.1/brdssap/sap/import
-        $params[SapConst::PARAMS][SapConst::DIS_CLIENT] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_ID] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_LANGUAGE] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_NAME] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_OBJECT] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_ARCHIVE_HANDLE] = '';
-        $params[SapConst::PARAMS][SapConst::DIS_LOCAL_CAT] = '';
-
-
+    public function getSapDispatch($filter) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZRFC_READTEXT;
+        $params[SapConst::PARAMS][SapConst::VBELN] = $filter;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;

@@ -123,7 +123,7 @@ class DispatchModel extends \yii\db\ActiveRecord
         $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT $tn.VBFA.VBELN, $tn.VBFA.ERDAT FROM $tn.VBFA WHERE $tn.VBFA.VBELV ='".$filter."' AND $tn.VBFA.VBTYP_N = 'Q'";
+            $stmt = "SELECT $tn.VBFA.VBELV, $tn.VBFA.ERDAT FROM $tn.VBFA WHERE $tn.VBFA.VBELN ='".$filter."'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                  $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {

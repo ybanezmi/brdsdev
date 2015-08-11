@@ -73,8 +73,7 @@ use app\models\DispatchModel;
         <td>
             <div class="row">
                 <div class="disp-left">Customer Number:</div>
-                <div class="disp-right"><?php echo $dispatch_model_1[0]->KUNNR; ?> 
-                    <?php //echo $dismodel->getKUNNR($dispatch_model_1[0]->KUNNR)[0]->NAME1; ?></div>
+                <div class="disp-right"><?php echo $dispatch_model_1[0]->KUNNR; ?> </div>
             </div>
             <div class="row">
                 <div class="disp-left">Delivered To:</div>
@@ -88,16 +87,10 @@ use app\models\DispatchModel;
             </div>
         </td>
 
-        <?php  
-        // echo $dispatch_model_1[0]->VBELN;
-        // echo '<br />';
-        $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); //echo '<pre>'; print_r($so_data); echo '</pre>';  
-        // echo $so_data[0]->VBELN;
-        // echo '<br />';
-        ?>
-        <?php  $po_data = $dismodel->getPO($so_data[0]->VBELN); //echo '<pre>'; print_r($po_data); echo '</pre>';  ?>
+        <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); ?>
+        <?php  $po_data = $dismodel->getPO($so_data[0]->VBELV); ?>
 
-        <?php $po_data = (empty($so_data[0]->VBELN)) ? 'Empty' : $dismodel->getPO($so_data[0]->VBELN); ?>
+        <?php $po_data = (empty($so_data[0]->VBELV)) ? 'Empty' : $dismodel->getPO($so_data[0]->VBELV); ?>
 
         <td style="padding-left:50px;">
             <div class="row">
@@ -229,11 +222,11 @@ use app\models\DispatchModel;
     <input type="hidden" value="<?= $dispatch_date; ?>" name="dispatch_date">
 
      <!-- po_and_so information-->
-     <?php if(empty($so_data[0]->VBELN)){
+     <?php if(empty($so_data[0]->VBELV)){
         echo '<input type="hidden" value="empty" name="so_number">';
     }
     else{
-        echo '<input type="hidden" value="'.$so_data[0]->VBELN.'" name="so_number">'; 
+        echo '<input type="hidden" value="'.$so_data[0]->VBELV.'" name="so_number">'; 
     } ?>
      <?php if(empty($so_data[0]->ERDAT)){
         echo '<input type="hidden" value="empty" name="so_date">';
@@ -254,13 +247,6 @@ use app\models\DispatchModel;
         echo '<input type="hidden" value="'.date("d-M-Y", strtotime($po_data[0]->BSTDK)).'" name="po_date"> ';
     } ?>
 
-    
-    
-
-    
-    
-
-    
     <div class="one-column-button pdt-one-column-button">
         <div class="submit-button ie6-submit-button">
         <?= Html::submitButton('Print', ['class' => 'btn btn-primary',
@@ -268,11 +254,8 @@ use app\models\DispatchModel;
         <button type="button" class="btn btn-primary" name="clear" onclick="return clearvalue()">Clear</button>
         </div>
     </div>
-
     <?php ActiveForm::end(); ?>
-
     <?php } ?>
-
 </div>
 
 
