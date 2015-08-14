@@ -40,9 +40,9 @@
         <p class="shipping_title">Shipping Information</p>
         <div class="row_ship"><b>Dispatch Number:</b> <?= Yii::$app->request->post('dispatch_number'); ?></div>
         <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('dispatch_date'); ?></div>
-        <div class="row_ship"><b>Customer Request No:</b> <?= Yii::$app->request->post('po_number'); ?></div>
+        <div class="row_ship"><b>Customer Request:</b> <?= Yii::$app->request->post('po_number'); ?></div>
         <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('po_date'); ?></div>
-        <div class="row_ship"><b>Sales Order Number:</b> <?= Yii::$app->request->post('so_number'); ?></div>
+        <div class="row_ship"><b>Request No.:</b> <?= ltrim(Yii::$app->request->post('so_number'),0); ?></div>
         <div class="row_date"><b>Date:</b><?= Yii::$app->request->post('so_date'); ?></div>
     </div>  
 </div>
@@ -63,7 +63,15 @@
 </div>
 <br />
 <p class="shipping_details">Shipping Details</p>
-<p class="ship_info">SAP - Header Text test line 1<br /> SAP - Header Text test line 1</p>
+<p class="ship_info">
+    <?php
+    if(Yii::$app->request->post('sap_header')){
+        foreach(Yii::$app->request->post('sap_header') as $key => $value){
+            echo $value."<br />";
+        }
+    }
+    ?>
+</p>
 </div>
 
 </htmlpageheader>

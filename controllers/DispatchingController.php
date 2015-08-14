@@ -32,10 +32,11 @@ class DispatchingController extends \yii\web\Controller
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
             $dispatch_model_2 = $dismodel->getDispatchItems($full_dispatch_id);
             $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
-
+           
             return $this->render('dispatch-print-form', [
                 'dispatch_model_1' => $dispatch_model_1,
-                'dispatch_model_2' => $dispatch_model_2
+                'dispatch_model_2' => $dispatch_model_2,
+                'sap_dispatch' => $sap_dispatch
             ]);
         }
         else{

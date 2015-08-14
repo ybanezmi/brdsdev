@@ -70,7 +70,7 @@ use app\models\DispatchModel;
     
     <table class="tablelist">
     <tr>
-        <td>
+        <td style="vertical-align:top;">
             <div class="row">
                 <div class="disp-left">Customer Number:</div>
                 <div class="disp-right"><?php echo $dispatch_model_1[0]->KUNNR; ?> </div>
@@ -90,7 +90,7 @@ use app\models\DispatchModel;
         <?php  $so_data = $dismodel->getSO($dispatch_model_1[0]->VBELN); ?>
         <?php  $po_data = $dismodel->getPO($so_data[0]->VBELV); ?>
 
-        <?php $po_data = (empty($so_data[0]->VBELV)) ? 'Empty' : $dismodel->getPO($so_data[0]->VBELV); ?>
+        <?php $po_data = (empty($so_data[0]->VBELV)) ? 'N/A' : $dismodel->getPO($so_data[0]->VBELV); ?>
 
         <td style="padding-left:50px;">
             <div class="row">
@@ -103,10 +103,10 @@ use app\models\DispatchModel;
                 <div class="disp-right"><?= $dispatch_date  ?></div>
             </div>
             <div class="row">
-                <div class="disp-left">Customer Request Number:</div>
+                <div class="disp-left">Customer Request:</div>
                 <div class="disp-right"><?php
                     if(empty($po_data[0]->BSTNK)){
-                        echo '<span class="red-col">empty</span>'; }
+                        echo '<span class="red-col">N/A</span>'; }
                     else{
                         echo $po_data[0]->BSTNK; } ?>
 
@@ -116,11 +116,32 @@ use app\models\DispatchModel;
                 <div class="disp-left">Date:</div>
                 <div class="disp-right"><?php
                     if(empty($po_data[0]->BSTDK)){
-                        echo '<span class="red-col">empty</span>'; }
+                        echo '<span class="red-col">N/A</span>'; }
                     else{
                         echo date("d-M-Y", strtotime($po_data[0]->BSTDK)); } ?>
                 </div>
             </div>
+             
+             <div class="row">
+                <div class="disp-left">Request #:</div>
+                <div class="disp-right"><?php
+                    if(empty($so_data[0]->VBELV)){
+                        echo '<span class="red-col">N/A</span>'; }
+                    else{
+                        echo ltrim($so_data[0]->VBELV,0); } ?>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="disp-left">Date:</div>
+                <div class="disp-right"><?php
+                    if(empty($so_data[0]->ERDAT)){
+                        echo '<span class="red-col">N/A</span>'; }
+                    else{
+                        echo date("d-M-Y", strtotime($so_data[0]->ERDAT)); } ?>
+                </div>
+            </div>
+
         </td>
     </tr>
     <tr>
@@ -135,7 +156,25 @@ use app\models\DispatchModel;
        
     </div>
     </div>
-
+    <div class="sap-header">
+    
+    <?php if($sap_dispatch["data_lines"]){ ?>
+    <div class="dispatch-details">
+    <h1>Details</h1>
+    <div style="padding:20px 20px 30px;">
+        <?php   
+            foreach ($sap_dispatch["data_lines"] as $head_sap => $head_value) {
+                foreach ($head_value as $body_value) {
+                    echo "$body_value";
+                    echo "<br />";
+                    echo "<input type='hidden' value='".$body_value."' name='sap_header[]'>";
+                }
+            }
+        ?>
+    </div>
+    </div>
+    <?php }?>
+    
     <div class="dispatch-details">
         <h1>Shipping Details</h1>
             <style>table.details{ width:auto; margin-top: 20px; } </style>
@@ -223,25 +262,25 @@ use app\models\DispatchModel;
 
      <!-- po_and_so information-->
      <?php if(empty($so_data[0]->VBELV)){
-        echo '<input type="hidden" value="empty" name="so_number">';
+        echo '<input type="hidden" value="N/A" name="so_number">';
     }
     else{
         echo '<input type="hidden" value="'.$so_data[0]->VBELV.'" name="so_number">'; 
     } ?>
      <?php if(empty($so_data[0]->ERDAT)){
-        echo '<input type="hidden" value="empty" name="so_date">';
+        echo '<input type="hidden" value="N/A" name="so_date">';
     }
     else{
         echo '<input type="hidden" value="'.date("d-M-Y", strtotime($so_data[0]->ERDAT)).'" name="so_date">'; 
     } ?>
      <?php if(empty($po_data[0]->BSTNK)){
-        echo '<input type="hidden" value="empty" name="po_number">'; 
+        echo '<input type="hidden" value="N/A" name="po_number">'; 
     }
     else{
         echo '<input type="hidden" value="'.$po_data[0]->BSTNK.'" name="po_number">'; 
     } ?>
      <?php if(empty($po_data[0]->BSTDK)){
-        echo '<input type="hidden" value="empty" name="po_date">'; 
+        echo '<input type="hidden" value="N/A" name="po_date">'; 
     }
     else{
         echo '<input type="hidden" value="'.date("d-M-Y", strtotime($po_data[0]->BSTDK)).'" name="po_date"> ';
