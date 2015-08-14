@@ -43,7 +43,7 @@
         <div class="row_ship"><b>Customer Request:</b> <?= Yii::$app->request->post('po_number'); ?></div>
         <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('po_date'); ?></div>
         <div class="row_ship"><b>Request No.:</b> <?= ltrim(Yii::$app->request->post('so_number'),0); ?></div>
-        <div class="row_date"><b>Date:</b><?= Yii::$app->request->post('so_date'); ?></div>
+        <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('so_date'); ?></div>
     </div>  
 </div>
 <br />
@@ -96,23 +96,21 @@
     $i=1;
     $x=0;
     foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {    
+        $current = $dispatch_model_2_info->LFIMG;
+        $updated = Yii::$app->request->post('material_quantity')[$x];
+
         echo '<table class="item-list"><tr>';
-            echo '<td width="30">'.$i.'</td>';              
-            echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="240">'.$dispatch_model_2_info->ARKTX.'</td>';
-            $current = $dispatch_model_2_info->LFIMG;
-            $updated = Yii::$app->request->post('material_quantity')[$x];
 
             if($current == $updated){
-                echo '<td>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
-                 echo '<td width="90">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').'KG </td>';
+                echo '<td width="30">'.$i.'</td>';  
             } else {
-
-                echo '<td><u>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</u></td>';
-                 echo '<td width="90"><u>'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').'KG </u></td>';
+                 echo '<td width="30"><u>'.$i.'</u></td>'; 
             }
 
-           
+            echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
+            echo '<td width="240">'.$dispatch_model_2_info->ARKTX.'</td>';
+            echo '<td>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
+            echo '<td width="90">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').'KG </td>';
             echo '<td width="100">'.$dispatch_model_2_info->CHARG.'</td>';
             echo '<td width="100">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
         echo "</tr></table>";
