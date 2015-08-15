@@ -99,7 +99,7 @@ use app\models\DispatchModel;
             </div>
             <div class="row">
                 <div class="disp-left">Date:</div>
-                <?php $dispatch_date = date("d-M-Y", strtotime($dispatch_model_1[0]->BLDAT))?>
+                <?php $dispatch_date =  date("d-M-Y"); //date("d-M-Y", strtotime($dispatch_model_1[0]->BLDAT))?>
                 <div class="disp-right"><?= $dispatch_date  ?></div>
             </div>
             <div class="row">

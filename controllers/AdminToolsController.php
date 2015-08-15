@@ -129,6 +129,7 @@ class AdminToolsController extends Controller
 	        echo $out;
 	        return;
 	    }
+		
 		$account_model = new MstAccount;
 		$account_model = $this->setAccountDefaults($account_model);
 			
@@ -219,8 +220,24 @@ class AdminToolsController extends Controller
     public function actionEditProfile($id)
     {
     	$accountModel = Yii::$app->modelFinder->findAccountModel($id);
-    	
-        return $this->render('_edit-profile', ['model' => $accountModel]);
+    	$updateUser = false;
+
+        return $this->render('_edit-profile', ['model' => $accountModel, 'success' => $updateUser]);
+    }
+
+    public function actionUpdateProfile(){
+  
+   		$prof_id = Yii::$app->request->post('id');
+    	$account_model = new MstAccount;
+	 	$updateUser = false;
+
+        if ($account_model->load(Yii::$app->request->post())) {
+			if ($account_model->updateByUser($prof_id,Yii::$app->request->post())) {
+				$updateUser = true;
+			}
+        }
+
+        return $this->render('_edit-profile', array('model' => $account_model, 'success' => $updateUser));
     }
 
     /**

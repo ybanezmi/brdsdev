@@ -25,20 +25,33 @@ $this->params['breadcrumbs'][] = 'Edit Profile';
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
     	'options' => ['class' => 'form-horizontal'],
+        'action' => '/brdsdev/web/admin-tools/update-profile',
     	'fieldConfig' => [
     		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	],
     ]); ?>
 
 	<?= $form->field($model, 'first_name')->textInput(['maxlength' => 100]) ?>
-    
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'account_type')->dropDownList([ 'admin' => 'Admin', 'checker' => 'Checker', 'standard' => 'Standard', ], ['prompt' => '-- Select account type --']) ?>
-
+    <?= $form->field($model, 'contact_no')->textInput(['maxlength' => 100]) ?>
+    <?php if(Yii::$app->session->get('user_id') != $model->id ){?>
+        <?= $form->field($model, 'account_type')->dropDownList([ 'admin' => 'Admin', 'checker' => 'Checker', 'standard' => 'Standard', ], ['prompt' => '-- Select account type --']) ?>
+    <?php } else { ?>
+    <div style="display:none">
+        <?= $form->field($model, 'account_type')->dropDownList([ 'admin' => 'Admin', 'checker' => 'Checker', 'standard' => 'Standard', ], ['prompt' => '-- Select account type --']) ?>
+    </div>
+    <?php } ?>
+    <input type="hidden" value="<?= $model->id; ?>" name="MstAccount[id]" />
+    
     <div class="form-group">
+        <?php if($success){ ?> 
+        <label class="control-label"></label>
+        <a class="btn btn-primary" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>/admin-tools/user-mgmt">Back</a>
+        <?php }else{  ?>
         <label class="control-label"></label>
         <?= Html::submitButton('Save Changes', ['class' => 'btn btn-primary']) ?>
+        <?php } ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>

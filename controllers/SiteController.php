@@ -90,7 +90,9 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
+        $session = Yii::$app->session;
+        $session->close();
+        $session->destroy();
         return $this->redirect(['site/login']);
     }
 
@@ -126,14 +128,23 @@ class SiteController extends Controller
 	public function actionSuccessful()
 	{
 		$model = Yii::$app->user->identity;
+        $session = Yii::$app->session;
 
 		if (null !== Yii::$app->request->post('confirm')) {
-			$this->redirect(['site/index']);
+            if (!$session->isActive)
+                $session->open();
+                $session->set('user_id', $model->id);
+                $this->redirect(['site/index']);
+
 		} else if(null !== Yii::$app->request->post('abort')) {
 			$this->redirect(['site/logout']);
+            $session->close();
+            $session->destroy();
 		} else {
 			// display the successful page
 			return $this->render('successful', ['model' => $model]);
+            $session->close();
+            $session->destroy();
 		}
 	}
 }
