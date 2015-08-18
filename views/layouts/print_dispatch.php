@@ -29,21 +29,20 @@
             color:#aaa;
             background:#aaa;
         }
-
         .dispatch, .page-header {
             width: 100%;
             height: 100%;
-            padding: 20px 30px;
+            padding: 15px 40px 20px;
             font-weight: bold;
             font-size: 12px;
             line-height: 20px;
         }
         .row_1_title{
             position: relative;
-            font-size:25px;
-            margin-top:20px;
-            margin-bottom:5px;
-            line-height: 28px;
+            font-size:18px;
+            margin-top:0px;
+            margin-bottom:10px;
+            line-height: 25px;
         }
         .row_2_cnumber{
             position: relative;
@@ -59,20 +58,20 @@
             position: relative;
             font-size:12px;
             font-weight: normal;
+            line-height: 17px;
             margin-left: 0px;
-            margin-top: 10px;
+            margin-top: 0px;
         }
         .row_ship{
             position: relative;
             font-size:12px;
             font-weight: normal;
-            margin-left: 6px;
         }
         .row_date{
             position: relative;
             font-size:12px;
             font-weight: normal;
-            margin-bottom: 10px;
+            margin-bottom: 0px;
             margin-left: 6px;
         }
         .row_cond{
@@ -80,6 +79,7 @@
             font-size:12px;
             font-weight: normal;
             margin-left: 6px;
+            margin-top:10px;
         }
         .row_weight{
             position: relative;
@@ -96,8 +96,11 @@
         .item-list{
             width: 100%;
             position: relative;
-            font-size:12px;
+            font-size:11px;
             font-weight: normal;
+        }
+        .item-list .thead{
+            font-size:12px;
         }
         
         .item-list td {
@@ -108,19 +111,20 @@
             background: #ccc;
             width:100%;
             padding-left: 5px;
-            line-height: 25px;
+            line-height: 20px;
+            margin-bottom:8px;
         }
         .conditions{
             background: #ccc;
             width:100%;
             padding-left: 5px;
-            line-height: 25px;
+            line-height: 20px;
         }
         .shipping_details{
             background: #ccc;
             width:100%;
             padding-left: 5px;
-            line-height: 25px;
+            line-height: 20px;
         }
 
         .two_column{
@@ -134,11 +138,11 @@
         }
         .perfect-right_column{
             float: right;
-            width: 50%;
+            width: 40%;
         }
         .left_column{
             float: left;
-            width: 50%;
+            width: 60%;
         }
         .footer_bar{
             width:100%;
@@ -146,6 +150,8 @@
             line-height: 18px;
             position: fixed;
             bottom: 0;
+            margin:0;
+            padding: 0;
         }
 
         .f_info4 {
@@ -163,15 +169,16 @@
         }
 
         div.dispatch-table{
-            height: 90mm;
+            height: 140mm;
         }
+   
 
         @page {
             /* ensure you append the header/footer name with 'html_' */
             header: html_DispatchHeader; /* sets <htmlpageheader name="MyCustomHeader"> as the header */
             footer: html_DispatchFooter; /* sets <htmlpagefooter name="MyCustomFooter"> as the footer */
             size: auto;
-            margin-top: 540px;
+            margin-top: 288px;
             margin-bottom: 50px;
         }
 

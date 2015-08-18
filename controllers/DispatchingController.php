@@ -53,7 +53,7 @@ class DispatchingController extends \yii\web\Controller
             $dismodel = new DispatchModel;
             Yii::$app->response->format = 'pdf';
             Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
-                  'format' => 'A4',
+                  'format' => 'Letter',
                   'orientation' => 'Portrait', // This value will be ignored if format is a string value.
                   'beforeRender' => function($mpdf, $data) {},
                   ]);

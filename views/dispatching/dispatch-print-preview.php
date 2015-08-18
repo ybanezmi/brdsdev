@@ -8,7 +8,7 @@
 ?>
 
 <htmlpagefooter name="DispatchFooter" style="display:none">
-    <div style="text-align:center; position:relative; bottom:0px; font-size:11px;">Page {PAGENO} of {nbpg}</div><br /><br />
+    <div style="text-align:center; position:relative; bottom:0px; font-size:11px;">Page {PAGENO} of {nbpg}</div><br /><br /><br />
 </htmlpagefooter>
 <sethtmlpagefooter name="DispatchFooter" page="O" value="on" show-this-page="1" />
 <sethtmlpagefooter name="DispatchFooter" page="E" value="on" />
@@ -20,16 +20,16 @@
             <td style="width:60%">
                 <img src='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/dispatch_header.jpg' width="60%" />
             </td>
-            <td style="width:40%"><div style="font-size:75px; text-align:right">DISPATCH</div></td>
+            <td style="width:40%"><div style="font-size:75px; text-align:right"><b>DISPATCH</b></div></td>
         <tr>
 </table>
-<div class="two_column">
+<div class="two_column" style="margin-bottom:5px">
     <div class="left_column">
         <div class="row_1_title"><b><?= Yii::$app->request->post('customer_name'); ?><b/></div>
         <div class="row_2_cnumber"><b>Customer Number:</b> <?= Yii::$app->request->post('customer_number'); ?></div>
         <div class="row_3_deliver"><b>Delivered To:</b></div>
-        <div class="row_4_deliver">
-            <?= Yii::$app->request->post('customer_address')['name']; ?> <br />
+        <div class="row_4_deliver" style="margin-left:20px;">
+            <div style="font-size:14px;"><?= Yii::$app->request->post('customer_address')['name']; ?></div>
             <?= Yii::$app->request->post('customer_address')['street']; ?> <br />
             <?= Yii::$app->request->post('customer_address')['town']; ?>, <?= Yii::$app->request->post('customer_address')['country']; ?> <?= Yii::$app->request->post('customer_address')['zip']; ?> <br />
             <?= Yii::$app->request->post('customer_address')['tel']; ?> <br />
@@ -37,59 +37,78 @@
     </div>
 
     <div class="right_column">
-        <p class="shipping_title">Shipping Information</p>
-        <div class="row_ship"><b>Dispatch Number:</b> <?= Yii::$app->request->post('dispatch_number'); ?></div>
-        <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('dispatch_date'); ?></div>
-        <div class="row_ship"><b>Customer Request:</b> <?= Yii::$app->request->post('po_number'); ?></div>
-        <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('po_date'); ?></div>
-        <div class="row_ship"><b>Request No.:</b> <?= ltrim(Yii::$app->request->post('so_number'),0); ?></div>
-        <div class="row_date"><b>Date:</b> <?= Yii::$app->request->post('so_date'); ?></div>
+    <div class="shipping_title">Shipping Information</div>
+    <table style="width:90%; margin:0 auto">
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Dispatch Number:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= Yii::$app->request->post('dispatch_number'); ?></div></td>
+        </tr>
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Date:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= Yii::$app->request->post('dispatch_date'); ?></div></td>
+        </tr>
+
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Customer Request:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= Yii::$app->request->post('po_number'); ?></div></td>
+        </tr>
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Date:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= Yii::$app->request->post('po_date'); ?></div></td>
+        </tr>
+
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Request No.:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= ltrim(Yii::$app->request->post('so_number'),0); ?></div></td>
+        </tr>
+        <tr>
+            <td style="width:50%; text-align:right"><div class="row_ship"><b>Date:</b></div></td>
+            <td style="width:50%; text-align:right"><div class="row_ship"><?= Yii::$app->request->post('so_date'); ?></div></td>
+        </tr>
+    </table>
     </div>  
 </div>
-<br />
 <div class="two_column">
     <div class="left_column">
-        <p class="conditions">Conditions</p>
-        <div class="row_cond"><b>
-            Shipping 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-            Pick Unit
-        </b></div>
+        <div class="conditions">Conditions</div>
+        <div class="row_cond">
+            <b>Shipping</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pick-up
+        </div>
     </div>
     <div class="perfect-right_column">
-        <p class="conditions">Weight - Volume</p>
+        <div class="conditions">Weight - Volume</div>
         <div class="row_weight"><b>Total Weight:</b> <?= number_format((float)Yii::$app->request->post('total_weight'),3,'.',',') ?> <?= Yii::$app->request->post('total_unit'); ?></div>
         <div class="row_weight"><b>Total Volume:</b> <?= number_format((float)Yii::$app->request->post('total_volume'),3,'.',',') ?> </div>
     </div>
 </div>
-<br />
-<p class="shipping_details">Shipping Details</p>
-<p class="ship_info">
-    <?php
-    if(Yii::$app->request->post('sap_header')){
-        foreach(Yii::$app->request->post('sap_header') as $key => $value){
-            echo $value."<br />";
-        }
-    }
-    ?>
-</p>
-</div>
-
 </htmlpageheader>
 <sethtmlpageheader name="DispatchHeader" page="O" value="on" show-this-page="1" />
 <sethtmlpageheader name="DispatchHeader" page="E" value="on" />
 
 <div class="dispatch">
 <div class="dispatch-table">
-<table class="item-list" style="margin-bottom:10px;">
+
+<div class="shipping_details">Shipping Details</div>
+<div class="ship_info">
+    <?php
+    if(Yii::$app->request->post('sap_header')){
+        foreach(Yii::$app->request->post('sap_header') as $key => $value){
+            echo $value."<br />";
+        }
+    } else {
+        echo "<br />";
+    }
+    ?>
+</div>
+<table class="item-list" style="margin-bottom:10px; margin-top:10px;">
     <tr>
-        <td width="30"><b>Item</b></td>
-        <td width="100"><b>Material No.</b></td>
-        <td width="240"><b>Material Description</b></td>
-        <td><b>Quantity</b></td>
-        <td width="90"><b>Weight</b></td>
-        <td width="100"><b>Batch</b></td>
-        <td width="100"><b>Expiry</b></td>
+        <td class="thead" width="30"><b>Item</b></td>
+        <td class="thead" width="100"><b>Material No.</b></td>
+        <td class="thead" width="260"><b>Material Description</b></td>
+        <td class="thead" align="right"><b>Quantity</b></td>
+        <td class="thead" width="110" align="right"><b>Weight</b></td>
+        <td class="thead" width="80" align="right"><b>Batch</b></td>
+        <td class="thead" width="90" align="right"><b>Expiry</b></td>
     </tr>
 </table>
     <?php
@@ -109,24 +128,35 @@
             }
 
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="240">'.$dispatch_model_2_info->MAKTX.'</td>';
-            echo '<td>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
-            echo '<td width="90">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
-            echo '<td width="100">'.$dispatch_model_2_info->CHARG.'</td>';
-            echo '<td width="100">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
+            echo '<td width="260">'.$dispatch_model_2_info->MAKTX.'</td>';
+            echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
+            echo '<td width="110" align="right">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
+            echo '<td width="80" align="right">'.$dispatch_model_2_info->CHARG.'</td>';
+            echo '<td width="90" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
         echo "</tr></table>";
-        if( $i % 15 == 0 ){
+        if( $i % 25 == 0 ){
             echo '<hr />';
             echo '<div class="breakNow"></div>';
-            echo '<table class="item-list" style="margin-bottom:10px;">';
+
+            echo '<div class="shipping_details">Shipping Details</div>';
+            echo '<div class="ship_info">';
+                if(Yii::$app->request->post('sap_header')){
+                    foreach(Yii::$app->request->post('sap_header') as $key => $value){
+                        echo $value."<br />";
+                    }
+                } else {
+                    echo "<br />";
+                }
+            echo '</div>';
+            echo '<table class="item-list" style="margin-bottom:10px; margin-top:10px;">';
             echo '<tr>';
-                echo '<td width="30"><b>Item</b></td>';
-                echo '<td width="100"><b>Material No.</b></td>';
-                echo '<td width="240"><b>Material Description</b></td>';
-                echo '<td><b>Quantity</b></td>';
-                echo '<td width="90"><b>Weight</b></td>';
-                echo '<td width="100"><b>Batch</b></td>';
-                echo '<td width="100"><b>Expiry</b></td>';
+                echo '<td class="thead" width="30"><b>Item</b></td>';
+                echo '<td class="thead" width="100"><b>Material No.</b></td>';
+                echo '<td class="thead" width="260"><b>Material Description</b></td>';
+                echo '<td class="thead" align="right"><b>Quantity</b></td>';
+                echo '<td class="thead" width="110" align="right"><b>Weight</b></td>';
+                echo '<td class="thead" width="80" align="right"><b>Batch</b></td>';
+                echo '<td class="thead" width="90" align="right"><b>Expiry</b></td>';
             echo '</tr>';
             echo '</table>';
             } 
@@ -137,23 +167,18 @@
 </table>
 <hr />
 </div>
-<table class="footer_bar">
+<table class="footer_bar" style="width:100%">
     <tr>
-    <td align="left" valign="top">
+    <td align="left" valign="top" style="width:50%">
         <div><b>DR Created by</b></div>
         <div><?= Yii::$app->request->post('prepared_by'); ?></div>
         <br />
+        <div><b>Checked By:</b></div>
         <br />
-        <div>Checked By:</div>
-        <br />
-        <hr style="width:200px;" />
+        <hr style="width:60%; text-align:left" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
-
     </td>
-    <td style="width:20%"></td>
-    <td style="width:10%"></td>
-    <td align="left" valign="top">
-
+    <td align="left" valign="top" style="width:30%">
         <div><b>Items Prepared/Picked By:</b></div>
         <div>
             <?php
@@ -172,12 +197,10 @@
             ?>
         </div>
         <br />
+        <div><b>Received in Good Order and Condition by:</b></div>
         <br />
-        <div>Received in Good Order and Condition by:</div>
-        <br />
-        <hr />
+        <hr style="width:100%; text-align:left" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
-
     </td>
 </table>
 </div>
