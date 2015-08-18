@@ -30,7 +30,7 @@ class DispatchingController extends \yii\web\Controller
             $full_dispatch_id = '00'.$dispatch_id;
             $dismodel = new DispatchModel;
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
-            $dispatch_model_2 = $dismodel->getDispatchItems($full_dispatch_id);
+            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($full_dispatch_id);
             $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
            
             return $this->render('dispatch-print-form', [
@@ -58,7 +58,7 @@ class DispatchingController extends \yii\web\Controller
                   'beforeRender' => function($mpdf, $data) {},
                   ]);
             $this->layout = '//print_dispatch';
-            $dispatch_model_2 = $dismodel->getDispatchItems($dispatch_id);
+            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($dispatch_id);
             return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
 
         }

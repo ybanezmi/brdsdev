@@ -59,6 +59,7 @@
     <div class="perfect-right_column">
         <p class="conditions">Weight - Volume</p>
         <div class="row_weight"><b>Total Weight:</b> <?= number_format((float)Yii::$app->request->post('total_weight'),3,'.',',') ?> <?= Yii::$app->request->post('total_unit'); ?></div>
+        <div class="row_weight"><b>Total Volume:</b> <?= number_format((float)Yii::$app->request->post('total_volume'),3,'.',',') ?> </div>
     </div>
 </div>
 <br />
@@ -96,7 +97,7 @@
     $i=1;
     $x=0;
     foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {    
-        $current = $dispatch_model_2_info->LFIMG;
+        $current = $dispatch_model_2_info->VISTM;
         $updated = Yii::$app->request->post('material_quantity')[$x];
 
         echo '<table class="item-list"><tr>';
@@ -108,9 +109,9 @@
             }
 
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="240">'.$dispatch_model_2_info->ARKTX.'</td>';
-            echo '<td>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
-            echo '<td width="90">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').'KG </td>';
+            echo '<td width="240">'.$dispatch_model_2_info->MAKTX.'</td>';
+            echo '<td>'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
+            echo '<td width="90">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
             echo '<td width="100">'.$dispatch_model_2_info->CHARG.'</td>';
             echo '<td width="100">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
         echo "</tr></table>";
@@ -140,7 +141,7 @@
     <tr>
     <td align="left" valign="top">
         <div><b>DR Created by</b></div>
-        <div>SAP SUPPORT</div>
+        <div><?= Yii::$app->request->post('prepared_by'); ?></div>
         <br />
         <br />
         <div>Checked By:</div>
@@ -154,7 +155,22 @@
     <td align="left" valign="top">
 
         <div><b>Items Prepared/Picked By:</b></div>
-        <div>BTCABARDO</div>
+        <div>
+            <?php
+            if(Yii::$app->request->post('picked_by')){
+
+            $picked_data = Yii::$app->request->post('picked_by');
+            $len = count($picked_data);
+
+                foreach($picked_data as $key => $value){
+                    echo $value;
+                    if ($key != $len - 1) {
+                        echo ", ";
+                    }
+                }
+            }
+            ?>
+        </div>
         <br />
         <br />
         <div>Received in Good Order and Condition by:</div>

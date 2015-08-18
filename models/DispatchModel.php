@@ -13,7 +13,7 @@ class DispatchModel extends \yii\db\ActiveRecord
         $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT $tn.LIKP.VBELN, $tn.LIKP.KUNNR,  $tn.LIKP.KUNAG, $tn.LIKP.BLDAT, $tn.LIKP.XABLN  
+            $stmt = "SELECT $tn.LIKP.VBELN, $tn.LIKP.KUNNR,  $tn.LIKP.KUNAG, $tn.LIKP.BLDAT, $tn.LIKP.XABLN, $tn.LIKP.ERNAM  
                      FROM $tn.LIKP  WHERE $tn.LIKP.VBELN ='".$dr."' AND $tn.LIKP.MANDT = $fnumb";
 
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
@@ -36,7 +36,28 @@ class DispatchModel extends \yii\db\ActiveRecord
         $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT $tn.LIPS.MATNR, $tn.LIPS.ARKTX, $tn.LIPS.CHARG, $tn.LIPS.UMVKZ, $tn.LIPS.GEWEI, $tn.LIPS.VRKME, $tn.LIPS.LFIMG, $tn.LIPS.VFDAT, $tn.LIPS.MEINS, $tn.LIPS.VOLUM FROM $tn.LIPS WHERE $tn.LIPS.VBELN ='".$dr."' AND $tn.LIPS.MANDT = $fnumb";
+            $stmt = "SELECT $tn.LIPS.MATNR, $tn.LIPS.ARKTX, $tn.LIPS.CHARG, $tn.LIPS.VFDAT, $tn.LIPS.UMVKZ, $tn.LIPS.VRKME, $tn.LIPS.LFIMG FROM $tn.LIPS WHERE $tn.LIPS.VBELN ='".$dr."' AND $tn.LIPS.MANDT = $fnumb";
+            if(($result = sqlsrv_query($conn,$stmt)) !== false){
+                $return_value = array();
+                while( $obj = sqlsrv_fetch_object( $result )) {
+                      array_push( $return_value, $obj);
+                }
+                return $return_value;
+            }
+        } else{
+            echo "Connection could not be established.<br />";
+            die( print_r( sqlsrv_errors(), true));
+        }
+    }
+
+     public function getConfirmDispatchItems($dr)
+    {
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
+
+        if( $conn ) {
+            $stmt = "SELECT $tn.LTAP.MATNR, $tn.LTAP.MAKTX, $tn.LTAP.CHARG, $tn.LTAP.VFDAT,  $tn.LTAP.VISTM, $tn.LTAP.ALTME, $tn.LTAP.UMREZ, $tn.LTAP.UMREN, $tn.LTAP.VOLUM, $tn.LTAP.QNAME FROM $tn.LTAP WHERE $tn.LTAP.VBELN ='".$dr."' AND $tn.LTAP.PQUIT = 'X'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                 $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {
