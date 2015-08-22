@@ -22,7 +22,7 @@ use app\models\DispatchModel;
     ]); ?>
     
     <div class="control-group">
-    <label class="control-label-f" for="document_number">Enter Document #:</label>
+    <div class="control-label-f dispatch_document_number_ie6" style="font-weight:bold; margin-bottom:10px;">Enter Document #:</div>
         <div class="f-full-size">
             <?= Html::textInput('document_number', '', ['id'  => 'document_number','class' => 'uborder help-85percent', 'maxlength'=>'8', 'onkeypress'=> 'return isNumberKey(event)' ]) ?>
         </div>

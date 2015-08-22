@@ -3,6 +3,14 @@ var site_url = "/";
 var decimalPlaces = 3;
 
 $(function () {
+    
+    $('.print-tag-form form').bind("keypress", function(e) {
+      if (e.keyCode == 13) {               
+        e.preventDefault();
+        return false;
+      }
+    });
+
 	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
        // $("button[type=\"submit\"]").attr("disabled","disabled");
     });
@@ -51,7 +59,7 @@ $(function () {
 });
 
 
-/*function emporary direct page*/
+/*function temporary direct page*/
 function goBack() {
     window.history.back();
 }
