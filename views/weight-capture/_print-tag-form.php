@@ -28,6 +28,7 @@ use kartik\widgets\DatePicker;
 			('customer', null, $customer_list,
 					   ['id'        => 'customer',
 						'class'	    => 'uborder',
+						'required'	    => 'required',
 						'label'	    => 'Customer',
 						'prompt'	=> '-- Select a customer --',
 						'onchange'	=> 'getMaterialList(getFieldValueById("customer"))']);
@@ -78,11 +79,12 @@ use kartik\widgets\DatePicker;
 		<label class="control-label" style="color:#000; font-size: 20px; padding-top: 15px;">GROSS Weight: </label>
 		<div class="control-field">
 			<?= Html::input('number', 'gross_weight', '', ['id'		 => 'gross_weight',
-			                                               'midn'     => 0,
+			                                               'min'     => 0,
+			                                               'required' => 'required',
 														   'step'	 => 'any',
 													  	   'class'	 => 'uborder help-32percent',
 													  	   'style'	 => 'height: 50px; text-align: right;',
-													  	   'onchange' => 'calculateNetWeight()']) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+													  	   'onchange' => 'calculateNOWorNEVER()']) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -97,10 +99,11 @@ use kartik\widgets\DatePicker;
 		<div class="control-field">
 			<?= Html::input('number', 'pallet_tare', '', ['id'			=> 'pallet_tare',
 			                                              'min'         => 0,
+			                                              'required'	=> 'required',
 														  'step'		=> 'any',
 														  'class'	 	=> 'uborder help-32percent',
 														  'style'		=> 'text-align: right;',
-														  'onchange'	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+														  'onchange'	=> 'calculateNOWorNEVER()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -111,7 +114,9 @@ use kartik\widgets\DatePicker;
 		<div class="control-field">
 			<?= Html::input('number', 'product_tare', '', [	'id'	    => 'product_tare',
 			                                                'min'       => 0,
-															'onchange'  => 'calculateTotalProductTare()',
+			                                                'required' 	=> 'required',
+			                                                'step'	 	=> 'any',
+															'onchange'  => 'calculateNOWorNEVER()',
 															'style'	    => 'text-align: right;',
 															'class'	    => 'uborder help-32percent',]) ?> <span style="font-weight: bold;" class="page-title-bt">EA</span>
 		</div>
@@ -124,10 +129,11 @@ use kartik\widgets\DatePicker;
 		<div class="control-field">
 			<?= Html::input('number', 'units', '', ['id'		=> 'units',
 			                                        'min'       => 0,
+			                                        'required' => 'required',
 													'step'	 	=> 'any',
 													'style'		=> 'text-align: right;',
 													'class'		=> 'uborder help-32percent',
-													'onchange' 	=> 'calculateTotalProductTare()']) ?>
+													'onchange' 	=> 'calculateNOWorNEVER()']) ?>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -142,7 +148,7 @@ use kartik\widgets\DatePicker;
 																  'readonly'	=> 'readonly',
 																  'class'	 	=> 'uborder help-32percent disabled',
 																  'style'	 	=> 'text-align: right;',
-																  'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+																  'onchange' 	=> 'calculateNOWorNEVER()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -153,12 +159,13 @@ use kartik\widgets\DatePicker;
 	<div class="control-group">
 		<label class="control-label">Pallet Packaging Tare: </label>
 		<div class="control-field">
-				<?= Html::input('number', 'pallet_packaging_tare', '', ['id'		=> 'pallet_packaging_tare',
+				<?= Html::input('number', 'pallet_packaging_tare', '0', ['id'		=> 'pallet_packaging_tare',
 																		'min'       => 0,
 																		'step'	 	=> 'any',
-																		'class'	 	=> 'uborder help-32percent',
+																		'class'	 	=> 'uborder help-32percent disabled',
 																		'style'	 	=> 'text-align: right;',
-																		'onchange' 	=> 'calculateNetWeight()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
+																		'readonly'	=> 'readonly',
+																		'onchange' 	=> 'calculateNOWorNEVER()',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>
 		</div>
 		<div class="col-lg-8"></div>
 	</div>
@@ -171,7 +178,6 @@ use kartik\widgets\DatePicker;
 		<div class="control-field">
 			<?= Html::textInput('net_weight', '0', ['id'		=> 'net_weight',
 													'min'       => 0,
-													'step'	 	=> 'any',
 												    'readonly' 	=> 'readonly',
 												    'class'	 	=> 'uborder disabled help-32percent',
 												    'style'	 	=> 'height: 50px; text-align: right;',]) ?> <span style="font-weight: bold;" class="page-title-bt">kg</span>

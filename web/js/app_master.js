@@ -765,6 +765,59 @@ function calculateTotalProductTare() {
 	}
 }
 
+function calculateNOWorNEVER(){
+    var grossWeight = 0;
+    var palletTare = 0;
+    var productTare = 0;
+    var units = 0;
+    var productTareTotal = 0;
+    var palletPackagingTare = 0;
+    var netWeight = 0;
+
+    if (!isNaN(parseFloat(getFieldValueById('gross_weight')))) {
+        grossWeight = parseFloat(getFieldValueById('gross_weight'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_tare')))) {
+        palletTare = parseFloat(getFieldValueById('pallet_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('product_tare')))) {
+        productTare = parseFloat(getFieldValueById('product_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('units')))) {
+        units = parseFloat(getFieldValueById('units'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('product_tare_total')))) {
+        productTareTotal = parseFloat(getFieldValueById('product_tare_total'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_packaging_tare')))) {
+        palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('net_weight')))) {
+        netWeight = parseFloat(getFieldValueById('net_weight'));
+    }
+
+    ptt = (parseFloat(productTare) * parseFloat(units)).toFixed(3);
+    ppt = (parseFloat(palletTare) + parseFloat(ptt)).toFixed(3);
+    nt  = (parseFloat(grossWeight) - parseFloat(ppt)).toFixed(3);
+
+    setFieldValueById('product_tare_total', ptt);
+    setFieldValueById('pallet_packaging_tare', ppt);
+
+    if(nt >= 0) {
+        setFieldValueById('net_weight', nt);
+    } else {
+        setFieldValueById('net_weight', '0');
+        alert('NET WEIGHT should not be negative value, NET WEIGHT has changed to ZERO!');
+    }
+
+}
+
 /* function to view transaction summary */
 function viewTransactionSummary(transaction_id) {
 	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
