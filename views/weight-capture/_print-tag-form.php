@@ -47,6 +47,7 @@ use kartik\widgets\DatePicker;
 					   ['id'        => 'material',
 						'class'	    => 'uborder',
 						'label'	    => 'Material',
+						'required'	    => 'required',
 						'prompt'	=> '-- Select a material --',
 						'onchange'	=> 'setFieldValueById("material_code", getFieldValueById("material"));
 										var e = document.getElementById("material");
