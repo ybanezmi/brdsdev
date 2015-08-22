@@ -25,6 +25,7 @@ session_cache_limiter('private_no_expire'); // works
 				<?= $this->render('_print-form.php', [
 					'dispatch_model_1' => $dispatch_model_1,
 					'dispatch_model_2' => $dispatch_model_2,
+					'full_dispatch_id' => $full_dispatch_id,
 					'sap_dispatch' => $sap_dispatch
 				]) ?>
 

@@ -36,6 +36,7 @@ class DispatchingController extends \yii\web\Controller
             return $this->render('dispatch-print-form', [
                 'dispatch_model_1' => $dispatch_model_1,
                 'dispatch_model_2' => $dispatch_model_2,
+                'full_dispatch_id' => $full_dispatch_id,
                 'sap_dispatch' => $sap_dispatch
             ]);
         }

@@ -104,11 +104,11 @@
     <tr>
         <td class="thead" width="30"><b>Item</b></td>
         <td class="thead" width="100"><b>Material No.</b></td>
-        <td class="thead" width="260"><b>Material Description</b></td>
+        <td class="thead" width="255"><b>Material Description</b></td>
         <td class="thead" align="right"><b>Quantity</b></td>
         <td class="thead" width="110" align="right"><b>Weight</b></td>
         <td class="thead" width="80" align="right"><b>Batch</b></td>
-        <td class="thead" width="90" align="right"><b>Expiry</b></td>
+        <td class="thead" width="80" align="right"><b>Expiry</b></td>
     </tr>
 </table>
     <?php
@@ -124,17 +124,17 @@
             if($current == $updated){
                 echo '<td width="30">'.$i.'</td>';  
             } else {
-                 echo '<td width="30"><u>'.$i.'</u></td>'; 
+                 echo '<td width="30"><b><u>'.$i.'</u></b></td>'; 
             }
 
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="260">'.$dispatch_model_2_info->MAKTX.'</td>';
+            echo '<td width="255">'.$dispatch_model_2_info->MAKTX.'</td>';
             echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
             echo '<td width="110" align="right">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
             echo '<td width="80" align="right">'.$dispatch_model_2_info->CHARG.'</td>';
-            echo '<td width="90" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
+            echo '<td width="80" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
         echo "</tr></table>";
-        if( $i % 25 == 0 ){
+        if( $i % 22 == 0 ){
             echo '<hr />';
             echo '<div class="breakNow"></div>';
 
@@ -152,11 +152,11 @@
             echo '<tr>';
                 echo '<td class="thead" width="30"><b>Item</b></td>';
                 echo '<td class="thead" width="100"><b>Material No.</b></td>';
-                echo '<td class="thead" width="260"><b>Material Description</b></td>';
+                echo '<td class="thead" width="255"><b>Material Description</b></td>';
                 echo '<td class="thead" align="right"><b>Quantity</b></td>';
                 echo '<td class="thead" width="110" align="right"><b>Weight</b></td>';
                 echo '<td class="thead" width="80" align="right"><b>Batch</b></td>';
-                echo '<td class="thead" width="90" align="right"><b>Expiry</b></td>';
+                echo '<td class="thead" width="80" align="right"><b>Expiry</b></td>';
             echo '</tr>';
             echo '</table>';
             } 

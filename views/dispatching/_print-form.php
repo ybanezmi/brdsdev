@@ -12,9 +12,8 @@ use app\models\DispatchModel;
 ?>
 
 <div class="dispatch-form">
-    
-    <?php if(empty($dispatch_model_1) && empty($dispatch_model_2)) { 
-        echo '<b class="emptyr">Dispatch record is empty</b>'; } 
+    <?php if(empty($dispatch_model_1) || empty($dispatch_model_2)) { 
+        echo '<b class="emptyr">The Delivery '.$full_dispatch_id.' is empty</b>'; } 
     else { 
         $dismodel = new DispatchModel; 
     ?>
