@@ -42,10 +42,15 @@ use app\models\DispatchModel;
 
 
 <script type="text/javascript">
+    document.getElementById("cancel_button_dispatch").addEventListener("click", function(e) {
+        e.preventDefault();
+        window.location.assign(window.location.origin+"/brdsdev/web/")
+    });
+
     function valDispatchform()
     {
         var pname=encodeURIComponent(document.getElementById("document_number").value);
-        if (pname == '')
+        if (document.dispatchFORM.document_number.value == "")
         { alert('Please enter document number');
             return false;}
         else if (pname.length != 8)
@@ -53,6 +58,7 @@ use app\models\DispatchModel;
 
         return true;
     }
+    
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : evt.keyCode
         if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -60,63 +66,7 @@ use app\models\DispatchModel;
         return true;
     }
 
-    function clearvalue(){
-        var elements = document.getElementsByTagName("input");
-        for (var ii=0; ii < elements.length; ii++) {
-          if (elements[ii].type == "text") {
-            elements[ii].value = "0";
-          }
-        }
-    }
 
-    function func_totalcnt(){
-        return document.getElementById("total_inc").value;
-    }
-
-
-    function updatetotalWeight(ish,umvkz,qt,qt_1,qt_2,cnt){
-        var total_inc = func_totalcnt();
-        var total_row = 0;
-        var umvkzElem = "umvkz_"+cnt;
-        var wtElem = "weight_"+cnt;
-        var hidwtElem = "temp_weight_"+cnt;
-        var umvkzVal = document.getElementById(umvkzElem).innerHTML;
-
-
-        document.getElementById(wtElem).innerHTML = parseFloat(ish) * parseFloat(umvkzVal);
-        document.getElementById(hidwtElem).value = parseFloat(ish) * parseFloat(umvkzVal);
-
-
-        for (var i = 1; i <= total_inc; i++) {
-             var qat = document.getElementById("quantity_"+i+"").value;
-             var wt = document.getElementById("weight_"+i+"").innerHTML;
-            
-             total_row = parseFloat(total_row) + parseFloat(wt);
-        }
-
-        document.getElementById("total_weight").value = parseFloat(total_row);
-
-        //use this if weight has limit
-        /*
-        if(total_row <= 1000) {
-            document.getElementById("total_weight").value = total_row;
-        }else {
-            alert('total weight limit: 1000kg');
-            document.getElementById(qt).value = document.getElementById(qt_1).innerHTML;
-        }*/
-    }
-    function closestById(el, id) {
-        while (el.id != id) {
-            el = el.parentNode;
-            if (!el) {
-                return null;
-            }
-        }
-        return el;
-    }
-    document.getElementById("cancel_button_dispatch").addEventListener("click", function(e) {
-        e.preventDefault();
-        window.location.assign(window.location.origin+"/brdsdev/web/")
-    });
+    
 
 </script>

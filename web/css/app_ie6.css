@@ -642,3 +642,5 @@ input.uborder, textarea.uborder, select.uborder {
 .control-group label{
     width: 20px!important;
 }
+
+/*dispatch items ie6*/

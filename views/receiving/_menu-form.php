@@ -36,7 +36,7 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_model, 'id')->textInput(['disabled' => 'disabled',
                                                                   'class'      => 'uborder disabled help-40percent'])->label('BRDS ID #') ?>
 
-        <?= $form->field($transaction_model, 'inbound_no')->textInput(['disabled' => 'disabled',
+        <?= $form->field($transaction_model, 'sap_no')->textInput(['disabled' => 'disabled',
                                                                          'class'      => 'uborder disabled help-40percent'])->label('SAP #') ?>
 
         <?= $form->field($transaction_model, 'plant_location')->textInput(['disabled' => 'disabled',

@@ -153,7 +153,7 @@ class ReceivingController extends Controller
                     // set defaults
                     // @TODO: transfer updating of status/created/updated details to model
                     // set status, created and updated details
-                    $model->status          = Yii::$app->params['STATUS_PROCESS'];
+                    $model->inbound_status          = Yii::$app->params['STATUS_PROCESS'];
                     $model->creator_id      = Yii::$app->user->id;
                     $model->created_date    = $date;
                     $model->updater_id      = Yii::$app->user->id;
@@ -167,19 +167,23 @@ class ReceivingController extends Controller
                     $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
                     $model->plant_location = $transactionModel->plant_location;
                     $model->storage_location = $transactionModel->storage_location;
-                    $model->packaging_code = $transactionModel->packaging_code;
+                    $model->packaging_code = $transactionDetailsModel->packaging_code;
                     $model->pallet_weight = $transactionDetailsModel->pallet_weight;
                     $model->transfer_order = $createTO['export']['transfer_order'];
-                    $model->storage_type = $createTO['export']['storage_type'];
-                    $model->storage_section = $createTO['export']['storage_section'];
-                    $model->storage_bin = $createTO['export']['storage_bin'];
-                    $model->inbound_status = $createTO['export']['storage_position'];
-                    if ($model->save) {
+                    //$model->storage_type = $createTO['export']['storage_type'];
+                    //$model->storage_section = $createTO['export']['storage_section'];
+                    //$model->storage_bin = $createTO['export']['storage_bin'];
+                    //$model->inbound_status = $createTO['export']['storage_position'];
+                    if ($model->save()) {
                         $palletStatus['create_to_success'] = true;
                         $palletStatus['to_number'] = $createTO['export']['transfer_order'];
                     } else {
                         $palletStatus['create_to_error'] = true;
-                        $palletStatus['to_error'] = $createTO['error'];
+                        if (isset($createTO['error'])) {
+                            $palletStatus['to_error'] = $createTO['error'];
+                        } else {
+                            $palletStatus['to_error'] = $createTO['export']['transfer_order'];
+                        }
                     }
                 }
             } else {
@@ -680,6 +684,7 @@ class ReceivingController extends Controller
 		$this->initUser();
 
 		$success = false;
+        $error = null;
 
 		// Get customer list
 		$customer_model = new MstCustomer();
@@ -710,6 +715,7 @@ class ReceivingController extends Controller
 			'transaction_list'	=> $transaction_list,
 			'pallet_no'         => $pallet_no,
 			'success'			=> $success,
+            'error'             => $error,
 		]);
 	}
 
@@ -898,8 +904,6 @@ class ReceivingController extends Controller
         return $response;
     }
 
-    
-
     public function createTO($palletNo) {
         $params[SapConst::RFC_FUNCTION] = SapConst::L_TO_CREATE_MOVE_SU;
 
@@ -907,14 +911,6 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::I_LENUM] = str_pad($palletNo, 20, '0', STR_PAD_LEFT);
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-
-        echo "<pre /> params";
-        print_r($params);
-
-        echo "<pre /> response";
-        print_r($response);
-
-        die;
 
         return $response;
     }
@@ -924,15 +920,9 @@ class ReceivingController extends Controller
 
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::VBELN] = $inboundNo;
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('m/d/Y');
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd');
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-
-        echo "<pre /> params";
-        print_r($params);
-
-        echo "<pre /> response";
-        print_r($response);
 
         return $response;
     }

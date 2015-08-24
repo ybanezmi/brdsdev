@@ -166,11 +166,11 @@ use app\models\DispatchModel;
                         
                         if($dispatch_model_2_info->ALTME == 'KG'){
                          
-                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-60percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
+                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
                         onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->VISTM."\" name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
                                        
                         }  else {                     
-                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-60percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
+                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
                         onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".number_format($dispatch_model_2_info->VISTM,0,'.',',')."\" name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
                         }    
                             echo $dispatch_model_2_info->MAKTX; //$dispatch_model_2_info->MATNR;
