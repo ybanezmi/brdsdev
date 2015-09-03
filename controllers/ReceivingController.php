@@ -78,11 +78,11 @@ class ReceivingController extends Controller
 		$account_model->save();
 
 		// get access of users
-		$account_count = Yii::$app->modelFinder->getAccountList(null, ['access_token' => 'receiving'], 'id');
+		// $account_count = Yii::$app->modelFinder->getAccountList(null, ['access_token' => 'receiving'], 'id');
 		$isAccessReceiving = false;
-    	if ($account_count > 0) {
-    		$isAccessReceiving = true;
-    	}
+    	// if ($account_count > 0) {
+    		// $isAccessReceiving = true;
+    	// }
 
 		// active pallets
 		$params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
@@ -565,7 +565,7 @@ class ReceivingController extends Controller
 				    $sapNoFlag = false;
                     $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
-                    
+
                     if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
                         $sapNoFlag = true;
                         $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
