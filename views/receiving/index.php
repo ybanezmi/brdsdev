@@ -117,7 +117,7 @@ $this->title = 'Receiving';
                     ],
                 ]);
 
-                echo 'Failed to create TO number ' . $palletStatus['to_error'];
+                echo 'Failed to create TO number. ' . $palletStatus['to_error'];
 
                 Alert::end();
             }
