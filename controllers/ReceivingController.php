@@ -151,7 +151,7 @@ class ReceivingController extends Controller
         if (null !== Yii::$app->request->post('create-to')) {
             if (null !== Yii::$app->request->post('create_to_pallet_no') && "" !== Yii::$app->request->post('create_to_pallet_no')) {
                 $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                            ['pallet_no' => Yii::$app->request->post('create_to_pallet_no'),]);
+                                                                                            ['pallet_no' => Yii::$app->request->post('create_to_pallet_no')]);
                 if (!$transactionDetailsModel) {
                     $palletStatus['create_to_error'] = true;
                     $palletStatus['to_error'] = 'Pallet no. ' . Yii::$app->request->post('create_to_pallet_no') . ' does not exist.';
@@ -177,7 +177,7 @@ class ReceivingController extends Controller
                             $model->updater_id      = Yii::$app->user->id;
                             $model->updated_date    = $date;
 
-                            $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel->transaction_id);
+                            $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]->transaction_id);
                             $model->transaction_id = $transactionModel->id;
                             $model->customer_code = $transactionModel->customer_code;
                             $model->inbound_no = $transactionModel->sap_no;
