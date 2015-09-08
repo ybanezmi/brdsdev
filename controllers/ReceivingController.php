@@ -54,16 +54,23 @@ class ReceivingController extends Controller
 
 	public function initUser()
 	{
+		// set access token for user
+		$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
+		$account_model->access_token = 'receiving';
+		$account_model->save();
+		
 		// get access of users
+		/*
 		$account_count = Yii::$app->modelFinder->getAccountList(null, ['access_token' => 'receiving'], 'id');
-    	if ($account_count > 0) {
-    		$this->redirect(['index']);
-    	} else {
-    		// set access token for user
-	    	$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
-			$account_model->access_token = 'receiving';
-			$account_model->save();
-    	}
+				if ($account_count > 0) {
+					$this->redirect(['index']);
+				} else {
+					// set access token for user
+					$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
+					$account_model->access_token = 'receiving';
+					$account_model->save();
+				}
+		 */
 	}
 
     /**
