@@ -152,7 +152,7 @@ class ReceivingController extends Controller
             if (null !== Yii::$app->request->post('create_to_pallet_no') && "" !== Yii::$app->request->post('create_to_pallet_no')) {
                 $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                             ['pallet_no' => Yii::$app->request->post('create_to_pallet_no')]);
-                if (!$transactionDetailsModel) {
+                if (!$transactionDetailsModel || $transactionDetailsModel == null || count($transactionDetailsModel) == 0) {
                     $palletStatus['create_to_error'] = true;
                     $palletStatus['to_error'] = 'Pallet no. ' . Yii::$app->request->post('create_to_pallet_no') . ' does not exist.';
                 } else {
