@@ -22,13 +22,13 @@ AppAsset::register($this);
 	?>
 
 	<meta charset="<?= Yii::$app->charset ?>"/>
-	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/js/vendor/html5.js"></script><![endif]-->
     <?= Html::csrfMetaTags() ?>
 	<title><?php echo Html::encode($this->title); ?></title>
-	<link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>/images/favicon.ico" type="image/x-icon">
 	<?php $this->head() ?>
 	    <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link href='<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>/css/font.css' rel='stylesheet' type='text/css'>
 	<!--[if lt IE 7]>
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie6.css">
 	<![endif]-->
@@ -50,6 +50,9 @@ AppAsset::register($this);
 		<div class="copy-logo">
 			Copyright &copy; Manten Kaitou 2014. All rights reserve.
 		</div>
+		<!--[if IE 6]>
+		<script src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/js/vendor/jquery-latest.js"></script>
+		<![endif]-->
 		<?php include 'popupbox.php'; ?>
 	<?php $this->endBody() ?>
 </body>

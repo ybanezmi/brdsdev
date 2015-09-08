@@ -36,7 +36,7 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_model, 'id')->textInput(['disabled' => 'disabled',
                                                                   'class'      => 'uborder disabled help-40percent'])->label('BRDS ID #') ?>
 
-        <?= $form->field($transaction_model, 'inbound_no')->textInput(['disabled' => 'disabled',
+        <?= $form->field($transaction_model, 'sap_no')->textInput(['disabled' => 'disabled',
                                                                          'class'      => 'uborder disabled help-40percent'])->label('SAP #') ?>
 
         <?= $form->field($transaction_model, 'plant_location')->textInput(['disabled' => 'disabled',
@@ -222,7 +222,8 @@ use yii\bootstrap\Modal;
             <label class="control-label" for="close-pallet-no">Enter Pallet #:</label>
             <div class="f-inline-size">
                 <?= Html::textInput('close_pallet_no', '', ['id'         => 'close-pallet-no',
-                                                                 'class'          => 'uborder help-40percent']) ?>
+                                                                 'class'          => 'uborder help-40percent',
+                                                                 'maxlength' => 10,]) ?>
             </div>
         </div>
 
@@ -232,7 +233,6 @@ use yii\bootstrap\Modal;
                                     'onclick'     => 'hideHTMLById("close-pallet-panel");
                                                       showHTMLById("trx-details-panel");']) ?>
     </div>
-
 
     <div class="two-column-button pdt-two-column-button">
     <div class="submit-button ie6-submit-button">

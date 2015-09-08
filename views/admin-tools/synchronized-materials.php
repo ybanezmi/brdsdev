@@ -26,6 +26,9 @@ $this->title = 'Synch Materials';
 		padding-left: 20px;
  		padding-top: 10px;
 	}
+	#material-list_id{
+		display: none;
+	}
 </style>
 
 <div id="main-content">
@@ -55,29 +58,43 @@ $this->title = 'Synch Materials';
 			['class'	=> 'uborder help-80percent',
 			'prompt'	=> '-- Select a customer --',
 			'onchange'	=> 'getMateriaList(getFieldValueById("mstcustomer-name"));
-			hideHTMLById("material-details");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
+			hideHTMLById("material-list_id"); hideHTMLById("list-materials");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
 			?>
 
-			<!-- 
-			material-list_id
-			onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;"
-			-->
-			
-
-		    
-
+			<select id="material-list_id"><option></option></select>
+		
 			<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
 			<div class="submit-button ie6-submit-button">
 			<button class="btn btn-primary" style="width:35%;" id="syncAllMaterials">Sync All Materials</button>
-			<button class="btn btn-primary" style="width:35%;" id="view_details">View Details</button>
+			<button class="btn btn-primary" style="width:35%;" id="view_materials" name="view_materials">View Details</button>
 			<button class="btn btn-primary" style="width:35%;" id="material_only">Material Only</button>
-			<button class="btn btn-primary back cancel-button" style="width:35%;" name="back">Back To Main</button>
+			<button class="btn btn-primary" style="width:35%;" id="back_to_sync">Back To Main</button>
 			</div>
+			</div>
+
+			<div id="list-materials">
+
 			</div>
     <?php ActiveForm::end(); ?>
 
 	<script type="text/javascript">
 	
+
+	function view_materials() {
+		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
+		var pmat=encodeURIComponent(document.getElementById("material-list_id").value);
+		var url = window.location.origin+'/brdsdev/web/admin-tools/get-material-by?id='+pname;
+		var method = 'GET';
+		var params = '';
+		var container_id = 'list-materials' ;
+		var loading_text = 'Processing...' ;
+		if(pname == ''){
+			alert('Please select materials')
+		}else{
+			ajax_view (url, method, params, container_id, loading_text) ;
+		}
+	}
+
 	function syncAllMaterials() {
 		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
 		var url = brdsapi_site_url+"/brdsapi/materials_customer/"+pname+"/bigblue";
@@ -93,14 +110,14 @@ $this->title = 'Synch Materials';
 	}
 
 	function syncMaterialOnly() {
-		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
-		var url = brdsapi_site_url+"/brdsapi/materials_customer/"+pname+"/bigblue";
+		var pname=encodeURIComponent(document.getElementById("material-list_id").value);
+		var url = brdsapi_site_url+"/brdsapi/materials_only/"+pname+"/bigblue";
 		var method = 'GET';
 		var params = '';
 		var container_id = 'sync-status' ;
 		var loading_text = 'processing' ;
 		if(pname == ''){
-			alert('Please select packaging materials')
+			alert('Please select materials')
 		}else{
 			ajax (url, method, params, container_id, loading_text) ;
 		}
@@ -113,15 +130,18 @@ $this->title = 'Synch Materials';
 
 	document.getElementById("material_only").addEventListener("click", function(e) {
 		e.preventDefault();
-		alert('under construction');
-		//syncMaterialOnly();
+		syncMaterialOnly();
 	});
 
-	// document.getElementById("view_details").addEventListener("click", function(e) {
-	// 	e.preventDefault();
-	// 	alert('under construction');
-	// 	//syncMaterialOnly();
-	// });
+	document.getElementById("view_materials").addEventListener("click", function(e) {
+		e.preventDefault();
+		view_materials();
+	});
+
+	document.getElementById("back_to_sync").addEventListener("click", function(e) {
+		e.preventDefault();
+		window.location.assign(window.location.origin+"/brdsdev/web/admin-tools/synchronized-database")
+	});
 
 	</script>
 				

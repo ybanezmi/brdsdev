@@ -3,6 +3,14 @@ var site_url = "/";
 var decimalPlaces = 3;
 
 $(function () {
+    
+    $('.print-tag-form form').bind("keypress", function(e) {
+      if (e.keyCode == 13) {               
+        e.preventDefault();
+        return false;
+      }
+    });
+
 	 $("form#w0").on("beforeSubmit", function (event, messages, deferreds, attribute) {
        // $("button[type=\"submit\"]").attr("disabled","disabled");
     });
@@ -51,7 +59,7 @@ $(function () {
 });
 
 
-/*function emporary direct page*/
+/*function temporary direct page*/
 function goBack() {
     window.history.back();
 }
@@ -543,33 +551,58 @@ function getTransactionList(code){
 	});
 }
 
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return true;
+    }
+    return false;
+}
+
+function removeOptions(selectbox)
+{
+    var i;
+    for(i=selectbox.options.length-1;i>=0;i--)
+    {
+        selectbox.remove(i);
+    }
+}
+
+
 /* function to retrieve transaction list */
 function getMateriaList(code){
     load('get-material-list?id=' + code,function(xhr) {
-      
-        // document.getElementById('material-list_id').innerHTML='';
+      if (null != xhr.responseText && xhr.responseText.length > 0) {
+        var jsonData = JSON.parse(xhr.responseText);
+        var x  = document.getElementById('material-list_id');
+        var promptOption = document.createElement('option');
+        removeOptions(x);
 
-        // var jsonData = JSON.parse(xhr.responseText);
-        // var x  = document.getElementById('material-list_id');
-        // //setFieldValueByName('transaction-list', ['']);
-
-        // // set prompt value
-        // var promptOption = document.createElement('option');
-        // promptOption.text = "-- Select a transaction --";
-        // x.add(promptOption);
-
-        // if(null != jsonData){
-        //     for(var i = 0; i < jsonData.length; i++){
-        //         var option  = document.createElement('option');
-        //         option.text = jsonData[i];
-        //         x.add(option, x[i+1]);
-        //     }
-        // }
+        if(isEmpty(jsonData)){
+            for(var i = 0; i < jsonData.length; i++){
+                var option  = document.createElement('option');
+                option.value = jsonData[i].item_code;
+                option.text = jsonData[i].description;
+                x.add(option, x[i+1]);
+            }
+            x.style.display = "block";
+            promptOption.text = "-- Select a materials --";
+            promptOption.value = "";
+            promptOption.selected = true;
+            x.add(promptOption, x[0]);
+        } else {
+            x.style.display = "none";
+        } 
+    } else {
+        document.getElementById.style.display = "none";
+    }
 
 
 
     });
 }
+
+/*determine if obj is empty*/
 
 /* function to retrieve transaction */
 function getTransaction(id) {
@@ -732,6 +765,59 @@ function calculateTotalProductTare() {
 	}
 }
 
+function calculateNOWorNEVER(){
+    var grossWeight = 0;
+    var palletTare = 0;
+    var productTare = 0;
+    var units = 0;
+    var productTareTotal = 0;
+    var palletPackagingTare = 0;
+    var netWeight = 0;
+
+    if (!isNaN(parseFloat(getFieldValueById('gross_weight')))) {
+        grossWeight = parseFloat(getFieldValueById('gross_weight'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_tare')))) {
+        palletTare = parseFloat(getFieldValueById('pallet_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('product_tare')))) {
+        productTare = parseFloat(getFieldValueById('product_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('units')))) {
+        units = parseFloat(getFieldValueById('units'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('product_tare_total')))) {
+        productTareTotal = parseFloat(getFieldValueById('product_tare_total'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('pallet_packaging_tare')))) {
+        palletPackagingTare = parseFloat(getFieldValueById('pallet_packaging_tare'));
+    }
+
+    if (!isNaN(parseFloat(getFieldValueById('net_weight')))) {
+        netWeight = parseFloat(getFieldValueById('net_weight'));
+    }
+
+    ptt = (parseFloat(productTare) * parseFloat(units)).toFixed(3);
+    ppt = (parseFloat(palletTare) + parseFloat(ptt)).toFixed(3);
+    nt  = (parseFloat(grossWeight) - parseFloat(ppt)).toFixed(3);
+
+    setFieldValueById('product_tare_total', ptt);
+    setFieldValueById('pallet_packaging_tare', ppt);
+
+    if(nt >= 0) {
+        setFieldValueById('net_weight', nt);
+    } else {
+        setFieldValueById('net_weight', '0');
+        alert('NET WEIGHT should not be negative value, NET WEIGHT has changed to ZERO!');
+    }
+
+}
+
 /* function to view transaction summary */
 function viewTransactionSummary(transaction_id) {
 	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
@@ -755,6 +841,7 @@ function viewPalletDetails(transaction_id, pallet_no) {
 }
 
 /* synchronize js*/
+var brdsdev_site_url = "http://192.168.1.121";
 var brdsapi_site_url = "http://192.168.1.122";
 
 function ajax (url, method, params, container_id, loading_text) {
@@ -781,6 +868,33 @@ function ajax (url, method, params, container_id, loading_text) {
 	xhr.open(method, url, true);
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	xhr.send(params);
+}
+
+function ajax_view (url, method, params, container_id, loading_text) {
+    try { // For: chrome, firefox, safari, opera, yandex, ...
+        xhr = new XMLHttpRequest();
+    } catch(e) {
+        try{ // for: IE6+
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch(e1) { // if not supported or disabled
+            alert("Not supported!");
+        }
+    }
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4) {
+            document.getElementById(container_id).style.display = 'block';
+            document.getElementById(container_id).innerHTML = xhr.responseText;
+        } else {
+
+            document.getElementById(container_id).style.display = 'block';
+            document.getElementById(container_id).innerHTML = loading_text;
+
+
+        }
+    }
+    xhr.open(method, url, true);
+    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    xhr.send(params);
 }
 
 function toggleSync() {

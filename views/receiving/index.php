@@ -105,7 +105,7 @@ $this->title = 'Receiving';
                 ]);
 
                 echo 'Pallet #' . Yii::$app->request->post("create_to_pallet_no") . ' successfully created with Transfer Order.';
-                echo '<br />T.O.: ' . $palletStatus['TONumber'];
+                echo '<br />T.O. Number: ' . $palletStatus['to_number'];
 
                 Alert::end();
             }
@@ -117,7 +117,7 @@ $this->title = 'Receiving';
                     ],
                 ]);
 
-                echo 'Failed to reject pallet. ' . $palletStatus['to_error'];
+                echo 'Failed to create TO number. ' . $palletStatus['to_error'];
 
                 Alert::end();
             }

@@ -42,8 +42,8 @@ class TrxHandlingUnit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no', 'plant_location', 'storage_location', 'packaging_code', 'pallet_weight', 'transfer_order',
-              'storage_type', 'storage_section', 'storage_bin', 'inbound_status', 'creator_id', 'updater_id'], 'required'],
+            [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no', 'plant_location', 'storage_location', 'packaging_code', 'pallet_weight', 'transfer_order', 
+            'inbound_status', 'creator_id', 'updater_id'], 'required'],
             [['pallet_weight'], 'number'],
             [['creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],

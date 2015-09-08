@@ -27,14 +27,13 @@ AppAsset::register($this);
 	
 	?>	
     <meta charset="<?= Yii::$app->charset ?>"/>
-	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/js/vendor/html5.js"></script><![endif]-->
 	
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
     
-
     <?php $this->head() ?>
     <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
     <link href='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/font.css' rel='stylesheet' type='text/css'>
@@ -52,6 +51,7 @@ AppAsset::register($this);
 	
 </head>
 <body>
+
 <div class="wrap-page">
 <div id="sync-bg"></div>
 <?php $this->beginBody() ?>
@@ -81,40 +81,36 @@ AppAsset::register($this);
 					} else {
 						include 'navigation.php';
 					}
-		            
-					/*
-					NavBar::begin([
-															'brandLabel' => '',
-															'brandUrl' => '',
-															'options' => [
-																'class' => 'header',
-															],
-														]);
-														echo Nav::widget([
-															'encodeLabels' => false,
-															'options' => ['class' => 'header-nav'],
-															'items' => [
-																['label' => '<i class="fa fa-download"></i> Receiving', 'url' => ['/site/index']],
-																['label' => '<i class="fa fa-share-square-o"></i> Dispatching', 'url' => ['/site/about']],
-																['label' => '<i class="fa fa-anchor"></i> Weight Capture', 'url' => ['/site/contact']],
-																['label' => '<i class="fa fa-cogs"></i> Admin Tools', 'url' => ['/site/contact']],
-																Yii::$app->user->isGuest ?
-																	['label' => 'Login', 'url' => ['/site/login']] :
-																	['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-																		'url' => ['/site/logout'],
-																		'linkOptions' => ['data-method' => 'post']],
-															],
-														]);
-														NavBar::end();*/
-					
-					
+/* NavBar::begin([
+	'brandLabel' => '',
+	'brandUrl' => '',
+	'options' => [
+		'class' => 'header',
+	],
+]);
+echo Nav::widget([
+	'encodeLabels' => false,
+	'options' => ['class' => 'header-nav'],
+	'items' => [
+		['label' => '<i class="fa fa-download"></i> Receiving', 'url' => ['/site/index']],
+		['label' => '<i class="fa fa-share-square-o"></i> Dispatching', 'url' => ['/site/about']],
+		['label' => '<i class="fa fa-anchor"></i> Weight Capture', 'url' => ['/site/contact']],
+		['label' => '<i class="fa fa-cogs"></i> Admin Tools', 'url' => ['/site/contact']],
+		Yii::$app->user->isGuest ?
+			['label' => 'Login', 'url' => ['/site/login']] :
+			['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+				'url' => ['/site/logout'],
+				'linkOptions' => ['data-method' => 'post']],
+	],
+]);
+NavBar::end();*/
 		        ?>
 			</header>
 	        
 			
 		<section id="greetings">
 			<div class="g-body">
-				<a onclick="_togglehidden2('dropdownie6')" href="profile.php" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><?php echo Yii::$app->user->identity->first_name . ' ' . Yii::$app->user->identity->last_name ?> @ 
+				<a onclick="_togglehidden2('dropdownie6')" href="javascript:;" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><span class="head-firstname"><?php echo Yii::$app->user->identity->first_name . '</span> ' . Yii::$app->user->identity->last_name ?> @ 
 					<?php echo Yii::$app->user->identity->assignment ?></a>
 				
 				<ul class="dropdown-menu omenu" role="menu" aria-labelledby="dLabel" id="dropdownie6">
@@ -137,7 +133,9 @@ AppAsset::register($this);
 <script type="text/javascript">
 	var base_url = "<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>";
 </script>
-
+<!--[if IE 6]>
+	<script src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/js/vendor/jquery-latest.js"></script>
+<![endif]-->
 
     <?php include 'footer.php'; ?>
     

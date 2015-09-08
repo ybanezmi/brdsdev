@@ -24,4 +24,11 @@ $this->title = $name;
         Please contact us if you think this is a server error. Thank you.
     </p>
 
+    <p><a href="javascript:;" onclick="http://192.168.1.122/brdsdev/web">BACK TO HOMEPAGE</a></p>
+
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </div>

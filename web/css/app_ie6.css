@@ -317,13 +317,13 @@ footer  div {
     text-align: center;
 }
 
-
 .content-logo {
-    padding: 5px;
+    padding: 5px 0;
     float: left;
+    margin: 10px 0 20px;
 }
 
-.content-logo-img{
+.content-logo img{
     width: 200px;
     height:70px;
 }
@@ -549,6 +549,10 @@ input.uborder, textarea.uborder, select.uborder {
 
 }
 
+.g-body a{
+    font-size: 11px;
+}
+
 #greetings .g-body ul#dropdownie6 li a:hover{
     color:#333!important;
 }
@@ -614,6 +618,29 @@ input.uborder, textarea.uborder, select.uborder {
     color: #fff;
 }
 
-.nav {
-    
+.weight-nav{
+    display: none;
 }
+
+.admin-nav{
+    display: none;
+}
+
+.dropdown-toggle{
+    font-size: 11px!important;
+}
+
+.head-firstname{
+    display: none;
+}
+
+.dispatch_document_number_ie6{
+    font-size:11px!important;
+    width: 100%!important;
+}
+
+.control-group label{
+    width: 20px!important;
+}
+
+/*dispatch items ie6*/

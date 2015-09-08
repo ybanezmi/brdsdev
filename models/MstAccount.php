@@ -117,6 +117,29 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
     /**
      * @inheritdoc
      */
+    public static function updateByUser($id, $params = array())
+    {
+        // print_r($params);
+        // exit;
+
+        $account = MstAccount::find()
+                    ->where(['id'    => $params['MstAccount']['id'],
+                            'status' => Yii::$app->params['STATUS_ACTIVE']])
+                    ->one();
+
+        $account->id = $params['MstAccount']['id'];
+        $account->first_name = $params['MstAccount']['first_name'];
+        $account->last_name = $params['MstAccount']['last_name'];
+        $account->contact_no = $params['MstAccount']['contact_no'];
+        $account->account_type = $params['MstAccount']['account_type'];
+        if($account->save())
+            return true;
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
     	$account = MstAccount::find()

@@ -23,7 +23,7 @@ class SapConst
     // functions
     const RFC_FUNCTION = 'RFC_FUNCTION';
     const ZBAPI_RECEIVING = 'ZBAPI_RECEIVING';
-    const ZBAPI_CTO_PPTAG = 'ZBAPI_CTO_PPTAG';
+    const L_TO_CREATE_MOVE_SU = 'L_TO_CREATE_MOVE_SU';
     const ZBAPI_POST_GR = 'ZBAPI_POST_GR';
 
     // RS_INPUT
@@ -77,11 +77,27 @@ class SapConst
     const ET_PALLETS = 'ET_PALLETS';
     const ET_PALLETS_W_TO = 'ET_PALLETS_W_TO';
 
+    // Create TO
+    // pallet number
+    const I_LENUM = 'I_LENUM';
+
     // export
     const VBELN = 'VBELN';
     const OBJECT_LOCKED = 'OBJECT_LOCKED';
     const NOT_COMPATIBLE = 'NOT_COMPATIBLE';
     const VOLUME_CAP_ERROR = 'VOLUME_CAP_ERROR';
     const OTHER_ERROR = 'OTHER_ERROR';
+
+    // Dispatch function
+    const ZRFC_READTEXT = 'ZRFC_READTEXT';
+
+    // Dispatch Import
+    const DIS_VBELN = 'VBELN';
+
+    // Dispatch Export
+    const HEADER = 'HEADER';
+
+    // Dispatch table
+    const LINES = 'LINES';
 
 }

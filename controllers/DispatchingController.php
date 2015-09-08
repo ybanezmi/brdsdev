@@ -9,99 +9,78 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;;
 use kartik\mpdf\Pdf;
-
 use app\models\DispatchModel;
+use app\constants\SapConst;
+use linslin\yii2\curl;
 
 class DispatchingController extends \yii\web\Controller
 {
+     public function actionIndex(){
+      return $this->render('index');
+    }
 
-    public function actionIndex()
-    {
+    public function actionPostDispatch(){
         $dispatch_model_1 = array();
         $dispatch_model_2 = array();
+        $dispatch_id = Yii::$app->request->post('document_number');
 
-        if(null !== Yii::$app->request->post('cancel')) {
-            $this->redirect(['index']);
+         if (isset($dispatch_id)) {
+            //Yii::app()->session['dispatch_id'] = $dispatch_id;
 
-        } else {
-          
-
-            if (null !== Yii::$app->request->post('submit-document')) {
-
-                if (null !== Yii::$app->request->post('submit-document')) {
-                    $document_num = '00'.Yii::$app->request->post('document_number');
-                    $dismodel = new DispatchModel;
-
-                    $dispatch_model_1 = $dismodel->getDispatchList($document_num);
-                    $dispatch_model_2 = $dismodel->getDispatchItems($document_num);
-                    
-                    return $this->render('index', [
-                        'dispatch_model_1' => $dispatch_model_1,
-                        'dispatch_model_2' => $dispatch_model_2
-                    ]);
-                } 
-            }
-
-            else if (null !== Yii::$app->request->post('print-document')) {
-
-               // $items = Yii::$app->request->post();
-
-               // echo "<pre>"; print_r($items);
-
-               // foreach($items as $row => $value){
-               //      //echo $value->total_weight;
-               // }
-
-               // exit;
-
-               // foreach ($items as $items_key => $items_key_info) {
-               //    foreach($items_key_info->material_name as $material_name_key => $material_name_key_info){
-               //          echo $material_name_key_info
-               //    }
-               //  }
-
-               //  foreach($resultArray as $row => $value){
-               //      foreach($value as $row2 => $value2)
-               //          echo $value2 . "<br/>";
-               //  }
-
-               //  exit;
-              $dismodel = new DispatchModel;
-
-                Yii::$app->response->format = 'pdf';
-                 $dn = Yii::$app->request->post('dispatch_number');
-                
-               
-                Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
-                    'format' => 'A4',
-                    'orientation' => 'Portrait', // This value will be ignored if format is a string value.
-                    'beforeRender' => function($mpdf, $data) {},
-                    ]);
-                $this->layout = '//print';
-                $dispatch_model_2 = $dismodel->getDispatchItems($dn);
-                return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
-            }
+            $full_dispatch_id = '00'.$dispatch_id;
+            $dismodel = new DispatchModel;
+            $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
+            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($full_dispatch_id);
+            $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
            
-            else {
-                 return $this->render('index', [
-                    'dispatch_model_1' => $dispatch_model_1,
-                    'dispatch_model_2' => $dispatch_model_2
-                ]);
-            }
+            return $this->render('dispatch-print-form', [
+                'dispatch_model_1' => $dispatch_model_1,
+                'dispatch_model_2' => $dispatch_model_2,
+                'full_dispatch_id' => $full_dispatch_id,
+                'sap_dispatch' => $sap_dispatch
+            ]);
+        }
+        else{
+            return $this->render('index');
+        }    
+    }
 
+    public function actionPrintDispatch(){
+        $dispatch_model_1 = array();
+        $dispatch_model_2 = array();
+        $dispatch_id = Yii::$app->request->post('dispatch_number');
 
+         if (isset($dispatch_id)) {
+            $dismodel = new DispatchModel;
+            Yii::$app->response->format = 'pdf';
+            Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+                  'format' => 'Letter',
+                  'orientation' => 'Portrait', // This value will be ignored if format is a string value.
+                  'beforeRender' => function($mpdf, $data) {},
+                  ]);
+            $this->layout = '//print_dispatch';
+            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($dispatch_id);
+            return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
 
-
+        }
+        else{
+            return $this->render('index');
         }
     }
 
-    public function actionDispatch()
-    {
+    public function getSapDispatch($filter) {
+        $params[SapConst::RFC_FUNCTION] = SapConst::ZRFC_READTEXT;
+        $params[SapConst::PARAMS][SapConst::VBELN] = $filter;
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
+
+        return $response;
+    }
+
+    public function actionDispatch(){
         return $this->render('dispatch');
     }
 
-    public function actionPrint()
-    {
+    public function actionPrint(){
           echo Yii::$app->request->post('total_weight');
           exit;
           Yii::$app->response->format = 'pdf';
@@ -110,8 +89,28 @@ class DispatchingController extends \yii\web\Controller
                 'orientation' => 'Landscape', // This value will be ignored if format is a string value.
                 'beforeRender' => function($mpdf, $data) {},
                 ]);
-            $this->layout = '//print';
+            $this->layout = '//print_dispatch';
             return $this->render('print-preview',[]);
+    }
+
+    function curl($url, $cookie = false, $post = false, $header = false, $follow_location = false, $referer=false, $proxy=false) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_REFERER, $referer);
+        curl_setopt($ch, CURLOPT_HEADER, $header);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $follow_location);
+        if ($cookie) {
+            curl_setopt ($ch, CURLOPT_COOKIE, $cookie);
+        }
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        return $response;
     }
 
 }

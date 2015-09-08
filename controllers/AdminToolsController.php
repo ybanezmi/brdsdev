@@ -129,6 +129,7 @@ class AdminToolsController extends Controller
 	        echo $out;
 	        return;
 	    }
+		
 		$account_model = new MstAccount;
 		$account_model = $this->setAccountDefaults($account_model);
 			
@@ -216,6 +217,29 @@ class AdminToolsController extends Controller
         ]);
     }
 
+    public function actionEditProfile($id)
+    {
+    	$accountModel = Yii::$app->modelFinder->findAccountModel($id);
+    	$updateUser = false;
+
+        return $this->render('_edit-profile', ['model' => $accountModel, 'success' => $updateUser]);
+    }
+
+    public function actionUpdateProfile(){
+  
+   		$prof_id = Yii::$app->request->post('id');
+    	$account_model = new MstAccount;
+	 	$updateUser = false;
+
+        if ($account_model->load(Yii::$app->request->post())) {
+			if ($account_model->updateByUser($prof_id,Yii::$app->request->post())) {
+				$updateUser = true;
+			}
+        }
+
+        return $this->render('_edit-profile', array('model' => $account_model, 'success' => $updateUser));
+    }
+
     /**
      * Creates a new MstAccount model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -224,7 +248,6 @@ class AdminToolsController extends Controller
     public function actionCreateUser()
     {
         $model = new MstAccount();
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -272,7 +295,6 @@ class AdminToolsController extends Controller
     public function actionUpdateUser($id)
     {
         $model = Yii::$app->modelFinder->findAccountModel($id);
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -317,7 +339,6 @@ class AdminToolsController extends Controller
         //Yii::$app->modelFinder->findAccountModel($id)->delete();
         $model = Yii::$app->modelFinder->findAccountModel($id);
 		$model->status = Yii::$app->params['STATUS_DELETED'];
-		
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
 		
 		// set defaults
@@ -338,6 +359,16 @@ class AdminToolsController extends Controller
         ]);
 		echo $user_profile;
 	}
+
+	public function actionGetMaterialInfo($id)
+	{
+		$user_profile = $this->renderPartial('_user-profile', [
+            'model' => Yii::$app->modelFinder->findAccountModel($id),
+        ]);
+		echo $user_profile;
+	}
+
+
 	/**
      * Database syncronized
      * @return mixed
@@ -366,13 +397,30 @@ class AdminToolsController extends Controller
 		}
     }
 
+
+	public function actionGetMaterialBy($id)
+	{
+		$material_model_by = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $id]);			
+		$material_model_list = Yii::$app->modelFinder->getMaterialConversionList(null, ['like', 'material_code', $id]);			
+		$material_by = ArrayHelper::toArray($material_model_by);		
+		$material_conv = ArrayHelper::toArray($material_model_list);		
+		return $this->renderPartial('view_material_details', ['materal_list' => $material_by, 'material_conv' => $material_conv]);
+	}
+
+	public function actionGetMaterialList($id) {
+		$material_list = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $id]);			
+		$material_list_result = ArrayHelper::toArray($material_list);	
+
+		echo json_encode($material_list_result);
+	}
+
     public function actionGetTransactionList($id) {
 		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, ['customer_code' => $id]), 'id');
 		echo json_encode($transactionlist);
 	}
 
     public function actionPackagingMaterials() {
-			return $this->render('packaging-materials');
+		return $this->render('packaging-materials');
     }
 	
 	public function actionExport() {
@@ -450,7 +498,6 @@ class AdminToolsController extends Controller
 		}
 		
 		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction History')) {
-			
 			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 			$searchModel = new TrxTransactionsSearch();
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $params);
@@ -477,7 +524,6 @@ class AdminToolsController extends Controller
 						 'label'		=> 'STATUS']];
 		}
 		
-		
 		if ($searchModel && $dataProvider) {
 			ExcelView::widget([
 	            'dataProvider' => $dataProvider,
@@ -493,11 +539,9 @@ class AdminToolsController extends Controller
      * Lists all TrxTransaction models.
      * @return mixed
      */
-    public function actionViewTransaction() {
-		    	
+    public function actionViewTransaction() {	    	
 		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 		$trxSearchModel = new TrxTransactionsSearch();
-
 		$trxDataProvider = $trxSearchModel->search(Yii::$app->request->queryParams, $params);
 
     	return $this->render('view-transaction', ['dataProvider' => $trxDataProvider,

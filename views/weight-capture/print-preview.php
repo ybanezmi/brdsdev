@@ -74,7 +74,7 @@ function truncate($str, $len) {
 		display:inline; 
 	}
 	.net-weight {
-		font-size: 35px;
+		font-size: 25px;
 	}
 	.code-bars-dns1d{
 		width:90%; 
