@@ -177,7 +177,7 @@ class ReceivingController extends Controller
                             $model->updater_id      = Yii::$app->user->id;
                             $model->updated_date    = $date;
 
-                            $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]->transaction_id);
+                            $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]['transaction_id']);
                             $model->transaction_id = $transactionModel->id;
                             $model->customer_code = $transactionModel->customer_code;
                             $model->inbound_no = $transactionModel->sap_no;
@@ -185,8 +185,8 @@ class ReceivingController extends Controller
                             $model->plant_location = $transactionModel->plant_location;
                             $model->storage_location = $transactionModel->storage_location;
 
-                            $model->packaging_code = $transactionDetailsModel[0]->packaging_code;
-                            $model->pallet_weight = $transactionDetailsModel[0]->pallet_weight;
+                            $model->packaging_code = $transactionDetailsModel[0]['packaging_code'];
+                            $model->pallet_weight = $transactionDetailsModel[0]['pallet_weight'];
                             $model->transfer_order = $createTO['export']['transfer_order'];
                             //$model->storage_type = $createTO['export']['storage_type'];
                             //$model->storage_section = $createTO['export']['storage_section'];
