@@ -552,6 +552,9 @@ class ReceivingController extends Controller
 			$isPalletAdded = false;
 
 	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post())) {
+	            // Update total weight
+	            $total_weight = $total_weight + $transaction_detail_model->net_weight;
+
 	            // Get SAP Inbound Number
 	            $sapNoFlag = false;
                 $sapError = array();
@@ -931,7 +934,9 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = '36';
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-
+        echo "<pre />";
+        print_r($params);
+        die;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;
