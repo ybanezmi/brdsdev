@@ -593,6 +593,34 @@ class ReceivingController extends Controller
                     if (null == $transaction_detail_model->getAttribute('net_unit')) {
                         $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
                     }
+
+                    if ($transaction_detail_model->save() && $transaction_detail_model->validate()) {
+                        $this->redirect(['menu', 'id'            => $transaction_model->id,
+                                                 'pallet'        => $transaction_detail_model->pallet_no,
+                                                 'isPalletAdded' => $isPalletAdded,
+                                                 'sapNoFlag'     => $sapNoFlag,
+                                                 'sapError'      => $sapError,
+                        ]);
+                    } else {
+                        return $this->render('menu', [
+                            'transaction_model'         => $transaction_model,
+                            'customer_model'            => $customer_model,
+                            'material_conversion_model' => $material_conversion_model,
+                            'material_list'             => $material_list,
+                            'packaging_type_list'       => $packaging_type_list,
+                            'kitting_type_list'         => $kitting_type_list,
+                            'transaction_detail_model'  => $transaction_detail_model,
+                            'transaction_details'       => $transaction_details,
+                            'handling_unit_model'       => $handling_unit_model,
+                            'total_weight'              => $total_weight,
+                            'pallet_count'              => $pallet_count,
+                            'pallet_no'                 => $pallet_no,
+                            'isPalletAdded'             => $isPalletAdded,
+                            'isPalletClosed'            => $isPalletClosed,
+                            'isPalletRejected'          => $isPalletRejected,
+                            'scripts'                   => $scripts,
+                        ]);
+                    }
                 } else {
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
                     if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
@@ -631,42 +659,54 @@ class ReceivingController extends Controller
                         if (null == $transaction_detail_model->getAttribute('net_unit')) {
                             $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
                         }
+
+                        // set to default value if net_unit is not set
+                        if (null == $transaction_detail_model->getAttribute('net_unit')) {
+                            $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
+                        }
+
+                        if ($transaction_detail_model->save() && $transaction_detail_model->validate()) {
+                            $this->redirect(['menu', 'id'            => $transaction_model->id,
+                                                     'pallet'        => $transaction_detail_model->pallet_no,
+                                                     'isPalletAdded' => $isPalletAdded,
+                                                     'sapNoFlag'     => $sapNoFlag,
+                                                     'sapError'      => $sapError,
+                            ]);
+                        } else {
+                            return $this->render('menu', [
+                                'transaction_model'         => $transaction_model,
+                                'customer_model'            => $customer_model,
+                                'material_conversion_model' => $material_conversion_model,
+                                'material_list'             => $material_list,
+                                'packaging_type_list'       => $packaging_type_list,
+                                'kitting_type_list'         => $kitting_type_list,
+                                'transaction_detail_model'  => $transaction_detail_model,
+                                'transaction_details'       => $transaction_details,
+                                'handling_unit_model'       => $handling_unit_model,
+                                'total_weight'              => $total_weight,
+                                'pallet_count'              => $pallet_count,
+                                'pallet_no'                 => $pallet_no,
+                                'isPalletAdded'             => $isPalletAdded,
+                                'isPalletClosed'            => $isPalletClosed,
+                                'isPalletRejected'          => $isPalletRejected,
+                                'scripts'                   => $scripts,
+                            ]);
+                        }
                     } else {
                         if (isset($sapInboundNumber['error'])) {
                             $sapError = $sapInboundNumber['error'] . ' Failed to save pallet.';
                         } else {
                             $sapError = 'Unable to retrieve inbound number. Failed to save pallet.';
                         }
+
+                        $this->redirect(['menu', 'id'            => $transaction_model->id,
+                                                 'pallet'        => $transaction_detail_model->pallet_no,
+                                                 'isPalletAdded' => $isPalletAdded,
+                                                 'sapNoFlag'     => $sapNoFlag,
+                                                 'sapError'      => $sapError,
+                        ]);
                     }
                 }
-
-				if ($transaction_detail_model->save() && $transaction_detail_model->validate()) {
-                    $this->redirect(['menu', 'id'            => $transaction_model->id,
-                                             'pallet'        => $transaction_detail_model->pallet_no,
-                                             'isPalletAdded' => $isPalletAdded,
-                                             'sapNoFlag'     => $sapNoFlag,
-                                             'sapError'      => $sapError,
-                    ]);
-				} else {
-					return $this->render('menu', [
-		                'transaction_model' 		=> $transaction_model,
-		                'customer_model'			=> $customer_model,
-                        'material_conversion_model' => $material_conversion_model,
-		                'material_list'				=> $material_list,
-		                'packaging_type_list'		=> $packaging_type_list,
-		                'kitting_type_list'         => $kitting_type_list,
-		                'transaction_detail_model'	=> $transaction_detail_model,
-		                'transaction_details'		=> $transaction_details,
-		                'handling_unit_model' 		=> $handling_unit_model,
-		                'total_weight'				=> $total_weight,
-		                'pallet_count'				=> $pallet_count,
-		                'pallet_no'					=> $pallet_no,
-		                'isPalletAdded' 			=> $isPalletAdded,
-		                'isPalletClosed'			=> $isPalletClosed,
-		                'isPalletRejected'			=> $isPalletRejected,
-		                'scripts'					=> $scripts,
-		            ]);
-				}
 	        } else {
 	            return $this->render('menu', [
 	                'transaction_model' 		=> $transaction_model,
