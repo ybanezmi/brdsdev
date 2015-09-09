@@ -49,7 +49,7 @@ echo $scripts;
                     Alert::end();
                 }
 
-				if ($isPalletAdded || isset($_GET['isPalletAdded'])) {
+				if ($isPalletAdded || (isset($_GET['isPalletAdded']) && $_GET['isPalletAdded'] != 0)) {
 					Alert::begin([
 					    'options' => [
 					        'class' => 'alert-success',
