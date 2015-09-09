@@ -661,8 +661,6 @@ class ReceivingController extends Controller
     	}
     }
 
-
-
 	public function actionEdit()
 	{
 		$this->initUser();
@@ -934,9 +932,6 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = '36';
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        echo "<pre />";
-        print_r($params);
-        die;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;
