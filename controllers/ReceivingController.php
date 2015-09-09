@@ -57,7 +57,7 @@ class ReceivingController extends Controller
 		$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
 		$account_model->access_token = 'receiving';
 		$account_model->save();
-		
+
 		// get access of users
 		/*
 		$account_count = Yii::$app->modelFinder->getAccountList(null, ['access_token' => 'receiving'], 'id');
@@ -377,11 +377,12 @@ class ReceivingController extends Controller
 											  'updater_id'		=> Yii::$app->user->id,
 											  'updated_date'	=> $date],
 											 ['transaction_id' 	=> $transaction_model->id,
-											  'pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
+											  //'pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
 											  'status' 			=> Yii::$app->params['STATUS_PROCESS']]);
 
 			if ($transaction_model->save()) {
-				return $this->redirect(['menu', 'id' => $transaction_model->id]);
+				return $this->redirect(['menu', 'id' => $transaction_model->id,
+				                                'closeAllPalletsFlag' => true, ]);
 			} else {
 				return $this->render('menu', [
 	                'transaction_model' 		=> $transaction_model,
@@ -581,7 +582,7 @@ class ReceivingController extends Controller
                     $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
                 }
 
-				if ($transaction_detail_model->save()) {
+				if ($transaction_detail_model->save() && $transaction_detail_model->validate()) {
 				    $sapNoFlag = false;
                     $sapError = array();
                     $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
@@ -589,19 +590,23 @@ class ReceivingController extends Controller
                     if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
                         $sapNoFlag = true;
                         $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
+
+                        $transaction_model->save();
+                        $isPalletAdded = true;
                     } else {
                         if (isset($sapInboundNumber['error'])) {
-                            $sapError = $sapInboundNumber['error'];
+                            $sapError = $sapInboundNumber['error'] . ' Failed to save pallet.';
+                        } else {
+                            $sapError = 'Unable to retrieve inbound number. Failed to save pallet.';
                         }
                     }
-                    $transaction_model->save();
-                    $isPalletAdded = true;
-					$this->redirect(['menu', 'id'            => $transaction_model->id,
-											 'pallet'        => $transaction_detail_model->pallet_no,
-											 'isPalletAdded' => $isPalletAdded,
-											 'sapNoFlag'     => $sapNoFlag,
-											 'sapError'      => $sapError,
-		                ]);
+
+                    $this->redirect(['menu', 'id'            => $transaction_model->id,
+                                             'pallet'        => $transaction_detail_model->pallet_no,
+                                             'isPalletAdded' => $isPalletAdded,
+                                             'sapNoFlag'     => $sapNoFlag,
+                                             'sapError'      => $sapError,
+                    ]);
 				} else {
 					return $this->render('menu', [
 		                'transaction_model' 		=> $transaction_model,

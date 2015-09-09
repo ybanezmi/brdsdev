@@ -12,9 +12,11 @@ use yii\bootstrap\Modal;
 
 <div class="receiving_menu-form">
     <?php
-        $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
+        $js = 'function beforeValidate(form) {if ( form.data("cancel") ) {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
         $form = ActiveForm::begin([
-            'options' => ['class' => 'form-horizontal']
+            'options' => ['class' => 'form-horizontal'],
+            'validateOnSubmit' => true,
+            'enableClientValidation' => false,
            ]); ?>
 
     <div class="col-1 help-bg-gray">
@@ -215,32 +217,12 @@ use yii\bootstrap\Modal;
         </div>
     </div>
 
-    <div id="close-pallet-panel" class="col-2 help-bg-gray" style="display: none;">
-        <h2 class="legend">Close Pallet</h2>
-
-        <div class="control-group">
-            <label class="control-label" for="close-pallet-no">Enter Pallet #:</label>
-            <div class="f-inline-size">
-                <?= Html::textInput('close_pallet_no', '', ['id'         => 'close-pallet-no',
-                                                                 'class'          => 'uborder help-40percent',
-                                                                 'maxlength' => 10,]) ?>
-            </div>
-        </div>
-
-        <?= Html::submitButton('Use Pallet', ['class'     => 'btn btn-success',
-                                              'name'    => 'close-pallet']) ?>
-        <?= Html::button('Cancel', ['class'     => 'btn btn-success',
-                                    'onclick'     => 'hideHTMLById("close-pallet-panel");
-                                                      showHTMLById("trx-details-panel");']) ?>
-    </div>
-
     <div class="two-column-button pdt-two-column-button">
     <div class="submit-button ie6-submit-button">
         <?= Html::submitButton('Add to Pallet', ['class'     => 'btn btn-primary',
                                                        'name'        => 'add-pallet']) ?>
-            <?= Html::button('Close Pallet', ['class'     => 'btn btn-primary',
-                                              'onclick' => 'hideHTMLById("trx-details-panel");
-                                                              showHTMLById("close-pallet-panel");']) ?>
+            <?= Html::submitButton('Close Pallet', ['class'   => 'btn btn-primary',
+                                              'name'    => 'close-pallet']) ?>
 
     </div>
     <div class="submit-button ie6-submit-button">

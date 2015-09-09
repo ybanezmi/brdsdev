@@ -16,7 +16,7 @@ echo $scripts;
 	<div class="receiving-menu">
 		<div class="wrapper-150">
 			<?php
-			    if (isset($_GET['sapNoFlag']) && $_GET['sapNoFlag']) {
+			    if (isset($_GET['sapNoFlag']) && $_GET['sapNoFlag'] != 0) {
                     Alert::begin([
                         'options' => [
                             'class' => 'alert-success',
@@ -38,7 +38,18 @@ echo $scripts;
                     Alert::end();
                 }
 
-				if ($isPalletAdded || isset($_GET['isPalletAdded'])) {
+                if (isset($_GET['closeAllPalletsFlag'])) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-success',
+                        ],
+                    ]);
+                    echo 'Successfully closed all pallets.';
+
+                    Alert::end();
+                }
+
+				if ($isPalletAdded && isset($_GET['isPalletAdded'])) {
 					Alert::begin([
 					    'options' => [
 					        'class' => 'alert-success',
