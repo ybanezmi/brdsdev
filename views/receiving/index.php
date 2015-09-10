@@ -126,16 +126,10 @@ $this->title = 'Receiving';
 		<ul class="list-sub-menu">
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/create"> <span>Create Receiving</span></a></li>
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/edit"> <span>Edit Receiving</span></a></li>
-			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/view-pallet"> <span>View Pallet</span></a></li>
+			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/view-close-pallet"> <span>View & Close Pallet</span></a></li>
 			<?php if (Yii::$app->user->identity->account_type === 'checker') { ?>
 				<li><a href="#openpallet" data-toggle="modal"> <span>Open Pallet</span></a></li>
 			<?php } ?>
-			<li><a href="#closepallet"
-
-
-data-toggle="modal"
-
-			> <span>Close Pallet</span></a></li>
 			<?php if (Yii::$app->user->identity->account_type === 'admin' || Yii::$app->user->identity->account_type === 'checker') { ?>
 				<li><a href="#rejectpallet" data-toggle="modal"> <span>Reject Pallet</span></a></li>
 			    <li><a href="#createto" data-toggle="modal"> <span>Create TO</span></a></li>

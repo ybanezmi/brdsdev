@@ -713,6 +713,40 @@ class ReceivingController extends Controller
 		}
 	}
 
+    public function actionViewClosePallet()
+    {
+        $this->initUser();
+
+        // Initialize variables
+        $transactionModel = new TrxTransactionDetails();
+        $palletStatus = array();
+
+        if (null !== Yii::$app->request->post('cancel')) {
+            $this->redirect(['index']);
+        } else if(null !== Yii::$app->request->post('close-pallet')) {
+            // close pallets
+            $palletStatus['close_success'] = false;
+            $palletStatus['close_error'] = false;
+            if (null !== Yii::$app->request->post('close_pallet_no') && "" !== Yii::$app->request->post('close_pallet_no')) {
+                TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_CLOSED'],
+                                                  'updater_id'      => Yii::$app->user->id,
+                                                  'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                 ['pallet_no'       => Yii::$app->request->post('pallet_no'),
+                                                  'status'          => $params]);
+                $palletStatus['close_success'] = true;
+            } else {
+                $palletStatus['close_error'] = true;
+            }
+        } else {
+            // Do nothing
+        }
+
+
+        return $this->render('view-close-pallet', [
+                'transactionModel' => $transactionModel,
+            ]);
+    }
+
 	public function actionClose()
 	{
 		$this->initUser();
