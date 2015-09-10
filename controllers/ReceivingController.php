@@ -720,18 +720,22 @@ class ReceivingController extends Controller
         // Initialize variables
         $transactionModel = new TrxTransactionDetails();
         $palletStatus = array();
+        $palletStatus['close_success'] = false;
+        $palletStatus['close_error'] = false;
+        // active pallets
+        $params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
 
         if (null !== Yii::$app->request->post('cancel')) {
             $this->redirect(['index']);
         } else if(null !== Yii::$app->request->post('close-pallet')) {
             // close pallets
-            $palletStatus['close_success'] = false;
-            $palletStatus['close_error'] = false;
-            if (null !== Yii::$app->request->post('close_pallet_no') && "" !== Yii::$app->request->post('close_pallet_no')) {
+            $transactionDetails = Yii::$app->request->post('TrxTransactionDetails');
+
+            if (!$this->isEmpty($transactionDetails['pallet_no'])) {
                 TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_CLOSED'],
                                                   'updater_id'      => Yii::$app->user->id,
                                                   'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
-                                                 ['pallet_no'       => Yii::$app->request->post('pallet_no'),
+                                                 ['pallet_no'       => $transactionDetails['pallet_no'],
                                                   'status'          => $params]);
                 $palletStatus['close_success'] = true;
             } else {
@@ -741,10 +745,10 @@ class ReceivingController extends Controller
             // Do nothing
         }
 
-
         return $this->render('view-close-pallet', [
-                'transactionModel' => $transactionModel,
-            ]);
+                'transactionModel'  => $transactionModel,
+                'palletStatus'      => $palletStatus,
+        ]);
     }
 
 	public function actionClose()
@@ -926,6 +930,36 @@ class ReceivingController extends Controller
         }
         echo json_encode($material_conversion);
 
+    }
+
+    public function actionGetPalletDetails($id) {
+        $palletDetails = null;
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $id]);
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $palletDetails['transaction_id'] = $transactionDetailsModel[0]['transaction_id'];
+            $palletDetails['material_code'] = $transactionDetailsModel[0]['material_code'];
+            $palletDetails['batch'] = $transactionDetailsModel[0]['batch'];
+            $palletDetails['pallet_count'] = count($transactionDetailsModel);
+            $palletDetails['net_weight'] = $transactionDetailsModel[0]['net_weight'];
+            $palletDetails['total_weight'] = $transactionDetailsModel[0]['total_weight'];
+            $palletDetails['pallet_weight'] = $transactionDetailsModel[0]['pallet_weight'];
+            $palletDetails['kitted_unit'] = $transactionDetailsModel[0]['kitted_unit'];
+            $palletDetails['manufacturing_date'] = $transactionDetailsModel[0]['manufacturing_date'];
+            $palletDetails['expiry_date'] = $transactionDetailsModel[0]['expiry_date'];
+            $palletDetails['pallet_type'] = $transactionDetailsModel[0]['pallet_type'];
+            $palletDetails['status'] = $transactionDetailsModel[0]['status'];
+            // Creator details
+            $creatorAccountModel = Yii::$app->modelFinder->findAccountModel($transactionDetailsModel[0]['creator_id']);
+            $palletDetails['creator'] = $creatorAccountModel->first_name . ' ' . $creatorAccountModel->last_name;
+            $palletDetails['created_date'] = date('m/d/Y', strtotime($transactionDetailsModel[0]['created_date']));
+            // Updater details
+            $updaterAccountModel = Yii::$app->modelFinder->findAccountModel($transactionDetailsModel[0]['updater_id']);
+            $palletDetails['updater'] = $updaterAccountModel->first_name . ' ' . $updaterAccountModel->last_name;
+            $palletDetails['updated_date'] = date('m/d/Y', strtotime($transactionDetailsModel[0]['updated_date']));
+        }
+
+        echo json_encode($palletDetails);
     }
 
     public function isEmpty($str) {

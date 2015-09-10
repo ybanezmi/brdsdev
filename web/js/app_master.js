@@ -3,9 +3,9 @@ var site_url = "/";
 var decimalPlaces = 3;
 
 $(function () {
-    
+
     $('.print-tag-form form').bind("keypress", function(e) {
-      if (e.keyCode == 13) {               
+      if (e.keyCode == 13) {
         e.preventDefault();
         return false;
       }
@@ -592,7 +592,7 @@ function getMateriaList(code){
             x.add(promptOption, x[0]);
         } else {
             x.style.display = "none";
-        } 
+        }
     } else {
         document.getElementById.style.display = "none";
     }
@@ -638,6 +638,45 @@ function getTransaction(id) {
 
 
 	});
+}
+
+/* function to retrieve pallet details */
+function getPalletDetails(id) {
+    load("get-pallet-details?id=" + id, function(xhr) {
+        if (null != xhr.responseText && xhr.responseText.length > 0) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                // show pallet details panel
+                showHTMLById("pallet-details");
+
+                // set corresponding field values
+                setFieldValueByName("transaction_id", jsonData.transaction_id);
+                setFieldValueByName("material_code", jsonData.material_code);
+                setFieldValueByName("batch", jsonData.batch);
+                setFieldValueByName("pallet_count", jsonData.pallet_count);
+                setFieldValueByName("net_weight", jsonData.net_weight);
+                setFieldValueByName("total_weight", jsonData.total_weight);
+                setFieldValueByName("pallet_weight", jsonData.pallet_weight);
+                setFieldValueByName("kitted_unit", jsonData.kitted_unit);
+                setFieldValueByName("manufacturing_date", jsonData.manufacturing_date);
+                setFieldValueByName("expiry_date", jsonData.expiry_date);
+                setFieldValueByName("pallet_type", jsonData.pallet_type);
+                setFieldValueByName("status", jsonData.status);
+                setFieldValueByName("creator", jsonData.creator);
+                setFieldValueByName("created_date", jsonData.created_date);
+                setFieldValueByName("updater", jsonData.updater);
+                setFieldValueByName("updated_date", jsonData.updated_date);
+
+            } else {
+                // hide pallet details panel
+                hideHTMLById("pallet-details");
+            }
+        } else {
+            // hide pallet details panel
+            hideHTMLById("pallet-details");
+        }
+    });
 }
 
 /* function used for ajax requests */
