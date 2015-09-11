@@ -54,6 +54,8 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['customer_code', 'pallet_no', 'net_unit'], 'string', 'max' => 10],
             [['pallet_no', 'kitted_unit'], 'string', 'min' => 10],
             [['material_code', 'packaging_code', 'kitting_code'], 'string', 'max' => 32],
+            [['net_weight', 'total_weight', 'pallet_weight'], 'min' => 0.001],
+            [['pallet_weight'], 'max' => 1000],
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
             [['pallet_no'], 'checkPackagingPalletNoRange'],
             [['pallet_no'], 'checkKittingPalletNoRange'],

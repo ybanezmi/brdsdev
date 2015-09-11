@@ -557,12 +557,12 @@ class ReceivingController extends Controller
                 $sapError = array();
                 $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model);
 
-                if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
-                    $sapNoFlag = true;
-                    $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
-
-                    $transaction_model->save();
-                    $isPalletAdded = true;
+                if (!$this->isEmpty($transaction_model->sap_no)
+                        || (isset($sapInboundNumber['sap_inbound_no']) && !$this->isEmpty($sapInboundNumber['sap_inbound_no']))) {
+                    if (isset($sapInboundNumber['sap_inbound_no']) && !$this->isEmpty($sapInboundNumber['sap_inbound_no'])) {
+                        $sapNoFlag = true;
+                        $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
+                    }
 
                     // add net weight of transaction_detail to the total weight of transaction
                     $transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;
@@ -594,7 +594,8 @@ class ReceivingController extends Controller
                         $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
                     }
 
-                    if ($transaction_detail_model->save() && $transaction_detail_model->validate()) {
+                    if ($transaction_model->save() && $transaction_detail_model->save() && $transaction_detail_model->validate()) {
+                        $isPalletAdded = true;
                         $this->redirect(['menu', 'id'            => $transaction_model->id,
                                                  'pallet'        => $transaction_detail_model->pallet_no,
                                                  'isPalletAdded' => $isPalletAdded,
@@ -993,8 +994,10 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
+        //$response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
+        //$response['sap_inbound_no'] = '6969696969';
+        $response['error'] = 'sap inbound# is currently being processed by othe user. Failed to save pallet';
         return $response;
     }
 

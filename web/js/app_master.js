@@ -337,7 +337,7 @@ function checkTransactionPalletWeight() {
         if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
             trx_pallet_weight = parseFloat(trx_pallet_weight) + parseFloat(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
         }
-        setFieldValueById("trxtransactiondetails-pallet_weight", parseFloat(trx_pallet_weight));
+        setFieldValueById("trxtransactiondetails-pallet_weight", trx_pallet_weight.toFixed(decimalPlaces));
 	}
 }
 
