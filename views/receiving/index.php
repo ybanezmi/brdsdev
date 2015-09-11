@@ -220,7 +220,8 @@ $this->title = 'Receiving';
    		]); ?>
         <div class="control-group">
             <?= Html::textInput('reject_pallet_no', '', ['id'		 => 'reject-pallet-no',
-								 					  	'class'	 	 => 'uborder help-40percent']) ?>
+								 					  	'class'	 	 => 'uborder help-40percent',
+								 					  	'maxlength'  => 10,]) ?>
             <?= Html::submitButton('Use Pallet', ['class' 	=> 'btn btn-success',
         									  	  'name'	=> 'reject-pallet']) ?>
         </div>
@@ -228,7 +229,7 @@ $this->title = 'Receiving';
 
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Reject</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>
 
@@ -250,8 +251,9 @@ $this->title = 'Receiving';
             ]
         ]); ?>
         <div class="control-group">
-            <?= Html::textInput('create_to_pallet_no', '', ['id'    => 'create-to-pallet-no',
-                                                            'class'     => 'uborder help-40percent']) ?>
+            <?= Html::textInput('create_to_pallet_no', '', ['id'        => 'create-to-pallet-no',
+                                                            'class'     => 'uborder help-40percent',
+                                                            'maxlength' => 10,]) ?>
             <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
                                                   'name'    => 'create-to']) ?>
         </div>
