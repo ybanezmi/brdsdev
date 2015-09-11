@@ -60,6 +60,8 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
             [['assignment', 'next_assignment'], 'string', 'max' => 50],
             [['contact_no', 'notify_conact_no'], 'match', 'not' => true, 'pattern' => '/[^0-9()-]/', 'message' => 'Incorrect contact no. format.'],
             [['username'], 'validateUsername'],
+            [['start_date', 'end_date'], 'checkStartEndDate'],
+            [['next_start_date', 'next_end_date'], 'checkNextStartEndDate'],
         ];
     }
 
@@ -229,6 +231,28 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
         $userName = MstAccount::findUniqueUsername($this->username, $this->id);
         if (!Yii::$app->request->post('hasEditable') && $userName) {
             $this->addError('username', 'Username is already taken.');
+        }
+    }
+
+    /**
+     * Validates start and end date
+     */
+    public function checkStartEndDate($attribute, $params)
+    {
+        if ($this->start_date >= $this->end_date) {
+            $this->addError('start_date', 'Start date should be less than the end date.');
+            $this->addError('end_date', 'End date should be greater than the start date.');
+        }
+    }
+
+    /**
+     * Validates next start and end date
+     */
+    public function checkNextStartEndDate($attribute, $params)
+    {
+        if ($this->next_start_date >= $this->next_end_date) {
+            $this->addError('start_date', 'Next start date should be less than the next end date.');
+            $this->addError('end_date', 'Next end date should be greater than the next start date.');
         }
     }
 }

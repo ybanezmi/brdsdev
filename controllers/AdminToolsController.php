@@ -74,23 +74,23 @@ class AdminToolsController extends Controller
 		// get plant list
 		$plant_location_list = Yii::$app->modelFinder->getPlantList(null, ['status' => Yii::$app->params['STATUS_ACTIVE']], 'plant_location');
 		$assignment_list = ArrayHelper::map($plant_location_list, 'plant_location', 'plant_location');
-		
+
 		// get user list
 		$account_list = Yii::$app->modelFinder->getAccountList();
 		foreach($account_list as $key => $value) {
 			$user_list[$value['id']] = $value['first_name'] . ' ' . $value['last_name'];
 		}
-		
+
 		// validate if there is a editable input saved via AJAX
 	    if (Yii::$app->request->post('hasEditable')) {
 	        // find account model
 	        $model = Yii::$app->modelFinder->findAccountModel(Yii::$app->request->post('editableKey'));
-	 
+
 	        // store a default json response as desired by editable
 	        $out = Json::encode(['output'=>'', 'message'=>'']);
-	 
-	        // fetch the first entry in posted data (there should 
-	        // only be one entry anyway in this array for an 
+
+	        // fetch the first entry in posted data (there should
+	        // only be one entry anyway in this array for an
 	        // editable submission)
 	        // - $posted is the posted data for MstAccount without any indexes
 	        // - $post is the converted array for single model validation
@@ -103,53 +103,53 @@ class AdminToolsController extends Controller
 	        	if (isset($posted['password']) && $posted['password'] !== "") {
 	        		$model->password = md5($posted['password']);
 	        	}
-				
+
 	            // can save model or do something before saving model
 	            $model->save();
 	            // custom output to return to be displayed as the editable grid cell
-	            // data. Normally this is empty - whereby whatever value is edited by 
+	            // data. Normally this is empty - whereby whatever value is edited by
 	            // in the input by user is updated automatically.
 	            $output = '';
-	 
+
 	            // specific use case where you need to validate a specific
-	            // editable column posted when you have more than one 
-	            // EditableColumn in the grid view. We evaluate here a 
+	            // editable column posted when you have more than one
+	            // EditableColumn in the grid view. We evaluate here a
 	            // check to see if buy_amount was posted for the Book model
 	            //if (isset($posted['assignment'])) {
 	           		//$output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
-	            //} 
-	 
+	            //}
+
 	            // similarly you can check if the name attribute was posted as well
 	            //if (isset($posted['assignment'])) {
 	               //$output =  $posted['assignment']; // process as you need
-	            //} 
+	            //}
 	            $out = Json::encode(['output'=>$output, 'message'=>'']);
-	        } 
+	        }
 	        // return ajax json encoded response and exit
 	        echo $out;
 	        return;
 	    }
-		
+
 		$account_model = new MstAccount;
 		$account_model = $this->setAccountDefaults($account_model);
-			
+
 		$addUserSuccess = false;
         if ($account_model->load(Yii::$app->request->post())) {
         	$account_model->password = md5($account_model->password);
-			
+
 			// convert to correct date format
 			$account_model->start_date = Yii::$app->dateFormatter->convert($account_model->start_date);
 			$account_model->end_date = Yii::$app->dateFormatter->convert($account_model->end_date);
-			
-			
-			
+
+
+
 			if ($account_model->save()) {
 				$addUserSuccess = true;
 				$account_model = new MstAccount;
 				$account_model = $this->setAccountDefaults($account_model);
 			}
         }
-		
+
 		return $this->render('user-mgmt', [
         	'account_search_model' 		=> $account_search_model,
         	'account_data_provider' 	=> $account_data_provider,
@@ -165,12 +165,13 @@ class AdminToolsController extends Controller
 
 	public function setAccountDefaults($account_model) {
 		$date = date('Y-m-d');
+        $next_date = date('Y-m-d', strtotime($date . ' + 1 day'));
 		$datetime = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-		
+
 		// set defaults
 		$account_model->start_date		= $date;
-		$account_model->end_date		= $date;
-		
+		$account_model->end_date		= $next_date;
+
 		// @TODO: transfer updating of status/created/updated details to model
 		// set status, created and updated details
 		$account_model->status			= Yii::$app->params['STATUS_ACTIVE'];
@@ -178,7 +179,7 @@ class AdminToolsController extends Controller
 		$account_model->created_date 	= $datetime;
 		$account_model->updater_id		= Yii::$app->user->id;
 		$account_model->updated_date	= $datetime;
-		
+
 		return $account_model;
 	}
 
@@ -210,7 +211,7 @@ class AdminToolsController extends Controller
 		// get user transaction detail list
 		$userTransactionDetailList = Yii::$app->modelFinder->getTransactionDetailList(null, null, null, $params, false, null);
 		$userTrxDetailStatusCount = array_count_values(ArrayHelper::getColumn($userTransactionDetailList, 'status'));
-		
+
         return $this->render('_user-profile', [
             'model' => $accountModel,
             'statusCount' => $userTrxDetailStatusCount,
@@ -226,7 +227,7 @@ class AdminToolsController extends Controller
     }
 
     public function actionUpdateProfile(){
-  
+
    		$prof_id = Yii::$app->request->post('id');
     	$account_model = new MstAccount;
 	 	$updateUser = false;
@@ -249,7 +250,7 @@ class AdminToolsController extends Controller
     {
         $model = new MstAccount();
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-		
+
 		// set defaults
 		// @TODO: transfer updating of status/created/updated details to model
 		// set status, created and updated details
@@ -258,14 +259,14 @@ class AdminToolsController extends Controller
 		$model->created_date 	= $date;
 		$model->updater_id		= Yii::$app->user->id;
 		$model->updated_date	= $date;
-		
+
 		// get plant list
 		$plant_location_list = Yii::$app->modelFinder->getPlantList(null, ['status' => Yii::$app->params['STATUS_ACTIVE']], 'plant_location');
 		$assignment_list = ArrayHelper::map($plant_location_list, 'plant_location', 'plant_location');
-		
+
         if ($model->load(Yii::$app->request->post())) {
         	$model->password = md5($model->password);
-			
+
 			// convert to correct date format
 			$model->start_date = Yii::$app->dateFormatter->convert($model->start_date);
 			$model->end_date = Yii::$app->dateFormatter->convert($model->end_date);
@@ -296,22 +297,22 @@ class AdminToolsController extends Controller
     {
         $model = Yii::$app->modelFinder->findAccountModel($id);
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-		
+
 		// set defaults
 		// @TODO: transfer updating of updated details to model
 		// set updated details
 		$model->updater_id		= Yii::$app->user->id;
 		$model->updated_date	= $date;
-		
+
 		// get plant list
 		$plant_location_list = Yii::$app->modelFinder->getPlantList(null, ['status' => Yii::$app->params['STATUS_ACTIVE']], 'plant_location');
 		$assignment_list = ArrayHelper::map($plant_location_list, 'plant_location', 'plant_location');
-		
+
         if ($model->load(Yii::$app->request->post())) {
         	// convert to correct date format
 			$model->start_date = Yii::$app->dateFormatter->convert($model->start_date);
 			$model->end_date = Yii::$app->dateFormatter->convert($model->end_date);
-			
+
 			if ($model->save()) {
 				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else {
@@ -340,15 +341,15 @@ class AdminToolsController extends Controller
         $model = Yii::$app->modelFinder->findAccountModel($id);
 		$model->status = Yii::$app->params['STATUS_DELETED'];
 		$date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-		
+
 		// set defaults
 		// @TODO: transfer updating of updated details to model
 		// set updated details
 		$model->updater_id		= Yii::$app->user->id;
 		$model->updated_date	= $date;
-		
+
 		if ($model->save()) {
-			return $this->redirect(['user-management']);					
+			return $this->redirect(['user-management']);
 		}
     }
 
@@ -374,14 +375,14 @@ class AdminToolsController extends Controller
      * @return mixed
      */
     public function actionSynchronizedDatabase() {
-		
+
     	return $this->render('synchronized-database');
     }
-	
+
 	public function actionSynchronizedMaterials() {
 		if(null !== Yii::$app->request->post('back')) {
     		$this->redirect(['synchronized-database']);
-    	} 
+    	}
 		else if(null !== Yii::$app->request->post('synch_all')){
 			$customer_code = Yii::$app->request->post()['MstCustomer']['name'];
 			$this->redirect('http://192.168.1.125/materials_customer/'.$customer_code.'/bigblue');
@@ -400,16 +401,16 @@ class AdminToolsController extends Controller
 
 	public function actionGetMaterialBy($id)
 	{
-		$material_model_by = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $id]);			
-		$material_model_list = Yii::$app->modelFinder->getMaterialConversionList(null, ['like', 'material_code', $id]);			
-		$material_by = ArrayHelper::toArray($material_model_by);		
-		$material_conv = ArrayHelper::toArray($material_model_list);		
+		$material_model_by = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $id]);
+		$material_model_list = Yii::$app->modelFinder->getMaterialConversionList(null, ['like', 'material_code', $id]);
+		$material_by = ArrayHelper::toArray($material_model_by);
+		$material_conv = ArrayHelper::toArray($material_model_list);
 		return $this->renderPartial('view_material_details', ['materal_list' => $material_by, 'material_conv' => $material_conv]);
 	}
 
 	public function actionGetMaterialList($id) {
-		$material_list = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $id]);			
-		$material_list_result = ArrayHelper::toArray($material_list);	
+		$material_list = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $id]);
+		$material_list_result = ArrayHelper::toArray($material_list);
 
 		echo json_encode($material_list_result);
 	}
@@ -422,7 +423,7 @@ class AdminToolsController extends Controller
     public function actionPackagingMaterials() {
 		return $this->render('packaging-materials');
     }
-	
+
 	public function actionExport() {
 		$searchModel = null;
 		$dataProvider = null;
@@ -432,7 +433,7 @@ class AdminToolsController extends Controller
 			$gridColumns = [
 	                ['class' => 'yii\grid\SerialColumn'],
 	                'username',
-	                [	
+	                [
 				    	'attribute' 		=> 'password',
 				    	'value' 			=> function ($model) {
 				    						if ($model->password === md5(Yii::$app->params["DEFAULT_PASSWORD"])) {
@@ -458,7 +459,7 @@ class AdminToolsController extends Controller
 		             'label'	 => 'Next End Date'],
 	              ];
 		}
-		
+
 		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction Details List')) {
 			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
 			$searchModel = new TrxTransactionDetailsSearch();
@@ -496,12 +497,12 @@ class AdminToolsController extends Controller
 	             'label'	 => 'Status'],
 	        ];
 		}
-		
+
 		if (false !== strpos(Yii::$app->request->post('export_filename'), 'Transaction History')) {
 			$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 			$searchModel = new TrxTransactionsSearch();
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $params);
-		
+
 			$gridColumns = [['attribute' 	=> 'created_date',
 						 'label' 		=> 'DATE'],
 						['attribute' 	=> 'id',
@@ -523,7 +524,7 @@ class AdminToolsController extends Controller
 						['attribute'	=> 'status',
 						 'label'		=> 'STATUS']];
 		}
-		
+
 		if ($searchModel && $dataProvider) {
 			ExcelView::widget([
 	            'dataProvider' => $dataProvider,
@@ -539,7 +540,7 @@ class AdminToolsController extends Controller
      * Lists all TrxTransaction models.
      * @return mixed
      */
-    public function actionViewTransaction() {	    	
+    public function actionViewTransaction() {
 		$params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED']]];
 		$trxSearchModel = new TrxTransactionsSearch();
 		$trxDataProvider = $trxSearchModel->search(Yii::$app->request->queryParams, $params);
