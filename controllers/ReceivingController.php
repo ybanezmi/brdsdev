@@ -552,13 +552,10 @@ class ReceivingController extends Controller
 			$isPalletAdded = false;
 
 	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post())) {
-	            // Update total weight
-	            $total_weight = $total_weight + $transaction_detail_model->net_weight;
-
 	            // Get SAP Inbound Number
 	            $sapNoFlag = false;
                 $sapError = array();
-                $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model, $total_weight);
+                $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model);
 
                 if (isset($sapInboundNumber['sap_inbound_no']) && $sapInboundNumber['sap_inbound_no'] !== "") {
                     $sapNoFlag = true;
@@ -970,14 +967,14 @@ class ReceivingController extends Controller
         }
     }
 
-    public function getSapInboundNumber($trxTransaction, $trxTransactionDetails, $trxDetailsTotalWeight) {
+    public function getSapInboundNumber($trxTransaction, $trxTransactionDetails) {
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_RECEIVING;
 
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxDetailsTotalWeight, 3, '.', '');
+        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxTransactionDetails['pallet_weight'], 3, '.', '');
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
         $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
