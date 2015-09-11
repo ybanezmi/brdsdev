@@ -115,8 +115,6 @@ class ChangePasswordForm extends Model
 			$user->password = md5($this->newPassword);
 			return $user->save();
         } else {
-            echo "<pre />";
-            print_r($this);
             return false;
         }
     }
