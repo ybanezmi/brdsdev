@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'customer_code')->dropDownList($customer_list, ['class'	=> 'f-full-size',
 																			 'prompt'	=> '-- Select a customer --',
-																			 'onchange'	=> 'setFieldValueById("customer_code", getFieldValueById("trxtransactions-customer_code"))'])->label('Customer Product', ['class' => 'control-label-f']); ?>
+																			 'onchange'	=> 'setFieldValueById("customer_code", getFieldValueById("trxtransactions-customer_code"))'])->label('Customer Name', ['class' => 'control-label-f']); ?>
 
 	<div class="control-group">
     	<div class="f-full-size">
