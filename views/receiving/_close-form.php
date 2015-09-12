@@ -21,16 +21,30 @@ use yii\widgets\ActiveForm;
 		    
 		    <?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-70percent',
 																 			 'prompt'	=> '-- Select a customer --',
-																 			 'onchange'	=> 'getTransactionList(getFieldValueById("mstcustomer-name"));
+																 			 'onchange'	=> 'getTransactionListByType(getFieldValueById("mstcustomer-name"),
+																	 			 				document.getElementsByName("transaction_type")[0].checked,
+																	 			 				document.getElementsByName("transaction_type")[1].checked);
 																 			 				hideHTMLById("trx-details");'])->label('SELECT CUSTOMER', ['class' => 'control-label-f']); ?>
 		    
+		    <div class="control-group">
+		        <div class="f-inline-size">
+					<?= Html::radioList('transaction_type', 'brds', ['brds' => 'BRDS #', 'sap' => 'SAP #'],
+						['class'	=> 'form-radio-inline',
+						 'onchange'	=> 'getTransactionListByType(getFieldValueById("mstcustomer-name"),
+				 			 				document.getElementsByName("transaction_type")[0].checked,
+				 			 				document.getElementsByName("transaction_type")[1].checked);
+										hideHTMLById("trx-details");']); ?>
+				</div>
+			</div>
 		    <?= $form->field($transaction_model, 'transaction_id', 
 						['template' 	=> '<div class="control-group">{label}<div>{input}
 											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
 											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --',
-																							  'onchange' => 'getTransaction(getFieldValueById("trxtransactiondetails-transaction_id"))'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
+																							  'onchange' => 'getTransactionByType(getFieldValueById("trxtransactiondetails-transaction_id"),
+																							  					document.getElementsByName("transaction_type")[0].checked,
+																	 			 								document.getElementsByName("transaction_type")[1].checked)'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
 		    
 			
 			<div class="control-group">
@@ -130,6 +144,6 @@ use yii\widgets\ActiveForm;
 <script type="text/javascript">
 	window.onload=function() {
 		var remarks;
-		getTransaction();
+		//getTransaction();
 	}
 </script>

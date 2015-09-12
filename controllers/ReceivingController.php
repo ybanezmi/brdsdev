@@ -794,13 +794,22 @@ class ReceivingController extends Controller
 		return $this->render('synchronize');
 	}
 
-	public function actionGetTransaction($id)
+	public function actionGetTransaction($id, $type = null)
 	{
+        $transaction_model = null;
+        if ($type != null && $type === 'brds') {
+            $transaction_model = Yii::$app->modelFinder->findTransactionModel($id); // @TODO: change to dynamic transaction id
+        } else if ($type != null && $type === 'sap') {
+            $transaction_model = Yii::$app->modelFinder->getTransaction(['sap_no' => $id]);
+        } else {
+            // Do nothing
+        }
+
 		// if no transaction selected
 		if ($id === '-- Select a transaction --') {
 			return;
 		}
-		$transaction_model = Yii::$app->modelFinder->findTransactionModel($id); // @TODO: change to dynamic transaction id
+		
 		$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
 
 		// retrieve all transaction details
@@ -847,8 +856,15 @@ class ReceivingController extends Controller
 		echo json_encode($transaction_header);
 	}
 
-	public function actionGetTransactionList($id) {
-		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, ['customer_code' => $id]), 'id');
+	public function actionGetTransactionList($id, $type = null) {
+        $column = 'id';
+        $condition = ['customer_code' => $id];
+        if ($type != null && $type === 'sap') {
+            $column = 'sap_no';
+            $condition = ['and',['customer_code' => $id], ['not', ['sap_no' => '']]];
+        }
+
+		$transactionlist = ArrayHelper::getColumn(Yii::$app->modelFinder->getTransactionList(null, $condition), $column);
 		echo json_encode($transactionlist);
 	}
 

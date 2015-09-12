@@ -551,6 +551,35 @@ function getTransactionList(code){
 	});
 }
 
+/* function to retrieve transaction list by transaction type */
+function getTransactionListByType(code, brds_type, sap_type){
+    var transaction_type = 'brds';
+    if (sap_type) {
+        transaction_type = 'sap';
+    }
+    load('get-transaction-list?id=' + code + '&type=' + transaction_type,function(xhr) {
+        document.getElementById('trxtransactiondetails-transaction_id').innerHTML='';
+
+        var jsonData = JSON.parse(xhr.responseText);
+        var x  = document.getElementById('trxtransactiondetails-transaction_id');
+        //setFieldValueByName('transaction-list', ['']);
+
+        // set prompt value
+        var promptOption = document.createElement('option');
+        promptOption.text = "-- Select a transaction --";
+        x.add(promptOption);
+
+        if(null != jsonData){
+            for(var i = 0; i < jsonData.length; i++){
+                var option  = document.createElement('option');
+                option.text = jsonData[i];
+                x.add(option, x[i+1]);
+            }
+        }
+
+    });
+}
+
 function isEmpty(obj) {
     for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
@@ -638,6 +667,46 @@ function getTransaction(id) {
 
 
 	});
+}
+
+/* function to retrieve transaction by transaction type */
+function getTransactionByType(id, brds_type, sap_type) {
+    var transaction_type = 'brds';
+    if (sap_type) {
+        transaction_type = 'sap';
+    }
+    load("get-transaction?id=" + id + '&type=' + transaction_type, function(xhr) {
+        if (null != xhr.responseText && xhr.responseText.length > 0) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                // show transaction details panel
+                showHTMLById("trx-details");
+
+                // set corresponding field values
+                setFieldValueByName("customer_name", jsonData.customer_name);
+                setFieldValueByName("customer_code", jsonData.customer_code);
+                setFieldValueByName("created_date", jsonData.created_date_formatted); // @TODO: incorrect date format
+                setFieldValueByName("transaction_id", jsonData.id);
+                setFieldValueByName("sap_no", jsonData.sap_no);
+                setFieldValueByName("plant_location", jsonData.plant_location);
+                setFieldValueByName("storage_location", jsonData.storage_location);
+                setFieldValueByName("truck_van", jsonData.truck_van);
+                setFieldValueByName("pallet_count", jsonData.pallet_count);
+                setFieldValueByName("total_weight", jsonData.total_weight);
+
+                remarks = jsonData.remarks;
+            } else {
+                // hide transaction details panel
+                hideHTMLById("trx-details");
+            }
+        } else {
+            // hide transaction details panel
+            hideHTMLById("trx-details");
+        }
+
+
+    });
 }
 
 /* function to retrieve pallet details */

@@ -287,6 +287,16 @@ class CModelFinder extends Component
         return $packaging_material;
     }
 
+    public function getTransaction($conditions = null)
+    {
+        // to retrieve all *active* transactions by their index and order them by their ID:
+            $model = TrxTransactions::find()
+                ->where($conditions)
+                ->one();
+
+        return $model;
+    }
+
     public function getTransactionDetails($conditions = null)
     {
         // to retrieve all *active* material conversions by their index and order them by their ID:
