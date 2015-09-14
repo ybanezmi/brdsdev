@@ -12,7 +12,7 @@ class WeightCaptureController extends Controller
     {
     	// Get customer list
 		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-		
+
 		if (null !== Yii::$app->request->post('print')) {
 			Yii::$app->response->format = 'pdf';
 
@@ -35,7 +35,7 @@ class WeightCaptureController extends Controller
     {
     	// Get customer list
 		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-		
+
 		if (null !== Yii::$app->request->post('print')) {
 			Yii::$app->response->format = 'pdf';
 
@@ -53,18 +53,18 @@ class WeightCaptureController extends Controller
 	        ]);
 		}
     }
-	
+
 	public function actionPrintPreview()
 	{
 		$this->layout = '//print';
 		return iconv("UTF-8","UTF-8//IGNORE",$this->render('print-preview',[]));
 	}
-	
+
     public function actionWeighing()
     {
         return $this->render('weighing');
     }
-	
+
 	public function actionGetMaterialList($item_code)
 	{
 		$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $item_code]);
@@ -84,5 +84,18 @@ class WeightCaptureController extends Controller
             ]);
 
         $this->layout = '//print';
+    }
+
+    public function actionGetMaterial($id, $desc) {
+        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
+
+        if ($material_model == null || count($material_model) == 0) {
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
+        }
+
+        $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
+        $material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
+
+        echo json_encode($material_list);
     }
 }

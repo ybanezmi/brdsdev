@@ -444,11 +444,11 @@ function getMaterialConversion() {
     });
 }
 
-function searchMaterial(value) {
+function searchMaterial(value, customer_code, id) {
     load('get-material?id=' + customer_code + '&desc=' + value, function(xhr) {
         var jsonData = JSON.parse(xhr.responseText);
 
-        var x  = document.getElementById('trxtransactiondetails-material_code');
+        var x  = document.getElementById(id);
 
         // clear options
         x.options.length = 0;
@@ -468,7 +468,7 @@ function searchMaterial(value) {
         }
 
         // set initial value
-        setFieldValueById('trxtransactiondetails-material_code', jsonData.item_code[0], true);
+        setFieldValueById(id, jsonData.item_code[0], true);
     });
 }
 

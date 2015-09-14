@@ -107,7 +107,7 @@ use yii\bootstrap\Modal;
 
         <?= Html::textInput('material_barcode', '', ['id'         => 'material_barcode',
                                                           'class'     => 'uborder help-44percent',
-                                                          'onchange'  => 'searchMaterial(this.value)']) ?>
+                                                          'onchange'  => 'searchMaterial(this.value, customer_code, "trxtransactiondetails-material_code")']) ?>
                     </div>
                   </div>
 

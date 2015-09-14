@@ -66,8 +66,11 @@ use kartik\widgets\DatePicker;
 		<div class="control-field">
 			<?= Html::textInput('material_code', null, ['id' 		=> 'material_code',
 														'readonly'	=> 'readonly',
-											  			'class'	 	=> 'uborder',
+											  			'class'	 	=> 'uborder disabled',
 											  			'onchange' 	=> 'setFieldValueById("material", getFieldValueById("material_code"))',]) ?>
+  			<?= Html::textInput('material_barcode', '', ['id'       => 'material_barcode',
+                                                         'class'    => 'uborder help-44percent',
+                                                         'onchange' => 'searchMaterial(this.value, getFieldValueById("customer"), "material")']) ?>
 		   <?= Html::input('hidden', 'material_description', '', ['id' => 'material_description']) ?>
 		</div>
 		<div class="col-lg-8"></div>
