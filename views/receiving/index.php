@@ -141,7 +141,7 @@ $this->title = 'Receiving';
 
 <!-- Popup Box -->
 <!-- Open Pallet -->
-<div id="openpallet" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div style="height:230px" id="openpallet" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel" class="header-popup">Open Pallet</h3>
@@ -157,8 +157,9 @@ $this->title = 'Receiving';
 	    	]
    		]); ?>
         <div class="control-group">
-            <?= Html::textInput('open_pallet_no', '', ['id'		 => 'open-pallet-no',
-								 					  	'class'	 	 => 'uborder help-40percent']) ?>
+            <?= Html::textInput('open_pallet_no', '', ['id'		   => 'open-pallet-no',
+								 					   'class'	   => 'uborder help-40percent',
+								 					   'maxlength' => 10]) ?>
             <?= Html::submitButton('Use Pallet', ['class' 	=> 'btn btn-success',
         									  	  'name'	=> 'open-pallet']) ?>
         </div>
@@ -166,7 +167,7 @@ $this->title = 'Receiving';
 
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Open</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>
 
