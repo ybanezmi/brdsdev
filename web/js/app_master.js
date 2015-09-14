@@ -195,24 +195,28 @@ function getTimestamp() {
 
 /* function to check material sled */
 function checkMaterialSled() {
-	if (null != getMaterialSled() && getMaterialSled() != 0 && getFieldValueById("trxtransactiondetails-manufacturing_date").length > 0
+    var materialSled = getMaterialSled();
+	if (null != materialSled && materialSled != 0 && getFieldValueById("trxtransactiondetails-manufacturing_date").length > 0
 	   && getFieldValueById("trxtransactiondetails-expiry_date").length == 0) {
 		setFieldValueById("trxtransactiondetails-expiry_date",
-			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),getMaterialSled(),"add"));
+			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),materialSled,"add"));
 	}
 
-    if (null != getMaterialSled() && getMaterialSled() != 0 && getFieldValueById("trxtransactiondetails-expiry_date").length > 0
+    if (null != materialSled && materialSled != 0 && getFieldValueById("trxtransactiondetails-expiry_date").length > 0
        && getFieldValueById("trxtransactiondetails-manufacturing_date").length == 0) {
         setFieldValueById("trxtransactiondetails-manufacturing_date",
-            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),getMaterialSled(),"subtract"));
+            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),materialSled,"subtract"));
     }
 }
 
 /* function to add/subtract days in a date string */
 function calculateDate(strDate, days, type) {
 	var newDate = new Date(strDate);
+    console.log('new date: ' + newDate.getDate());
 	if (type == 'add') {
 		newDate.setDate(newDate.getDate() + days);
+        console.log('days: ' + days);
+        console.log('calc date: ' + newDate);
 	} else if (type == 'subtract') {
 		newDate.setDate(newDate.getDate() - days);
 	} else {
@@ -245,6 +249,8 @@ function searchMaterial() {
 /* function to retrieve sled of material */
 function getMaterialSled() {
 	var material_sled_val = material_sled[getFieldValueById("trxtransactiondetails-material_code")];
+    
+    console.log(material_sled_val);
 
 	return material_sled_val;
 }
