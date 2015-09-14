@@ -212,13 +212,10 @@ function checkMaterialSled() {
 /* function to add/subtract days in a date string */
 function calculateDate(strDate, days, type) {
 	var newDate = new Date(strDate);
-    console.log('new date: ' + newDate.getDate());
 	if (type == 'add') {
-		newDate.setDate(newDate.getDate() + days);
-        console.log('days: ' + days);
-        console.log('calc date: ' + newDate);
+		newDate.setDate(newDate.getDate() + parseInt(days));
 	} else if (type == 'subtract') {
-		newDate.setDate(newDate.getDate() - days);
+		newDate.setDate(newDate.getDate() - parseInt(days));
 	} else {
 		// do nothing
 	}
