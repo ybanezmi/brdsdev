@@ -212,7 +212,7 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_detail_model, 'kitted_unit',
                 ['inputOptions' => ['class' => 'uborder help-25percent'],
                 'labelOptions' => ['class' => 'control-label',
-                    'style' => 'font-size: 16px'
+                    'style' => 'font-size: 16px',
                     'onchange' => 'validatePalletType(this.value, getFieldValueById("material_code"));']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
