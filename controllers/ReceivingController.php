@@ -809,7 +809,7 @@ class ReceivingController extends Controller
 		if ($id === '-- Select a transaction --') {
 			return;
 		}
-		
+
 		$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
 
 		// retrieve all transaction details
@@ -974,6 +974,24 @@ class ReceivingController extends Controller
         }
 
         echo json_encode($palletDetails);
+    }
+
+    public function actionValidatePallet($id) {
+        $response['success'] = true;
+
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $id]);
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $material = Yii::$app->modelFinder->findMaterialModel(Yii::$app->request->get('material_code'));
+            if ($transactionDetailsModel[0]['pallet_type'] !== $material['pallet_ind']) {
+                $response['success'] = false;
+                $response['error'] = 'Compatibility error. Pallet type is different with the selected customer product pallet type. Please select compatible customer product.';
+            } else {
+                $response['success'] = true;
+            }
+        }
+
+        echo json_encode($response);
     }
 
     public function isEmpty($str) {

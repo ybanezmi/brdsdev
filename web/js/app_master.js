@@ -341,6 +341,24 @@ function checkTransactionPalletWeight() {
 	}
 }
 
+/* new function to validate pallet type of material and transaction_detail */
+function validatePalletType(palletNo, materialCode) {
+    if (palletNo && materialCode) {
+        load('validate-pallet?id=' + palletNo + '&material_code=' + materialCode, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                if (jsonData.error) {
+                    alert(jsonData.error);
+                    setFieldValueById("trxtransactiondetails-material_code", "");
+                    setFieldValueById("material_code", "");
+                    setFieldValueById("material_barcode", "");
+                }
+            }
+        });
+    }
+}
+
 /* function to check pallet type of transaction_detail */
 function checkTransactionPalletType() {
 	if (checkTransactionStatus() && null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {

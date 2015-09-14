@@ -96,7 +96,9 @@ use yii\bootstrap\Modal;
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
             ->dropDownList($material_list, ['class'    => 'uborder help-70percent',
                                             'prompt'    => '-- Select a product --',
-                                            'onchange'    => 'onSelectMaterial()'])->label('Customer Product',['class' => 'control-label-f']); ?>
+                                            'onchange'    => 'onSelectMaterial();
+                                                              validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"),
+                                                                this.value);'])->label('Customer Product',['class' => 'control-label-f']); ?>
 
         <div class="control-group">
                     <div class="f-full-size ie6-padtop">
@@ -191,11 +193,15 @@ use yii\bootstrap\Modal;
                                                    checkTransactionPalletWeight();
                                                    checkTransactionPalletType();
                                                    validateTransactionPalletType();
+                                                   validatePalletType(this.value, getFieldValueById("material_code"));
                                                    '],
                  'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',],
                  ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
-
+        <?= $form->field($transaction_detail_model, 'pallet_type',
+                ['inputOptions' => ['class' => 'uborder disabled help-25percent',
+                                    'readonly' => 'readonly',],
+                ])->textInput()->label('Pallet Type') ?>
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
                     ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',
@@ -206,7 +212,8 @@ use yii\bootstrap\Modal;
         <?= $form->field($transaction_detail_model, 'kitted_unit',
                 ['inputOptions' => ['class' => 'uborder help-25percent'],
                 'labelOptions' => ['class' => 'control-label',
-                    'style' => 'font-size: 16px']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
+                    'style' => 'font-size: 16px'
+                    'onchange' => 'validatePalletType(this.value, getFieldValueById("material_code"));']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-25percent',
