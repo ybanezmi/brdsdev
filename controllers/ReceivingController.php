@@ -557,8 +557,8 @@ class ReceivingController extends Controller
                 $sapError = array();
                 $sapInboundNumber = $this->getSapInboundNumber($transaction_model, $transaction_detail_model);
 
-                if (!$this->isEmpty($transaction_model->sap_no)
-                        || (isset($sapInboundNumber['sap_inbound_no']) && !$this->isEmpty($sapInboundNumber['sap_inbound_no']))) {
+                // if (!$this->isEmpty($transaction_model->sap_no)
+                if (isset($sapInboundNumber['sap_inbound_no']) && !$this->isEmpty($sapInboundNumber['sap_inbound_no'])) {
                     if (isset($sapInboundNumber['sap_inbound_no']) && !$this->isEmpty($sapInboundNumber['sap_inbound_no'])) {
                         $sapNoFlag = true;
                         $transaction_model->sap_no = $sapInboundNumber['sap_inbound_no'];
