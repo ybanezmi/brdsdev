@@ -7,9 +7,9 @@ use yii\grid\GridView;
 /* @var $model app\models\TrxTransactions */
 
 $this->title = 'View Entries';
-$this->params['breadcrumbs'][] = ['label' => 'Receiving', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Receiving Menu', 'url' => ['menu', 'id' => Yii::$app->request->get('id')]];
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = ['label' => 'Receiving', 'url' => ['index']];
+// $this->params['breadcrumbs'][] = ['label' => 'Receiving Menu', 'url' => ['menu', 'id' => Yii::$app->request->get('id')]];
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="trx-transactions-view">
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-		 * 
+		 *
 		 */ ?>
     </p>
 
