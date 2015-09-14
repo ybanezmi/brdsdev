@@ -198,10 +198,6 @@ use yii\bootstrap\Modal;
                  'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',],
                  ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
-        <?= $form->field($transaction_detail_model, 'pallet_type',
-                ['inputOptions' => ['class' => 'uborder disabled help-25percent',
-                                    'readonly' => 'readonly',],
-                ])->textInput()->label('Pallet Type') ?>
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
                     ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',

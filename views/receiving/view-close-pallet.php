@@ -58,7 +58,7 @@ $this->title = 'View & Close Pallet';
 
 			<div class="control-group">
 				<label class="control-label-f">PALLET DETAILS</label>
-	            <div class="f-full-size help-75percent" style="background:#ccc; min-height: 365px; padding:20px;">
+	            <div class="f-full-size help-75percent" style="background:#ccc; min-height: 200px; padding:20px;">
 	            	<div id="pallet-details" style="display: none;">
 	            		<div class="control-group">
                             <?= Html::label('TRANSACTION ID', 'transaction_id', ['class' => 'control-label']) ?>
@@ -69,38 +69,10 @@ $this->title = 'View & Close Pallet';
                             </div>
                         </div>
 		            	<div class="control-group">
-                            <?= Html::label('MATERIAL CODE', 'material_code', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('material_code', null, ['class'     => 'uborder disabled help-40percent',
-                                                                            'disabled'  => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('BATCH', 'batch', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('batch', null, ['class'    => 'uborder disabled help-40percent',
-                                                                            'disabled' => 'disabled']); ?>
-                            </div>
-                        </div>
-		            	<div class="control-group">
 		            		<?= Html::label('# PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
 		            			<?= Html::textInput('pallet_count', null, ['class'     => 'uborder disabled help-20percent',
 		            			                                           'disabled'  => 'disabled']); ?>
-		            		</div>
-		            	</div>
-		            	<div class="control-group">
-		            		<?= Html::label('NET WEIGHT', 'net_weight', ['class' => 'control-label']) ?>
-		            		<div class="f-inline-size">
-		            			<?= Html::textInput('net_weight', null, ['class' 	=> 'uborder disabled help-20percent',
-		            			                                         'disabled' => 'disabled']); ?>
-		            		</div>
-		            	</div>
-		            	<div class="control-group">
-		            		<?= Html::label('TOTAL WEIGHT', 'total_weight', ['class' => 'control-label']) ?>
-		            		<div class="f-inline-size">
-		            			<?= Html::textInput('total_weight', null, ['class'     => 'uborder disabled help-20percent',
-		            									   		   		   'disabled'  => 'disabled']); ?>
 		            		</div>
 		            	</div>
 		            	<div class="control-group">
@@ -110,27 +82,6 @@ $this->title = 'View & Close Pallet';
 		            									   		   			'disabled' => 'disabled']); ?>
 		            		</div>
 		            	</div>
-		            	<div class="control-group">
-                            <?= Html::label('KITTED UNIT', 'kitted_unit', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('kitted_unit', null, ['class'       => 'uborder disabled help-40percent',
-                                                                          'disabled'    => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('MANUFACTURING DATE', 'manufacturing_date', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('manufacturing_date', null, ['class'    => 'uborder disabled help-40percent',
-                                                                                 'disabled' => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('EXPIRY DATE', 'expiry_date', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('expiry_date', null, ['class'       => 'uborder disabled help-40percent',
-                                                                          'disabled'    => 'disabled']); ?>
-                            </div>
-                        </div>
                         <div class="control-group">
                             <?= Html::label('PALLET TYPE', 'pallet_type', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
@@ -144,35 +95,7 @@ $this->title = 'View & Close Pallet';
                                 <?= Html::textInput('status', null, ['class'    => 'uborder disabled help-40percent',
                                                                      'disabled' => 'disabled']); ?>
                             </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('CREATOR', 'creator', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('creator', null, ['class'       => 'uborder disabled help-40percent',
-                                                                      'disabled'    => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('CREATED DATE', 'created_date', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('created_date', null, ['class'      => 'uborder disabled help-40percent',
-                                                                           'disabled'   => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('UPDATER', 'updater', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('updater', null, ['class'       => 'uborder disabled help-40percent',
-                                                                      'disabled'    => 'disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <?= Html::label('UPDATED DATE', 'updated_date', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('updated_date', null, ['class'       => 'uborder disabled help-40percent',
-                                                                      'disabled'    => 'disabled']); ?>
-                            </div>
-                        </div>
+                        </div>                        
 	            	</div>
             	</div>
 

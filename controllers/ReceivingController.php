@@ -1009,7 +1009,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::ZEX_VBELN] = $trxTransaction['id'];
         $params[SapConst::PARAMS][SapConst::KUNNR] = $trxTransactionDetails['customer_code'];
         $params[SapConst::PARAMS][SapConst::MATNR] = $trxTransactionDetails['material_code'];
-        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxTransactionDetails['net_weight'], 3, '.', '');
+        $params[SapConst::PARAMS][SapConst::LFIMG] = number_format((float)$trxTransactionDetails['total_weight'], 3, '.', '');
         $params[SapConst::PARAMS][SapConst::CHARG] = $trxTransactionDetails['batch'];
         $params[SapConst::PARAMS][SapConst::WERKS] = $trxTransaction['plant_location'];
         $params[SapConst::PARAMS][SapConst::LFART] = SapConst::ZEL;
