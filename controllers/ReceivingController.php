@@ -994,6 +994,30 @@ class ReceivingController extends Controller
         echo json_encode($response);
     }
 
+    public function actionGetBatch($id) {
+        $batchList = null;
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $id]);
+
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');
+        }
+
+        echo json_encode($batchList);
+    }
+
+    public function actionGetManufacturingExpiryDateFromBatch($id) {
+        $response = null;
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch' => $id]);
+
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $response['manufacturing_date'] = date('d-M-y', strtotime($transactionDetailsModel->manufacturing_date));
+            $response['expiry_date'] = date('d-M-y', strtotime($transactionDetailsModel->expiry_date));
+        }
+
+        echo json_encode($response);
+    }
+
     public function isEmpty($str) {
         if (isset($str) && $str != null && $str !== SapConst::EMPTY_STRING) {
             return false;
@@ -1027,7 +1051,7 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;

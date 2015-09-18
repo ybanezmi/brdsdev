@@ -246,7 +246,7 @@ function searchMaterial() {
 /* function to retrieve sled of material */
 function getMaterialSled() {
 	var material_sled_val = material_sled[getFieldValueById("trxtransactiondetails-material_code")];
-    
+
     console.log(material_sled_val);
 
 	return material_sled_val;
@@ -1082,4 +1082,74 @@ function calculateTotalWeight() {
     setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
     var palletWeight = parseFloat(getMaterialTotalWeight()) + parseFloat(getTransactionPalletWeight());
     setFieldValueById("trxtransactiondetails-pallet_weight", palletWeight.toFixed(decimalPlaces));
+}
+
+var useFlag = 0;
+function toggleUse(id) {
+    var btnLabel = document.getElementById('btn-use').innerHTML;
+    if (!useFlag) {
+        useFlag = 1;
+        document.getElementById('batch-dropdown').style.display = 'block';
+        document.getElementById('batch-dropdown').children[1].children[0].disabled = false;
+        document.getElementById('batch-dropdown').children[1].children[0].setAttribute('class', 'uborder help-25percent');
+        document.getElementById('batch-text').style.display = 'none';
+        document.getElementById('batch-text').children[1].children[0].disabled = true;
+        document.getElementById('batch-text').children[1].children[0].setAttribute('class', 'uborder help-25percent disabled');
+    } else {
+        useFlag = 0;
+        document.getElementById('batch-dropdown').style.display = 'none';
+        document.getElementById('batch-dropdown').children[1].children[0].disabled = true;
+        document.getElementById('batch-dropdown').children[1].children[0].setAttribute('class', 'uborder help-25percent disabled');
+        document.getElementById('batch-text').style.display = 'block';
+        document.getElementById('batch-text').children[1].children[0].disabled = false;
+        document.getElementById('batch-text').children[1].children[0].setAttribute('class', 'uborder help-25percent');
+    }
+}
+
+function populateBatchDropdown(palletNo) {
+    if (palletNo) {
+        load('get-batch?id=' + palletNo, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+            var x = document.getElementById('batch-dropdown').children[1].children[0];
+
+            // clear options
+            x.options.length = 0;
+
+            if (null != jsonData && jsonData.length > 0) {
+                // show use buttons
+                document.getElementById('btn-use').style.display = 'inline-block';
+                document.getElementById('btn-use-cancel').style.display = 'inline-block';
+                for(var i = 0; i < jsonData.length; i++){
+                    var option  = document.createElement('option');
+                    option.value = jsonData[i];
+                    option.text = jsonData[i];
+                    x.add(option, x[i+1]);
+                }
+            } else {
+                // hide use buttons
+                document.getElementById('btn-use').style.display = 'none';
+                document.getElementById('btn-use-cancel').style.display = 'none';
+            }
+        });
+    }
+}
+
+function populateManufacturingExpiryDateFromBatch(batch) {
+    if (batch) {
+        load('get-manufacturing-expiry-date-from-batch?id=' + batch, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                // set manufacturing date
+                if (jsonData.manufacturing_date) {
+                    setFieldValueById('trxtransactiondetails-manufacturing_date', jsonData.manufacturing_date);
+                }
+
+                // set expiry date
+                if (jsonData.expiry_date) {
+                    setFieldValueById('trxtransactiondetails-expiry_date', jsonData.expiry_date);
+                }
+            }
+        });
+    }
 }

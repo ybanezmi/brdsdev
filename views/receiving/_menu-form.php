@@ -113,24 +113,35 @@ use yii\bootstrap\Modal;
                     </div>
                   </div>
 
-
-
-
-
-
         <?= $form->field($transaction_detail_model, 'batch',
-                ['inputOptions' => ['class' => 'uborder help-25percent'],
-                 'template' => '<div class="control-group">{label}
+                ['inputOptions' => ['class' => 'uborder help-25percent',
+                                    'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value);'],
+                 'template' => '<div class="control-group" id="batch-text">{label}
                                     <div class="f-inline-size">{input}
                                     <button class="btn btn-primary help-15percent"
                                         onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());"
                                         type="button">INT</button>
+                                    <button id="btn-use" class="btn btn-primary help-15percent"
+                                        onclick="toggleUse(this.id);"
+                                        style="display: none;"
+                                        type="button">USE</button>
                                     </div>
                                     <div class=\"col-lg-8\">{error}</div>
                                 </div>',
                  ])->textInput(['maxlength' => 10])->label('Batch / Lot') ?>
 
-
+        <?= $form->field($transaction_detail_model, 'batch',
+                ['inputOptions' => ['class' => 'uborder help-25percent',
+                                    'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value);'],
+                 'template' => '<div class="control-group" id="batch-dropdown" style="display: none;">{label}
+                                    <div class="f-inline-size">{input}
+                                    <button id="btn-use-cancel" class="btn btn-primary help-15percent"
+                                        onclick="toggleUse(this.id);"
+                                        style="display: none;"
+                                        type="button">CANCEL</button>
+                                    </div>
+                                    <div class=\"col-lg-8\">{error}</div>
+                                </div>',])->dropDownList([])->label('Batch / Lot') ?>
 
         <?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),[
                                                                                                             'language' => 'en-GB',
@@ -193,6 +204,7 @@ use yii\bootstrap\Modal;
                                                    checkTransactionPalletWeight();
                                                    checkTransactionPalletType();
                                                    validatePalletType(this.value, getFieldValueById("material_code"));
+                                                   populateBatchDropdown(this.value);
                                                    '],
                  'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',],
@@ -246,6 +258,7 @@ var net_weight = document.getElementById("trxtransactiondetails-net_weight");
 var pallet_no = document.getElementById("trxtransactiondetails-pallet_no");
 net_weight.addEventListener("blur", catchWeight, true);
 pallet_no.addEventListener("blur", catchWeight, true);
+document.getElementById('batch-dropdown').hidden = false;
 
 function catchWeight() {
     if (parseInt(getFieldValueById("trxtransactiondetails-pallet_weight")) > 1000 ) {
