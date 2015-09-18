@@ -1056,8 +1056,10 @@ function ajax_dispatch (url, method, params, container_id, loading_text) {
 	xhr.send(params);
 }
 
-function onSelectMaterial() {
-    clearAllFields();
+function onSelectMaterial(shouldNotClear) {
+    if (!shouldNotClear) {
+        clearAllFields();
+    }
     if (getFieldValueById("trxtransactiondetails-material_code") != '-- Select a product --') {
         setFieldValueById("material_code",getFieldValueById("trxtransactiondetails-material_code"));
     }

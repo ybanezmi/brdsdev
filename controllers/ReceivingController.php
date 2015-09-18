@@ -549,9 +549,40 @@ class ReceivingController extends Controller
 	        	$pallet_no = '';
 	        }
 
-			$isPalletAdded = false;
+            if ($transaction_detail_model->load(Yii::$app->request->post())) {
+                // convert to correct date format
+                if (null != $transaction_detail_model->getAttribute('manufacturing_date')) {
+                    $transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));
+                }
 
-	        if (!$isPalletClosed && !$isPalletRejected && $transaction_detail_model->load(Yii::$app->request->post())) {
+                if (null != $transaction_detail_model->getAttribute('expiry_date')) {
+                    $transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
+                }
+
+                $packaging_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->packaging_code]);
+                $transaction_detail_model->pallet_type = $packaging_material->pallet_type;
+
+                // set to null if no kitting_type selection
+                if ($transaction_detail_model->kitting_code === '-- Select a kitting type --') {
+                    $transaction_detail_model->kitting_code = null;
+                } else {
+                    $kitting_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->kitting_code]);
+                    if ($kitting_material != null) {
+                        $transaction_detail_model->kitting_type = $kitting_material->pallet_type;
+                    }
+                }
+
+                // set to default value if net_unit is not set
+                if (null == $transaction_detail_model->getAttribute('net_unit')) {
+                    $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
+                }
+            }
+
+			$isPalletAdded = false;
+	        if (!$isPalletClosed
+	               && !$isPalletRejected
+	               && Yii::$app->request->post()
+                   && $transaction_detail_model->validate()) {
 	            // Get SAP Inbound Number
 	            $sapNoFlag = false;
                 $sapError = array();
@@ -567,34 +598,8 @@ class ReceivingController extends Controller
                     // add net weight of transaction_detail to the total weight of transaction
                     $transaction_model->weight = $transaction_model->weight + $transaction_detail_model->net_weight;
 
-                    // convert to correct date format
-                    if (null != $transaction_detail_model->getAttribute('manufacturing_date')) {
-                        $transaction_detail_model->setAttribute('manufacturing_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('manufacturing_date')));
-                    }
 
-                    if (null != $transaction_detail_model->getAttribute('expiry_date')) {
-                        $transaction_detail_model->setAttribute('expiry_date', Yii::$app->dateFormatter->convert($transaction_detail_model->getAttribute('expiry_date')));
-                    }
-
-                    $packaging_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->packaging_code]);
-                    $transaction_detail_model->pallet_type = $packaging_material->pallet_type;
-
-                    // set to null if no kitting_type selection
-                    if ($transaction_detail_model->kitting_code === '-- Select a kitting type --') {
-                        $transaction_detail_model->kitting_code = null;
-                    } else {
-                        $kitting_material = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $transaction_detail_model->kitting_code]);
-                        if ($kitting_material != null) {
-                            $transaction_detail_model->kitting_type = $kitting_material->pallet_type;
-                        }
-                    }
-
-                    // set to default value if net_unit is not set
-                    if (null == $transaction_detail_model->getAttribute('net_unit')) {
-                        $transaction_detail_model->net_unit = SapConst::DEFAULT_NET_UNIT;
-                    }
-
-                    if ($transaction_model->save() && $transaction_detail_model->save() && $transaction_detail_model->validate()) {
+                    if ($transaction_model->save() && $transaction_detail_model->save()) {
                         $isPalletAdded = true;
                         $this->redirect(['menu', 'id'            => $transaction_model->id,
                                                  'pallet'        => $transaction_detail_model->pallet_no,
@@ -1051,8 +1056,9 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
+        //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+        // $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
+        $response['sap_inbound_no'] = '69696969';
 
         return $response;
     }

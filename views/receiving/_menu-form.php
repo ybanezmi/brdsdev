@@ -253,18 +253,22 @@ use yii\bootstrap\Modal;
 
 </div>
 
-<script>
+<script type="text/javascript">
 var net_weight = document.getElementById("trxtransactiondetails-net_weight");
 var pallet_no = document.getElementById("trxtransactiondetails-pallet_no");
 net_weight.addEventListener("blur", catchWeight, true);
 pallet_no.addEventListener("blur", catchWeight, true);
-document.getElementById('batch-dropdown').hidden = false;
 
 function catchWeight() {
     if (parseInt(getFieldValueById("trxtransactiondetails-pallet_weight")) > 1000 ) {
         alert('The weight exceeds the maximum allowed.');
         setFieldValueById("trxtransactiondetails-net_weight", 0, true);
     }
+}
+
+window.onload=function() {
+    onSelectMaterial(true);
+    validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"), getFieldValueById("trxtransactiondetails-material_code"));
 }
 
 </script>

@@ -58,7 +58,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
             [['pallet_no'], 'checkPackagingPalletNoRange'],
             [['pallet_no'], 'checkKittingPalletNoRange'],
-            [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9]/', 'message' => 'Must contain alphanumeric characters only.'],
+            [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9- ]/', 'message' => 'Must contain alphanumeric, space ( ), and dash (-) characters only.'],
         ];
     }
 
