@@ -296,8 +296,11 @@ class ReceivingController extends Controller
 			$model->updater_id		= Yii::$app->user->id;
 			$model->updated_date	= $date;
 
-	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-	            return $this->redirect(['menu', 'id' => $model->id]);
+	        if ($model->load(Yii::$app->request->post())) {
+	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
+                if ($model->validate() && $model->save()) {
+	               return $this->redirect(['menu', 'id' => $model->id]);
+                }
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');

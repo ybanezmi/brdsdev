@@ -41,7 +41,10 @@ use yii\widgets\ActiveForm;
   	<?= $form->field($model, 'storage_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($storage_list, ['class'	=> 'uborder help-40percent',
 																			   'prompt'	=> '-- Select a storage --'])->label('S. Loc'); ?>
 
-    <?= $form->field($model, 'remarks')->textarea(['rows'=>'5']) ?>
+    <?= $form->field($model, 'remarks',
+            ['template' => '<div class="control-group">{label}<div class="f-inline-size">
+                                <label class="class="control-label">' . Yii::$app->user->identity->username . '@:</label>
+                                {input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textarea(['rows'=>'5']) ?>
 
 
     	<div class="one-column-button pdt-one-column-button">
