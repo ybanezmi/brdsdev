@@ -192,7 +192,6 @@ use yii\bootstrap\Modal;
                                     'onchange' => 'checkTransactionKittedUnit();
                                                    checkTransactionPalletWeight();
                                                    checkTransactionPalletType();
-                                                   validateTransactionPalletType();
                                                    validatePalletType(this.value, getFieldValueById("material_code"));
                                                    '],
                  'labelOptions' => ['class' => 'control-label',
