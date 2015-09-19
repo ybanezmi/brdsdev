@@ -1059,9 +1059,8 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
-        //$params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        // $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-        $response['sap_inbound_no'] = '69696969';
+        $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
         return $response;
     }
