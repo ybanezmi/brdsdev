@@ -211,7 +211,13 @@ function checkMaterialSled() {
 
 /* function to add/subtract days in a date string */
 function calculateDate(strDate, days, type) {
-	var newDate = new Date(strDate);
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var date = strDate.split('-');
+    var year = date[2];
+    var month = monthNames.indexOf(date[1]);
+    var day = date[0];
+	var newDate = new Date(year, month, day);
+
 	if (type == 'add') {
 		newDate.setDate(newDate.getDate() + parseInt(days));
 	} else if (type == 'subtract') {
@@ -219,8 +225,6 @@ function calculateDate(strDate, days, type) {
 	} else {
 		// do nothing
 	}
-
-	var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 	var dd = ('0' + newDate.getDate()).slice(-2);
 	var mm = newDate.getMonth();
