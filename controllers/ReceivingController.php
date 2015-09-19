@@ -1009,6 +1009,7 @@ class ReceivingController extends Controller
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');
+            $batchList = array_unique($batchList);
         }
 
         echo json_encode($batchList);
