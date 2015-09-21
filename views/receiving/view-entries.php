@@ -15,6 +15,14 @@ $this->title = 'View Entries';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <div class="one-column-button pdt-one-column-button">
+        <div class="submit-button ie6-submit-button">
+            <?= Html::button('Back', ['class'   => 'btn btn-primary back-button',
+                                      'name'    => 'back',
+                                      'onclick' => ' window.history.back(); return false;',]) ?>
+        </div>
+    </div>
+
     <p>
     	<?php /*
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

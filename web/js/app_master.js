@@ -251,8 +251,6 @@ function searchMaterial() {
 function getMaterialSled() {
 	var material_sled_val = material_sled[getFieldValueById("trxtransactiondetails-material_code")];
 
-    console.log(material_sled_val);
-
 	return material_sled_val;
 }
 
