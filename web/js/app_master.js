@@ -634,7 +634,8 @@ function getMateriaList(code){
             for(var i = 0; i < jsonData.length; i++){
                 var option  = document.createElement('option');
                 option.value = jsonData[i].item_code;
-                option.text = jsonData[i].description;
+                /*option.text = jsonData[i].description;*/
+                option.text = jsonData[i].item_code + ' - ' + jsonData[i].description;
                 x.add(option, x[i+1]);
             }
             x.style.display = "block";

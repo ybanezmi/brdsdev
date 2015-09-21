@@ -52,41 +52,17 @@ class DispatchingController extends \yii\web\Controller
 
          if (isset($dispatch_id)) {
             
-            // $dismodel = new DispatchModel;
-            // Yii::$app->response->format = 'pdf';
-            // Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
-            //       'format' => 'Letter',
-            //       'orientation' => 'Portrait', // This value will be ignored if format is a string value.
-            //       'beforeRender' => function($mpdf, $data) {},
-            //       ]);
-            // $this->layout = '//print_dispatch';
-            // $dispatch_model_2 = $dismodel->getConfirmDispatchItems($dispatch_id);
+            $dismodel = new DispatchModel;
+            Yii::$app->response->format = 'pdf';
+            Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+                  'format' => 'Letter',
+                  'orientation' => 'Portrait', // This value will be ignored if format is a string value.
+                  'beforeRender' => function($mpdf, $data) {},
+                  ]);
+            $this->layout = '//print_dispatch';
+            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($dispatch_id);
 
-            // return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
-            
-            //$printer = '\\\\BRDS_TEST-PC\\Canon LBP2900'
-            var_dump(printer_list(PRINTER_ENUM_LOCAL | PRINTER_ENUM_SHARED));
-            exit;
-            
-            if($ph = printer_open($printer)) {
-                printer_start_doc($ph, "START DOC");
-                $content = "hello";
-
-                // Set print mode to RAW and send PDF to printer
-                printer_set_option($ph, PRINTER_MODE, "RAW");
-                printer_write($ph, $content);
-
-                printer_close($ph);
-                printer_end_doc($ph);
-            }
-            else {
-                echo "Couldn't connect on shared printer";
-            }
-
-           
-
-            
-
+            return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
 
         }
         else{
