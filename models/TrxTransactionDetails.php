@@ -58,6 +58,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
             [['pallet_no'], 'checkPackagingPalletNoRange'],
             [['pallet_no'], 'checkKittingPalletNoRange'],
+            [['pallet_type'], 'checkPalletTypeCompatibility'],
             [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9- ]/', 'message' => 'Must contain alphanumeric, space ( ), and dash (-) characters only.'],
         ];
     }
@@ -130,6 +131,20 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
 
             if (substr($this->kitted_unit, 0, 1) !== $plantLocation->pallet_range) {
                 $this->addError('kitted_unit', 'Pallet no. is not in range ['.$plantLocation->pallet_range.'*********]');
+            }
+        }
+    }
+
+    /**
+     * pallet_type validation
+     */
+    public function checkPalletTypeCompatibility($attribute, $params) {
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $this->pallet_no]);
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $material = Yii::$app->modelFinder->findMaterialModel($this->material_code);
+            if ($transactionDetailsModel[0]['pallet_type'] !== $material['pallet_ind']) {
+                $this->addError('pallet_no', 'Compatibility error. Pallet type is different with the selected customer product pallet type. Please select compatible customer product.');
             }
         }
     }
