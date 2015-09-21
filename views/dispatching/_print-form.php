@@ -21,7 +21,7 @@ use app\models\DispatchModel;
     <?php 
         $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
         $form = ActiveForm::begin([
-        'options' => ['class' => 'form-horizontal', 'name'=>'dispatchFORM'],
+        'options' => ['class' => 'form-horizontal', 'name'=>'dispatchFORM', 'target'=>'_blank'],
         'action' => ['/dispatching/print-dispatch'],
         'fieldConfig' => [
             'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
@@ -146,11 +146,14 @@ use app\models\DispatchModel;
     </div>
     <?php }?>
     
+    <div class="scanner" style="padding-bottom:20px;">
+        <input type="text" class='uborder help-100percent'>
+    </div>
     <div class="dispatch-details">
         <h1>Shipping Details</h1>
             <style>table.details{ width:auto; margin-top: 20px; } </style>
             <div style="padding:0 20px;">       
-                <table class="details">
+                <table class="details" id="ship-details">
                 <tbody>
                 <?php
                 $i=1;
@@ -166,12 +169,12 @@ use app\models\DispatchModel;
                         
                         if($dispatch_model_2_info->ALTME == 'KG'){
                          
-                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".$dispatch_model_2_info->VISTM."\" name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
+                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
                                        
                         }  else {                     
-                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:110px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value=\"".number_format($dispatch_model_2_info->VISTM,0,'.',',')."\" name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
+                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
                         }    
                             echo $dispatch_model_2_info->MAKTX; //$dispatch_model_2_info->MATNR;
                             echo "<br />";
@@ -183,8 +186,9 @@ use app\models\DispatchModel;
 
                               $gr_tot = $dispatch_model_2_info->VISTM;
                               echo '<span style="display:none" id="umvkz_'.$i.'">1</span>';
-                              echo '<span id="weight_'.$i.'">'.number_format((float)$gr_tot,3,'.','').'</span> '.$dispatch_model_2_info->ALTME;
-                              echo '<input type= "hidden" value="'.number_format((float)$gr_tot,3,'.','').'" name="temp_weight[]" id="temp_weight_'.$i.'"';
+                              echo '<span id="weight_'.$i.'" style="display:none;"></span>';
+                              echo '<span>'.number_format((float)$gr_tot,3,'.','').'</span> '.$dispatch_model_2_info->ALTME;
+                              echo '<input type= "hidden" value="" name="temp_weight[]" id="temp_weight_'.$i.'"';
                               echo '<input type= "hidden" value="'.$dispatch_model_2_info->ALTME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
                             
                             }else {
@@ -192,9 +196,10 @@ use app\models\DispatchModel;
                               $umrez_umren = $dispatch_model_2_info->UMREZ / $dispatch_model_2_info->UMREN;
 
                               $gr_tot = $dispatch_model_2_info->VISTM * $umrez_umren;
+                              echo "<span>".$dispatch_model_2_info->VISTM."".$dispatch_model_2_info->ALTME."</span> "; 
                               echo "<span id='umvkz_".$i."'>".number_format((float)$umrez_umren,1,'.','')." KG</span>"; 
-                              echo ' (<span id="weight_'.$i.'">'.number_format((float)$gr_tot,3,'.','').'</span> KG)';
-                              echo '<input type= "hidden" value="'.number_format((float)$gr_tot,3,'.','').'" name="temp_weight[]" id="temp_weight_'.$i.'"';
+                              echo ' (<span id="weight_'.$i.'"></span> KG)';
+                              echo '<input type= "hidden" value="" name="temp_weight[]" id="temp_weight_'.$i.'"';
                               echo '<input type= "hidden" value="'.$dispatch_model_2_info->ALTME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
 
                             }
@@ -220,7 +225,7 @@ use app\models\DispatchModel;
                     ?>
                     </tbody>
                 </table>
-                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-10percent' readonly="readonly" id="total_weight" value="<?php echo number_format((float)$totalweight,3,'.',''); ?>" name="total_weight" /> KG
+                <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-20percent' readonly="readonly" id="total_weight" value="" name="total_weight" /> KG
                 </p>
             </div>
     </div>
@@ -280,8 +285,8 @@ use app\models\DispatchModel;
 
     <div class="one-column-button pdt-one-column-button">
         <div class="submit-button ie6-submit-button">
-        <?= Html::submitButton('Print', ['class' => 'btn btn-primary', 'name'  => 'print-document']) ?>
-        <button type="button" class="btn btn-primary" name="clear" onclick="return clearvalue()">Clear</button>
+        <?= Html::submitButton('Print', ['style' => 'display:none', 'class' => 'btn btn-primary', 'name'  => 'print-document', 'id'  => 'printButton']) ?>
+        <!-- <button type="button" class="btn btn-primary" name="clear" onclick="return clearvalue()">Clear</button> -->
         </div>
     </div>
 
@@ -320,30 +325,28 @@ use app\models\DispatchModel;
         var hidwtElem = "temp_weight_"+cnt;
         var umvkzVal = document.getElementById(umvkzElem).innerHTML;
 
+        var empty = 0;
 
         document.getElementById(wtElem).innerHTML = formatNumber(parseFloat(ish) * parseFloat(umvkzVal));
         document.getElementById(hidwtElem).value = formatNumber(parseFloat(ish) * parseFloat(umvkzVal));
 
-
         for (var i = 1; i <= total_inc; i++) {
              var qat = document.getElementById("quantity_"+i+"").value;
              var wt = document.getElementById("weight_"+i+"").innerHTML;
-            
+
+            if(wt == '') {
+                wt = 0;
+                empty = empty + i;
+            } 
              total_row = parseFloat(total_row) + parseFloat(wt);
+             
+        }
+        if(empty == 0) {
+           document.getElementById('printButton').style.display = 'block'; 
         }
 
         document.getElementById("total_weight").value = formatNumber(parseFloat(total_row));
-
-        //use this if weight has limit
-        /*
-        if(total_row <= 1000) {
-            document.getElementById("total_weight").value = total_row;
-        }else {
-            alert('total weight limit: 1000kg');
-            document.getElementById(qt).value = document.getElementById(qt_1).innerHTML;
-        }*/
     }
-
 
     function closestById(el, id) {
         while (el.id != id) {

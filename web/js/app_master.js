@@ -4,7 +4,7 @@ var decimalPlaces = 3;
 
 $(function () {
 
-    $('.print-tag-form form').bind("keypress", function(e) {
+    $('.print-tag-form form, .dispatch-form form').bind("keypress", function(e) {
       if (e.keyCode == 13) {
         e.preventDefault();
         return false;
