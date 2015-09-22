@@ -297,7 +297,9 @@ class ReceivingController extends Controller
 			$model->updated_date	= $date;
 
 	        if ($model->load(Yii::$app->request->post())) {
+	        	$model->actual_gr_date = Yii::$app->dateFormatter->convert($model->getAttribute('actual_gr_date'));
 	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
+				
                 if ($model->validate() && $model->save()) {
 	               return $this->redirect(['menu', 'id' => $model->id]);
                 }
@@ -1049,7 +1051,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
         $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
         $params[SapConst::PARAMS][SapConst::WADAT] = date('Ymd');
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['actual_gr_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
         //$params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;

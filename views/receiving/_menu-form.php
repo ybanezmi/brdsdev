@@ -31,7 +31,7 @@ use yii\bootstrap\Modal;
                          'options'       => ['style' => 'margin-bottom: 0']])->textInput(['disabled' => 'disabled'])->label(false) ?>
 
 
-        <?= $form->field($transaction_model, 'created_date')->textInput(['value'    => date('m/d/Y', strtotime($transaction_model->created_date)),
+        <?= $form->field($transaction_model, 'actual_gr_date')->textInput(['value'    => date('m/d/Y', strtotime($transaction_model->actual_gr_date)),
                                                                           'disabled' => 'disabled',
                                                                           'class'     => 'uborder disabled help-25percent'])->label('DATE') ?>
 

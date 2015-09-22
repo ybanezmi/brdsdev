@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TrxTransactions */
@@ -40,6 +41,16 @@ use yii\widgets\ActiveForm;
 
   	<?= $form->field($model, 'storage_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($storage_list, ['class'	=> 'uborder help-40percent',
 																			   'prompt'	=> '-- Select a storage --'])->label('S. Loc'); ?>
+
+	<?= $form->field($model,'actual_gr_date',['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->widget(DatePicker::className(),[
+		'language' 		=> 'en-GB',
+		'clientOptions'	=> ['dateFormat'     => 'dd-M-yy',
+                            'showOn'        => 'button',
+                         	'buttonImage'  => '../images/calendar.gif',
+                         	'buttonImageOnly' => 'true',],
+       	'options'       => ['class'         => 'uborder disabled help-25percent dateclass',
+                            'readonly'        => 'readonly',
+                            'dateFormat'     => 'dd-M-yy',]]) ?>
 
     <?= $form->field($model, 'remarks',
             ['template' => '<div class="control-group">{label}<div class="f-inline-size">
