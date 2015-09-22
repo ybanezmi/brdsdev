@@ -115,8 +115,11 @@
     
     $i=1;
     $x=0;
-    foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {    
-        $current = $dispatch_model_2_info->VISTM;
+
+    foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {
+        if($dispatch_model_2_info->CHARG != " "){ 
+
+        $current = $dispatch_model_2_info->LFIMG;
         $updated = Yii::$app->request->post('material_quantity')[$x];
 
         echo '<table class="item-list"><tr>';
@@ -128,8 +131,8 @@
             }
 
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="255">'.$dispatch_model_2_info->MAKTX.'</td>';
-            echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
+            echo '<td width="255">'.$dispatch_model_2_info->ARKTX.'</td>';
+            echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
             echo '<td width="110" align="right">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
             echo '<td width="80" align="right">'.$dispatch_model_2_info->CHARG.'</td>';
             echo '<td width="80" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
@@ -162,6 +165,7 @@
             } 
         $i++;
         $x++;                    
+        }
     }
     ?>
 </table>
@@ -175,7 +179,8 @@
         <br />
         <div><b>Checked By:</b></div>
         <br />
-        <hr style="width:60%; text-align:left" />
+        <div style="margin-top:10px; text-transform:uppercase"><?= Yii::$app->request->post('checked_by'); ?></div>
+        <hr style="width:60%; text-align:left; margin-top:0; padding-top:0" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
     </td>
     <td align="left" valign="top" style="width:30%">
@@ -199,7 +204,7 @@
         <br />
         <div><b>Received in Good Order and Condition by:</b></div>
         <br />
-        <hr style="width:100%; text-align:left" />
+        <hr style="width:100%; text-align:left; margin-top:15px;" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
     </td>
 </table>

@@ -36,7 +36,28 @@ class DispatchModel extends \yii\db\ActiveRecord
         $fnumb = SapConfig::$funcNumber;
 
         if( $conn ) {
-            $stmt = "SELECT $tn.LIPS.MATNR, $tn.LIPS.ARKTX, $tn.LIPS.CHARG, $tn.LIPS.VFDAT, $tn.LIPS.UMVKZ, $tn.LIPS.VRKME, $tn.LIPS.LFIMG FROM $tn.LIPS WHERE $tn.LIPS.VBELN ='".$dr."' AND $tn.LIPS.MANDT = $fnumb";
+            $stmt = "SELECT $tn.LIPS.MATNR, $tn.LIPS.ARKTX, $tn.LIPS.CHARG, $tn.LIPS.UMVKZ, $tn.LIPS.BRGEW, $tn.LIPS.VRKME, $tn.LIPS.LFIMG, $tn.LIPS.VFDAT, $tn.LIPS.MEINS, $tn.LIPS.VOLUM, $tn.LIPS.UMVKZ, $tn.LIPS.UMVKN FROM $tn.LIPS WHERE $tn.LIPS.VBELN ='".$dr."' AND $tn.LIPS.MANDT = $fnumb";
+            if(($result = sqlsrv_query($conn,$stmt)) !== false){
+                $return_value = array();
+                while( $obj = sqlsrv_fetch_object( $result )) {
+                      array_push( $return_value, $obj);
+                }
+                return $return_value;
+            }
+        } else{
+            echo "Connection could not be established.<br />";
+            die( print_r( sqlsrv_errors(), true));
+        }
+    }
+
+    public function getPickedBy($dr)
+    {
+        $conn = SapConfig::msqlconn();
+        $tn = SapConfig::$getTable;
+        $fnumb = SapConfig::$funcNumber;
+
+        if( $conn ) {
+            $stmt = "SELECT $tn.LTAP.QNAME FROM $tn.LTAP WHERE $tn.LTAP.VBELN ='".$dr."' AND $tn.LTAP.PQUIT = 'X'";
             if(($result = sqlsrv_query($conn,$stmt)) !== false){
                 $return_value = array();
                 while( $obj = sqlsrv_fetch_object( $result )) {

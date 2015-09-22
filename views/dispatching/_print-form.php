@@ -146,9 +146,6 @@ use app\models\DispatchModel;
     </div>
     <?php }?>
     
-    <div class="scanner" style="padding-bottom:20px;">
-        <input type="text" class='uborder help-100percent'>
-    </div>
     <div class="dispatch-details">
         <h1>Shipping Details</h1>
             <style>table.details{ width:auto; margin-top: 20px; } </style>
@@ -161,72 +158,91 @@ use app\models\DispatchModel;
                 $total_volume=0;
                 $qname = array();
 
-                    foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {   
+                foreach ($dispatch_model_3 as $dispatch_model_3_key => $dispatch_model_3_info) {   
                         
-                        if (!in_array($dispatch_model_2_info->QNAME, $qname)) {
-                            $qname[] = $dispatch_model_2_info->QNAME;  
+                        if (!in_array($dispatch_model_3_info->QNAME, $qname)) {
+                            $qname[] = $dispatch_model_3_info->QNAME;  
                         }
+
+                }
+
+              
+                if(!empty($dispatch_model_2)) {
+
+                $total_inc = 0; 
+                
+                foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {   
                         
-                        if($dispatch_model_2_info->ALTME == 'KG'){
+                     if($dispatch_model_2_info->CHARG != " "){  
+
+                        if($dispatch_model_2_info->VRKME == 'KG'){
                          
                          echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
                                        
                         }  else {                     
                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->ALTME."</td><td style='padding-top:5px;'>" ;
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
                         }    
-                            echo $dispatch_model_2_info->MAKTX; //$dispatch_model_2_info->MATNR;
+                            echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
                             echo "<br />";
                             echo $dispatch_model_2_info->CHARG.' ('.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).')';
                             echo "<br />";
 
-                            if($dispatch_model_2_info->ALTME == 'KG'){
+                            if($dispatch_model_2_info->VRKME == 'KG'){
                               
 
-                              $gr_tot = $dispatch_model_2_info->VISTM;
+                              $gr_tot = $dispatch_model_2_info->LFIMG;
                               echo '<span style="display:none" id="umvkz_'.$i.'">1</span>';
                               echo '<span id="weight_'.$i.'" style="display:none;"></span>';
-                              echo '<span>'.number_format((float)$gr_tot,3,'.','').'</span> '.$dispatch_model_2_info->ALTME;
+                              echo '<span>'.number_format((float)$gr_tot,3,'.','').'</span> '.$dispatch_model_2_info->VRKME;
                               echo '<input type= "hidden" value="" name="temp_weight[]" id="temp_weight_'.$i.'"';
-                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->ALTME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
+                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->VRKME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
                             
                             }else {
 
-                              $umrez_umren = $dispatch_model_2_info->UMREZ / $dispatch_model_2_info->UMREN;
+                              $umvkz_umvkn = $dispatch_model_2_info->UMVKZ / $dispatch_model_2_info->UMVKN;
 
-                              $gr_tot = $dispatch_model_2_info->VISTM * $umrez_umren;
-                              echo "<span>".$dispatch_model_2_info->VISTM."".$dispatch_model_2_info->ALTME."</span> "; 
-                              echo "<span id='umvkz_".$i."'>".number_format((float)$umrez_umren,1,'.','')." KG</span>"; 
+                              $gr_tot = $dispatch_model_2_info->LFIMG * $umvkz_umvkn;
+                              echo "<span>".$dispatch_model_2_info->LFIMG."".$dispatch_model_2_info->VRKME."</span> "; 
+                              echo "<span id='umvkz_".$i."'>".number_format((float)$umvkz_umvkn,3,'.','')." KG</span>"; 
                               echo ' (<span id="weight_'.$i.'"></span> KG)';
                               echo '<input type= "hidden" value="" name="temp_weight[]" id="temp_weight_'.$i.'"';
-                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->ALTME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
+                              echo '<input type= "hidden" value="'.$dispatch_model_2_info->VRKME.'" name="temp_weight[]" id="unit_weight_'.$i.'"';
 
                             }
                             
                             echo "<br />";
-                            
+                        echo "<input type='hidden' value='".$dispatch_model_2_info->MATNR."' name='material_number[]' />";
+                        echo "<input type='hidden' value='".$dispatch_model_2_info->ARKTX."' name='material_name[]' />";
+
                         echo "<td></tr>";
                         $i++;
 
                         $total_inc = $i-1;
 
-                        echo "<input type='hidden' value='".$dispatch_model_2_info->MATNR."' name='material_number[]' />";
-                        echo "<input type='hidden' value='".$dispatch_model_2_info->MAKTX."' name='material_name[]' />";
                         (float) $totalweight = $totalweight + $gr_tot;
                         (float) $total_volume = $total_volume + $dispatch_model_2_info->VOLUM;
 
-                        
+                        }
                     }
 
                     echo '<input type="hidden"  id="total_volume" value="'.$total_volume.'" name="total_inc" />';
                     echo '<input type="hidden"  id="total_inc" value="'.$total_inc.'" name="total_inc" />';
                     echo '<input type="hidden"  id="total_unit" value="KG" name="total_unit" />';
+                    
+                    } else {
+                        echo "<div style='font-weight: bold; padding-top: 30px; color: #990000;''>No record found!</div>";
+                    }
+                    
+                   
                     ?>
                     </tbody>
                 </table>
                 <p style="padding-top:50px; font-weight:bold; font-size:20px;">TOTAL WEIGHT: <input type='text' class='uborder disabled help-20percent' readonly="readonly" id="total_weight" value="" name="total_weight" /> KG
                 </p>
+
+
             </div>
     </div>
     </div>
@@ -252,6 +268,8 @@ use app\models\DispatchModel;
     <input type="hidden" value="<?= $customer_data[0]->LAND1; ?>" name="customer_address[country]">
     <input type="hidden" value="<?= $customer_data[0]->PSTLZ; ?>" name="customer_address[zip]">
     <input type="hidden" value="<?= $customer_data[0]->TELF1; ?>" name="customer_address[tel]">
+
+    <input type="hidden" value="<?= Yii::$app->user->identity->first_name .' '.Yii::$app->user->identity->last_name ?>" name="checked_by">
 
      <!-- shipping_information-->
     <input type="hidden" value="<?= $dispatch_model_1[0]->VBELN; ?>" name="dispatch_number">
@@ -334,11 +352,16 @@ use app\models\DispatchModel;
              var qat = document.getElementById("quantity_"+i+"").value;
              var wt = document.getElementById("weight_"+i+"").innerHTML;
 
-            if(wt == '') {
+            if(qat < 0) {
+                 qat = document.getElementById("quantity_"+i+"").value = 0;
+            }
+            if(wt == '' || qat == '' ) {
                 wt = 0;
                 empty = empty + i;
             } 
-             total_row = parseFloat(total_row) + parseFloat(wt);
+            
+            total_row = parseFloat(total_row) + parseFloat(wt);
+
              
         }
         if(empty == 0) {
