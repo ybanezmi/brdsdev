@@ -779,7 +779,7 @@ class ReceivingController extends Controller
 	    	// close receiving
 	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
 
-            $closeReceiving = $this->closeReceiving($transaction->sap_no);
+            $closeReceiving = $this->closeReceiving($transaction->sap_no, $transaction->actual_gr_date);
             if (isset($closeReceiving['success']) && $closeReceiving['success'] <> 0) {
                 $transaction->status = Yii::$app->params['STATUS_CLOSED'];
                 $success = $transaction->update();
@@ -1079,12 +1079,12 @@ class ReceivingController extends Controller
         return $response;
     }
 
-    public function closeReceiving($inboundNo) {
+    public function closeReceiving($inboundNo, $actualGRDate) {
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_POST_GR;
 
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::VBELN] = $inboundNo;
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd');
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($actualGRDate));
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
