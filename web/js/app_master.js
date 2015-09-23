@@ -4,6 +4,101 @@ var decimalPlaces = 3;
 
 $(function () {
 
+        $("input.display").on("click", function(e){
+            e.preventDefault();
+
+            var $curclick = $(this).val();
+            var $serval   = $(".search_box input.search").val();
+            var $tableid  = $("table#ship-details");
+
+            SearchCode($serval,$tableid,$curclick)
+            
+        });
+
+function SearchCode(searchTerm, tableid, buttons) {
+
+    if(buttons == 'CLEAR'){
+        $(".search_box input.search").val("").focus();
+    } else {
+
+        if(searchTerm) {
+            var tableid = tableid || "body";
+
+            if(!$('.bb').hasClass('curloc')){
+
+            tableid.find('input.barcode').each(function(index) {
+                $(this).removeClass('matched');
+
+                if($(this).val() == searchTerm) {
+                    $(this).addClass('matched');
+                }
+                
+                if($(this).val() == searchTerm) {
+                    $('.bb').removeClass('curloc');
+
+                    
+                    $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                    temp = $(this).val();
+                    cc=1;
+                    getindex = index+1;
+                }
+
+            });
+
+            } else {
+
+                if(temp == searchTerm){
+                    $('.bb').removeClass('curloc');
+                    
+                    tableid.find('input.matched').each(function(index) {
+                        getindex = index+1;
+                    });
+
+                    if(getindex == 1){
+                        cc=0;
+                    }
+
+                    $('.matched').eq(cc).siblings('.bb').addClass('curloc').focus();
+                    
+                    cc+=1;
+
+                    if(cc == getindex){
+                        cc=0;
+                    }
+                    
+                } else {
+        
+                    tableid.find('input.barcode').each(function(index) {
+                        $(this).removeClass('matched');
+
+                        if($(this).val() == searchTerm) {
+                            $(this).addClass('matched');
+                        }
+                        
+                        if($(this).val() == searchTerm) {
+                            $('.bb').removeClass('curloc');
+
+                            $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+                            temp = $(this).val();
+                            cc=1;
+                            getindex = index+1;
+                        }
+
+                        
+
+                    });
+
+                }
+            }
+        } else {
+            alert('Field is empty');
+        }
+    }
+
+}
+
+
     $('.print-tag-form form, .dispatch-form form').bind("keypress", function(e) {
       if (e.keyCode == 13) {
         e.preventDefault();

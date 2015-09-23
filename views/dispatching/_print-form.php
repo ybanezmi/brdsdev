@@ -10,6 +10,34 @@ use app\models\DispatchModel;
 /* @var $model app\models\MstAccount */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style type="text/css">
+    .search_box{
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        background: #3E4095;
+        padding: 10px 10px 0px 10px;
+        border-radius: 5px;
+    }
+    .search_box input{
+        vertical-align: top;
+    }
+
+    .search_box input.display{
+        padding-top:3px;
+        padding-bottom:3px;
+        font-weight: bold;
+    }
+    .details input.curloc {
+        border:3px solid #990000!important;
+    }
+</style>
+
+<div class="search_box">
+    <input type="text" class="search" placeholder="Seach Here" />
+    <input type="button" class="display" value="NEXT" />
+    <input type="button" class="display" value="CLEAR" />
+</div>
 
 <div class="dispatch-form">
     <?php if(empty($dispatch_model_1) || empty($dispatch_model_2)) { 
@@ -177,12 +205,22 @@ use app\models\DispatchModel;
 
                         if($dispatch_model_2_info->VRKME == 'KG'){
                          
-                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
+                         echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='bb uborder help-70percent' onkeypress='return checkInputWeight(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."
+
+                        <input type='hidden' class='barcode' value='".$dispatch_model_2_info->MATNR."' name='barcode[]' />
+                        <input type='hidden' class='upc_1' value='".$dispatch_model_2_info->UPC_1."' name='upc_1[]' />
+                        <input type='hidden' class='upc_2' value='".$dispatch_model_2_info->UPC_2."' name='upc_2[]' />
+                        </td><td style='padding-top:5px;'>" ;
                                        
                         }  else {                     
-                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
-                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."</td><td style='padding-top:5px;'>" ;
+                        echo "<tr style='border-bottom:1px solid #ccc;'><td style='width:150px; vertical-align:top; padding-top:7px; padding-right:10px; padding-bottom:10px; '> <input type='text' class='bb uborder help-70percent' onkeypress='return isNumberKey(event)' id='quantity_".$i."' 
+                        onchange='updatetotalWeight(this.value, \"umvkz_".$i."\", \"quantity_".$i."\", \"current_quantity_".$i."\", \"weight_".$i."\", \"".$i."\" )' value='' name='material_quantity[]' /> ".$dispatch_model_2_info->VRKME."
+
+                        <input type='hidden' class='barcode' value='".$dispatch_model_2_info->MATNR."' name='barcode[]' />
+                        <input type='hidden' class='upc_1' value='".$dispatch_model_2_info->UPC_1."' name='upc_1[]' />
+                        <input type='hidden' class='upc_2' value='".$dispatch_model_2_info->UPC_2."' name='upc_2[]' />
+                        </td><td style='padding-top:5px;'>" ;
                         }    
                             echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
                             echo "<br />";

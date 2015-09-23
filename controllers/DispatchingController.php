@@ -30,10 +30,42 @@ class DispatchingController extends \yii\web\Controller
             $full_dispatch_id = '00'.$dispatch_id;
             $dismodel = new DispatchModel;
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
-            $dispatch_model_2 = $dismodel->getDispatchItems($full_dispatch_id);
             $dispatch_model_3 = $dismodel->getPickedBy($full_dispatch_id);
             $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
-           
+            
+            $ditems = $dismodel->getDispatchItems($full_dispatch_id);
+            $dispatch_model_2 = array();
+            foreach( $ditems as $key=>$item){
+
+                $mm = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $item->MATNR]);
+                if(empty($mm)){
+                    $speclist['0']['barcode'] = "";
+                    $speclist['0']['upc_1'] = "";
+                    $speclist['0']['upc_2'] = "";
+                    $speclist = array( array('barcode' => '', 'upc_1' => '', 'upc_2' => '', ) );
+                } else {
+                    $speclist = ArrayHelper::toArray($mm);
+                }
+
+                $result = array(
+                    'MATNR' => $item->MATNR,
+                    'ARKTX' => $item->ARKTX,
+                    'CHARG' => $item->CHARG,
+                    'UMVKZ' => $item->UMVKZ,
+                    'BRGEW' => $item->BRGEW,
+                    'VRKME' => $item->VRKME,
+                    'LFIMG' => $item->LFIMG,
+                    'VFDAT' => $item->VFDAT,
+                    'MEINS' => $item->MEINS,
+                    'VOLUM' => $item->VOLUM,
+                    'UMVKN' => $item->UMVKN,
+                    'BARCODE' => $speclist['0']['barcode'],
+                    'UPC_1' => $speclist['0']['upc_1'],
+                    'UPC_2' => $speclist['0']['upc_2'],
+                );
+                $dispatch_model_2[] = (object) $result;
+            }
+
             return $this->render('dispatch-print-form', [
                 'dispatch_model_1' => $dispatch_model_1,
                 'dispatch_model_2' => $dispatch_model_2,
