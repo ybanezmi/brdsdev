@@ -224,6 +224,8 @@ use app\models\DispatchModel;
                         }    
                             echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
                             echo "<br />";
+                            echo $dispatch_model_2_info->MATNR;
+                            echo "<br />";
                             echo $dispatch_model_2_info->CHARG.' ('.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).')';
                             echo "<br />";
 

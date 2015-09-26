@@ -19,6 +19,7 @@ function SearchCode(searchTerm, tableid, buttons) {
 
     if(buttons == 'CLEAR'){
         $(".search_box input.search").val("").focus();
+        $('.bb').removeClass('curloc');
     } else {
 
         if(searchTerm) {
@@ -26,25 +27,72 @@ function SearchCode(searchTerm, tableid, buttons) {
 
             if(!$('.bb').hasClass('curloc')){
 
-            tableid.find('input.barcode').each(function(index) {
-                $(this).removeClass('matched');
+             tableid.find('input.barcode').each(function(index) {
+                    $(this).removeClass('matched');
+                    $(this).siblings('.upc_1, .upc_2').removeClass('matched');
 
-                if($(this).val() == searchTerm) {
-                    $(this).addClass('matched');
-                }
-                
-                if($(this).val() == searchTerm) {
-                    $('.bb').removeClass('curloc');
+                    var bc = $(this).val();
+                    var upc1 = $(this).siblings('.upc_1').val();
+                    var upc2 = $(this).siblings('.upc_2').val();
 
+                    var bf = '';
+                    var upf1 = '';
+                    var upf2 = '';
+
+                    console.log(searchTerm);
+                    console.log(upc2);
+
+
+                    if(bc == searchTerm) {
+                        bf = $(this).addClass('matched');
+                        console.log('barcode');
+                    }
+                    else if(upc1 == searchTerm ){
+                        upf1 = $(this).siblings('.upc_1').addClass('matched');
+                        console.log('upc1');
+                    }
+
+                    else if(upc2 == searchTerm ){
+                        upf2 = $(this).siblings('.upc_2').addClass('matched');
+                        console.log('upc2');
+                    }
                     
-                    $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+                    if(bc == searchTerm) {
+                        $('.bb').removeClass('curloc');
 
-                    temp = $(this).val();
-                    cc=1;
-                    getindex = index+1;
-                }
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
-            });
+                        temp = $(this).val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+                    else if(upc1 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_1').val();
+                        cc=1;
+                        getindex = index+1;
+                    } 
+
+                     else if(upc2 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_2').val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+
+
+                });
 
             } else {
 
@@ -69,25 +117,65 @@ function SearchCode(searchTerm, tableid, buttons) {
                     
                 } else {
         
-                    tableid.find('input.barcode').each(function(index) {
-                        $(this).removeClass('matched');
+                tableid.find('input.barcode').each(function(index) {
+                    $(this).removeClass('matched');
+                    $(this).siblings('.upc_1, .upc_2').removeClass('matched');
 
-                        if($(this).val() == searchTerm) {
-                            $(this).addClass('matched');
-                        }
+                    var bc = $(this).val();
+                    var upc1 = $(this).siblings('.upc_1').val();
+                    var upc2 = $(this).siblings('.upc_2').val();
+
+                    var bf = '';
+                    var upf1 = '';
+                    var upf2 = '';
+
+                    if(bc == searchTerm) {
+                        bf = $(this).addClass('matched');
+                    }
+                    else if(upc1 == searchTerm ){
+                        upf1 = $(this).siblings('.upc_1').addClass('matched');
+                    }
+
+                    else if(upc2 == searchTerm ){
+                        upf2 = $(this).siblings('.upc_2').addClass('matched');
+                    }
+                    
+                    if(bc == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
                         
-                        if($(this).val() == searchTerm) {
-                            $('.bb').removeClass('curloc');
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
-                            $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
-                            temp = $(this).val();
-                            cc=1;
-                            getindex = index+1;
-                        }
+                        temp = $(this).val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+                    else if(upc1 == searchTerm) {
+                        $('.bb').removeClass('curloc');
 
                         
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
-                    });
+                        temp = $(this).siblings('.upc_1').val();
+                        cc=1;
+                        getindex = index+1;
+                    } 
+
+                     else if(upc2 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_2').val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+
+
+                });
 
                 }
             }
