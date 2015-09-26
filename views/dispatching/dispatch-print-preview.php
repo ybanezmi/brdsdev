@@ -119,23 +119,46 @@
     foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {
         if($dispatch_model_2_info->CHARG != " "){ 
 
-        $current = $dispatch_model_2_info->LFIMG;
-        $updated = Yii::$app->request->post('material_quantity')[$x];
+        $cur_qty = $dispatch_model_2_info->LFIMG;
+        $up_qty = Yii::$app->request->post('material_quantity')[$x];
+        $fup_qty = '';
 
+        $cur_bat = $dispatch_model_2_info->CHARG;
+        $up_bat = Yii::$app->request->post('batch')[$x];
+        $fup_bat = '';
+
+        $cur_ex = date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT));
+        $up_ex = Yii::$app->request->post('expiry')[$x];
+        $fup_ex = '';
+
+        if($cur_qty == $up_qty) { 
+            $fup_qty = number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG';
+        } else {
+            $fup_qty = "<span class='underline'>".number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',')." KG</span>";
+        }
+
+        if($cur_bat == $up_bat) { 
+            $fup_bat = $up_bat;
+        } else {
+            $fup_bat = "<span class='underline'>".$up_bat."</span>";
+        }
+
+        if($cur_ex == $up_ex) { 
+            $fup_ex = $up_ex;
+        } else {
+            $fup_ex = "<span class='underline'>".$up_ex."</span>";
+        }
+
+    
         echo '<table class="item-list"><tr>';
 
-            if($current == $updated){
-                echo '<td width="30">'.$i.'</td>';  
-            } else {
-                 echo '<td width="30"><b><u>'.$i.'</u></b></td>'; 
-            }
-
+            echo '<td width="30">'.$i.'</td>';  
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
             echo '<td width="255">'.$dispatch_model_2_info->ARKTX.'</td>';
             echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
-            echo '<td width="110" align="right">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
-            echo '<td width="80" align="right">'.$dispatch_model_2_info->CHARG.'</td>';
-            echo '<td width="80" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
+            echo '<td width="110" align="right">'.$fup_qty.'</td>';
+            echo '<td width="80" align="right">'.$fup_bat.'</td>';
+            echo '<td width="80" align="right">'.$fup_ex.'</td>';                            
         echo "</tr></table>";
         if( $i % 22 == 0 ){
             echo '<hr />';

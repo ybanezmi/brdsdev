@@ -3,7 +3,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\widgets\DatePicker;
+use yii\jui\DatePicker;
 
 use app\models\DispatchModel;
 /* @var $this yii\web\View */
@@ -222,11 +222,21 @@ use app\models\DispatchModel;
                         <input type='hidden' class='upc_2' value='".$dispatch_model_2_info->UPC_2."' name='upc_2[]' />
                         </td><td style='padding-top:5px;'>" ;
                         }    
-                            echo $dispatch_model_2_info->ARKTX; //$dispatch_model_2_info->MATNR;
+                            echo $dispatch_model_2_info->MATNR.' '.$dispatch_model_2_info->ARKTX;
                             echo "<br />";
-                            echo $dispatch_model_2_info->MATNR;
-                            echo "<br />";
-                            echo $dispatch_model_2_info->CHARG.' ('.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).')';
+                            echo "<input type='text' class='uborder help-30percent' id='batch_".$i."'  value='".$dispatch_model_2_info->CHARG."' name='batch[]' /> ";
+                            echo DatePicker::widget([
+                            'name'  => 'expiry[]',
+                            'language'      => 'en-GB',
+                            'value'  => date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)),
+                            'clientOptions' => ['dateFormat'     => 'dd-M-yy',
+                                        'showOn'        => 'button',
+                                        'buttonImage'  => '../images/calendar.gif',
+                                        'buttonImageOnly' => 'true',],
+                            'options'       => ['class'         => 'uborder disabled help-25percent dateclass',
+                                        'readonly'        => 'readonly',
+                                        'dateFormat'     => 'dd-M-yy',]
+                            ]);
                             echo "<br />";
 
                             if($dispatch_model_2_info->VRKME == 'KG'){
