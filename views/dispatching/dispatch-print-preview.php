@@ -179,8 +179,10 @@
         <br />
         <div><b>Checked By:</b></div>
         <br />
-        <div style="margin-top:10px; text-transform:uppercase"><?= Yii::$app->request->post('checked_by'); ?></div>
-        <hr style="width:60%; text-align:left; margin-top:0; padding-top:0" />
+        <div style="margin-top:10px; text-transform:uppercase">
+            <?= Yii::$app->request->post('checked_by'); ?> <?= date('d-M-Y H:i:s') ?>
+        </div>
+        <hr style="width:80%; text-align:left; margin-top:0; padding-top:0" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
     </td>
     <td align="left" valign="top" style="width:30%">

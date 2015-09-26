@@ -12,27 +12,27 @@ function truncate($str, $len) {
 	<table class="product-details">
 		<tr>
 			<td>
-				<b>PALLET TARE:</b>
+				<b>TOTAL TARE:</b>
 			</td>
 			<td>
-				<b><?php echo number_format((float)Yii::$app->request->post('pallet_tare'), 2, '.', ','); ?>KG</b>
+				<b><?php echo number_format((float)Yii::$app->request->post('pallet_packaging_tare'), 2, '.', ','); ?> KG</b>
 			</td>
-			<td width="50%" rowspan="3" class="net-weight">
+			<td width="55%" rowspan="3" class="net-weight">
 				<b><?php echo number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ','); ?>KG</b>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<b>PACKAGING TARE:</b></td>
+				<b>DATE:</b></td>
 			<td>
-				<b><?php echo number_format((float)Yii::$app->request->post('pallet_packaging_tare'), 2, '.', ','); ?>KG </b>
+				<b><?= date('d-M-Y') ?></b>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<b>PRODUCT TARE:</b></td>
+				<b>TIME</b></td>
 			<td>
-				<b><?php echo number_format((float)Yii::$app->request->post('product_tare_total'), 2, '.', ','); ?>KG</b>
+				<b><?= date('H:i:s') ?></b>
 			</td>
 		</tr>
 	</table>
@@ -74,7 +74,7 @@ function truncate($str, $len) {
 		display:inline; 
 	}
 	.net-weight {
-		font-size: 25px;
+		font-size: 30px;
 	}
 	.code-bars-dns1d{
 		width:90%; 

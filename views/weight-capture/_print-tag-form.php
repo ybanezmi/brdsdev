@@ -15,6 +15,7 @@ use kartik\widgets\DatePicker;
     <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
+    	'options' => ['target'=>'_blank'],
     	'fieldConfig' => [
     		'template' => '<div class="control-group">{label}<div class="control-field">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	]]);
