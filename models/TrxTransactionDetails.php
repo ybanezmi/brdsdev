@@ -149,4 +149,17 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * batch validation
+     */
+    public function checkBatch($attribute, $params) {
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch' => $id]);
+
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            if ($transactionDetailsModel[0]['material_code'] !== $this->batch) {
+                $this->addError('batch', 'Batch should only contain one type of material.');
+            }
+        }
+    }
+
 }

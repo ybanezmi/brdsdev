@@ -609,6 +609,7 @@ class ReceivingController extends Controller
                                                  'isPalletAdded' => $isPalletAdded,
                                                  'sapNoFlag'     => $sapNoFlag,
                                                  'sapError'      => $sapError,
+                                                 'material_code' => $transaction_detail_model->material_code,
                         ]);
                     } else {
                         return $this->render('menu', [
@@ -1020,6 +1021,7 @@ class ReceivingController extends Controller
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch' => $id]);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $response['material_code'] = $transactionDetailsModel->material_code;
             $response['manufacturing_date'] = date('d-M-y', strtotime($transactionDetailsModel->manufacturing_date));
             $response['expiry_date'] = date('d-M-y', strtotime($transactionDetailsModel->expiry_date));
         }
@@ -1061,8 +1063,8 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-
+        // $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
+        $response['sap_inbound_no'] = '0180000269';
         return $response;
     }
 

@@ -1144,14 +1144,24 @@ function populateManufacturingExpiryDateFromBatch(batch) {
             var jsonData = JSON.parse(xhr.responseText);
 
             if (null != jsonData) {
+                // set material
+                if (jsonData.material_code) {
+                    setFieldValueById('trxtransactiondetails-material_code', jsonData.material_code, true);
+                    setFieldValueById('trxtransactiondetails-batch', batch);
+                }
+
                 // set manufacturing date
                 if (jsonData.manufacturing_date) {
                     setFieldValueById('trxtransactiondetails-manufacturing_date', jsonData.manufacturing_date);
+                } else {
+                    setFieldValueById('trxtransactiondetails-manufacturing_date', '');
                 }
 
                 // set expiry date
                 if (jsonData.expiry_date) {
                     setFieldValueById('trxtransactiondetails-expiry_date', jsonData.expiry_date);
+                } else {
+                    setFieldValueById('trxtransactiondetails-expiry_date', '');
                 }
             }
         });
