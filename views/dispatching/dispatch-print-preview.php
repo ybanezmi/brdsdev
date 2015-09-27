@@ -115,24 +115,50 @@
     
     $i=1;
     $x=0;
-    foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {    
-        $current = $dispatch_model_2_info->VISTM;
-        $updated = Yii::$app->request->post('material_quantity')[$x];
 
+    foreach ($dispatch_model_2 as $dispatch_model_2_key => $dispatch_model_2_info) {
+        if($dispatch_model_2_info->CHARG != " "){ 
+
+        $cur_qty = $dispatch_model_2_info->LFIMG;
+        $up_qty = Yii::$app->request->post('material_quantity')[$x];
+        $fup_qty = '';
+
+        $cur_bat = $dispatch_model_2_info->CHARG;
+        $up_bat = Yii::$app->request->post('batch')[$x];
+        $fup_bat = '';
+
+        $cur_ex = date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT));
+        $up_ex = Yii::$app->request->post('expiry')[$x];
+        $fup_ex = '';
+
+        if($cur_qty == $up_qty) { 
+            $fup_qty = number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG';
+        } else {
+            $fup_qty = "<span class='underline'>".number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',')." KG</span>";
+        }
+
+        if($cur_bat == $up_bat) { 
+            $fup_bat = $up_bat;
+        } else {
+            $fup_bat = "<span class='underline'>".$up_bat."</span>";
+        }
+
+        if($cur_ex == $up_ex) { 
+            $fup_ex = $up_ex;
+        } else {
+            $fup_ex = "<span class='underline'>".$up_ex."</span>";
+        }
+
+    
         echo '<table class="item-list"><tr>';
 
-            if($current == $updated){
-                echo '<td width="30">'.$i.'</td>';  
-            } else {
-                 echo '<td width="30"><b><u>'.$i.'</u></b></td>'; 
-            }
-
+            echo '<td width="30">'.$i.'</td>';  
             echo '<td width="100">'.$dispatch_model_2_info->MATNR.'</td>';
-            echo '<td width="255">'.$dispatch_model_2_info->MAKTX.'</td>';
-            echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->ALTME.'</td>';
-            echo '<td width="110" align="right">'.number_format((float)Yii::$app->request->post('temp_weight')[$x],3,'.',',').' KG </td>';
-            echo '<td width="80" align="right">'.$dispatch_model_2_info->CHARG.'</td>';
-            echo '<td width="80" align="right">'.date("d-M-Y", strtotime($dispatch_model_2_info->VFDAT)).'</td>';                            
+            echo '<td width="255">'.$dispatch_model_2_info->ARKTX.'</td>';
+            echo '<td align="right">'.number_format((float)Yii::$app->request->post('material_quantity')[$x],3,'.',',').' '.$dispatch_model_2_info->VRKME.'</td>';
+            echo '<td width="110" align="right">'.$fup_qty.'</td>';
+            echo '<td width="80" align="right">'.$fup_bat.'</td>';
+            echo '<td width="80" align="right">'.$fup_ex.'</td>';                            
         echo "</tr></table>";
         if( $i % 22 == 0 ){
             echo '<hr />';
@@ -162,6 +188,7 @@
             } 
         $i++;
         $x++;                    
+        }
     }
     ?>
 </table>
@@ -175,7 +202,10 @@
         <br />
         <div><b>Checked By:</b></div>
         <br />
-        <hr style="width:60%; text-align:left" />
+        <div style="margin-top:10px; text-transform:uppercase">
+            <?= Yii::$app->request->post('checked_by'); ?> <?= date('d-M-Y H:i:s') ?>
+        </div>
+        <hr style="width:80%; text-align:left; margin-top:0; padding-top:0" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
     </td>
     <td align="left" valign="top" style="width:30%">
@@ -199,7 +229,7 @@
         <br />
         <div><b>Received in Good Order and Condition by:</b></div>
         <br />
-        <hr style="width:100%; text-align:left" />
+        <hr style="width:100%; text-align:left; margin-top:15px;" />
         <div class="f_info4">Print Name, Date, Time and Sign</div>
     </td>
 </table>

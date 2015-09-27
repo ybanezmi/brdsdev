@@ -20,6 +20,7 @@ use Yii;
  * @property string $lower_hu
  * @property string $remarks
  * @property string $truck_van
+ * @property string $actual_gr_date
  * @property string $status
  * @property string $creator_id
  * @property string $created_date
@@ -42,11 +43,10 @@ class TrxTransactions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_code', 'plant_location', 'storage_location', 'truck_van'], 'required'],
+            [['customer_code', 'plant_location', 'storage_location', 'truck_van', 'actual_gr_date'], 'required'],
             [['pallet_count', 'quantity', 'packaging_id', 'creator_id', 'updater_id'], 'integer'],
             [['weight'], 'double'],
-            [['remarks', 'status'], 'string'],
-            [['created_date', 'updated_date'], 'safe'],
+            [['actual_gr_date', 'created_date', 'updated_date'], 'safe'],
             [['id','customer_code', 'truck_van'], 'string', 'max' => 10],
             [['inbound_no', 'plant_location', 'storage_location', 'lower_hu'], 'string', 'max' => 32],
             [['unit'], 'string', 'max' => 4],
@@ -73,6 +73,7 @@ class TrxTransactions extends \yii\db\ActiveRecord
             'lower_hu' => 'Lower Hu',
             'remarks' => 'Remarks',
             'truck_van' => 'Truck Plate #',
+            'actual_gr_date' => 'Actual GR Date',
             'status' => 'Status',
             'creator_id' => 'Creator ID',
             'created_date' => 'Created Date',

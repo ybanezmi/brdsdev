@@ -30,12 +30,46 @@ class DispatchingController extends \yii\web\Controller
             $full_dispatch_id = '00'.$dispatch_id;
             $dismodel = new DispatchModel;
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
-            $dispatch_model_2 = $dismodel->getConfirmDispatchItems($full_dispatch_id);
+            $dispatch_model_3 = $dismodel->getPickedBy($full_dispatch_id);
             $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
-           
+            
+            $ditems = $dismodel->getDispatchItems($full_dispatch_id);
+            $dispatch_model_2 = array();
+            foreach( $ditems as $key=>$item){
+
+                $mm = Yii::$app->modelFinder->getMaterialBy(null, ['like', 'item_code', $item->MATNR]);
+                if(empty($mm)){
+                    $speclist['0']['barcode'] = "";
+                    $speclist['0']['upc_1'] = "";
+                    $speclist['0']['upc_2'] = "";
+                    $speclist = array( array('barcode' => '', 'upc_1' => '', 'upc_2' => '', ) );
+                } else {
+                    $speclist = ArrayHelper::toArray($mm);
+                }
+
+                $result = array(
+                    'MATNR' => $item->MATNR,
+                    'ARKTX' => $item->ARKTX,
+                    'CHARG' => $item->CHARG,
+                    'UMVKZ' => $item->UMVKZ,
+                    'BRGEW' => $item->BRGEW,
+                    'VRKME' => $item->VRKME,
+                    'LFIMG' => $item->LFIMG,
+                    'VFDAT' => $item->VFDAT,
+                    'MEINS' => $item->MEINS,
+                    'VOLUM' => $item->VOLUM,
+                    'UMVKN' => $item->UMVKN,
+                    'BARCODE' => $speclist['0']['barcode'],
+                    'UPC_1' => $speclist['0']['upc_1'],
+                    'UPC_2' => $speclist['0']['upc_2'],
+                );
+                $dispatch_model_2[] = (object) $result;
+            }
+
             return $this->render('dispatch-print-form', [
                 'dispatch_model_1' => $dispatch_model_1,
                 'dispatch_model_2' => $dispatch_model_2,
+                'dispatch_model_3' => $dispatch_model_3,
                 'full_dispatch_id' => $full_dispatch_id,
                 'sap_dispatch' => $sap_dispatch
             ]);
@@ -52,41 +86,17 @@ class DispatchingController extends \yii\web\Controller
 
          if (isset($dispatch_id)) {
             
-            // $dismodel = new DispatchModel;
-            // Yii::$app->response->format = 'pdf';
-            // Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
-            //       'format' => 'Letter',
-            //       'orientation' => 'Portrait', // This value will be ignored if format is a string value.
-            //       'beforeRender' => function($mpdf, $data) {},
-            //       ]);
-            // $this->layout = '//print_dispatch';
-            // $dispatch_model_2 = $dismodel->getConfirmDispatchItems($dispatch_id);
+            $dismodel = new DispatchModel;
+            Yii::$app->response->format = 'pdf';
+            Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [
+                  'format' => 'Letter',
+                  'orientation' => 'Portrait', // This value will be ignored if format is a string value.
+                  'beforeRender' => function($mpdf, $data) {},
+                  ]);
+            $this->layout = '//print_dispatch';
+            $dispatch_model_2 = $dismodel->getDispatchItems($dispatch_id);
 
-            // return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
-            
-            //$printer = '\\\\BRDS_TEST-PC\\Canon LBP2900'
-            var_dump(printer_list(PRINTER_ENUM_LOCAL | PRINTER_ENUM_SHARED));
-            exit;
-            
-            if($ph = printer_open($printer)) {
-                printer_start_doc($ph, "START DOC");
-                $content = "hello";
-
-                // Set print mode to RAW and send PDF to printer
-                printer_set_option($ph, PRINTER_MODE, "RAW");
-                printer_write($ph, $content);
-
-                printer_close($ph);
-                printer_end_doc($ph);
-            }
-            else {
-                echo "Couldn't connect on shared printer";
-            }
-
-           
-
-            
-
+            return $this->render('dispatch-print-preview.php',['dispatch_model_2' => $dispatch_model_2]);
 
         }
         else{

@@ -135,6 +135,8 @@ $this->title = 'Receiving';
 			    <li><a href="#createto" data-toggle="modal"> <span>Create TO</span></a></li>
 			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>
 			<?php } ?>
+      <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/admin-tools/synchronized-database"> <span>Sycnhronize Database</span></a></li>
+    
 		</ul>
 	</div>
 </div>

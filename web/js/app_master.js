@@ -4,7 +4,190 @@ var decimalPlaces = 3;
 
 $(function () {
 
-    $('.print-tag-form form').bind("keypress", function(e) {
+        $("input.display").on("click", function(e){
+            e.preventDefault();
+
+            var $curclick = $(this).val();
+            var $serval   = $(".search_box input.search").val();
+            var $tableid  = $("table#ship-details");
+
+            SearchCode($serval,$tableid,$curclick)
+            
+        });
+
+function SearchCode(searchTerm, tableid, buttons) {
+
+    if(buttons == 'CLEAR'){
+        $(".search_box input.search").val("").focus();
+        $('.bb').removeClass('curloc');
+    } else {
+
+        if(searchTerm) {
+            var tableid = tableid || "body";
+
+            if(!$('.bb').hasClass('curloc')){
+
+             tableid.find('input.barcode').each(function(index) {
+                    $(this).removeClass('matched');
+                    $(this).siblings('.upc_1, .upc_2').removeClass('matched');
+
+                    var bc = $(this).val();
+                    var upc1 = $(this).siblings('.upc_1').val();
+                    var upc2 = $(this).siblings('.upc_2').val();
+
+                    var bf = '';
+                    var upf1 = '';
+                    var upf2 = '';
+
+                    console.log(searchTerm);
+                    console.log(upc2);
+
+
+                    if(bc == searchTerm) {
+                        bf = $(this).addClass('matched');
+                        console.log('barcode');
+                    }
+                    else if(upc1 == searchTerm ){
+                        upf1 = $(this).siblings('.upc_1').addClass('matched');
+                        console.log('upc1');
+                    }
+
+                    else if(upc2 == searchTerm ){
+                        upf2 = $(this).siblings('.upc_2').addClass('matched');
+                        console.log('upc2');
+                    }
+                    
+                    if(bc == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+                    else if(upc1 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_1').val();
+                        cc=1;
+                        getindex = index+1;
+                    } 
+
+                     else if(upc2 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_2').val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+
+
+                });
+
+            } else {
+
+                if(temp == searchTerm){
+                    $('.bb').removeClass('curloc');
+                    
+                    tableid.find('input.matched').each(function(index) {
+                        getindex = index+1;
+                    });
+
+                    if(getindex == 1){
+                        cc=0;
+                    }
+
+                    $('.matched').eq(cc).siblings('.bb').addClass('curloc').focus();
+                    
+                    cc+=1;
+
+                    if(cc == getindex){
+                        cc=0;
+                    }
+                    
+                } else {
+        
+                tableid.find('input.barcode').each(function(index) {
+                    $(this).removeClass('matched');
+                    $(this).siblings('.upc_1, .upc_2').removeClass('matched');
+
+                    var bc = $(this).val();
+                    var upc1 = $(this).siblings('.upc_1').val();
+                    var upc2 = $(this).siblings('.upc_2').val();
+
+                    var bf = '';
+                    var upf1 = '';
+                    var upf2 = '';
+
+                    if(bc == searchTerm) {
+                        bf = $(this).addClass('matched');
+                    }
+                    else if(upc1 == searchTerm ){
+                        upf1 = $(this).siblings('.upc_1').addClass('matched');
+                    }
+
+                    else if(upc2 == searchTerm ){
+                        upf2 = $(this).siblings('.upc_2').addClass('matched');
+                    }
+                    
+                    if(bc == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+                    else if(upc1 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_1').val();
+                        cc=1;
+                        getindex = index+1;
+                    } 
+
+                     else if(upc2 == searchTerm) {
+                        $('.bb').removeClass('curloc');
+
+                        
+                        $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
+
+                        temp = $(this).siblings('.upc_2').val();
+                        cc=1;
+                        getindex = index+1;
+                    }
+
+
+
+                });
+
+                }
+            }
+        } else {
+            alert('Field is empty');
+        }
+    }
+
+}
+
+
+    $('.print-tag-form form, .dispatch-form form').bind("keypress", function(e) {
       if (e.keyCode == 13) {
         e.preventDefault();
         return false;
@@ -634,7 +817,8 @@ function getMateriaList(code){
             for(var i = 0; i < jsonData.length; i++){
                 var option  = document.createElement('option');
                 option.value = jsonData[i].item_code;
-                option.text = jsonData[i].description;
+                /*option.text = jsonData[i].description;*/
+                option.text = jsonData[i].item_code + ' - ' + jsonData[i].description;
                 x.add(option, x[i+1]);
             }
             x.style.display = "block";

@@ -297,7 +297,9 @@ class ReceivingController extends Controller
 			$model->updated_date	= $date;
 
 	        if ($model->load(Yii::$app->request->post())) {
+	        	$model->actual_gr_date = Yii::$app->dateFormatter->convert($model->getAttribute('actual_gr_date'));
 	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
+				
                 if ($model->validate() && $model->save()) {
 	               return $this->redirect(['menu', 'id' => $model->id]);
                 }
@@ -778,7 +780,7 @@ class ReceivingController extends Controller
 	    	// close receiving
 	    	$transaction = Yii::$app->modelFinder->findTransactionModel(Yii::$app->request->post('transaction_id'));
 
-            $closeReceiving = $this->closeReceiving($transaction->sap_no);
+            $closeReceiving = $this->closeReceiving($transaction->sap_no, $transaction->actual_gr_date);
             if (isset($closeReceiving['success']) && $closeReceiving['success'] <> 0) {
                 $transaction->status = Yii::$app->params['STATUS_CLOSED'];
                 $success = $transaction->update();
@@ -906,6 +908,14 @@ class ReceivingController extends Controller
 
         if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
+        }
+		
+		if ($material_model == null || count($material_model) == 0) {
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_2' => $desc]);
+        }
+		
+		if ($material_model == null || count($material_model) == 0) {
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_1' => $desc]);
         }
 
         $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
@@ -1051,7 +1061,7 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::LGORT] = $trxTransaction['storage_location'];
         $params[SapConst::PARAMS][SapConst::XABLN] = $trxTransaction['truck_van'];
         $params[SapConst::PARAMS][SapConst::WADAT] = date('Ymd');
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransactionDetails['created_date']));
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransaction['actual_gr_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
         //$params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
@@ -1079,12 +1089,12 @@ class ReceivingController extends Controller
         return $response;
     }
 
-    public function closeReceiving($inboundNo) {
+    public function closeReceiving($inboundNo, $actualGRDate) {
         $params[SapConst::RFC_FUNCTION] = SapConst::ZBAPI_POST_GR;
 
         // Post http://127.0.0.1/brdssap/sap/import
         $params[SapConst::PARAMS][SapConst::VBELN] = $inboundNo;
-        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd');
+        $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($actualGRDate));
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
 
