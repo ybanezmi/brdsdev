@@ -299,7 +299,7 @@ class ReceivingController extends Controller
 	        if ($model->load(Yii::$app->request->post())) {
 	        	$model->actual_gr_date = Yii::$app->dateFormatter->convert($model->getAttribute('actual_gr_date'));
 	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
-				
+
                 if ($model->validate() && $model->save()) {
 	               return $this->redirect(['menu', 'id' => $model->id]);
                 }
@@ -909,11 +909,11 @@ class ReceivingController extends Controller
         if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
         }
-		
+
 		if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_2' => $desc]);
         }
-		
+
 		if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_1' => $desc]);
         }
@@ -1073,8 +1073,7 @@ class ReceivingController extends Controller
         //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
-        // $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-        $response['sap_inbound_no'] = '0180000269';
+        $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
         return $response;
     }
 
