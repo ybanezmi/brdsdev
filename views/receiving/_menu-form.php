@@ -74,7 +74,7 @@ use yii\bootstrap\Modal;
                                     'disabled'     => 'disabled',
                                     'value'        => $pallet_count],
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input} PP
-                                     <button type="submit" class="btn btn-primary help-25percent" name="view-entries">View</button>
+                                     <button type="button" class="btn btn-primary help-25percent" name="view-entries">View</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10])->label('# Pallet(s)') ?>
 
@@ -240,10 +240,10 @@ use yii\bootstrap\Modal;
 
     </div>
     <div class="submit-button ie6-submit-button">
-        <?= Html::submitButton('View Entries', ['class'     => 'btn btn-primary',
+        <?= Html::button('View Entries', ['class'     => 'btn btn-primary',
                                                        'name'        => 'view-entries',
                                                        'onclick'    => 'js: window.location = "view-entries?id='.$transaction_model->id.'"']) ?>
-            <?= Html::submitButton('Cancel', ['class'             => 'btn btn-primary',
+            <?= Html::button('Cancel', ['class'             => 'btn btn-primary',
                                                 'name'              => 'cancel',
                                                 'onclick'            => 'js: window.location = "index"']) ?>
     </div>
