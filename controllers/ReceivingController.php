@@ -548,7 +548,7 @@ class ReceivingController extends Controller
 			$pallet_count = Yii::$app->modelFinder->getTransactionDetailList(null, 'id', null, ['transaction_id' => $transaction_model->id,
 																							   	'status' 		 => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]], false, 'pallet_no');
 
-	        if(isset($_GET["pallet_no"])){
+	        if (isset($_GET["pallet_no"])) {
 	        	$pallet_no = htmlspecialchars($_GET["pallet_no"]);
 	        } else {
 	        	$pallet_no = '';
@@ -1020,7 +1020,7 @@ class ReceivingController extends Controller
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');
-            $batchList = array_unique($batchList);
+            $batchList = array_values(array_unique($batchList));
         }
 
         echo json_encode($batchList);
@@ -1074,7 +1074,6 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-        // $response['sap_inbound_no'] = '0180000269';
         return $response;
     }
 

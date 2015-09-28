@@ -521,7 +521,6 @@ function checkTransactionPalletWeight() {
             trx_pallet_weight = parseFloat(trx_pallet_weight) + parseFloat(getMaterialTotalWeight());
         }
 
-        console.log(trx_pallet_weight);
         if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
             trx_pallet_weight = parseFloat(trx_pallet_weight) + parseFloat(transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['pallet_weight']);
         }
@@ -1330,7 +1329,8 @@ function populateManufacturingExpiryDateFromBatch(batch) {
             if (null != jsonData) {
                 // set material
                 if (jsonData.material_code) {
-                    setFieldValueById('trxtransactiondetails-material_code', jsonData.material_code, true);
+                    setFieldValueById('trxtransactiondetails-material_code', jsonData.material_code, false);
+                    setFieldValueById('material_code', jsonData.material_code, false);
                     setFieldValueById('trxtransactiondetails-batch', batch);
                 }
 

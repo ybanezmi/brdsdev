@@ -132,7 +132,8 @@ use yii\bootstrap\Modal;
 
         <?= $form->field($transaction_detail_model, 'batch',
                 ['inputOptions' => ['class' => 'uborder help-25percent',
-                                    'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value);'],
+                                    'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value);',
+                                    'disabled' => 'disabled',],
                  'template' => '<div class="control-group" id="batch-dropdown" style="display: none;">{label}
                                     <div class="f-inline-size">{input}
                                     <button id="btn-use-cancel" class="btn btn-primary help-15percent"
