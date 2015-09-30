@@ -1028,7 +1028,11 @@ class ReceivingController extends Controller
 
     public function actionGetManufacturingExpiryDateFromBatch($id) {
         $response = null;
-        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch' => $id]);
+        $condition['batch'] = $id;
+        if (isset($_GET['code']) && $_GET['code'] != '') {
+            $condition['material_code'] = $_GET['code'];
+        }
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails($condition);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $response['material_code'] = $transactionDetailsModel->material_code;

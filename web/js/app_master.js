@@ -1321,9 +1321,13 @@ function populateBatchDropdown(palletNo) {
     }
 }
 
-function populateManufacturingExpiryDateFromBatch(batch) {
+function populateManufacturingExpiryDateFromBatch(batch, materialCode) {
     if (batch) {
-        load('get-manufacturing-expiry-date-from-batch?id=' + batch, function(xhr) {
+        var populateUrl = 'get-manufacturing-expiry-date-from-batch?id=' + batch;
+        if (materialCode) {
+            populateUrl = populateUrl + '&code=' + materialCode;
+        }
+        load(populateUrl, function(xhr) {
             var jsonData = JSON.parse(xhr.responseText);
 
             if (null != jsonData) {
@@ -1347,6 +1351,9 @@ function populateManufacturingExpiryDateFromBatch(batch) {
                 } else {
                     setFieldValueById('trxtransactiondetails-expiry_date', '');
                 }
+            } else {
+                setFieldValueById('trxtransactiondetails-expiry_date', '');
+                setFieldValueById('trxtransactiondetails-manufacturing_date', '');
             }
         });
     }
