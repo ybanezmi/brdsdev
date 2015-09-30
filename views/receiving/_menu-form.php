@@ -101,17 +101,19 @@ use yii\bootstrap\Modal;
                                                                 this.value);'])->label('Customer Product',['class' => 'control-label-f']); ?>
 
         <div class="control-group">
-                    <div class="f-full-size ie6-padtop">
-                                <?= Html::textInput('material_code', '', ['id'         => 'material_code',
-                                                  'readonly' => 'readonly',
-                                                  'class'     => 'uborder disabled help-44percent']) ?>
+            <div class="f-full-size ie6-padtop">
+                <?= Html::textInput('material_code', '', ['id'          => 'material_code',
+                                                          'readonly'    => 'readonly',
+                                                          'class'       => 'uborder disabled help-30percent']) ?>
 
+                <?= Html::textInput('material_barcode', '', ['id'       => 'material_barcode',
+                                                             'class'    => 'uborder help-50percent',
+                                                             'onchange' => 'searchMaterial(this.value, customer_code, "trxtransactiondetails-material_code")']) ?>
 
-        <?= Html::textInput('material_barcode', '', ['id'         => 'material_barcode',
-                                                          'class'     => 'uborder help-44percent',
-                                                          'onchange'  => 'searchMaterial(this.value, customer_code, "trxtransactiondetails-material_code")']) ?>
-                    </div>
-                  </div>
+                <?= Html::button('Scan', ['class'   => 'btn btn-primary help-15percent',
+                                          'onclick' => 'scanPalletBarcode("material_barcode", "trxtransactiondetails-net_weight")']) ?>
+            </div>
+        </div>
 
         <?= $form->field($transaction_detail_model, 'batch',
                 ['inputOptions' => ['class' => 'uborder help-25percent',

@@ -12,7 +12,7 @@ $(function () {
             var $tableid  = $("table#ship-details");
 
             SearchCode($serval,$tableid,$curclick)
-            
+
         });
 
 function SearchCode(searchTerm, tableid, buttons) {
@@ -56,11 +56,11 @@ function SearchCode(searchTerm, tableid, buttons) {
                         upf2 = $(this).siblings('.upc_2').addClass('matched');
                         console.log('upc2');
                     }
-                    
+
                     if(bc == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).val();
@@ -71,18 +71,18 @@ function SearchCode(searchTerm, tableid, buttons) {
                     else if(upc1 == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).siblings('.upc_1').val();
                         cc=1;
                         getindex = index+1;
-                    } 
+                    }
 
                      else if(upc2 == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).siblings('.upc_2').val();
@@ -98,7 +98,7 @@ function SearchCode(searchTerm, tableid, buttons) {
 
                 if(temp == searchTerm){
                     $('.bb').removeClass('curloc');
-                    
+
                     tableid.find('input.matched').each(function(index) {
                         getindex = index+1;
                     });
@@ -108,15 +108,15 @@ function SearchCode(searchTerm, tableid, buttons) {
                     }
 
                     $('.matched').eq(cc).siblings('.bb').addClass('curloc').focus();
-                    
+
                     cc+=1;
 
                     if(cc == getindex){
                         cc=0;
                     }
-                    
+
                 } else {
-        
+
                 tableid.find('input.barcode').each(function(index) {
                     $(this).removeClass('matched');
                     $(this).siblings('.upc_1, .upc_2').removeClass('matched');
@@ -139,11 +139,11 @@ function SearchCode(searchTerm, tableid, buttons) {
                     else if(upc2 == searchTerm ){
                         upf2 = $(this).siblings('.upc_2').addClass('matched');
                     }
-                    
+
                     if(bc == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).val();
@@ -154,18 +154,18 @@ function SearchCode(searchTerm, tableid, buttons) {
                     else if(upc1 == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).siblings('.upc_1').val();
                         cc=1;
                         getindex = index+1;
-                    } 
+                    }
 
                      else if(upc2 == searchTerm) {
                         $('.bb').removeClass('curloc');
 
-                        
+
                         $('.matched').eq(0).siblings('.bb').addClass('curloc').focus();
 
                         temp = $(this).siblings('.upc_2').val();
@@ -1349,5 +1349,15 @@ function populateManufacturingExpiryDateFromBatch(batch) {
                 }
             }
         });
+    }
+}
+
+function scanPalletBarcode(materialCodeId, netWTId) {
+    if (materialCodeId) {
+        var barcode = getFieldValueById(materialCodeId).substring(0, 12);
+        var netWT = getFieldValueById(materialCodeId).substring(12, 20).replace(/^0+/, '');
+
+        setFieldValueById(materialCodeId, barcode, true);
+        setFieldValueById(netWTId, netWT, true);
     }
 }
