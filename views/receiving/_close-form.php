@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="close-receiving-form">
-    <?php 
+    <?php
 		    	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
 		    	$form = ActiveForm::begin([
 		    	'options' => ['class' => 'form-horizontal'],
@@ -18,14 +18,14 @@ use yii\widgets\ActiveForm;
 		    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
 		    	]
 		    ]); ?>
-		    
+
 		    <?= $form->field($customer_model, 'name')->dropDownList($customer_list, ['class'	=> 'uborder help-70percent',
 																 			 'prompt'	=> '-- Select a customer --',
 																 			 'onchange'	=> 'getTransactionListByType(getFieldValueById("mstcustomer-name"),
 																	 			 				document.getElementsByName("transaction_type")[0].checked,
 																	 			 				document.getElementsByName("transaction_type")[1].checked);
 																 			 				hideHTMLById("trx-details");'])->label('SELECT CUSTOMER', ['class' => 'control-label-f']); ?>
-		    
+
 		    <div class="control-group">
 		        <div class="f-inline-size">
 					<?= Html::radioList('transaction_type', 'brds', ['brds' => 'BRDS #', 'sap' => 'SAP #'],
@@ -36,17 +36,17 @@ use yii\widgets\ActiveForm;
 										hideHTMLById("trx-details");']); ?>
 				</div>
 			</div>
-		    <?= $form->field($transaction_model, 'transaction_id', 
+		    <?= $form->field($transaction_model, 'transaction_id',
 						['template' 	=> '<div class="control-group">{label}<div>{input}
-											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;" 
+											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;"
 											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --',
 																							  'onchange' => 'getTransactionByType(getFieldValueById("trxtransactiondetails-transaction_id"),
 																							  					document.getElementsByName("transaction_type")[0].checked,
 																	 			 								document.getElementsByName("transaction_type")[1].checked)'])->label('SELECT TRANSACTION', ['class' => 'control-label-f']); ?>
-		    
-			
+
+
 			<div class="control-group">
 				<label class="control-label-f">TRANSACTION DETAILS</label>
 	            <div class="f-full-size help-75percent" style="background:#ccc; min-height: 365px; padding:20px;">
@@ -81,7 +81,7 @@ use yii\widgets\ActiveForm;
 		            		<?= Html::label('SAP #', 'sap_no', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
 		            			<?= Html::textInput('sap_no', null, ['class' 	=> 'uborder disabled help-40percent',
-		            									   		   				   'disabled' => 'disabled']); ?>
+		            									   		   				   'readonly' => 'readonly']); ?>
 		            		</div>
 		            	</div>
 		            	<div class="control-group">
@@ -126,7 +126,7 @@ use yii\widgets\ActiveForm;
 		            	</div>
 	            	</div>
 			</div>
-		
+
 		    <div class="form-group">
 		    	<div class="one-column-button">
 					<div class="submit-button ie6-submit-button">
@@ -137,7 +137,7 @@ use yii\widgets\ActiveForm;
 		        	</div>
 		        </div>
 		    </div>
-		
+
 		    <?php ActiveForm::end(); ?>
 </div>
 
