@@ -109,7 +109,7 @@ class CModelFinder extends Component
     	$materials = MstMaterial::find()
 		    ->where($conditions)
             ->andWhere(['status' => Yii::$app->params['STATUS_ACTIVE']])
-		    ->orderBy('item_code')
+		    ->orderBy('description')
 			->indexBy($index)
 		    ->all();
 
