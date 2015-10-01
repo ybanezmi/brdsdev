@@ -28,9 +28,9 @@ $this->title = 'Change Password';
     	<div class="one-column-button pdt-one-column-button">
 			<div class="submit-button ie6-submit-button">
         		<?= Html::submitButton('Proceed', ['class' => 'btn btn-primary',
-												'name'  => 'submit']) ?>
+												'name'  => 'proceed']) ?>
         	</div>
         </div>
-    
+
     <?php ActiveForm::end(); ?>
 </div>

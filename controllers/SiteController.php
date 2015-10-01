@@ -93,7 +93,7 @@ class SiteController extends Controller
 		$account_model = Yii::$app->modelFinder->findAccountModel(Yii::$app->user->id);
 		$account_model->access_token = null;
 		$account_model->save();
-		
+
         Yii::$app->user->logout();
         $session = Yii::$app->session;
         $session->close();

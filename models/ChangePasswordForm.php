@@ -44,7 +44,7 @@ class ChangePasswordForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = Yii::$app->user->identity;
-            if (!$user && shouldValidateOldPassword || !$user->validatePassword($this->oldPassword)) {
+            if (!$user && shouldValidateOldPassword && !$user->validatePassword($this->oldPassword)) {
             	if(preg_match('/(?i)msie [1-6]/',$_SERVER['HTTP_USER_AGENT'])) {
             		// if IE <= 6
             		echo 'alert("Incorrect password.")';
