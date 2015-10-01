@@ -74,7 +74,7 @@ use yii\bootstrap\Modal;
                                     'disabled'     => 'disabled',
                                     'value'        => $pallet_count],
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input} PP
-                                     <button type="button" class="btn btn-primary help-25percent" name="view-entries">View</button>
+                                     <button type="button" class="btn btn-primary help-25percent" name="view-entries" onclick="js: window.location = &quot;view-entries?id='.$transaction_model->id.'&quot;">View</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10])->label('# Pallet(s)') ?>
 
