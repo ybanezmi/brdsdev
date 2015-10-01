@@ -105,7 +105,39 @@ class AdminToolsController extends Controller
 	        	}
 
 	            // can save model or do something before saving model
-	            $model->save();
+	            if ($model->validate()) {
+	                $message = '';
+	                $model->save();
+	            } else {
+	                if (isset($posted['password']) && $posted['password'] !== "") {
+                        $message = $model->getFirstError('password');
+                    }
+
+                    if (isset($posted['assignment']) && $posted['assignment'] !== "") {
+                        $message = $model->getFirstError('assignment');
+                    }
+
+	                if (isset($posted['start_date']) && $posted['start_date'] !== "") {
+    	                $message = $model->getFirstError('start_date');
+	                }
+
+                    if (isset($posted['end_date']) && $posted['end_date'] !== "") {
+                        $message = $model->getFirstError('end_date');
+                    }
+
+                    if (isset($posted['next_assignment']) && $posted['next_assignment'] !== "") {
+                        $message = $model->getFirstError('next_assignment');
+                    }
+
+                    if (isset($posted['next_start_date']) && $posted['next_start_date'] !== "") {
+                        $message = $model->getFirstError('next_start_date');
+                    }
+
+                    if (isset($posted['next_end_date']) && $posted['next_end_date'] !== "") {
+                        $message = $model->getFirstError('next_end_date');
+                    }
+	            }
+
 	            // custom output to return to be displayed as the editable grid cell
 	            // data. Normally this is empty - whereby whatever value is edited by
 	            // in the input by user is updated automatically.
@@ -123,7 +155,7 @@ class AdminToolsController extends Controller
 	            //if (isset($posted['assignment'])) {
 	               //$output =  $posted['assignment']; // process as you need
 	            //}
-	            $out = Json::encode(['output'=>$output, 'message'=>'']);
+	            $out = Json::encode(['output'=>$output, 'message'=>$message]);
 	        }
 	        // return ajax json encoded response and exit
 	        echo $out;
