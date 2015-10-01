@@ -907,15 +907,15 @@ class ReceivingController extends Controller
         $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
 
         if ($material_model == null || count($material_model) == 0) {
-            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'barcode', $desc]]);
         }
 
 		if ($material_model == null || count($material_model) == 0) {
-            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_2' => $desc]);
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['upc_2' => $desc]]);
         }
 
 		if ($material_model == null || count($material_model) == 0) {
-            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['upc_1' => $desc]);
+            $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['upc_2' => $desc]]);
         }
 
         $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');

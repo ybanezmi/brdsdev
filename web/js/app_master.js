@@ -663,17 +663,17 @@ function searchMaterial(value, customer_code, id) {
         promptOption.text = "-- Select a product --";
         x.add(promptOption);
 
-        if(null != jsonData){
+        if (null != jsonData && jsonData.item_code.length > 0) {
             for(var i = 0; i < jsonData.item_code.length; i++){
                 var option  = document.createElement('option');
                 option.value = jsonData.item_code[i];
                 option.text = jsonData.description[i];
                 x.add(option, x[i+1]);
             }
+            // set initial value
+            setFieldValueById(id, jsonData.item_code[0], true);
         }
 
-        // set initial value
-        setFieldValueById(id, jsonData.item_code[0], true);
     });
 }
 
