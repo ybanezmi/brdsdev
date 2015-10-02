@@ -94,7 +94,7 @@ use yii\bootstrap\Modal;
 
         <?= $form->field($transaction_detail_model, 'material_code',
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
-            ->dropDownList($material_list, ['class'    => 'uborder help-80percent',
+            ->dropDownList($material_list, ['class'    => 'uborder help-100percent',
                                             'prompt'    => '-- Select a product --',
                                             'onchange'    => 'onSelectMaterial();
                                                               validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"),
