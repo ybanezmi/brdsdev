@@ -602,7 +602,9 @@ function getMaterialConversion() {
             document.getElementById('net-weight').innerHTML = "NET WT";
             
             // remove unit span element
-            document.getElementById('unit-label').remove();
+            if (document.getElementById('unit-label')) {
+            	document.getElementById('unit-label').remove();
+            }
         } else {
             // remove span element
             if (document.getElementById('net-unit')) {
