@@ -92,10 +92,13 @@ use yii\bootstrap\Modal;
         <h2 class="legend" id="transaction-details" onclick="_toggleshow('toggle-div-2')">Transaction Details</h2>
         <div id="toggle-div-2">
 
+		<?php $material_code_val = ''; if (isset($_GET['material_code'])) { $material_code_val = $_GET['material_code']; }?>
+		
         <?= $form->field($transaction_detail_model, 'material_code',
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
-            ->dropDownList($material_list, ['class'    => 'uborder help-80percent',
+            ->dropDownList($material_list, ['class'    => 'uborder help-100percent',
                                             'prompt'    => '-- Select a product --',
+                                            'options'	=> [$material_code_val => ['Selected' => 'selected']],
                                             'onchange'    => 'onSelectMaterial();
                                                               validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"),
                                                                 this.value);'])->label('Customer Product',['class' => 'control-label-f']); ?>

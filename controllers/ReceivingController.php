@@ -413,6 +413,10 @@ class ReceivingController extends Controller
             $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
 
+			foreach ($material_list as $key => $value) {
+				$material_list[$key] = $key . ' - ' . $value;
+			}
+
 			// retrieve and convert sled in days unit
 			$material_sled_properties = [
 										    'app\models\MstMaterial' => [
