@@ -465,6 +465,7 @@ function getMaterialTotalWeight() {
 		    case 'PCS':
 			case 'CBM':
 			case 'BXS':
+			case 'BAG':
 				material_total_weight = parseFloat(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
 					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']);
 			    material_total_weight = material_total_weight.toFixed(decimalPlaces);
@@ -599,6 +600,9 @@ function getMaterialConversion() {
                 document.getElementById('net-wt').appendChild(spanElem);
             }
             document.getElementById('net-weight').innerHTML = "NET WT";
+            
+            // remove unit span element
+            document.getElementById('unit-label').remove();
         } else {
             // remove span element
             if (document.getElementById('net-unit')) {
@@ -617,6 +621,13 @@ function getMaterialConversion() {
                 document.getElementById('net-wt').appendChild(selectElem);
             }
 
+			// add unit span element
+			var spanElem = document.getElementById('unit-label');
+			if (!spanElem) {
+	            spanElem = document.createElement('span');
+	            spanElem.id = 'unit-label';
+			}
+
             // clear options
             var i = 0;
             selectElem.options.length = 0;
@@ -626,6 +637,8 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_1.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
+                
+                spanElem.innerHTML = ' (' +  jsonData.unit_1.den / jsonData.unit_1.num + ' KG)';
             }
 
             if (typeof jsonData.unit_2 != 'undefined' && jsonData.unit_2.unit != 'KG') {
@@ -634,6 +647,8 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_2.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
+                
+                spanElem.innerHTML = ' (' +  jsonData.unit_2.den / jsonData.unit_2.num + ' KG)';
             }
 
             if (typeof jsonData.unit_3 != 'undefined' && jsonData.unit_3.unit != 'KG') {
@@ -642,8 +657,11 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_3.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
+                
+                spanElem.innerHTML = ' (' +  jsonData.unit_3.den / jsonData.unit_3.num + ' KG)';
             }
 
+			document.getElementById('net-wt').appendChild(spanElem);
             document.getElementById('net-weight').innerHTML = "QUANTITY";
         }
     });
@@ -1269,6 +1287,16 @@ function calculateTotalWeight() {
     setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
     var palletWeight = parseFloat(getMaterialTotalWeight()) + parseFloat(getTransactionPalletWeight());
     setFieldValueById("trxtransactiondetails-pallet_weight", palletWeight.toFixed(decimalPlaces));
+    
+    // add unit span element
+	var spanElem = document.getElementById('unit-label');
+	if (!spanElem) {
+        spanElem = document.createElement('span');
+        spanElem.id = 'unit-label';
+	}
+	
+	spanElem.innerHTML = ' (' + (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
+					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']) + ' KG)';
 }
 
 var useFlag = 0;
