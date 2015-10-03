@@ -252,8 +252,7 @@ class ReceivingController extends Controller
 							  																					['transaction_id' => $id,
 															   			  	 									 'status' 		=> [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]],
 																												true),
-													'sort'=> ['defaultOrder' => ['status'=>SORT_ASC,
-																				 'id'=>SORT_ASC]],
+													'sort'=> ['defaultOrder' => ['pallet_no' => SORT_DESC]],
 												]);
 		$search_model = new TrxTransactionDetailsSearch;
 		if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')['pallet_no']) {

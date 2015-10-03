@@ -360,7 +360,7 @@ class CModelFinder extends Component
      * Finds the MstMaterial model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return TrxTransactions the loaded model
+     * @return MstMaterial the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function findMaterialModel($id)
@@ -371,6 +371,23 @@ class CModelFinder extends Component
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /**
+     * Finds the MstMaterialconversion model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return MstMaterialconversion the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function findMaterialConversionModel($id)
+    {
+        if (($model = MstMaterialConversion::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
 
 	/**
      * Finds the TrxHandlingUnit model based on its primary key value.

@@ -26,7 +26,7 @@ use yii\helpers\ArrayHelper;
 								        		var date = new Date(val);
 												document.getElementById(this.id + "-targ").innerHTML = (date.getMonth()+1).padLeft() + "/" +
                																							date.getDate().padLeft() + "/" +
-               																							date.getFullYear(); 
+               																							date.getFullYear();
 											}',
 								        ]
 								    ];
@@ -41,7 +41,7 @@ use yii\helpers\ArrayHelper;
                                             }',
                                         ],
                                     ];
-	
+
 		$gridColumns = [
         	'username',
             [	'class'				=> 'kartik\grid\EditableColumn',
@@ -60,7 +60,7 @@ use yii\helpers\ArrayHelper;
 								        	'editableSuccess'=>'function(event, val) {
 								        		if (val == "password") {
 								        			document.getElementById(this.id + "-targ").innerHTML = "DEFAULT";
-								        		} else {	
+								        		} else {
 								        			document.getElementById(this.id + "-targ").innerHTML = "********";
 								        		}
 											}',
@@ -155,7 +155,7 @@ use yii\helpers\ArrayHelper;
 						   },
 				 'delete' => function ($url, $model, $key) {
 				 				/*
-						        return Html::a('<span class="glyphicon glyphicon-trash"></span>', 
+						        return Html::a('<span class="glyphicon glyphicon-trash"></span>',
 						        				str_replace('delete', 'delete-user', $url),
 												['data' => [
 									                'confirm' => 'Are you sure you want to delete this user?',
@@ -185,5 +185,5 @@ use yii\helpers\ArrayHelper;
 		        'type' => GridView::TYPE_PRIMARY,
 		        'heading' => 'USER LIST',
 		    ],
-    ]); 
-	
+    ]);
+
