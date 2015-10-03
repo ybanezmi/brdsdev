@@ -600,7 +600,7 @@ function getMaterialConversion() {
                 document.getElementById('net-wt').appendChild(spanElem);
             }
             document.getElementById('net-weight').innerHTML = "NET WT";
-            
+
             // remove unit span element
             if (document.getElementById('unit-label')) {
             	document.getElementById('unit-label').remove();
@@ -639,7 +639,7 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_1.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-                
+
                 spanElem.innerHTML = ' (' +  jsonData.unit_1.den / jsonData.unit_1.num + ' KG)';
             }
 
@@ -649,7 +649,7 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_2.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-                
+
                 spanElem.innerHTML = ' (' +  jsonData.unit_2.den / jsonData.unit_2.num + ' KG)';
             }
 
@@ -659,7 +659,7 @@ function getMaterialConversion() {
                 option.text = jsonData.unit_3.unit;
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-                
+
                 spanElem.innerHTML = ' (' +  jsonData.unit_3.den / jsonData.unit_3.num + ' KG)';
             }
 
@@ -935,7 +935,7 @@ function getTransactionByType(id, brds_type, sap_type) {
     });
 }
 
-/* function to retrieve pallet details */
+/* function to retrieve pallet details for View & Close Pallet page */
 function getPalletDetails(id) {
     load("get-pallet-details?id=" + id, function(xhr) {
         if (null != xhr.responseText && xhr.responseText.length > 0) {
@@ -963,6 +963,28 @@ function getPalletDetails(id) {
                 setFieldValueByName("updater", jsonData.updater);
                 setFieldValueByName("updated_date", jsonData.updated_date);
 
+            } else {
+                // hide pallet details panel
+                hideHTMLById("pallet-details");
+            }
+        } else {
+            // hide pallet details panel
+            hideHTMLById("pallet-details");
+        }
+    });
+}
+
+/* function to retrieve pallet details for Edit Receiving page */
+function getPalletDetailsForEdit(id) {
+    load("get-pallet-details?id=" + id, function(xhr) {
+        if (null != xhr.responseText && xhr.responseText.length > 0) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                setFieldValueById('mstcustomer-name', jsonData.customer_code, true);
+                setTimeout (function() {
+                  setFieldValueById('trxtransactiondetails-transaction_id', jsonData.transaction_id);
+                }, 200);
             } else {
                 // hide pallet details panel
                 hideHTMLById("pallet-details");
@@ -1289,14 +1311,14 @@ function calculateTotalWeight() {
     setFieldValueById("trxtransactiondetails-total_weight", getMaterialTotalWeight());
     var palletWeight = parseFloat(getMaterialTotalWeight()) + parseFloat(getTransactionPalletWeight());
     setFieldValueById("trxtransactiondetails-pallet_weight", palletWeight.toFixed(decimalPlaces));
-    
+
     // add unit span element
 	var spanElem = document.getElementById('unit-label');
 	if (!spanElem) {
         spanElem = document.createElement('span');
         spanElem.id = 'unit-label';
 	}
-	
+
 	spanElem.innerHTML = ' (' + (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
 					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']) + ' KG)';
 }

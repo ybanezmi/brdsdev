@@ -37,7 +37,8 @@ use yii\widgets\ActiveForm;
 								name="btn-pallet-details">
 								Details</button> </div><div class=\"col-lg-8\">{error}</div></div>'
 				])->textInput(['class'	 => 'uborder help-50percent',
-				               'maxlength' => 10])->label('SCAN A PALLET NUMBER', ['class' => 'control-label-f']) ?>
+				               'maxlength' => 10,
+				               'onchange' => 'getPalletDetailsForEdit(this.value);'])->label('SCAN A PALLET NUMBER', ['class' => 'control-label-f']) ?>
 
 			<div class="one-column-button pdt-one-column-button">
 				<div class="submit-button ie6-submit-button">
@@ -51,3 +52,11 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<script type="text/javascript">
+    window.onload=function() {
+        if (getFieldValueById('trxtransactiondetails-pallet_no')) {
+            getPalletDetailsForEdit(getFieldValueById('trxtransactiondetails-pallet_no'));
+        }
+    }
+</script>

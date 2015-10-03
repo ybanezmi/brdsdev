@@ -972,9 +972,15 @@ class ReceivingController extends Controller
     public function actionGetPalletDetails($id) {
         $palletDetails = null;
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                    ['pallet_no' => $id]);
+                                                                                    ['pallet_no'    => $id,
+                                                                                     'status'       => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $palletDetails['transaction_id'] = $transactionDetailsModel[0]['transaction_id'];
+            $palletDetails['customer_code'] = $transactionDetailsModel[0]['customer_code'];
+            $customer = Yii::$app->modelFinder->findCustomerModel($palletDetails['customer_code']);
+            if ($customer != null) {
+                $palletDetails['customer_name'] = $customer->name;
+            }
             $palletDetails['material_code'] = $transactionDetailsModel[0]['material_code'];
             $palletDetails['batch'] = $transactionDetailsModel[0]['batch'];
             $palletDetails['pallet_count'] = count($transactionDetailsModel);
