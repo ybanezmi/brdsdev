@@ -963,6 +963,7 @@ function getPalletDetails(id) {
 
                 // set corresponding field values
                 setFieldValueByName("transaction_id", jsonData.transaction_id);
+                setFieldValueByName("customer", jsonData.customer_name);
                 setFieldValueByName("material_code", jsonData.material_code);
                 setFieldValueByName("batch", jsonData.batch);
                 setFieldValueByName("pallet_count", jsonData.pallet_count);

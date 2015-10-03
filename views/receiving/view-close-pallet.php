@@ -68,6 +68,14 @@ $this->title = 'View & Close Pallet';
                                                                              'id'       => 'transaction-id']); ?>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <?= Html::label('CUSTOMER', 'transaction_id', ['class' => 'control-label']) ?>
+                            <div class="f-inline-size">
+                                <?= Html::textInput('customer', null, ['class'    => 'uborder disabled help-40percent',
+                                                                       'disabled' => 'disabled',
+                                                                       'id'       => 'customer']); ?>
+                            </div>
+                        </div>
 		            	<div class="control-group">
 		            		<?= Html::label('# PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
@@ -95,7 +103,7 @@ $this->title = 'View & Close Pallet';
                                 <?= Html::textInput('status', null, ['class'    => 'uborder disabled help-40percent',
                                                                      'disabled' => 'disabled']); ?>
                             </div>
-                        </div>                        
+                        </div>
 	            	</div>
             	</div>
 
