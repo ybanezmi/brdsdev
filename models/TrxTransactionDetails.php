@@ -56,10 +56,13 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['pallet_no', 'kitted_unit'], 'string', 'min' => 10],
             [['material_code', 'packaging_code', 'kitting_code'], 'string', 'max' => 32],
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
+            [['pallet_no', 'kitted_unit'], 'checkUniquePalletKittedUnit'],
             [['pallet_no'], 'checkPackagingPalletNoRange'],
-            [['pallet_no'], 'checkKittingPalletNoRange'],
+            [['kitted_unit'], 'checkKittingPalletNoRange'],
             [['pallet_no'], 'checkPallet'],
+            [['kitted_unit'], 'checkKittedUnit'],
             [['pallet_type'], 'checkPalletTypeCompatibility'],
+            [['kitting_type'], 'checkKittingTypeCompatibility'],
             [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9- ]/', 'message' => 'Must contain alphanumeric, space ( ), and dash (-) characters only.'],
         ];
     }
@@ -107,6 +110,16 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
 	}
 
     /**
+     * unique pallet_no and kitted_unit
+     */
+    public function checkUniquePalletKittedUnit($attribute, $params) {
+        if ($this->pallet_no === $this->kitted_unit) {
+            $this->addError('pallet_no', 'Pallet # should not be the same with Kitting #');
+            $this->addError('kitted_unit', 'Kitted # should not be the same with Pallet #');
+        }
+    }
+
+    /**
      * pallet_no for packaging type validation
      */
     public function checkPackagingPalletNoRange($attribute, $params) {
@@ -152,6 +165,21 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     }
 
     /**
+     * kitting_type validation
+     */
+    public function checkKittingTypeCompatibility($attribute, $params) {
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['kitted_unit' => $this->kitted_unit,
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            $material = Yii::$app->modelFinder->findMaterialModel($this->material_code);
+            if ($transactionDetailsModel[0]['kitting_type'] !== $material['pallet_ind']) {
+                $this->addError('kitted_unit', 'Compatibility error. Pallet type is different with the selected customer product pallet type. Please select compatible customer product.');
+            }
+        }
+    }
+
+    /**
      * batch validation
      */
     public function checkBatch($attribute, $params) {
@@ -168,18 +196,51 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
     }
 
     /**
-     * unique pallet per transaction validation
+     * unique pallet no per transaction validation
      */
     public function checkPallet($attribute, $params) {
+        $status = [Yii::$app->params['STATUS_PROCESS'],
+                     Yii::$app->params['STATUS_CLOSED'],
+                     Yii::$app->params['STATUS_REJECTED']];
+
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                     ['pallet_no' => $this->pallet_no,
-                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'],
-                                                                                                     Yii::$app->params['STATUS_CLOSED'],
-                                                                                                     Yii::$app->params['STATUS_REJECTED']]]);
+                                                                                     'status'    => $status]);
+
+        if ($transactionDetailsModel == null || count($transactionDetailsModel) == 0) {
+            $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['kitted_unit' => $this->pallet_no,
+                                                                                     'status'      => $status]);
+        }
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             if ($this->transaction_id !== $transactionDetailsModel[0]['transaction_id']) {
                 $this->addError('pallet_no', 'Pallet # is already being used in another transaction.');
             }
         }
     }
+
+    /**
+     * unique kitted_unit per transaction validation
+     */
+    public function checkKittedUnit($attribute, $params) {
+        $status = [Yii::$app->params['STATUS_PROCESS'],
+                     Yii::$app->params['STATUS_CLOSED'],
+                     Yii::$app->params['STATUS_REJECTED']];
+
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $this->kitted_unit,
+                                                                                     'status'    => $status]);
+
+        if ($transactionDetailsModel == null || count($transactionDetailsModel) == 0) {
+            $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['kitted_unit' => $this->kitted_unit,
+                                                                                     'status'      => $status]);
+        }
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            if ($this->transaction_id !== $transactionDetailsModel[0]['transaction_id']) {
+                $this->addError('kitted_unit', 'Pallet # is already being used in another transaction.');
+            }
+        }
+    }
+
 }

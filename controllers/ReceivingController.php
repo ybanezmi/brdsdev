@@ -487,6 +487,7 @@ class ReceivingController extends Controller
 			foreach ($transaction_details_model as $key => $value) {
 				$transaction_details[$value['pallet_no']]['pallet_type'] = $value['pallet_type'];
 				$transaction_details[$value['pallet_no']]['kitted_unit'] = $value['kitted_unit'];
+				$transaction_details[$value['pallet_no']]['kitting_code'] = $value['kitting_code'];
 				$transaction_details[$value['pallet_no']]['pallet_weight'] = Yii::$app->modelFinder->getTransactionDetailList('pallet_weight', null, null, ['id' => $value['id'],
 																			'status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]],false, null);
 				$transaction_details[$value['pallet_no']]['status'] = Yii::$app->modelFinder->getTransactionDetailList('status', null, null, ['id' => $value['id'],
@@ -975,9 +976,19 @@ class ReceivingController extends Controller
 
     public function actionGetPalletDetails($id) {
         $palletDetails = null;
+        $status = [Yii::$app->params['STATUS_PROCESS'],
+                     Yii::$app->params['STATUS_CLOSED'],
+                     Yii::$app->params['STATUS_REJECTED']];
+
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                     ['pallet_no'    => $id,
-                                                                                     'status'       => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
+                                                                                     'status'       => $status]);
+        if ($transactionDetailsModel == null || count($transactionDetailsModel) == 0) {
+            $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['kitted_unit'  => $id,
+                                                                                     'status'       => $status]);
+        }
+
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $palletDetails['transaction_id'] = $transactionDetailsModel[0]['transaction_id'];
             $palletDetails['customer_code'] = $transactionDetailsModel[0]['customer_code'];
@@ -1011,10 +1022,20 @@ class ReceivingController extends Controller
 
     public function actionValidatePallet($id) {
         $response['success'] = true;
+        $status = [Yii::$app->params['STATUS_PROCESS'],
+                     Yii::$app->params['STATUS_CLOSED'],
+                     Yii::$app->params['STATUS_REJECTED']];
 
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                     ['pallet_no' => $id,
-                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
+                                                                                     'status'    => $status]);
+
+        if ($transactionDetailsModel == null || count($transactionDetailsModel) == 0) {
+            $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['kitted_unit'  => $id,
+                                                                                     'status'       => $status]);
+        }
+
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             if (Yii::$app->request->get('transaction_id') !== $transactionDetailsModel[0]['transaction_id']) {
                 $response['success'] = false;
@@ -1037,7 +1058,9 @@ class ReceivingController extends Controller
         $batchList = null;
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                     ['pallet_no' => $id,
-                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                     Yii::$app->params['STATUS_CLOSED'],
+                                                                                                     Yii::$app->params['STATUS_REJECTED']]]);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');
@@ -1089,13 +1112,13 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($trxTransaction['actual_gr_date']));
         $params[SapConst::PARAMS][SapConst::HSDAT] = date('Ymd', strtotime($trxTransactionDetails['manufacturing_date']));
         $params[SapConst::PARAMS][SapConst::VFDAT] = date('Ymd', strtotime($trxTransactionDetails['expiry_date']));
-        //$params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::CRATES_IND] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? SapConst::X : SapConst::HALF_WIDTH_SPACE;
         // Packaging Type
         $params[SapConst::PARAMS][SapConst::EXIDV_PAL] = !$this->isEmpty($trxTransactionDetails['pallet_no']) ? $trxTransactionDetails['pallet_no'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::VHILM2] = !$this->isEmpty($trxTransactionDetails['packaging_code']) ? $trxTransactionDetails['packaging_code'] : SapConst::HALF_WIDTH_SPACE;
         // Kitting Type
-        //$params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
-        //$params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::EXIDV] = !$this->isEmpty($trxTransactionDetails['kitted_unit']) ? $trxTransactionDetails['kitted_unit'] : SapConst::HALF_WIDTH_SPACE;
+        $params[SapConst::PARAMS][SapConst::VHILM] = !$this->isEmpty($trxTransactionDetails['kitting_code']) ? $trxTransactionDetails['kitting_code'] : SapConst::HALF_WIDTH_SPACE;
         $params[SapConst::PARAMS][SapConst::REMARKS] = $trxTransaction['remarks'];
         $params[SapConst::PARAMS][SapConst::LAST_ITEM_IND] = SapConst::HALF_WIDTH_SPACE;
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);

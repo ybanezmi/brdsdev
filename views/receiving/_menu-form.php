@@ -221,7 +221,8 @@ use yii\bootstrap\Modal;
                 ['inputOptions' => ['class' => 'uborder help-25percent'],
                 'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',
-                    'onchange' => 'validatePalletType(this.value, getFieldValueById("material_code"));']])->textInput(['maxlength' => 10])->label('Kitting #') ?>
+                    ]])->textInput(['maxlength' => 10,
+                                    'onchange'  => 'validateKittingType(this.value, getFieldValueById("material_code"), getFieldValueById("trxtransactions-id"));'])->label('Kitting #') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-25percent',

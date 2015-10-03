@@ -495,17 +495,14 @@ function checkTransactionStatus() {
 /* function to check existing pallet kitted unit of transaction detail */
 function checkTransactionKittedUnit() {
     if (checkTransactionStatus()) {
-      if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
-          var trx_kitted_unit = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['kitted_unit'];
+        if (null != transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]) {
+            var trx_kitted_unit = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['kitted_unit'];
+            var trx_kitting_code = transaction_details[getFieldValueById("trxtransactiondetails-pallet_no")]['kitting_code'];
 
-          // set fixed value
-          setFieldValueById("trxtransactiondetails-kitted_unit", trx_kitted_unit);
-
-      } else {
-          // set to blank
-          setFieldValueById("trxtransactiondetails-kitted_unit", "");
-
-      }
+            // set fixed value
+            setFieldValueById("trxtransactiondetails-kitting_code", trx_kitting_code);
+            setFieldValueById("trxtransactiondetails-kitted_unit", trx_kitted_unit);
+        }
     } else {
       alert('Pallet ' + getFieldValueById("trxtransactiondetails-pallet_no") + ' is already closed.');
       document.getElementById("trxtransactiondetails-kitted_unit").value = "";
@@ -544,6 +541,22 @@ function validatePalletType(palletNo, materialCode, transactionId) {
                     checkTransactionPalletWeight();
                     checkTransactionPalletType();
                     populateBatchDropdown(palletNo);
+                }
+            }
+        });
+    }
+}
+
+/* new function to validate kitting type of material and transaction_detail */
+function validateKittingType(palletNo, materialCode, transactionId) {
+    if (palletNo && transactionId) {
+        load('validate-pallet?id=' + palletNo + '&material_code=' + materialCode + '&transaction_id=' + transactionId, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                if (jsonData.error) {
+                    alert(jsonData.error);
+                    setFieldValueById("trxtransactiondetails-kitted_unit", "");
                 }
             }
         });
