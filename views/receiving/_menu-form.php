@@ -93,7 +93,7 @@ use yii\bootstrap\Modal;
         <div id="toggle-div-2">
 
 		<?php $material_code_val = ''; if (isset($_GET['material_code'])) { $material_code_val = $_GET['material_code']; }?>
-		
+
         <?= $form->field($transaction_detail_model, 'material_code',
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
             ->dropDownList($material_list, ['class'    => 'uborder help-100percent',
@@ -206,12 +206,7 @@ use yii\bootstrap\Modal;
                 ['inputOptions' => ['class' => 'uborder help-25percent',
                                     'value' => $pallet_no,
                                     'style' => 'font-size: 16px',
-                                    'onchange' => 'checkTransactionKittedUnit();
-                                                   checkTransactionPalletWeight();
-                                                   checkTransactionPalletType();
-                                                   validatePalletType(this.value, getFieldValueById("material_code"));
-                                                   populateBatchDropdown(this.value);
-                                                   '],
+                                    'onchange' => 'validatePalletType(this.value, getFieldValueById("material_code"), getFieldValueById("trxtransactions-id"));'],
                  'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',],
                  ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
@@ -274,7 +269,7 @@ function catchWeight() {
 
 window.onload=function() {
     onSelectMaterial(true);
-    validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"), getFieldValueById("trxtransactiondetails-material_code"));
+    validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"), getFieldValueById("trxtransactiondetails-material_code"), getFieldValueById("trxtransactions-id"));
 }
 
 </script>

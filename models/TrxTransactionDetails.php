@@ -58,6 +58,7 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
             [['manufacturing_date', 'expiry_date'], 'checkManufacturingExpiryDate'], // @TODO: calendar disable dates
             [['pallet_no'], 'checkPackagingPalletNoRange'],
             [['pallet_no'], 'checkKittingPalletNoRange'],
+            [['pallet_no'], 'checkPallet'],
             [['pallet_type'], 'checkPalletTypeCompatibility'],
             [['batch'], 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9- ]/', 'message' => 'Must contain alphanumeric, space ( ), and dash (-) characters only.'],
         ];
@@ -140,7 +141,8 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
      */
     public function checkPalletTypeCompatibility($attribute, $params) {
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                    ['pallet_no' => $this->pallet_no]);
+                                                                                    ['pallet_no' => $this->pallet_no,
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $material = Yii::$app->modelFinder->findMaterialModel($this->material_code);
             if ($transactionDetailsModel[0]['pallet_type'] !== $material['pallet_ind']) {
@@ -153,7 +155,10 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
      * batch validation
      */
     public function checkBatch($attribute, $params) {
-        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch' => $id]);
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetails(['batch'   => $id,
+                                                                                  'status'  => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                Yii::$app->params['STATUS_CLOSED'],
+                                                                                                Yii::$app->params['STATUS_REJECTED']]]);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             if ($transactionDetailsModel[0]['material_code'] !== $this->batch) {
@@ -162,4 +167,19 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * unique pallet per transaction validation
+     */
+    public function checkPallet($attribute, $params) {
+        $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                    ['pallet_no' => $this->pallet_no,
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                     Yii::$app->params['STATUS_CLOSED'],
+                                                                                                     Yii::$app->params['STATUS_REJECTED']]]);
+        if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
+            if ($this->transaction_id !== $transactionDetailsModel[0]['transaction_id']) {
+                $this->addError('pallet_no', 'Pallet # is already being used in another transaction.');
+            }
+        }
+    }
 }

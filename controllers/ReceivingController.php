@@ -883,11 +883,15 @@ class ReceivingController extends Controller
 		echo json_encode($transactionlist);
 	}
 
-    public function actionGetPackagingType() {
-        $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-            ['pallet_type' => Yii::$app->request->get('id')],
-            // 'plant_location' => Yii::$app->request->get('plant_location')],
-            ['like', 'description', Yii::$app->params['PALLET']]]);
+    public function actionGetPackagingType($id) {
+        $condition = ['like', 'description', Yii::$app->params['PALLET']];
+        if (isset($id) && $id !== 'undefined') {
+            $condition = ['and',
+                            ['pallet_type' => $id],
+                            ['like', 'description', Yii::$app->params['PALLET']]];
+        }
+
+        $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, $condition);
 
         $packaging_type_list['material_code'] = ArrayHelper::getColumn($packaging_type_model, 'material_code');
         $packaging_type_list['description'] = ArrayHelper::getColumn($packaging_type_model, 'description');
@@ -1009,12 +1013,18 @@ class ReceivingController extends Controller
         $response['success'] = true;
 
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                    ['pallet_no' => $id]);
+                                                                                    ['pallet_no' => $id,
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
-            $material = Yii::$app->modelFinder->findMaterialModel(Yii::$app->request->get('material_code'));
-            if ($transactionDetailsModel[0]['pallet_type'] !== $material['pallet_ind']) {
+            if (Yii::$app->request->get('transaction_id') !== $transactionDetailsModel[0]['transaction_id']) {
                 $response['success'] = false;
-                $response['error'] = 'Compatibility error. Pallet type is different with the selected customer product pallet type. Please select compatible customer product.';
+                $response['error'] = 'Pallet # is already being used in another transaction.';
+            } else if (Yii::$app->request->get('material_code')) {
+                $material = Yii::$app->modelFinder->findMaterialModel(Yii::$app->request->get('material_code'));
+                if ($transactionDetailsModel[0]['pallet_type'] !== $material['pallet_ind']) {
+                    $response['success'] = false;
+                    $response['error'] = 'Compatibility error. Pallet type is different with the selected customer product pallet type. Please select compatible customer product.';
+                }
             } else {
                 $response['success'] = true;
             }
@@ -1026,7 +1036,8 @@ class ReceivingController extends Controller
     public function actionGetBatch($id) {
         $batchList = null;
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                    ['pallet_no' => $id]);
+                                                                                    ['pallet_no' => $id,
+                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');

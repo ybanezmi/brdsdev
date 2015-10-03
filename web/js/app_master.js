@@ -530,17 +530,20 @@ function checkTransactionPalletWeight() {
 }
 
 /* new function to validate pallet type of material and transaction_detail */
-function validatePalletType(palletNo, materialCode) {
-    if (palletNo && materialCode) {
-        load('validate-pallet?id=' + palletNo + '&material_code=' + materialCode, function(xhr) {
+function validatePalletType(palletNo, materialCode, transactionId) {
+    if (palletNo && transactionId) {
+        load('validate-pallet?id=' + palletNo + '&material_code=' + materialCode + '&transaction_id=' + transactionId, function(xhr) {
             var jsonData = JSON.parse(xhr.responseText);
 
             if (null != jsonData) {
                 if (jsonData.error) {
                     alert(jsonData.error);
-                    setFieldValueById("trxtransactiondetails-material_code", "");
-                    setFieldValueById("material_code", "");
-                    setFieldValueById("material_barcode", "");
+                    setFieldValueById("trxtransactiondetails-pallet_no", "");
+                } else {
+                    checkTransactionKittedUnit();
+                    checkTransactionPalletWeight();
+                    checkTransactionPalletType();
+                    populateBatchDropdown(palletNo);
                 }
             }
         });
@@ -1304,6 +1307,7 @@ function clearAllFields() {
     setFieldValueById("trxtransactiondetails-pallet_no", "");
     setFieldValueById("trxtransactiondetails-kitted_unit", "");
     setFieldValueById("trxtransactiondetails-pallet_weight", "");
+    populateBatchDropdown();
 }
 
 function calculateTotalWeight() {
@@ -1370,6 +1374,13 @@ function populateBatchDropdown(palletNo) {
                 document.getElementById('btn-use-cancel').style.display = 'none';
             }
         });
+    } else {
+        if (useFlag) {
+            toggleUse();
+        }
+        // hide use buttons
+        document.getElementById('btn-use').style.display = 'none';
+        document.getElementById('btn-use-cancel').style.display = 'none';
     }
 }
 
