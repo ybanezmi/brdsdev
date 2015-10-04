@@ -58,7 +58,7 @@ class MstAccount extends \yii\db\ActiveRecord implements \yii\web\IdentityInterf
             [['first_name', 'middle_name', 'last_name', 'contact_no'], 'string', 'max' => 100],
             [['address', 'notify', 'notify_conact_no'], 'string', 'max' => 255],
             [['assignment', 'next_assignment'], 'string', 'max' => 50],
-            [['contact_no', 'notify_conact_no'], 'match', 'not' => true, 'pattern' => '/[^0-9()-]/', 'message' => 'Incorrect contact no. format.'],
+            [['contact_no', 'notify_conact_no'], 'match', 'not' => true, 'pattern' => '/[^ 0-9()-]/', 'message' => 'Incorrect contact no. format.'],
             [['username'], 'validateUsername'],
             [['start_date', 'end_date'], 'checkStartEndDate'],
             [['next_start_date', 'next_end_date'], 'checkNextStartEndDate'],
