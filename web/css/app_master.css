@@ -2,7 +2,7 @@
 	created by:Alex John Suarez;
 	Template Master styles
 	@import - supported by 3 css styles below
-	helper.css 
+	helper.css
 	responsive.css
 	ovveride.css
 **/
@@ -69,7 +69,7 @@ a:hover, a:active, a:focus {
 	margin: 20px auto 30px;
 	width: 263px;
 	height: 92px;
-	
+
 }
 
 .login-logo img{
@@ -213,7 +213,7 @@ a:hover, a:active, a:focus {
 #logo a.logo-img {
 	background: url('../images/logo.png') no-repeat;
 	display: block;
-	width:277px; 
+	width:277px;
 	height:112px;
 }
 
@@ -310,7 +310,8 @@ header nav ul li a:hover, header nav ul li a:active, header nav ul li a:focus {
 }
 
 .wrapper-150{
-	margin-left:150px;
+	margin-left: 150px;
+	margin-top: 5px;
 }
 
 
@@ -415,7 +416,7 @@ input.disabled, textarea.disabled, select.disabled {
 
 .control-group div{
 	padding:0 0 0 0px;
-}	
+}
 
 .f-full-size{
 	width: 30%;
@@ -611,7 +612,7 @@ form h2.legend{
 	padding-top:30px;
 }
 
-.weigh-page form .control-group{ 
+.weigh-page form .control-group{
 	clear:both;
 	overflow: hidden;
 
@@ -680,7 +681,7 @@ div.sync-form form {
 }
 
 /* MEDIA QUERIES START */
-@media only screen 
+@media only screen
 and (min-width : 880px)
 and (max-width : 1120px) {
 	.one-column {
@@ -704,7 +705,7 @@ and (max-width : 1120px) {
 	}
 }
 
-@media only screen 
+@media only screen
 and (min-width : 550px)
 and (max-width : 880px) {
 	#logo {
@@ -877,7 +878,7 @@ and (max-width : 880px) {
 }
 
 
-@media only screen 
+@media only screen
 and (min-width : 380px)
 and (max-width : 550px) {
 	.login-box{
@@ -885,7 +886,7 @@ and (max-width : 550px) {
 	}
 
 	.dropdown-menu.omenu {
-		left: -20px!important; 
+		left: -20px!important;
 	}
 
 	#logo {
@@ -900,10 +901,10 @@ and (max-width : 550px) {
 	#logo a.logo-img {
 		background: url('../images/logoSword.png') no-repeat;
 		display: block;
-		width:120px; 
+		width:120px;
 		height:36px;
 	}
-	
+
 	header {
 		background: #3E4095;
 		clear: both;
@@ -1053,7 +1054,7 @@ and (max-width : 550px) {
 	.two-column form input, .two-column form textarea, .two-column form select {
 		font-size: 0.9em;
 	}
-	
+
 	form h2.legend {
 		font-size: 18px;
 		padding: 0px;
@@ -1093,7 +1094,7 @@ and (max-width : 550px) {
 }
 
 
-@media only screen 
+@media only screen
 and (min-width : 320px)
 and (max-width : 380px) {
 	.login-box{
@@ -1101,7 +1102,7 @@ and (max-width : 380px) {
 	}
 
 	.dropdown-menu.omenu {
-		left: -20px!important; 
+		left: -20px!important;
 	}
 
 	#logo {
@@ -1116,10 +1117,10 @@ and (max-width : 380px) {
 	#logo a.logo-img {
 		background: url('../images/logoS.jpg') no-repeat;
 		display: block;
-		width:55px; 
+		width:55px;
 		height:36px;
 	}
-	
+
 	header {
 		background: #3E4095;
 		clear: both;
@@ -1270,7 +1271,7 @@ and (max-width : 380px) {
 	.two-column form input, .two-column form textarea, .two-column form select {
 		font-size: 0.9em;
 	}
-	
+
 	form h2.legend {
 		font-size: 18px;
 		padding: 0px;
@@ -1316,14 +1317,14 @@ and (max-width : 380px) {
 
 }
 
-@media only screen 
-and (max-width : 320px) { 
+@media only screen
+and (max-width : 320px) {
 	.login-box{
 		width: 100%
 	}
 
 	.dropdown-menu.omenu {
-		left: -20px!important; 
+		left: -20px!important;
 	}
 
 	#logo {
@@ -1338,10 +1339,10 @@ and (max-width : 320px) {
 	#logo a.logo-img {
 		background: url('../images/logoS.jpg') no-repeat;
 		display: block;
-		width:55px; 
+		width:55px;
 		height:36px;
 	}
-	
+
 	header {
 		background: #3E4095;
 		clear: both;
@@ -1389,7 +1390,7 @@ and (max-width : 320px) {
 		-moz-border-radius: 3px;
 		border-radius: 3px;
 	}
-	
+
 	header nav ul li a span {
 		display: none;
 	}
@@ -1495,7 +1496,7 @@ and (max-width : 320px) {
 	.one-column form input, .one-column form textarea, .one-column form select {
 		font-size: 0.9em;
 	}
-	
+
 	form h2.legend {
 		font-size: 18px;
 		padding: 0px;

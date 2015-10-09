@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 use yii\bootstrap\Modal;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $transaction_model app\models\TrxTransactions */
@@ -237,9 +238,7 @@ use yii\bootstrap\Modal;
     <div class="submit-button ie6-submit-button">
         <?= Html::submitButton('Add to Pallet', ['class'     => 'btn btn-primary',
                                                        'name'        => 'add-pallet']) ?>
-            <?= Html::submitButton('Close Pallet', ['class'   => 'btn btn-primary',
-                                              'name'    => 'close-pallet']) ?>
-
+        <button href="#closepallet" data-toggle="modal" class="btn btn-primary">Close Pallet</button>
     </div>
     <div class="submit-button ie6-submit-button">
         <?= Html::button('View Entries', ['class'     => 'btn btn-primary',
@@ -251,8 +250,51 @@ use yii\bootstrap\Modal;
     </div>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <!-- Close Pallet -->
+    <div style="height:275px" id="closepallet" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel" class="header-popup">Close Pallet</h3>
+        </div>
+        <div class="modal-body">
+            <?php
+                if (isset($_GET['closePalletFlag'])) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-success',
+                        ],
+                    ]);
+                    echo 'Pallet #' . $_GET['closePalletNo'] . ' successfully closed.';
 
+                    Alert::end();
+                }
+
+                if (isset($_GET['closePalletError'])) {
+                    Alert::begin([
+                        'options' => [
+                            'class' => 'alert-error',
+                        ],
+                    ]);
+                    echo 'Failed to close pallet. Please enter pallet no.';
+
+                    Alert::end();
+                }
+            ?>
+            <h4>Scan Pallet to Process</h4>
+            <div class="control-group">
+                <?= Html::textInput('close_pallet_no', '', ['id'         => 'close-pallet-no',
+                                                            'class'      => 'uborder help-40percent']) ?>
+                <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
+                                                      'name'    => 'close-pallet']) ?>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <?= Html::submitButton('Bulk Close Pallet', ['class' => 'btn btn-primary',
+                                                         'name'  => 'bulk-close-pallet']) ?>
+            <?php ActiveForm::end(); ?>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -274,3 +316,11 @@ window.onload=function() {
 }
 
 </script>
+
+<?php if (isset($_GET['closePalletFlag']) || isset($_GET['closePalletError'])) { ?>
+    <script type="text/javascript">
+        window.onload=function() {
+            $('#closepallet').modal('show');
+        }
+    </script>
+<?php } ?>

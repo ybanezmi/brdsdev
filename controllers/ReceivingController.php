@@ -356,7 +356,8 @@ class ReceivingController extends Controller
     	$this->initUser();
     	if(null !== Yii::$app->request->post('cancel')) {
     		$this->redirect(['index']);
-    	} else if (null !== Yii::$app->request->post('close-pallet')) {
+    	} else if (null !== Yii::$app->request->post('close-pallet')
+                    || null !== Yii::$app->request->post('bulk-close-pallet')) {
     		$transaction_model = Yii::$app->modelFinder->findTransactionModel($id);
     	    $material_conversion_model = new MstMaterialConversion;
 			$date = date('Y-m-d H:i:s');
@@ -367,7 +368,9 @@ class ReceivingController extends Controller
 			// get total weight from trx_transaction_details
 			$transaction_detail_list = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 																					    ['transaction_id' => $transaction_model->id,
-																						 'status' 		  => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]]);
+																						 'status' 		  => [Yii::$app->params['STATUS_PROCESS'],
+																						                      Yii::$app->params['STATUS_CLOSED'],
+																						                      Yii::$app->params['STATUS_REJECTED']]]);
 
 			// @TODO: use max param in getTransactionDetailList
 			$total_weight = array_sum(ArrayHelper::map($transaction_detail_list, 'id', 'total_weight'));
@@ -377,16 +380,41 @@ class ReceivingController extends Controller
 			$transaction_model->updated_date	= $date;
 
 			// close pallets
+			$condition = ['transaction_id'   => $transaction_model->id,
+                          'status'          => Yii::$app->params['STATUS_PROCESS']];
+
+            if (null !== Yii::$app->request->post('close-pallet')) {
+                if (null !== Yii::$app->request->post('close_pallet_no') && "" !== Yii::$app->request->post('close_pallet_no')) {
+                    $condition['pallet_no'] = Yii::$app->request->post('close_pallet_no');
+                    $closePalletFlags['closePalletFlag'] = true;
+                } else {
+                    $closePalletFlags['closePalletError'] = true;
+                }
+            } else {
+                $closePalletFlags['closeAllPalletsFlag'] = true;
+            }
+
+            if (isset($closePalletFlags['closePalletError'])) {
+                return $this->redirect(['menu', 'id'                => $transaction_model->id,
+                                                 'closePalletError' => true]);
+            }
 			TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_CLOSED'],
 											  'updater_id'		=> Yii::$app->user->id,
 											  'updated_date'	=> $date],
-											 ['transaction_id' 	=> $transaction_model->id,
-											  //'pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
-											  'status' 			=> Yii::$app->params['STATUS_PROCESS']]);
+											  $condition
+											 );
 
 			if ($transaction_model->save()) {
-				return $this->redirect(['menu', 'id' => $transaction_model->id,
-				                                'closeAllPalletsFlag' => true, ]);
+			    if (isset($closePalletFlags['closePalletFlag'])) {
+			        return $this->redirect(['menu', 'id'                => $transaction_model->id,
+			                                        'closePalletFlag'   => true,
+			                                        'closePalletNo'     => Yii::$app->request->post('close_pallet_no')]);
+			    } else if (isset($closePalletFlags['closeAllPalletsFlag'])) {
+                    return $this->redirect(['menu', 'id'                   => $transaction_model->id,
+                                                    'closeAllPalletsFlag'  => true]);
+                } else {
+                    return $this->redirect(['menu', 'id' => $transaction_model->id]);
+			    }
 			} else {
 				return $this->render('menu', [
 	                'transaction_model' 		=> $transaction_model,
