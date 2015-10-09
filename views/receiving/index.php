@@ -25,30 +25,6 @@ $this->title = 'Receiving';
 				Alert::end();
 			}
 
-			if ($palletStatus['open_success']) {
-				Alert::begin([
-				    'options' => [
-				        'class' => 'alert-success',
-				    ],
-				]);
-
-				echo 'Pallet #' . Yii::$app->request->post("open_pallet_no") . ' successfully opened.';
-
-				Alert::end();
-			}
-
-			if ($palletStatus['open_error']) {
-				Alert::begin([
-				    'options' => [
-				        'class' => 'alert-error',
-				    ],
-				]);
-
-				echo 'Failed to open pallet. Please enter pallet no.';
-
-				Alert::end();
-			}
-
 			if ($palletStatus['close_success']) {
 				Alert::begin([
 				    'options' => [
@@ -73,54 +49,6 @@ $this->title = 'Receiving';
 				Alert::end();
 			}
 
-			if ($palletStatus['reject_success']) {
-				Alert::begin([
-				    'options' => [
-				        'class' => 'alert-success',
-				    ],
-				]);
-
-				echo 'Pallet #' . Yii::$app->request->post("reject_pallet_no") . ' successfully rejected.';
-
-				Alert::end();
-			}
-
-			if ($palletStatus['reject_error']) {
-				Alert::begin([
-				    'options' => [
-				        'class' => 'alert-error',
-				    ],
-				]);
-
-				echo 'Failed to reject pallet. Please enter pallet no.';
-
-				Alert::end();
-			}
-
-            if ($palletStatus['create_to_success']) {
-                Alert::begin([
-                    'options' => [
-                        'class' => 'alert-success',
-                    ],
-                ]);
-
-                echo 'Pallet #' . Yii::$app->request->post("create_to_pallet_no") . ' successfully created with Transfer Order.';
-                echo '<br />T.O. Number: ' . $palletStatus['to_number'];
-
-                Alert::end();
-            }
-
-            if ($palletStatus['create_to_error']) {
-                Alert::begin([
-                    'options' => [
-                        'class' => 'alert-error',
-                    ],
-                ]);
-
-                echo 'Failed to create TO number. ' . $palletStatus['to_error'];
-
-                Alert::end();
-            }
 		?>
 		<div class="help-150"><h1 class="page-title page-title-bt">Receiving</h1></div>
 		<ul class="list-sub-menu">
@@ -136,7 +64,7 @@ $this->title = 'Receiving';
 			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>
 			<?php } ?>
       <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/admin-tools/synchronized-database"> <span>Sycnhronize Database</span></a></li>
-    
+
 		</ul>
 	</div>
 </div>
@@ -149,6 +77,31 @@ $this->title = 'Receiving';
     <h3 id="myModalLabel" class="header-popup">Open Pallet</h3>
   </div>
   <div class="modal-body">
+      <?php
+            if ($palletStatus['open_success']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-success',
+                    ],
+                ]);
+
+                echo 'Pallet #' . Yii::$app->request->post("open_pallet_no") . ' successfully opened.';
+
+                Alert::end();
+            }
+
+            if ($palletStatus['open_error']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-error',
+                    ],
+                ]);
+
+                echo 'Failed to open pallet. Please enter pallet no.';
+
+                Alert::end();
+            }
+      ?>
       <h4>Scan Pallet to Process</h4>
       <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
@@ -172,7 +125,6 @@ $this->title = 'Receiving';
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>
-
 
 <!-- Close Pallet -->
 <div style="height:230px" id="closepallet" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -212,6 +164,31 @@ $this->title = 'Receiving';
     <h3 id="myModalLabel" class="header-popup">Reject Pallet</h3>
   </div>
   <div class="modal-body">
+      <?php
+        if ($palletStatus['reject_success']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-success',
+                    ],
+                ]);
+
+                echo 'Pallet #' . Yii::$app->request->post("reject_pallet_no") . ' successfully rejected.';
+
+                Alert::end();
+            }
+
+            if ($palletStatus['reject_error']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-error',
+                    ],
+                ]);
+
+                echo 'Failed to reject pallet. Please enter pallet no.';
+
+                Alert::end();
+            }
+      ?>
       <h4>Scan Pallet to Process</h4>
       <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
@@ -244,6 +221,32 @@ $this->title = 'Receiving';
     <h3 id="myModalLabel" class="header-popup">Create Transfer Order</h3>
   </div>
   <div class="modal-body">
+      <?php
+            if ($palletStatus['create_to_success']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-success',
+                    ],
+                ]);
+
+                echo 'Pallet #' . Yii::$app->request->post("create_to_pallet_no") . ' successfully created with Transfer Order.';
+                echo '<br />T.O. Number: ' . $palletStatus['to_number'];
+
+                Alert::end();
+            }
+
+            if ($palletStatus['create_to_error']) {
+                Alert::begin([
+                    'options' => [
+                        'class' => 'alert-error',
+                    ],
+                ]);
+
+                echo 'Failed to create TO number. ' . $palletStatus['to_error'];
+
+                Alert::end();
+            }
+      ?>
       <h4>Scan Pallet to Process</h4>
       <?php
         $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
@@ -266,3 +269,27 @@ $this->title = 'Receiving';
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>
+
+<?php if ($palletStatus['open_success'] || $palletStatus['open_error']) { ?>
+    <script type="text/javascript">
+        window.onload=function() {
+            $('#openpallet').modal('show');
+        }
+    </script>
+<?php } ?>
+
+<?php if ($palletStatus['reject_success'] || $palletStatus['reject_error']) { ?>
+    <script type="text/javascript">
+        window.onload=function() {
+            $('#rejectpallet').modal('show');
+        }
+    </script>
+<?php } ?>
+
+<?php if ($palletStatus['create_to_success'] || $palletStatus['create_to_error']) { ?>
+    <script type="text/javascript">
+        window.onload=function() {
+            $('#createto').modal('show');
+        }
+    </script>
+<?php } ?>
