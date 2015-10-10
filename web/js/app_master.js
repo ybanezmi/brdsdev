@@ -377,16 +377,14 @@ function getTimestamp() {
 }
 
 /* function to check material sled */
-function checkMaterialSled() {
+function checkMaterialSled(dateType) {
     var materialSled = getMaterialSled();
-	if (null != materialSled && materialSled != 0 && getFieldValueById("trxtransactiondetails-manufacturing_date").length > 0
-	   && getFieldValueById("trxtransactiondetails-expiry_date").length == 0) {
+	if (null != materialSled && materialSled != 0 && dateType == "manufacturing_date") {
 		setFieldValueById("trxtransactiondetails-expiry_date",
 			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),materialSled,"add"));
 	}
 
-    if (null != materialSled && materialSled != 0 && getFieldValueById("trxtransactiondetails-expiry_date").length > 0
-       && getFieldValueById("trxtransactiondetails-manufacturing_date").length == 0) {
+    if (null != materialSled && materialSled != 0 && dateType == "expiry_date") {
         setFieldValueById("trxtransactiondetails-manufacturing_date",
             calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),materialSled,"subtract"));
     }

@@ -162,7 +162,7 @@ use yii\bootstrap\Alert;
                                                                                                            'options'          => ['class'         => 'uborder disabled help-25percent dateclass',
                                                                                                                                     'readonly'        => 'readonly',
                                                                                                                                     'dateFormat'     => 'dd-M-yy',
-                                                                                                                                    'onchange'        => 'checkMaterialSled()']])->label('Manuf Date') ?>
+                                                                                                                                    'onchange'        => 'checkMaterialSled("manufacturing_date")']])->label('Manuf Date') ?>
 
 
 
@@ -174,7 +174,7 @@ use yii\bootstrap\Alert;
                                                                                                                          'buttonImage'      => '../images/calendar.gif',
                                                                                                                          'buttonImageOnly'     => 'true'],
                                                                                                 'options'              => ['class'             => 'uborder disabled help-25percent dateclass',
-                                                                                                                         'onchange'         => 'checkMaterialSled()',
+                                                                                                                         'onchange'         => 'checkMaterialSled("expiry_date")',
                                                                                                                             'readonly'            => 'readonly',
                                                                                                                             'dateFormat'         => 'm/dd/yy']])->label('Expiry Date') ?>
 
