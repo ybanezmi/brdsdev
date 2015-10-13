@@ -103,6 +103,10 @@ class TrxTransactionDetails extends \yii\db\ActiveRecord
 	 */
 	public function checkManufacturingExpiryDate($attribute, $params)
 	{
+	    if ($this->manufacturing_date > date('Y-m-d')) {
+	        $this->addError('manufacturing_date', "Manufacturing date should not be greater than today's date.");
+	    }
+
 		if ($this->manufacturing_date >= $this->expiry_date) {
 			$this->addError('manufacturing_date', 'Manufacturing date should be less than the expiry date.');
 			$this->addError('expiry_date', 'Expiry date should be greater than the manufacturing date.');

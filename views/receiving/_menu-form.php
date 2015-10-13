@@ -150,19 +150,17 @@ use yii\bootstrap\Alert;
                                     <div class=\"col-lg-8\">{error}</div>
                                 </div>',])->dropDownList([])->label('Batch / Lot') ?>
 
-        <?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),[
-                                                                                                            'language' => 'en-GB',
-
-
-                                                                                                          'clientOptions'      => ['dateFormat'     => 'dd-M-yy',
-                                                                                                                                    'showOn'        => 'button',
-                                                                                                                                 'buttonImage'  => '../images/calendar.gif',
-                                                                                                                                 'buttonImageOnly' => 'true',
-                                                                                                                                 ],
-                                                                                                           'options'          => ['class'         => 'uborder disabled help-25percent dateclass',
-                                                                                                                                    'readonly'        => 'readonly',
-                                                                                                                                    'dateFormat'     => 'dd-M-yy',
-                                                                                                                                    'onchange'        => 'checkMaterialSled("manufacturing_date")']])->label('Manuf Date') ?>
+        <?= $form->field($transaction_detail_model,'manufacturing_date')->widget(DatePicker::className(),['language'        => 'en-GB',
+                                                                                                          'clientOptions'   => ['dateFormat'        => 'dd-M-yy',
+                                                                                                                                'showOn'            => 'button',
+                                                                                                                                'buttonImage'       => '../images/calendar.gif',
+                                                                                                                                'buttonImageOnly'   => 'true',
+                                                                                                                                'maxDate'           => '0',
+                                                                                                                               ],
+                                                                                                          'options'         => ['class'             => 'uborder disabled help-25percent dateclass',
+                                                                                                                                'readonly'          => 'readonly',
+                                                                                                                                'dateFormat'        => 'dd-M-yy',
+                                                                                                                                'onchange'          => 'checkMaterialSled("manufacturing_date")']])->label('Manuf Date') ?>
 
 
 
