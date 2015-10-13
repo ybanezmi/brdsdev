@@ -1428,3 +1428,12 @@ function scanPalletBarcode(materialCodeId, netWTId) {
         setFieldValueById(netWTId, netWT, true);
     }
 }
+
+function goBack() {
+    var referrer = document.referrer;
+    if(referrer != '') {
+        window.location = referrer;
+    } else {
+        window.history.back();
+    }
+}

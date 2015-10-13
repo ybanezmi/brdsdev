@@ -19,7 +19,7 @@ $this->title = 'View Entries';
         <div class="submit-button ie6-submit-button">
             <?= Html::button('Back', ['class'   => 'btn btn-primary back-button',
                                       'name'    => 'back',
-                                      'onclick' => ' window.history.back(); return false;',]) ?>
+                                      'onclick' => ' goBack(); return false;',]) ?>
         </div>
     </div>
 
