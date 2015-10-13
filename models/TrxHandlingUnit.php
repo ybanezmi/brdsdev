@@ -42,13 +42,14 @@ class TrxHandlingUnit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no', 'plant_location', 'storage_location', 'packaging_code', 'pallet_weight', 'transfer_order', 
+            [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no', 'plant_location', 'storage_location', 'packaging_code', 'pallet_weight',
             'inbound_status', 'creator_id', 'updater_id'], 'required'],
             [['pallet_weight'], 'number'],
             [['creator_id', 'updater_id'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no'], 'string', 'max' => 10],
-            [['plant_location', 'storage_location', 'packaging_code', 'transfer_order', 'storage_type', 'storage_section', 'storage_bin', 'inbound_status'], 'string', 'max' => 32]
+            [['plant_location', 'storage_location', 'packaging_code', 'transfer_order', 'storage_type', 'storage_section', 'storage_bin', 'inbound_status'], 'string', 'max' => 32],
+            [['transaction_id', 'customer_code', 'inbound_no', 'pallet_no'], 'validateTO'],
         ];
     }
 
@@ -77,5 +78,39 @@ class TrxHandlingUnit extends \yii\db\ActiveRecord
             'updater_id' => 'Updater ID',
             'updated_date' => 'Updated Date',
         ];
+    }
+
+    /**
+     * Find unique user by username
+     *
+     * @param  string      $username
+     * @return static|null
+     */
+    public static function findUniqueTO($transactionId, $customerCode, $inboundNo, $palletNo)
+    {
+        $handlingUnit = TrxHandlingUnit::find()
+                    ->where(['transaction_id'   => $transactionId,
+                             'customer_code'    => $customerCode,
+                             'inbound_no'       => $inboundNo,
+                             'pallet_no'        => $palletNo,
+                             'inbound_status'           => [Yii::$app->params['STATUS_PROCESS'],
+                                                    Yii::$app->params['STATUS_CLOSED']]])
+                    ->one();
+
+        return $handlingUnit;
+    }
+
+    /**
+     * Validates username
+     *
+     * @param attribute
+     * @param $params
+     */
+    public function validateTO($attribute, $params)
+    {
+        $handlingUnit = TrxHandlingUnit::findUniqueTO($this->transaction_id, $this->customer_code, $this->inbound_no, $this->pallet_no);
+        if ($handlingUnit) {
+            $this->addError('transfer_order', 'Transfer Order has already been issued.');
+        }
     }
 }

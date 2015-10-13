@@ -161,48 +161,53 @@ class ReceivingController extends Controller
                         $palletStatus['create_to_error'] = true;
                         $palletStatus['to_error'] = 'Pallet no. ' . Yii::$app->request->post('create_to_pallet_no') . ' is still open.';
                     } else {
-                        $createTO = $this->createTO(Yii::$app->request->post('create_to_pallet_no'));
-                        if (isset($createTO['error'])) {
-                            $palletStatus['create_to_error'] = true;
-                            $palletStatus['to_error'] = $createTO['error'];
-                        } else {
-                            $model = new TrxHandlingUnit();
-                            $date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
-                            // set defaults
-                            // @TODO: transfer updating of status/created/updated details to model
-                            // set status, created and updated details
-                            $model->inbound_status          = Yii::$app->params['STATUS_PROCESS'];
-                            $model->creator_id      = Yii::$app->user->id;
-                            $model->created_date    = $date;
-                            $model->updater_id      = Yii::$app->user->id;
-                            $model->updated_date    = $date;
+                        $model = new TrxHandlingUnit();
+                        $date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
+                        // set defaults
+                        // @TODO: transfer updating of status/created/updated details to model
+                        // set status, created and updated details
+                        $model->inbound_status  = Yii::$app->params['STATUS_PROCESS'];
+                        $model->creator_id      = Yii::$app->user->id;
+                        $model->created_date    = $date;
+                        $model->updater_id      = Yii::$app->user->id;
+                        $model->updated_date    = $date;
 
-                            $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]['transaction_id']);
-                            $model->transaction_id = $transactionModel->id;
-                            $model->customer_code = $transactionModel->customer_code;
-                            $model->inbound_no = $transactionModel->sap_no;
-                            $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
-                            $model->plant_location = $transactionModel->plant_location;
-                            $model->storage_location = $transactionModel->storage_location;
+                        $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]['transaction_id']);
+                        $model->transaction_id = $transactionModel->id;
+                        $model->customer_code = $transactionModel->customer_code;
+                        $model->inbound_no = $transactionModel->sap_no;
+                        $model->pallet_no = Yii::$app->request->post('create_to_pallet_no');
+                        $model->plant_location = $transactionModel->plant_location;
+                        $model->storage_location = $transactionModel->storage_location;
 
-                            $model->packaging_code = $transactionDetailsModel[0]['packaging_code'];
-                            $model->pallet_weight = $transactionDetailsModel[0]['pallet_weight'];
-                            $model->transfer_order = $createTO['export']['transfer_order'];
-                            //$model->storage_type = $createTO['export']['storage_type'];
-                            //$model->storage_section = $createTO['export']['storage_section'];
-                            //$model->storage_bin = $createTO['export']['storage_bin'];
-                            //$model->inbound_status = $createTO['export']['storage_position'];
-                            if ($model->save()) {
-                                $palletStatus['create_to_success'] = true;
-                                $palletStatus['to_number'] = $createTO['export']['transfer_order'];
-                            } else {
+                        $model->packaging_code = $transactionDetailsModel[0]['packaging_code'];
+                        $model->pallet_weight = $transactionDetailsModel[0]['pallet_weight'];
+                        //$model->storage_type = $createTO['export']['storage_type'];
+                        //$model->storage_section = $createTO['export']['storage_section'];
+                        //$model->storage_bin = $createTO['export']['storage_bin'];
+                        //$model->inbound_status = $createTO['export']['storage_position'];
+                        if ($model->validate()) {
+                            $createTO = $this->createTO(Yii::$app->request->post('create_to_pallet_no'));
+                            if (isset($createTO['error'])) {
                                 $palletStatus['create_to_error'] = true;
-                                if (isset($createTO['error'])) {
-                                    $palletStatus['to_error'] = $createTO['error'];
+                                $palletStatus['to_error'] = $createTO['error'];
+                            } else {
+                                $model->transfer_order = $createTO['export']['transfer_order'];
+                                if ($model->save()) {
+                                    $palletStatus['create_to_success'] = true;
+                                    $palletStatus['to_number'] = $createTO['export']['transfer_order'];
                                 } else {
-                                    $palletStatus['to_error'] = $createTO['export']['transfer_order'];
+                                    $palletStatus['create_to_error'] = true;
+                                    if (isset($createTO['error'])) {
+                                        $palletStatus['to_error'] = $createTO['error'];
+                                    } else {
+                                        $palletStatus['to_error'] = $createTO['export']['transfer_order'];
+                                    }
                                 }
                             }
+                        } else {
+                            $palletStatus['create_to_error'] = true;
+                            $palletStatus['to_error'] = $model->getFirstError('transfer_order');
                         }
                     }
                 }
