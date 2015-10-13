@@ -102,12 +102,28 @@ class ReceivingController extends Controller
 		$palletStatus['open_error'] = false;
 		if(null !== Yii::$app->request->post('open-pallet')) {
 			if (null !== Yii::$app->request->post('open_pallet_no') && "" !== Yii::$app->request->post('open_pallet_no')) {
-				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_PROCESS'],
-												  'updater_id'		=> Yii::$app->user->id,
-												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
-												 ['pallet_no' 		=> Yii::$app->request->post('open_pallet_no'),
-												  'status' 			=> $params]);
-				$palletStatus['open_success'] = true;
+                $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                            ['pallet_no'    => Yii::$app->request->post('open_pallet_no'),
+                                                                                             'status'       => $params]);
+                if ($transactionDetailsModel) {
+                    $handlingUnit = Yii::$app->modelFinder->getHandlingUnit(['transaction_id'   =>  $transactionDetailsModel[0]['transaction_id'],
+                                                                         'customer_code'    =>  $transactionDetailsModel[0]['customer_code'],
+                                                                         'pallet_no'        =>  Yii::$app->request->post('open_pallet_no')]);
+
+                    if (!$handlingUnit) {
+                        TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_PROCESS'],
+                                                      'updater_id'      => Yii::$app->user->id,
+                                                      'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                     ['pallet_no'       => Yii::$app->request->post('open_pallet_no'),
+                                                      'status'          => $params]);
+                        $palletStatus['open_success'] = true;
+                    } else {
+                        $palletStatus['open_error'] = true;
+                    }
+
+                } else {
+                    $palletStatus['open_error'] = true;
+                }
 			} else {
 				$palletStatus['open_error'] = true;
 			}
@@ -118,12 +134,28 @@ class ReceivingController extends Controller
 		$palletStatus['close_error'] = false;
 		if(null !== Yii::$app->request->post('close-pallet')) {
 			if (null !== Yii::$app->request->post('close_pallet_no') && "" !== Yii::$app->request->post('close_pallet_no')) {
-				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_CLOSED'],
-												  'updater_id'		=> Yii::$app->user->id,
-												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
-												 ['pallet_no' 		=> Yii::$app->request->post('close_pallet_no'),
-												  'status' 			=> $params]);
-				$palletStatus['close_success'] = true;
+			    $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                            ['pallet_no'    => Yii::$app->request->post('close_pallet_no'),
+                                                                                             'status'       => $params]);
+                if ($transactionDetailsModel) {
+                    $handlingUnit = Yii::$app->modelFinder->getHandlingUnit(['transaction_id'   =>  $transactionDetailsModel[0]['transaction_id'],
+                                                                         'customer_code'    =>  $transactionDetailsModel[0]['customer_code'],
+                                                                         'pallet_no'        =>  Yii::$app->request->post('close_pallet_no')]);
+
+                    if (!$handlingUnit) {
+                        TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_CLOSED'],
+                                                      'updater_id'      => Yii::$app->user->id,
+                                                      'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                     ['pallet_no'       => Yii::$app->request->post('close_pallet_no'),
+                                                      'status'          => $params]);
+                        $palletStatus['close_success'] = true;
+                    } else {
+                        $palletStatus['close_error'] = true;
+                    }
+
+                } else {
+                    $palletStatus['close_error'] = true;
+                }
 			} else {
 				$palletStatus['close_error'] = true;
 			}
@@ -134,12 +166,28 @@ class ReceivingController extends Controller
 		$palletStatus['reject_error'] = false;
 		if(null !== Yii::$app->request->post('reject-pallet')) {
 			if (null !== Yii::$app->request->post('reject_pallet_no') && "" !== Yii::$app->request->post('reject_pallet_no')) {
-				TrxTransactionDetails::updateAll(['status' 			=> Yii::$app->params['STATUS_REJECTED'],
-												  'updater_id'		=> Yii::$app->user->id,
-												  'updated_date'	=> date('Y-m-d H:i:s')], //@TODO: use yii date formatter
-												 ['pallet_no' 		=> Yii::$app->request->post('reject_pallet_no'),
-												  'status' 			=> $params]);
-				$palletStatus['reject_success'] = true;
+				$transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                            ['pallet_no'    => Yii::$app->request->post('reject_pallet_no'),
+                                                                                             'status'       => $params]);
+                if ($transactionDetailsModel) {
+                    $handlingUnit = Yii::$app->modelFinder->getHandlingUnit(['transaction_id'   =>  $transactionDetailsModel[0]['transaction_id'],
+                                                                         'customer_code'    =>  $transactionDetailsModel[0]['customer_code'],
+                                                                         'pallet_no'        =>  Yii::$app->request->post('reject_pallet_no')]);
+
+                    if (!$handlingUnit) {
+                        TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_REJECTED'],
+                                                      'updater_id'      => Yii::$app->user->id,
+                                                      'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                     ['pallet_no'       => Yii::$app->request->post('reject_pallet_no'),
+                                                      'status'          => $params]);
+                        $palletStatus['reject_success'] = true;
+                    } else {
+                        $palletStatus['reject_error'] = true;
+                    }
+
+                } else {
+                    $palletStatus['reject_error'] = true;
+                }
 			} else {
 				$palletStatus['reject_error'] = true;
 			}
@@ -1027,11 +1075,15 @@ class ReceivingController extends Controller
             $transactionModel = Yii::$app->modelFinder->findTransactionModel($palletDetails['transaction_id']);
             if ($transactionModel) {
                 $palletDetails['inbound_no'] = $transactionModel['sap_no'];
+            } else {
+                $palletDetails['inbound_no'] = "";
             }
             $palletDetails['customer_code'] = $transactionDetailsModel[0]['customer_code'];
             $customer = Yii::$app->modelFinder->findCustomerModel($palletDetails['customer_code']);
             if ($customer != null) {
                 $palletDetails['customer_name'] = $customer->name;
+            } else {
+                $palletDetails['customer_name'] = "";
             }
             $palletDetails['material_code'] = $transactionDetailsModel[0]['material_code'];
             $palletDetails['batch'] = $transactionDetailsModel[0]['batch'];
@@ -1049,6 +1101,8 @@ class ReceivingController extends Controller
                                                                      'pallet_no'        =>  $id]);
             if ($handlingUnit) {
                 $palletDetails['transfer_order'] = $handlingUnit['transfer_order'];
+            } else {
+                $palletDetails['transfer_order'] = "";
             }
             $palletDetails['status'] = $transactionDetailsModel[0]['status'];
             // Creator details

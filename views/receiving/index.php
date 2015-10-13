@@ -44,7 +44,7 @@ $this->title = 'Receiving';
 				    ],
 				]);
 
-				echo 'Failed to close pallet. Please enter pallet no.';
+				echo 'Failed to close pallet. Please enter valid pallet no.';
 
 				Alert::end();
 			}
@@ -97,7 +97,7 @@ $this->title = 'Receiving';
                     ],
                 ]);
 
-                echo 'Failed to open pallet. Please enter pallet no.';
+                echo 'Failed to open pallet. Please enter valid pallet no.';
 
                 Alert::end();
             }
@@ -184,7 +184,7 @@ $this->title = 'Receiving';
                     ],
                 ]);
 
-                echo 'Failed to reject pallet. Please enter pallet no.';
+                echo 'Failed to reject pallet. Please enter valid pallet no.';
 
                 Alert::end();
             }
