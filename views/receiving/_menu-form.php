@@ -121,7 +121,8 @@ use yii\bootstrap\Alert;
 
         <?= $form->field($transaction_detail_model, 'batch',
                 ['inputOptions' => ['class' => 'uborder help-25percent',
-                                    'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value, getFieldValueById("material_code"));'],
+                                    'onchange' => 'setFieldValueToUpperCaseById("trxtransactiondetails-batch");
+                                                   populateManufacturingExpiryDateFromBatch(this.value, getFieldValueById("material_code"));'],
                  'template' => '<div class="control-group" id="batch-text">{label}
                                     <div class="f-inline-size">{input}
                                     <button class="btn btn-primary help-15percent"

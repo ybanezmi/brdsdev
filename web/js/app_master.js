@@ -322,8 +322,8 @@ function getFieldValueByName(name) {
 }
 
 /* function to set field value to uppercase */
-function setFieldValueToUpperCaseById(id, value) {
-    setFieldValueById(id, value.toUpperCase());
+function setFieldValueToUpperCaseById(id) {
+    setFieldValueById(id, getFieldValueById(id).toUpperCase());
 }
 
 /* function to filter non-numeric field value */
