@@ -1023,6 +1023,11 @@ class ReceivingController extends Controller
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $palletDetails['transaction_id'] = $transactionDetailsModel[0]['transaction_id'];
+            // Transaction model
+            $transactionModel = Yii::$app->modelFinder->findTransactionModel($palletDetails['transaction_id']);
+            if ($transactionModel) {
+                $palletDetails['inbound_no'] = $transactionModel['sap_no'];
+            }
             $palletDetails['customer_code'] = $transactionDetailsModel[0]['customer_code'];
             $customer = Yii::$app->modelFinder->findCustomerModel($palletDetails['customer_code']);
             if ($customer != null) {
@@ -1038,6 +1043,13 @@ class ReceivingController extends Controller
             $palletDetails['manufacturing_date'] = $transactionDetailsModel[0]['manufacturing_date'];
             $palletDetails['expiry_date'] = $transactionDetailsModel[0]['expiry_date'];
             $palletDetails['pallet_type'] = $transactionDetailsModel[0]['pallet_type'];
+            // Handling unit
+            $handlingUnit = Yii::$app->modelFinder->getHandlingUnit(['transaction_id'   =>  $palletDetails['transaction_id'],
+                                                                     'customer_code'    =>  $palletDetails['customer_code'],
+                                                                     'pallet_no'        =>  $id]);
+            if ($handlingUnit) {
+                $palletDetails['transfer_order'] = $handlingUnit['transfer_order'];
+            }
             $palletDetails['status'] = $transactionDetailsModel[0]['status'];
             // Creator details
             $creatorAccountModel = Yii::$app->modelFinder->findAccountModel($transactionDetailsModel[0]['creator_id']);

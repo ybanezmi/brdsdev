@@ -946,6 +946,7 @@ function getPalletDetails(id) {
 
                 // set corresponding field values
                 setFieldValueByName("transaction_id", jsonData.transaction_id);
+                setFieldValueByName("inbound_no", jsonData.inbound_no);
                 setFieldValueByName("customer", jsonData.customer_name);
                 setFieldValueByName("material_code", jsonData.material_code);
                 setFieldValueByName("batch", jsonData.batch);
@@ -957,6 +958,7 @@ function getPalletDetails(id) {
                 setFieldValueByName("manufacturing_date", jsonData.manufacturing_date);
                 setFieldValueByName("expiry_date", jsonData.expiry_date);
                 setFieldValueByName("pallet_type", jsonData.pallet_type);
+                setFieldValueByName("transfer_order", jsonData.transfer_order);
                 setFieldValueByName("status", jsonData.status);
                 setFieldValueByName("creator", jsonData.creator);
                 setFieldValueByName("created_date", jsonData.created_date);

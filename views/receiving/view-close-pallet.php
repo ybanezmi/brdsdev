@@ -98,6 +98,20 @@ $this->title = 'View & Close Pallet';
                             </div>
                         </div>
                         <div class="control-group">
+                            <?= Html::label('Inbound Number', 'inbound_no', ['class' => 'control-label']) ?>
+                            <div class="f-inline-size">
+                                <?= Html::textInput('inbound_no', null, ['class'       => 'uborder disabled help-40percent',
+                                                                          'disabled'    => 'disabled']); ?>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <?= Html::label('T.O. Number', 'transfer_order', ['class' => 'control-label']) ?>
+                            <div class="f-inline-size">
+                                <?= Html::textInput('transfer_order', null, ['class'       => 'uborder disabled help-40percent',
+                                                                          'disabled'    => 'disabled']); ?>
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <?= Html::label('STATUS', 'status', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
                                 <?= Html::textInput('status', null, ['class'    => 'uborder disabled help-40percent',

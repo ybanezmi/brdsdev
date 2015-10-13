@@ -307,6 +307,15 @@ class CModelFinder extends Component
         return $model;
     }
 
+    public function getHandlingUnit($conditions = null)
+    {
+        // to retrieve all *active* transactions by their index and order them by their ID:
+            $model = TrxHandlingUnit::find()
+                ->where($conditions)
+                ->one();
+
+        return $model;
+    }
 
     /**
      * Finds the MstAccount model based on its primary key value.
