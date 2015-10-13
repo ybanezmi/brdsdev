@@ -538,7 +538,6 @@ function validatePalletType(palletNo, materialCode, transactionId) {
                     checkTransactionKittedUnit();
                     checkTransactionPalletWeight();
                     checkTransactionPalletType();
-                    populateBatchDropdown(palletNo);
                 }
             }
         });
@@ -1308,6 +1307,7 @@ function onSelectMaterial(shouldNotClear) {
     populatePackagingType();
     populateKittingType();
     getMaterialConversion();
+    populateBatchDropdown(getFieldValueById("trxtransactiondetails-material_code"), getQueryVariable('id'));
 }
 
 function clearAllFields() {
@@ -1319,7 +1319,6 @@ function clearAllFields() {
     setFieldValueById("trxtransactiondetails-pallet_no", "");
     setFieldValueById("trxtransactiondetails-kitted_unit", "");
     setFieldValueById("trxtransactiondetails-pallet_weight", "");
-    populateBatchDropdown();
 }
 
 function calculateTotalWeight() {
@@ -1361,9 +1360,9 @@ function toggleUse(id) {
     }
 }
 
-function populateBatchDropdown(palletNo) {
-    if (palletNo) {
-        load('get-batch?id=' + palletNo, function(xhr) {
+function populateBatchDropdown(material, transactionId) {
+    if (material && transactionId) {
+        load('get-batch?id=' + material + '&desc=' + transactionId, function(xhr) {
             var jsonData = JSON.parse(xhr.responseText);
             var x = document.getElementById('batch-dropdown').children[1].children[0];
 

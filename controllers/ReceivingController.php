@@ -1081,13 +1081,14 @@ class ReceivingController extends Controller
         echo json_encode($response);
     }
 
-    public function actionGetBatch($id) {
+    public function actionGetBatch($id, $desc) {
         $batchList = null;
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                    ['pallet_no' => $id,
-                                                                                     'status'    => [Yii::$app->params['STATUS_PROCESS'],
-                                                                                                     Yii::$app->params['STATUS_CLOSED'],
-                                                                                                     Yii::$app->params['STATUS_REJECTED']]]);
+                                                                                    ['material_code'    => $id,
+                                                                                     'transaction_id'   =>  $desc,
+                                                                                     'status'           => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                            Yii::$app->params['STATUS_CLOSED'],
+                                                                                                            Yii::$app->params['STATUS_REJECTED']]]);
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $batchList = ArrayHelper::getColumn($transactionDetailsModel, 'batch');
