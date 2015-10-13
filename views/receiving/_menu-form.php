@@ -282,7 +282,8 @@ use yii\bootstrap\Alert;
             <h4>Scan Pallet to Process</h4>
             <div class="control-group">
                 <?= Html::textInput('close_pallet_no', '', ['id'         => 'close-pallet-no',
-                                                            'class'      => 'uborder help-40percent']) ?>
+                                                            'class'      => 'uborder help-40percent',
+                                                            'maxlength'  => 10]) ?>
                 <?= Html::submitButton('Use Pallet', ['class'   => 'btn btn-success',
                                                       'name'    => 'close-pallet']) ?>
             </div>
