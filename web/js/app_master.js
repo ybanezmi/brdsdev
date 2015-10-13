@@ -630,18 +630,11 @@ function getMaterialConversion() {
                 selectElem = document.createElement('select');
                 selectElem.id = "trxtransactiondetails-net_unit";
                 selectElem.setAttribute('name', 'TrxTransactionDetails[net_unit]');
-                selectElem.setAttribute('class', 'uborder help-20percent');
+                selectElem.setAttribute('class', 'uborder help-25percent');
                 selectElem.setAttribute('onchange', 'calculateTotalWeight()');
 
                 document.getElementById('net-wt').appendChild(selectElem);
             }
-
-			// add unit span element
-			var spanElem = document.getElementById('unit-label');
-			if (!spanElem) {
-	            spanElem = document.createElement('span');
-	            spanElem.id = 'unit-label';
-			}
 
             // clear options
             var i = 0;
@@ -649,34 +642,27 @@ function getMaterialConversion() {
             if (typeof jsonData.unit_1 != 'undefined' && jsonData.unit_1.unit != 'KG') {
                 var option  = document.createElement('option');
                 option.value = "unit_1";
-                option.text = jsonData.unit_1.unit;
+                option.text = jsonData.unit_1.unit + ' (' +  jsonData.unit_1.den / jsonData.unit_1.num + ' KG)';
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-
-                spanElem.innerHTML = ' (' +  jsonData.unit_1.den / jsonData.unit_1.num + ' KG)';
             }
 
             if (typeof jsonData.unit_2 != 'undefined' && jsonData.unit_2.unit != 'KG') {
                 var option  = document.createElement('option');
                 option.value = "unit_2";
-                option.text = jsonData.unit_2.unit;
+                option.text = jsonData.unit_2.unit + ' (' +  jsonData.unit_2.den / jsonData.unit_2.num + ' KG)';
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-
-                spanElem.innerHTML = ' (' +  jsonData.unit_2.den / jsonData.unit_2.num + ' KG)';
             }
 
             if (typeof jsonData.unit_3 != 'undefined' && jsonData.unit_3.unit != 'KG') {
                 var option  = document.createElement('option');
                 option.value = "unit_3";
-                option.text = jsonData.unit_3.unit;
+                option.text = jsonData.unit_3.unit + ' (' +  jsonData.unit_3.den / jsonData.unit_3.num + ' KG)';
                 selectElem.add(option, selectElem[i+1]);
                 i++;
-
-                spanElem.innerHTML = ' (' +  jsonData.unit_3.den / jsonData.unit_3.num + ' KG)';
             }
 
-			document.getElementById('net-wt').appendChild(spanElem);
             document.getElementById('net-weight').innerHTML = "QUANTITY";
         }
     });
