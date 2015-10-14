@@ -845,6 +845,148 @@ class ReceivingController extends Controller
         ]);
     }
 
+    public function actionCreateTo()
+    {
+        $data_provider = new ActiveDataProvider(['query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                                             ['status'         => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                                                   Yii::$app->params['STATUS_CLOSED'],
+                                                                                                                                   Yii::$app->params['STATUS_REJECTED']]],
+                                                                                                                true),
+                                                 'sort'=> ['defaultOrder' => ['pallet_no' => SORT_DESC]],]);
+        $search_model = new TrxTransactionDetailsSearch;
+        if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')['pallet_no']) {
+            $params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+
+            $data_provider = $search_model->search(Yii::$app->request->queryParams, $params);
+        }
+
+        $createToFlag = array();
+        $rejectFlag = array();
+
+        if (null !== Yii::$app->request->post('cancel')) {
+            $this->redirect(['index']);
+        } else if (null !== Yii::$app->request->post('create-to') && null !== Yii::$app->request->post('selection')) {
+            $pallets = array_unique(Yii::$app->request->post('selection'));
+            $palletsStatus = array();
+            foreach ($pallets as $key => $value) {
+                $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                            ['pallet_no' => $value]);
+                $transactionDetailsStatusCountList = array_count_values(ArrayHelper::getColumn($transactionDetailsModel, 'status'));
+                if (isset($transactionDetailsStatusCountList['process']) && $transactionDetailsStatusCountList['process'] > 0
+                    || isset($transactionDetailsStatusCountList['rejected']) && $transactionDetailsStatusCountList['rejected'] > 0) {
+                    $palletsStatus[$value]['create_to_flag'] = false;
+                    $palletsStatus[$value]['to_error'] = 'Pallet #:' . $value . ' is still open.';
+                } else {
+                    $model = new TrxHandlingUnit();
+                    $date = date('Y-m-d H:i:s'); // @TODO Use Yii dateformatter
+                    // set defaults
+                    // @TODO: transfer updating of status/created/updated details to model
+                    // set status, created and updated details
+                    $model->inbound_status  = Yii::$app->params['STATUS_PROCESS'];
+                    $model->creator_id      = Yii::$app->user->id;
+                    $model->created_date    = $date;
+                    $model->updater_id      = Yii::$app->user->id;
+                    $model->updated_date    = $date;
+
+                    $transactionModel = Yii::$app->modelFinder->findTransactionModel($transactionDetailsModel[0]['transaction_id']);
+                    $model->transaction_id = $transactionModel->id;
+                    $model->customer_code = $transactionModel->customer_code;
+                    $model->inbound_no = $transactionModel->sap_no;
+                    $model->pallet_no = $value;
+                    $model->plant_location = $transactionModel->plant_location;
+                    $model->storage_location = $transactionModel->storage_location;
+
+                    $model->packaging_code = $transactionDetailsModel[0]['packaging_code'];
+                    $model->pallet_weight = $transactionDetailsModel[0]['pallet_weight'];
+                    //$model->storage_type = $createTO['export']['storage_type'];
+                    //$model->storage_section = $createTO['export']['storage_section'];
+                    //$model->storage_bin = $createTO['export']['storage_bin'];
+                    //$model->inbound_status = $createTO['export']['storage_position'];
+
+                    if ($model->validate()) {
+                        $createTO = $this->createTO($value);
+                        if (isset($createTO['error'])) {
+                            $palletsStatus[$value]['create_to_flag'] = false;
+                            $palletsStatus[$value]['to_error'] = $createTO['error'];
+                        } else {
+                            $model->transfer_order = $createTO['export']['transfer_order'];
+                            if ($model->save()) {
+                                $palletsStatus[$value]['create_to_flag'] = true;
+                                $palletsStatus[$value]['to_number'] = $createTO['export']['transfer_order'];
+                            } else {
+                                $palletsStatus[$value]['create_to_flag'] = false;
+                                if (isset($createTO['error'])) {
+                                    $palletsStatus[$value]['to_error'] = $createTO['error'];
+                                } else {
+                                    $palletsStatus[$value]['to_error'] = $createTO['export']['transfer_order'];
+                                }
+                            }
+                        }
+                    } else {
+                        $palletsStatus[$value]['create_to_flag'] = false;
+                        $palletsStatus[$value]['to_error'] = $model->getFirstError('transfer_order');
+                    }
+                }
+            }
+            // Form success and/or error messages
+            foreach ($palletsStatus as $palletKey => $palletValue) {
+
+                if ($palletValue['create_to_flag']) {
+                    // Success
+                    $createToFlag['to_success'][$palletKey] = 'Successfully created Transfer Order for Pallet #: ' . $palletKey . ' T.O. Number: ' . $palletValue['to_number'] . '<br/>';
+                } else {
+                    // Error
+                    $createToFlag['to_error'][$palletKey] = 'Failed to create Transfer Order for Pallet #: ' . $palletKey . ' Error: ' . $palletValue['to_error'] . '<br/>';
+                }
+            }
+        } else if (null !== Yii::$app->request->post('reject') && null !== Yii::$app->request->post('selection')) {
+            $pallets = array_unique(Yii::$app->request->post('selection'));
+            $palletsStatus = array();
+
+            // active pallets
+            $params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
+
+            foreach ($pallets as $key => $value) {
+                // Reject pallets
+                $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
+                                                                                            ['pallet_no'    => $value,
+                                                                                             'status'       => $params]);
+                if ($transactionDetailsModel) {
+                    $handlingUnit = Yii::$app->modelFinder->getHandlingUnit(['transaction_id'   =>  $transactionDetailsModel[0]['transaction_id'],
+                                                                             'customer_code'    =>  $transactionDetailsModel[0]['customer_code'],
+                                                                             'pallet_no'        =>  $value]);
+
+                    if (!$handlingUnit) {
+                        TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_REJECTED'],
+                                                          'updater_id'      => Yii::$app->user->id,
+                                                          'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                         ['pallet_no'       => $value,
+                                                          'status'          => $params]);
+                        $rejectFlag['reject_success'][$value] = 'Successfully rejected Pallet #: ' . $value;
+                    } else {
+                        $rejectFlag['reject_error'][$value] = 'Failed to reject Pallet #: ' . $value . '. T.O. number is already issued.';
+                    }
+
+                } else {
+                    $rejectFlag['reject_error'][$value] = 'Failed to reject Pallet #: ' . $value;
+                }
+            }
+        } else {
+            if (null !== Yii::$app->request->post('create-to')) {
+                $createToFlag['error'] = 'No rows selected for create TO.';
+            }
+            if (null !== Yii::$app->request->post('reject')) {
+                $rejectFlag['error'] = 'No rows selected for reject.';
+            }
+        }
+
+        return $this->render('create-to', ['data_provider' => $data_provider,
+                                           'search_model'  => $search_model,
+                                           'createToFlag'  => $createToFlag,
+                                           'rejectFlag'    => $rejectFlag,
+                                          ]);
+    }
+
 	public function actionClose()
 	{
 		$this->initUser();
@@ -1231,7 +1373,6 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::I_LENUM] = str_pad($palletNo, 20, '0', STR_PAD_LEFT);
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-
         return $response;
     }
 
@@ -1243,7 +1384,6 @@ class ReceivingController extends Controller
         $params[SapConst::PARAMS][SapConst::WDATU] = date('Ymd', strtotime($actualGRDate));
 
         $response = $this->curl(Yii::$app->params['SAP_API_URL'], false, http_build_query($params), false, true);
-
         return $response;
     }
 
