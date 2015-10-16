@@ -686,11 +686,11 @@ function searchMaterial(value, customer_code, id) {
             for(var i = 0; i < jsonData.item_code.length; i++){
                 var option  = document.createElement('option');
                 option.value = jsonData.item_code[i];
-                option.text = jsonData.description[i];
+                option.text = jsonData.description[i] + ' - ' + jsonData.item_code[i];
                 x.add(option, x[i+1]);
             }
             // set initial value
-            setFieldValueById(id, jsonData.item_code[0], true);
+            //setFieldValueById(id, jsonData.item_code[0], true);
         }
 
     });
@@ -1195,6 +1195,18 @@ function viewPalletDetails(transaction_id, pallet_no) {
 		}
 	} else {
 		alert('Please select a transaction.');
+	}
+}
+
+function createToSelectPallet(pallet_no)
+{
+	if(!pallet_no)
+	{
+		alert('Please enter pallet no.');
+	}
+	else
+	{
+		window.location = "create-to?TrxTransactionDetailsSearch[pallet_no]=" + pallet_no;
 	}
 }
 

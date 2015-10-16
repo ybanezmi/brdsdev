@@ -358,7 +358,9 @@ class ReceivingController extends Controller
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-                $plant_list = Yii::$app->modelFinder->getPlantList(null);
+
+                $plant_list = Yii::$app->modelFinder->getPlantList(null,['plant_location' => Yii::$app->user->identity->assignment]);
+				
                 $storage_list = array();
                 foreach ($plant_list as $key => $value) {
                     $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
@@ -491,7 +493,7 @@ class ReceivingController extends Controller
 
             $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
             $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
-			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
+			$material_list = ArrayHelper::map($material_model, 'description', 'item_code');
 
 			foreach ($material_list as $key => $value) {
 				$material_list[$key] = $key . ' - ' . $value;
@@ -845,17 +847,56 @@ class ReceivingController extends Controller
         ]);
     }
 
+	public function actionCreateToSelectPallet()
+	{
+        $this->initUser();
+
+        // Initialize variables
+        $transactionModel = new TrxTransactionDetails();
+        $palletStatus = array();
+        $palletStatus['close_success'] = false;
+        $palletStatus['close_error'] = false;
+        // active pallets
+        $params = [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']];
+
+        if (null !== Yii::$app->request->post('cancel')) {
+            $this->redirect(['index']);
+        } else if(null !== Yii::$app->request->post('close-pallet')) {
+            // close pallets
+            $transactionDetails = Yii::$app->request->post('TrxTransactionDetails');
+
+            if (!$this->isEmpty($transactionDetails['pallet_no'])) {
+                TrxTransactionDetails::updateAll(['status'          => Yii::$app->params['STATUS_CLOSED'],
+                                                  'updater_id'      => Yii::$app->user->id,
+                                                  'updated_date'    => date('Y-m-d H:i:s')], //@TODO: use yii date formatter
+                                                 ['pallet_no'       => $transactionDetails['pallet_no'],
+                                                  'status'          => $params]);
+                $palletStatus['close_success'] = true;
+            } else {
+                $palletStatus['close_error'] = true;
+            }
+        } else {
+            // Do nothing
+        }
+
+        return $this->render('create-to-select-pallet', [
+                'transactionModel'  => $transactionModel,
+                'palletStatus'      => $palletStatus,
+        ]);
+	}
+	
     public function actionCreateTo()
     {
         $data_provider = new ActiveDataProvider(['query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
-                                                                                                             ['status'         => [Yii::$app->params['STATUS_PROCESS'],
+                                                                                                             ['status'         => [
                                                                                                                                    Yii::$app->params['STATUS_CLOSED'],
-                                                                                                                                   Yii::$app->params['STATUS_REJECTED']]],
+																																		]],
                                                                                                                 true),
                                                  'sort'=> ['defaultOrder' => ['pallet_no' => SORT_DESC]],]);
         $search_model = new TrxTransactionDetailsSearch;
+
         if (null != Yii::$app->request->get('TrxTransactionDetailsSearch')['pallet_no']) {
-            $params = ['status' => [Yii::$app->params['STATUS_PROCESS'], Yii::$app->params['STATUS_CLOSED'], Yii::$app->params['STATUS_REJECTED']]];
+            $params = ['status' => [Yii::$app->params['STATUS_CLOSED']] ];
 
             $data_provider = $search_model->search(Yii::$app->request->queryParams, $params);
         }
@@ -1135,7 +1176,7 @@ class ReceivingController extends Controller
     }
 
     public function actionGetMaterial($id, $desc) {
-        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
+        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', "{$id}%", false], ['like', 'description', "{$desc}%", false]]);
 
         if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'barcode', $desc]]);
@@ -1197,7 +1238,23 @@ class ReceivingController extends Controller
     }
 
     public function actionGetPalletDetails($id) {
-        $palletDetails = null;
+
+		if(!$id)
+		{
+			$transactionDetailsModel = new TrxTransactionDetails();
+			$transactionDetailsFields = array_keys($transactionDetailsModel->attributeLabels());
+			$additionalFields = array('inbound_no','transfer_order','customer_name','pallet_count');
+			
+			$transactionDetailsFields = array_merge($transactionDetailsFields,$additionalFields);
+			foreach($transactionDetailsFields as $fieldName)
+			{
+				$palletDetails[$fieldName] = '';
+			}
+
+			echo json_encode($palletDetails);
+			exit;
+		}
+    
         $status = [Yii::$app->params['STATUS_PROCESS'],
                      Yii::$app->params['STATUS_CLOSED'],
                      Yii::$app->params['STATUS_REJECTED']];

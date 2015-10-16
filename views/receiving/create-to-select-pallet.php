@@ -6,12 +6,12 @@ use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 
-$this->title = 'View & Close Pallet';
+$this->title = 'Create TO';
 ?>
 <div id="main-content">
 
 	<div class="wrapper-150">
-		<h1 class="page-title">View & Close Pallet</h1>
+		<h1><?= Html::encode($this->title) ?></h1>
 
 		<div class="one-column help-bg-gray pdt-one-column" >
 		    <?php
@@ -125,13 +125,8 @@ $this->title = 'View & Close Pallet';
     		    	<div class="one-column-button">
     					<div class="submit-button ie6-submit-button">
     					    <button class="btn btn-primary"
-    					       onclick="js: viewPalletDetails(getFieldValueById('trxtransactiondetails-pallet_no')); return false;"
-    					       name="btn-view-pallets">View Pallets</button>
-    		        		<?= Html::submitButton('Close Pallet', ['class' => 'btn btn-primary',
-    		        												'name'  => 'close-pallet',
-    		        												'id'    => 'btn-close-pallet',]) ?>
-    		        		<?= Html::submitButton('Cancel', ['class' => 'btn btn-primary cancel-button',
-    		        										  'name'  => 'cancel']) ?>
+    					       onclick="js: createToSelectPallet(getFieldValueById('trxtransactiondetails-pallet_no')); return false;"
+    					       name="btn-view-pallets">Continue</button>
     		        	</div>
     		        </div>
     		    </div>

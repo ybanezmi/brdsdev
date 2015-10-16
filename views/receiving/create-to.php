@@ -147,18 +147,7 @@ $this->title = 'Create TO';
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'], // @TODO: Remove id column
             'pallet_no',
-            'kitted_unit',
-            'transaction_id',
-            ['attribute'    =>  'customer_code',
-             'label'        =>  'Customer Name',
-             'value'        =>  function ($model) {
-                                    $customer = Yii::$app->modelFinder->findCustomerModel($model['customer_code']);
-                                    if ($customer != null) {
-                                        return $customer->name;
-                                    }
-                                }
-            ],
-            'material_code',
+			'material_code',
             ['attribute'    =>  'material_code',
              'label'        =>  'Material Description',
              'value'        =>  function ($model) {
@@ -168,7 +157,13 @@ $this->title = 'Create TO';
                                     }
                                 }
             ],
-            'batch',
+			'net_weight',
+			'total_weight',
+			//'quantity',
+			//['attribute' => 'total_weight', 'label' => 'Net Weight/Quantity'],
+			'batch',
+			'expiry_date',
+			'manufacturing_date',
             'status',
             // ['class' => 'yii\grid\ActionColumn',
              // 'buttons' =>
@@ -183,6 +178,17 @@ $this->title = 'Create TO';
                            // },
                 // ]
             // ],
+            'kitted_unit',
+            'transaction_id',
+            ['attribute'    =>  'customer_code',
+             'label'        =>  'Customer Name',
+             'value'        =>  function ($model) {
+                                    $customer = Yii::$app->modelFinder->findCustomerModel($model['customer_code']);
+                                    if ($customer != null) {
+                                        return $customer->name;
+                                    }
+                                }
+            ],
             [
                 'class' => 'kartik\grid\CheckboxColumn',
                 'headerOptions' => ['class'=>'kartik-sheet-style'],
