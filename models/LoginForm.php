@@ -63,7 +63,7 @@ class LoginForm extends Model
 				$userIP = implode('.', $userIP);
 
 				if ($allowedIP !== $userIP) {
-				//	$this->addError($attribute, 'Login not allowed from this ip address.');
+					$this->addError($attribute, 'Login not allowed from this ip address.');
 				}
 			}
         }
