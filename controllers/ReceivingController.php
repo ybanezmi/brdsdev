@@ -357,7 +357,7 @@ class ReceivingController extends Controller
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-                $plant_list = Yii::$app->modelFinder->getPlantList(null);
+                $plant_list = Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]);
                 $storage_list = array();
                 foreach ($plant_list as $key => $value) {
                     $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
