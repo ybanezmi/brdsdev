@@ -120,7 +120,7 @@ use yii\bootstrap\Alert;
         </div>
 
         <?= $form->field($transaction_detail_model, 'batch',
-                ['inputOptions' => ['class' => 'uborder help-25percent',
+                ['inputOptions' => ['class' => 'uborder help-25percent batch-text-input',
                                     'onchange' => 'setFieldValueToUpperCaseById("trxtransactiondetails-batch");
                                                    populateManufacturingExpiryDateFromBatch(this.value, getFieldValueById("material_code"));'],
                  'template' => '<div class="control-group" id="batch-text">{label}
@@ -138,7 +138,7 @@ use yii\bootstrap\Alert;
                  ])->textInput(['maxlength' => 10])->label('Batch / Lot') ?>
 
         <?= $form->field($transaction_detail_model, 'batch',
-                ['inputOptions' => ['class' => 'uborder help-25percent',
+                ['inputOptions' => ['class' => 'uborder help-25percent batch-dropdown-input',
                                     'onchange' => 'populateManufacturingExpiryDateFromBatch(this.value, getFieldValueById("material_code"));',
                                     'disabled' => 'disabled',],
                  'template' => '<div class="control-group" id="batch-dropdown" style="display: none;">{label}

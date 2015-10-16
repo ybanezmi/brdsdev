@@ -1346,6 +1346,7 @@ function toggleUse(id) {
         document.getElementById('batch-text').children[1].children[0].disabled = false;
         document.getElementById('batch-text').children[1].children[0].setAttribute('class', 'uborder help-25percent');
     }
+    populateManufacturingExpiryDateFromBatch($("#trxtransactiondetails-batch:enabled").val(), getFieldValueById("material_code"));
 }
 
 function populateBatchDropdown(material, transactionId) {
@@ -1365,6 +1366,11 @@ function populateBatchDropdown(material, transactionId) {
                     var option  = document.createElement('option');
                     option.value = jsonData[i];
                     option.text = jsonData[i];
+
+                    if (i == 0) {
+                        option.selected = true;
+                    }
+
                     x.add(option, x[i+1]);
                 }
             } else {
