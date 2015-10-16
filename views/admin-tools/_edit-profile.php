@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
@@ -11,7 +12,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = $model->first_name . ' ' . $model->last_name;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['user-mgmt']];
-$this->params['breadcrumbs'][] = ['label' => $model->first_name, 'url' => ['/admin-tools/user-profile?id='.$model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->first_name . ' ' . $model->last_name, 'url' => ['/admin-tools/user-profile?id='.$model->id]];
 $this->params['breadcrumbs'][] = 'Edit Profile';
 ?>
 
@@ -21,11 +22,11 @@ $this->params['breadcrumbs'][] = 'Edit Profile';
 
  <div class="edit-form">
 
-    <?php 
+    <?php
     	$js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
     	$form = ActiveForm::begin([
     	'options' => ['class' => 'form-horizontal'],
-        'action' => '/brdsdev/web/admin-tools/update-profile',
+        'action' => Url::home() . 'admin-tools/update-profile',
     	'fieldConfig' => [
     		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
     	],
@@ -42,11 +43,11 @@ $this->params['breadcrumbs'][] = 'Edit Profile';
     </div>
     <?php } ?>
     <input type="hidden" value="<?= $model->id; ?>" name="MstAccount[id]" />
-    
+
     <div class="form-group">
-        <?php if($success){ ?> 
+        <?php if($success){ ?>
         <label class="control-label"></label>
-        <a class="btn btn-primary" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl(); ?>/admin-tools/user-mgmt">Back</a>
+        <a class="btn btn-primary" href="<?php echo Url::home(); ?>admin-tools/user-mgmt">Back</a>
         <?php }else{  ?>
         <label class="control-label"></label>
         <?= Html::submitButton('Save Changes', ['class' => 'btn btn-primary']) ?>

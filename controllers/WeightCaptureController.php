@@ -12,8 +12,9 @@ class WeightCaptureController extends Controller
     {
     	// Get customer list
 		$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-
-		if (null !== Yii::$app->request->post('print')) {
+        if (null !== Yii::$app->request->post('cancel')) {
+            $this->redirect('/receiving/index');
+		} else if (null !== Yii::$app->request->post('print')) {
 			Yii::$app->response->format = 'pdf';
 
 	        //Can you it if needed to rotate the page

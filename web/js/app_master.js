@@ -1200,7 +1200,7 @@ function viewPalletDetails(transaction_id, pallet_no) {
 
 /* synchronize js*/
 var brdsdev_site_url = "http://192.168.1.121";
-var brdsapi_site_url = "http://192.168.1.122";
+var brdsapi_site_url = "http://192.168.1.122/brdsapi/";
 
 function ajax (url, method, params, container_id, loading_text) {
     try { // For: chrome, firefox, safari, opera, yandex, ...

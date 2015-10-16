@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
+use yii\helpers\Url;
 
 use app\models\DispatchModel;
 /* @var $this yii\web\View */
@@ -11,7 +12,7 @@ use app\models\DispatchModel;
 ?>
 
 <div class="dispatch-form">
-    <?php 
+    <?php
         $js = 'function beforeValidate(form) {if ( form.data("cancel") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
         $form = ActiveForm::begin([
         'options' => ['class' => 'form-horizontal', 'name'=>'dispatchFORM','onSubmit'=>'return valDispatchform()'],
@@ -20,14 +21,14 @@ use app\models\DispatchModel;
             'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
         ],
     ]); ?>
-    
+
     <div class="control-group">
     <div class="control-label-f dispatch_document_number_ie6" style="font-weight:bold; margin-bottom:10px;">Enter Document #:</div>
         <div class="f-full-size">
             <?= Html::textInput('document_number', '', ['id'  => 'document_number','class' => 'uborder help-85percent', 'maxlength'=>'8', 'onkeypress'=> 'return isNumberKey(event)' ]) ?>
         </div>
     </div>
-    
+
     <div class="one-column-button pdt-one-column-button">
         <div class="submit-button ie6-submit-button">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary',
@@ -44,7 +45,7 @@ use app\models\DispatchModel;
 <script type="text/javascript">
     document.getElementById("cancel_button_dispatch").addEventListener("click", function(e) {
         e.preventDefault();
-        window.location.assign(window.location.origin+"/brdsdev/web/")
+        window.location.assign(window.location.origin+ '<?php echo Url::home() ?>');
     });
 
     function valDispatchform()
@@ -58,7 +59,7 @@ use app\models\DispatchModel;
 
         return true;
     }
-    
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : evt.keyCode
         if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -67,6 +68,6 @@ use app\models\DispatchModel;
     }
 
 
-    
+
 
 </script>

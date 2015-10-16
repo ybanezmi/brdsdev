@@ -350,8 +350,7 @@ class ReceivingController extends Controller
 
 	        if ($model->load(Yii::$app->request->post())) {
 	        	$model->actual_gr_date = Yii::$app->dateFormatter->convert($model->getAttribute('actual_gr_date'));
-	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
-
+	            $model->remarks = Yii::$app->user->identity->username . '@: ' . Yii::$app->request->post('TrxTransactions')['remarks'];
                 if ($model->validate() && $model->save()) {
 	               return $this->redirect(['menu', 'id' => $model->id]);
                 }
