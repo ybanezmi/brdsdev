@@ -56,7 +56,7 @@ $this->title = 'Receiving';
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/edit"> <span>Edit Receiving</span></a></li>
 			<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/view-close-pallet"> <span>View & Close Pallet</span></a></li>
 			<?php if (Yii::$app->user->identity->account_type === 'admin' || Yii::$app->user->identity->account_type === 'checker') { ?>
-			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/create-to"> <span>Create TO</span></a></li>
+			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/create-to-select-pallet"> <span>Create TO</span></a></li>
 			    <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/receiving/close"> <span>Close Receiving</span></a></li>
 			<?php } ?>
       <li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/admin-tools/synchronized-database"> <span>Sycnhronize Database</span></a></li>
