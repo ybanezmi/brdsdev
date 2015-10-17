@@ -881,7 +881,7 @@ class ReceivingController extends Controller
                 'palletStatus'      => $palletStatus,
         ]);
 	}
-	
+
     public function actionCreateTo()
     {
         $data_provider = new ActiveDataProvider(['query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
@@ -1148,7 +1148,8 @@ class ReceivingController extends Controller
         $condition = ['like', 'description', Yii::$app->params['PALLET']];
         if (isset($id) && $id !== 'undefined') {
             $condition = ['and',
-                            ['pallet_type' => $id],
+                            ['pallet_type' => $id,
+                             'plant_location' => Yii::$app->request->get('plant_location')],
                             ['like', 'description', Yii::$app->params['PALLET']]];
         }
 
@@ -1162,8 +1163,8 @@ class ReceivingController extends Controller
 
     public function actionGetKittingType($id) {
         $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-            ['pallet_type' => Yii::$app->request->get('id')],
-            // 'plant_location' => Yii::$app->request->get('plant_location')],
+            ['pallet_type' => Yii::$app->request->get('id'),
+             'plant_location' => Yii::$app->request->get('plant_location')],
             ['not like', 'description', Yii::$app->params['PALLET']]]);
 
         $kitting_type_list['material_code'] = ArrayHelper::getColumn($kitting_type_model, 'material_code');
@@ -1241,7 +1242,7 @@ class ReceivingController extends Controller
 			$transactionDetailsModel = new TrxTransactionDetails();
 			$transactionDetailsFields = array_keys($transactionDetailsModel->attributeLabels());
 			$additionalFields = array('inbound_no','transfer_order','customer_name','pallet_count');
-			
+
 			$transactionDetailsFields = array_merge($transactionDetailsFields,$additionalFields);
 			foreach($transactionDetailsFields as $fieldName)
 			{
@@ -1251,7 +1252,7 @@ class ReceivingController extends Controller
 			echo json_encode($palletDetails);
 			exit;
 		}
-    
+
         $status = [Yii::$app->params['STATUS_PROCESS'],
                      Yii::$app->params['STATUS_CLOSED'],
                      Yii::$app->params['STATUS_REJECTED']];
