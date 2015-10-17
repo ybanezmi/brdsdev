@@ -46,7 +46,7 @@ $this->title = 'Synch Packaging Materials';
     <div id="bar_blank">
    <div id="bar_color"></div>
   </div>
-																		 
+
 	<form action="#" id="w0" method="post">
 	<div class="form-group field-mstpackaging-name required">
 		<div class="control-group">
@@ -68,13 +68,13 @@ $this->title = 'Synch Packaging Materials';
 	</div>
 	</div>
 	</form>
-	
-	
+
+
 	<script type="text/javascript">
-	
+
 	function syncPackage() {
 		var pname=encodeURIComponent(document.getElementById("mstpackaging-name").value);
-		var url = brdsapi_site_url+"/brdsapi/packaging_materials/"+pname+"/bigblue";
+		var url = brdsapi_site_url+"packaging_materials/"+pname+"/bigblue";
 		var method = 'GET';
 		var params = '';
 		var container_id = 'sync-status' ;
@@ -94,7 +94,7 @@ $this->title = 'Synch Packaging Materials';
 	</script>
 
 
-				
+
 			</div>
 		</div>
 	</div>

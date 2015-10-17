@@ -31,7 +31,7 @@ use yii\bootstrap\Alert;
 
 
 <div id="main-content">
-	<div id="content-wrapper">	
+	<div id="content-wrapper">
 		<div class="help-150"><h1 class="page-title page-title-bt">Synchronize</h1></div>
 
 		<div id="sync-status" class="help-150"></div>
@@ -52,7 +52,7 @@ use yii\bootstrap\Alert;
 			<li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Material Data. Do you want to continue?') ) syncPackagingMaterials(); "> <span>Packaging Materials</span></a></li>
 
 			<!-- <li><a href="javascript:;" onclick="if( confirm('Synchronize Packaging Data. Do you want to continue?') ) pageload('/brdsapi/packaging_materials/ZCUS/bigblue');"> <span>Packaging Materials</span></a></li>  -->
-			
+
 			<li><a href="javascript:;" onclick="if( confirm('Synchronize plant location Data. Do you want to continue?') ) syncplantlocation();"> <span>Plant Locations</span></a></li>
 
 			<li><a href="javascript:;" onclick="if( confirm('Synchronize storage location Data. Do you want to continue?') ) syncstoragelocation();"> <span>Storage Locations</span></a></li>
@@ -65,7 +65,7 @@ use yii\bootstrap\Alert;
 <script type="text/javascript">
 
 function syncCustomer() {
-	var url = brdsapi_site_url+"/brdsapi/customer/bigblue";
+	var url = brdsapi_site_url+"customer/bigblue";
 	var method = 'GET';
 	var params = '';
 	var container_id = 'sync-status' ;
@@ -78,7 +78,7 @@ function syncCustomer() {
 }
 
 function syncPackaging() {
-	var url = brdsapi_site_url+"/brdsapi/packaging/bigblue";
+	var url = brdsapi_site_url+"packaging/bigblue";
 	var method = 'GET';
 	var params = '';
 	var container_id = 'sync-status' ;
@@ -91,7 +91,7 @@ function syncPackaging() {
 }
 
 function syncPackagingMaterials() {
-	var url = brdsapi_site_url+"/brdsapi/packaging_materials/VERP/bigblue";
+	var url = brdsapi_site_url+"packaging_materials/VERP/bigblue";
 	var method = 'GET';
 	var params = '';
 	var container_id = 'sync-status' ;
@@ -104,7 +104,7 @@ function syncPackagingMaterials() {
 }
 
 function syncplantlocation() {
-	var url = brdsapi_site_url+"/brdsapi/plant_location/plant/bigblue";
+	var url = brdsapi_site_url+"plant_location/plant/bigblue";
 	var method = 'GET';
 	var params = '';
 	var container_id = 'sync-status' ;
@@ -117,7 +117,7 @@ function syncplantlocation() {
 }
 
 function syncstoragelocation() {
-	var url = brdsapi_site_url+"/brdsapi/plant_location/storage/bigblue";
+	var url = brdsapi_site_url+"plant_location/storage/bigblue";
 	var method = 'GET';
 	var params = '';
 	var container_id = 'sync-status' ;

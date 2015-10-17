@@ -32,7 +32,7 @@ class DispatchingController extends \yii\web\Controller
             $dispatch_model_1 = $dismodel->getDispatchList($full_dispatch_id);
             $dispatch_model_3 = $dismodel->getPickedBy($full_dispatch_id);
             $sap_dispatch = $this->getSapDispatch($full_dispatch_id);
-            
+
             $ditems = $dismodel->getDispatchItems($full_dispatch_id);
             $dispatch_model_2 = array();
             foreach( $ditems as $key=>$item){
@@ -76,7 +76,7 @@ class DispatchingController extends \yii\web\Controller
         }
         else{
             return $this->render('index');
-        }    
+        }
     }
 
     public function actionPrintDispatch(){
@@ -85,7 +85,7 @@ class DispatchingController extends \yii\web\Controller
         $dispatch_id = Yii::$app->request->post('dispatch_number');
 
          if (isset($dispatch_id)) {
-            
+
             $dismodel = new DispatchModel;
             Yii::$app->response->format = 'pdf';
             Yii::$container->set(Yii::$app->response->formatters['pdf']['class'], [

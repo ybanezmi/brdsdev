@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -43,9 +44,9 @@ $this->title = 'Synch Materials';
 			<div class="process-loading" style="font-size:18px;">Please wait...</div>
 		</div>
 
-			<div class="one-column help-bg-gray pdt-one-column" style="width:50%" >	
+			<div class="one-column help-bg-gray pdt-one-column" style="width:50%" >
 
-	<?php 
+	<?php
 			$js = 'function beforeValidate(form) {if ( form.data("back") {this.validateOnSubmit = false;this.beforeValidate = "";form.submit();return false;}return true;}';
 			$form = ActiveForm::begin([
 			'fieldConfig' => [
@@ -53,16 +54,16 @@ $this->title = 'Synch Materials';
 			]
 			]); ?>
 
-																	 
-			<?= $form->field($customer_model, 'name')->dropDownList($customer_list, 
+
+			<?= $form->field($customer_model, 'name')->dropDownList($customer_list,
 			['class'	=> 'uborder help-80percent',
 			'prompt'	=> '-- Select a customer --',
 			'onchange'	=> 'getMateriaList(getFieldValueById("mstcustomer-name"));
-			hideHTMLById("material-list_id"); hideHTMLById("list-materials");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']); 
+			hideHTMLById("material-list_id"); hideHTMLById("list-materials");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']);
 			?>
 
 			<select id="material-list_id"><option></option></select>
-		
+
 			<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
 			<div class="submit-button ie6-submit-button">
 			<button class="btn btn-primary" style="width:35%;" id="syncAllMaterials">Sync All Materials</button>
@@ -78,12 +79,12 @@ $this->title = 'Synch Materials';
     <?php ActiveForm::end(); ?>
 
 	<script type="text/javascript">
-	
+
 
 	function view_materials() {
 		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
 		var pmat=encodeURIComponent(document.getElementById("material-list_id").value);
-		var url = window.location.origin+'/brdsdev/web/admin-tools/get-material-by?id='+pname;
+		var url = window.location.origin+'<?php echo Url::home() ?>admin-tools/get-material-by?id='+pname;
 		var method = 'GET';
 		var params = '';
 		var container_id = 'list-materials' ;
@@ -97,7 +98,7 @@ $this->title = 'Synch Materials';
 
 	function syncAllMaterials() {
 		var pname=encodeURIComponent(document.getElementById("mstcustomer-name").value);
-		var url = brdsapi_site_url+"/brdsapi/materials_customer/"+pname+"/bigblue";
+		var url = brdsapi_site_url+"materials_customer/"+pname+"/bigblue";
 		var method = 'GET';
 		var params = '';
 		var container_id = 'sync-status' ;
@@ -111,7 +112,7 @@ $this->title = 'Synch Materials';
 
 	function syncMaterialOnly() {
 		var pname=encodeURIComponent(document.getElementById("material-list_id").value);
-		var url = brdsapi_site_url+"/brdsapi/materials_only/"+pname+"/bigblue";
+		var url = brdsapi_site_url+"materials_only/"+pname+"/bigblue";
 		var method = 'GET';
 		var params = '';
 		var container_id = 'sync-status' ;
@@ -140,11 +141,11 @@ $this->title = 'Synch Materials';
 
 	document.getElementById("back_to_sync").addEventListener("click", function(e) {
 		e.preventDefault();
-		window.location.assign(window.location.origin+"/brdsdev/web/admin-tools/synchronized-database")
+		window.location.assign(window.location.origin+"<?php echo Url::home() ?>admin-tools/synchronized-database")
 	});
 
 	</script>
-				
+
 			</div>
 		</div>
 	</div>

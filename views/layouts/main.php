@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -15,25 +16,25 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 <head>
 
-	<?php 
-	
+	<?php
+
 		header('P3P: CP=”NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM”');
-	
+
 		header('Set-Cookie: SIDNAME=ronty; path=/; secure');
-		
+
 		header('Cache-Control: no-cache');
-		
+
 		header('Pragma: no-cache');
-	
-	?>	
+
+	?>
     <meta charset="<?= Yii::$app->charset ?>"/>
 	<!--[if lt IE 9]><script src="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/js/vendor/html5.js"></script><![endif]-->
-	
+
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/images/favicon.ico" type="image/x-icon">
-    
+
     <?php $this->head() ?>
     <!--[if gte IE 9]><link rel="stylesheet" type="text/css" href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/app_ie9.css"><![endif]-->
     <link href='<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/css/font.css' rel='stylesheet' type='text/css'>
@@ -48,7 +49,7 @@ AppAsset::register($this);
 	</script>
 	<![endif]-->
 
-	
+
 </head>
 <body>
 
@@ -57,9 +58,9 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
     <div class="wrap">
     			<div id="logo">
-		<a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>" class="logo-img"></a>
+		<a href="<?php echo Url::home(); ?>" class="logo-img"></a>
 	</div>
-			
+
 			<header>
 				<?php
 					//@TODO Reimplement navigation
@@ -106,19 +107,19 @@ echo Nav::widget([
 NavBar::end();*/
 		        ?>
 			</header>
-	        
-			
+
+
 		<section id="greetings">
 			<div class="g-body">
-				<a onclick="_togglehidden2('dropdownie6')" href="javascript:;" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><span class="head-firstname"><?php echo Yii::$app->user->identity->first_name . '</span> ' . Yii::$app->user->identity->last_name ?> @ 
+				<a onclick="_togglehidden2('dropdownie6')" href="javascript:;" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><span class="head-firstname"><?php echo Yii::$app->user->identity->first_name . '</span> ' . Yii::$app->user->identity->last_name ?> @
 					<?php echo Yii::$app->user->identity->assignment ?></a>
-				
+
 				<ul class="dropdown-menu omenu" role="menu" aria-labelledby="dLabel" id="dropdownie6">
 					<li><a href="<?php echo Yii::$app->getUrlManager()->getBaseUrl();?>/site/change-password"><i class="fa fa-fire"></i> Change password</a></li>
 				</ul>
 			</div>
 		</section>
-	
+
 		<section class="blue-line"></section>
 
         <div class="container" id="container">
@@ -138,7 +139,7 @@ NavBar::end();*/
 <![endif]-->
 
     <?php include 'footer.php'; ?>
-    
+
     <?php include 'popupbox.php'; ?>
 </div>
 <?php $this->endBody() ?>

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 //use yii\jui\DatePicker;
 use kartik\widgets\DatePicker;
@@ -193,7 +194,7 @@ use kartik\widgets\DatePicker;
 	<div class="desktop-only-weigh-capt">
 	<div class="weight-capt-button">
 
-		<button class="btn btn-primary cancel-button" type="button" onclick="window.location = 'index'">CANCEL</button>
+		<button class="btn btn-primary" type="button" onclick="window.location.assign(window.location.origin+ '<?php echo Url::home() ?>'); return false;">CANCEL</button>
 		<?= Html::submitButton('PRINT', ['class' 	=> 'btn btn-primary',
 										 'style'	=> '',
         								 'name'  	=> 'print']) ?>

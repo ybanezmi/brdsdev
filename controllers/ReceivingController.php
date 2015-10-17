@@ -350,17 +350,14 @@ class ReceivingController extends Controller
 
 	        if ($model->load(Yii::$app->request->post())) {
 	        	$model->actual_gr_date = Yii::$app->dateFormatter->convert($model->getAttribute('actual_gr_date'));
-	            $model->remarks = Yii::$app->user->identity->username . '@: ' . $model->remarks;
-
+	            $model->remarks = Yii::$app->user->identity->username . '@: ' . Yii::$app->request->post('TrxTransactions')['remarks'];
                 if ($model->validate() && $model->save()) {
 	               return $this->redirect(['menu', 'id' => $model->id]);
                 }
 	        } else {
 	        	// Get customer list
 	        	$customer_list = ArrayHelper::map(Yii::$app->modelFinder->getCustomerList(), 'code', 'name');
-
-                $plant_list = Yii::$app->modelFinder->getPlantList(null,['plant_location' => Yii::$app->user->identity->assignment]);
-				
+                $plant_list = Yii::$app->modelFinder->getPlantList(null, ['plant_location' => Yii::$app->user->identity->assignment]);
                 $storage_list = array();
                 foreach ($plant_list as $key => $value) {
                     $storage_list[$value['storage_location']] = $value['storage_location'] . ' - ' . $value['storage_name'];
