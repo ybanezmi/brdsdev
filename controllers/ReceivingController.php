@@ -493,7 +493,7 @@ class ReceivingController extends Controller
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
 
 			foreach ($material_list as $key => $value) {
-				$material_list[$key] = $key . ' - ' . $value;
+				$material_list[$key] = $value . ' - ' . $key;
 			}
 
 			// retrieve and convert sled in days unit
