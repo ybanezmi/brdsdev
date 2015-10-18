@@ -906,11 +906,15 @@ class ReceivingController extends Controller
         } else if (null !== Yii::$app->request->post('create-to') && null !== Yii::$app->request->post('selection')) {
             $pallets = array_unique(Yii::$app->request->post('selection'));
             $palletsStatus = array();
+            $arrPalletCount = array_count_values(Yii::$app->request->post('selection'));
             foreach ($pallets as $key => $value) {
                 $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
                                                                                             ['pallet_no' => $value]);
                 $transactionDetailsStatusCountList = array_count_values(ArrayHelper::getColumn($transactionDetailsModel, 'status'));
-                if (isset($transactionDetailsStatusCountList['process']) && $transactionDetailsStatusCountList['process'] > 0
+                if (count($transactionDetailsModel) != $arrPalletCount[$value]) {
+                    $palletsStatus[$value]['create_to_flag'] = false;
+                    $palletsStatus[$value]['to_error'] = 'Please select all pallets';
+                } else if (isset($transactionDetailsStatusCountList['process']) && $transactionDetailsStatusCountList['process'] > 0
                     || isset($transactionDetailsStatusCountList['rejected']) && $transactionDetailsStatusCountList['rejected'] > 0) {
                     $palletsStatus[$value]['create_to_flag'] = false;
                     $palletsStatus[$value]['to_error'] = 'Pallet #:' . $value . ' is still open.';
