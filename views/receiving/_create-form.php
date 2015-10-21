@@ -33,14 +33,14 @@ use yii\jui\DatePicker;
 
 	<?= $form->field($model, 'truck_van', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['maxlength' => 10,
 													  'class' => 'uborder help-20percent',
-													  'onchange' => 'setFieldValueToUpperCaseById(this.id, this.value);'])->label('T.PLATE #') ?>
+													  'onchange' => 'setFieldValueToUpperCaseById(this.id, this.value);'])->label('Truck PLATE Number:') ?>
 
 	<?= $form->field($model, 'plant_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->textInput(['value'	  => Yii::$app->user->identity->assignment,
 														   'readonly' => 'readonly',
-														   'class'	  => 'uborder disabled help-40percent'])->label('P. Loc') ?>
+														   'class'	  => 'uborder disabled help-40percent'])->label('PLANT LOCATION:') ?>
 
   	<?= $form->field($model, 'storage_location', ['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($storage_list, ['class'	=> 'uborder help-40percent',
-																			   'prompt'	=> '-- Select a storage --'])->label('S. Loc'); ?>
+																			   'prompt'	=> '-- Select a storage --'])->label('STORAGE LOCATION:'); ?>
 
 	<?= $form->field($model,'actual_gr_date',['template' => '<div class="control-group">{label}<div class="f-inline-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>'])->widget(DatePicker::className(),[
 		'language' 		=> 'en-GB',
