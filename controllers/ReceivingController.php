@@ -482,7 +482,8 @@ class ReceivingController extends Controller
 			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
             $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-                ['like', 'description', Yii::$app->params['PALLET']], ['plant_location' => $transaction_model->plant_location]]);
+                 ['like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
+				//['like', 'description', Yii::$app->params['PALLET']], ['plant_location' => $transaction_model->plant_location]]);
                 // ['plant_location' => $transaction_model->plant_location]]);
             $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
                 ['not like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
@@ -1165,23 +1166,20 @@ class ReceivingController extends Controller
 
     public function actionGetPackagingType($id, $plant_location) {
 
+		$condition[] = 'and';
         $condition[] = ['like', 'description', Yii::$app->params['PALLET']];
+		$condition[] = ['like', 'material_code', 'VERP%',false];
 		
 		if(isset($id) && $id !== 'undefined')
 		{
 			$condition[] = ['pallet_type' => $id];
 		}
 		
-		if(isset($plant_location) && $plant_location !== 'undefined')
+		/*if(isset($plant_location) && $plant_location !== 'undefined')
 		{
 			$condition[] = ['plant_location' => Yii::$app->request->get('plant_location')];
-		}
+		}*/
 		
-		if(1 < count($condition))
-		{
-			array_unshift($condition , 'and');
-		}
-
         $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, $condition);
 
         $packaging_type_list['material_code'] = ArrayHelper::getColumn($packaging_type_model, 'material_code');
