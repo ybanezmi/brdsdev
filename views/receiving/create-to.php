@@ -128,7 +128,9 @@ $this->title = 'Create TO';
         'dataProvider' => $data_provider,
         'filterModel'  => $search_model,
         'bootstrap'=>true,
-        'responsive'   => true,
+		'options' => [],
+		'containerOptions'=>['style'=>'overflow: auto'],
+        //'responsive'   => true,
         'hover'        => true,
         'toolbar' =>  [],
         'panel' => [

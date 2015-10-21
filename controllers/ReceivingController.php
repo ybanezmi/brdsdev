@@ -485,15 +485,30 @@ class ReceivingController extends Controller
                 ['like', 'description', Yii::$app->params['PALLET']], ['plant_location' => $transaction_model->plant_location]]);
                 // ['plant_location' => $transaction_model->plant_location]]);
             $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-                ['not like', 'description', Yii::$app->params['PALLET']]]);
+                ['not like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
                 // ['plant_location' => $transaction_model->plant_location]]);
 
             $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
             $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
 			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
 
-			foreach ($material_list as $key => $value) {
-				$material_list[$key] = $value . ' - ' . $key;
+			$description_max_length = 40;
+			$space_char = '&nbsp;';
+			foreach ($material_list as $key => $value)
+			{
+				$value_length = strlen($value);
+				
+				if($description_max_length < $value_length)
+				{
+					$value = substr($value, 0, $description_max_length);
+				}
+				else
+				{
+					$space_padding = $description_max_length - $value_length;
+					$value = $value . str_repeat($space_char, $space_padding);
+				}
+				
+				$material_list[$key] = html_entity_decode("{$value}{$space_char}{$space_char}-{$space_char}{$space_char}{$key}");
 			}
 
 			// retrieve and convert sled in days unit
@@ -1149,7 +1164,7 @@ class ReceivingController extends Controller
 	}
 
     public function actionGetPackagingType($id, $plant_location) {
-		
+
         $condition[] = ['like', 'description', Yii::$app->params['PALLET']];
 		
 		if(isset($id) && $id !== 'undefined')
@@ -1179,7 +1194,7 @@ class ReceivingController extends Controller
         $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
             ['pallet_type' => Yii::$app->request->get('id'),
              'plant_location' => Yii::$app->request->get('plant_location')],
-            ['not like', 'description', Yii::$app->params['PALLET']]]);
+            ['not like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
 
         $kitting_type_list['material_code'] = ArrayHelper::getColumn($kitting_type_model, 'material_code');
         $kitting_type_list['description'] = ArrayHelper::getColumn($kitting_type_model, 'description');

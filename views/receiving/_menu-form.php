@@ -98,6 +98,7 @@ use yii\bootstrap\Alert;
         <?= $form->field($transaction_detail_model, 'material_code',
             ['template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>'])
             ->dropDownList($material_list, ['class'    => 'uborder help-100percent',
+											'style' => 'font-family: consolas;',
                                             'prompt'    => '-- Select a product --',
                                             'options'	=> [$material_code_val => ['Selected' => 'selected']],
                                             'onchange'    => 'onSelectMaterial();
