@@ -8,7 +8,7 @@ use yii\bootstrap\Alert;
 /* @var $this yii\web\View */
 /* @var $model app\models\TrxTransactions */
 
-$this->title = 'Create TO';
+$this->title = 'Create T.O';
 ?>
 <div class="trx-transactions-view">
 

@@ -6,12 +6,12 @@ use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Create TO';
+$this->title = 'Create T.O.';
 ?>
 <div id="main-content">
 
 	<div class="wrapper-150">
-		<h1><?= Html::encode($this->title) ?></h1>
+        <h1 class="page-title">Create T.O.</h1>
 
 		<div class="one-column help-bg-gray pdt-one-column" >
 		    <?php
@@ -77,7 +77,7 @@ $this->title = 'Create TO';
                             </div>
                         </div>
 		            	<div class="control-group">
-		            		<?= Html::label('# PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
+		            		<?= Html::label('Number of PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
 		            			<?= Html::textInput('pallet_count', null, ['class'     => 'uborder disabled help-20percent',
 		            			                                           'disabled'  => 'disabled']); ?>
@@ -127,6 +127,8 @@ $this->title = 'Create TO';
     					    <button class="btn btn-primary"
     					       onclick="js: createToSelectPallet(getFieldValueById('trxtransactiondetails-pallet_no')); return false;"
     					       name="btn-view-pallets">Continue</button>
+                            <button class="btn btn-primary cancel-button"
+                                    name="cancel">Cancel</button>   
     		        	</div>
     		        </div>
     		    </div>

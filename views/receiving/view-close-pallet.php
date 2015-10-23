@@ -58,12 +58,12 @@ $this->title = 'View & Close Pallet';
 
 			<div class="control-group">
 				<label class="control-label-f">PALLET DETAILS</label>
-	            <div class="f-full-size help-75percent" style="background:#ccc; min-height: 200px; padding:20px;">
+	            <div class="f-full-size help-100percent" style="background:#ccc; min-height: 200px; padding:20px;">
 	            	<div id="pallet-details" style="display: none;">
 	            		<div class="control-group">
                             <?= Html::label('TRANSACTION ID', 'transaction_id', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('transaction_id', null, ['class'    => 'uborder disabled help-40percent',
+                                <?= Html::textInput('transaction_id', null, ['class'    => 'uborder disabled help-45percent',
                                                                              'disabled' => 'disabled',
                                                                              'id'       => 'transaction-id']); ?>
                             </div>
@@ -71,13 +71,13 @@ $this->title = 'View & Close Pallet';
                         <div class="control-group">
                             <?= Html::label('CUSTOMER', 'transaction_id', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('customer', null, ['class'    => 'uborder disabled help-40percent',
+                                <?= Html::textInput('customer', null, ['class'    => 'uborder disabled help-45percent',
                                                                        'disabled' => 'disabled',
                                                                        'id'       => 'customer']); ?>
                             </div>
                         </div>
 		            	<div class="control-group">
-		            		<?= Html::label('# PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
+		            		<?= Html::label('Number of PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
 		            		<div class="f-inline-size">
 		            			<?= Html::textInput('pallet_count', null, ['class'     => 'uborder disabled help-20percent',
 		            			                                           'disabled'  => 'disabled']); ?>
@@ -93,28 +93,28 @@ $this->title = 'View & Close Pallet';
                         <div class="control-group">
                             <?= Html::label('PALLET TYPE', 'pallet_type', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('pallet_type', null, ['class'       => 'uborder disabled help-40percent',
+                                <?= Html::textInput('pallet_type', null, ['class'       => 'uborder disabled help-45percent',
                                                                           'disabled'    => 'disabled']); ?>
                             </div>
                         </div>
                         <div class="control-group">
                             <?= Html::label('Inbound Number', 'inbound_no', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('inbound_no', null, ['class'       => 'uborder disabled help-40percent',
+                                <?= Html::textInput('inbound_no', null, ['class'       => 'uborder disabled help-45percent',
                                                                           'disabled'    => 'disabled']); ?>
                             </div>
                         </div>
                         <div class="control-group">
                             <?= Html::label('T.O. Number', 'transfer_order', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('transfer_order', null, ['class'       => 'uborder disabled help-40percent',
+                                <?= Html::textInput('transfer_order', null, ['class'       => 'uborder disabled help-45percent',
                                                                           'disabled'    => 'disabled']); ?>
                             </div>
                         </div>
                         <div class="control-group">
                             <?= Html::label('STATUS', 'status', ['class' => 'control-label']) ?>
                             <div class="f-inline-size">
-                                <?= Html::textInput('status', null, ['class'    => 'uborder disabled help-40percent',
+                                <?= Html::textInput('status', null, ['class'    => 'uborder disabled help-45percent',
                                                                      'disabled' => 'disabled']); ?>
                             </div>
                         </div>

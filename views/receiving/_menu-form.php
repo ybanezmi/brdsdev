@@ -46,16 +46,16 @@ use yii\bootstrap\Alert;
                                                                                 'class'      => 'uborder disabled help-25percent'])->label('WAREHOUSE') ?>
 
         <?= $form->field($transaction_model, 'storage_location')->textInput(['disabled' => 'disabled',
-                                                                                  'class'      => 'uborder disabled help-25percent'])->label('S. LOC') ?>
+                                                                                  'class'      => 'uborder disabled help-25percent'])->label('STORAGE LOCATION') ?>
 
         <?= $form->field($transaction_model, 'truck_van',
-                ['inputOptions' => ['class'     => 'uborder disabled help-25percent',
+                ['inputOptions' => ['class'     => 'uborder disabled help-30percent',
                                     'disabled'     => 'disabled'],
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input}
                                      <button class="btn btn-primary help-25percent" type="button" onclick="alert(\''.$transaction_model->remarks.'\')">Remarks</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
                 ])
-                ->textInput(['maxlength' => 10])->label('T.PLATE #') ?>
+                ->textInput(['maxlength' => 10])->label('TRUCK PLATE NUMBER') ?>
 
         <?php
             Modal::begin([
@@ -77,14 +77,14 @@ use yii\bootstrap\Alert;
                  'template'     => '<div class="control-group">{label}<div class="f-inline-size">{input} PP
                                      <button type="button" class="btn btn-primary help-25percent" name="view-entries" onclick="js: window.location = &quot;view-entries?id='.$transaction_model->id.'&quot;">View</button>
                                      </div><div class=\"col-lg-8\">{error}</div></div>'
-                ])->textInput(['maxlength' => 10])->label('# Pallet(s)') ?>
+                ])->textInput(['maxlength' => 10])->label('NUMBER OF Pallet(s)') ?>
 
         <?= $form->field($transaction_model, 'weight',
                 ['inputOptions' => ['class' => 'disabled uborder help-25percent'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size" >{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'
                 ])->textInput(['maxlength' => 10,
                                'disabled'  => 'disabled',
-                               'value'       => $total_weight])->label('Total WT') ?>
+                               'value'       => $total_weight])->label('Total WEIGHT') ?>
 
         </div>
     </div>
@@ -184,13 +184,13 @@ use yii\bootstrap\Alert;
                  'template' => '<div class="control-group">{label}<div class="f-inline-size" id="net-wt">{input} <span id="net-unit">KG</span></div><div class=\"col-lg-8\">{error}</div></div> ',
                  'labelOptions' => ['id' => 'net-weight',
                                     'class' => 'control-label',],
-                ])->textInput(['maxlength' => 10])->label('Net WT') ?>
+                ])->textInput(['maxlength' => 10])->label('Net WeighT') ?>
 
         <?= $form->field($transaction_detail_model, 'total_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-25percent totalweight',
                                     'readonly' => 'readonly'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG</div><div class=\"col-lg-8\">{error}</div></div>'
-                ])->textInput(['maxlength' => 10])->label('Total WT') ?>
+                ])->textInput(['maxlength' => 10])->label('Total WeighT') ?>
         <?php
             // retrieve post pallet_no
             // @TODO: fix pallet_no default value during post error
@@ -200,7 +200,7 @@ use yii\bootstrap\Alert;
         ?>
 
         <?= $form->field($transaction_detail_model, 'packaging_code')
-                    ->dropDownList($packaging_type_list, ['class'    => 'uborder help-70percent',
+                    ->dropDownList($packaging_type_list, ['class'    => 'uborder help-60percent',
                                                     'style' => 'font-size: 16px',
                                                     'value'       => Yii::$app->request->post('TrxTransactionDetails[pallet_type]')])->label('PACKAGING TYPE'); ?>
         <?= $form->field($transaction_detail_model, 'pallet_no',
@@ -210,10 +210,10 @@ use yii\bootstrap\Alert;
                                     'onchange' => 'validatePalletType(this.value, getFieldValueById("material_code"), getFieldValueById("trxtransactions-id"));'],
                  'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',],
-                 ])->textInput(['maxlength' => 10])->label('Pallet #') ?>
+                 ])->textInput(['maxlength' => 10])->label('Pallet Number') ?>
 
         <?= $form->field($transaction_detail_model, 'kitting_code')
-                    ->dropDownList($kitting_type_list, ['class'    => 'uborder help-70percent',
+                    ->dropDownList($kitting_type_list, ['class'    => 'uborder help-60percent',
                                                     'style' => 'font-size: 16px',
                                                     'prompt'    => '-- Select a kitting type --',
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
@@ -223,14 +223,14 @@ use yii\bootstrap\Alert;
                 'labelOptions' => ['class' => 'control-label',
                     'style' => 'font-size: 16px',
                     ]])->textInput(['maxlength' => 10,
-                                    'onchange'  => 'validateKittingType(this.value, getFieldValueById("material_code"), getFieldValueById("trxtransactions-id"));'])->label('Kitting #') ?>
+                                    'onchange'  => 'validateKittingType(this.value, getFieldValueById("material_code"), getFieldValueById("trxtransactions-id"));'])->label('Kitting Number') ?>
 
         <?= $form->field($transaction_detail_model, 'pallet_weight',
                 ['inputOptions' => ['class' => 'uborder disabled help-25percent',
                                     'readonly' => 'readonly',
                                     'value' => '0.000'],
                  'template' => '<div class="control-group">{label}<div class="f-inline-size">{input} KG </div><div class=\"col-lg-8\">{error}</div></div>'
-                ])->textInput(['maxlength' => 10])->label('Pallet WT') ?>
+                ])->textInput(['maxlength' => 10])->label('Pallet WeighT') ?>
         </div>
     </div>
 
