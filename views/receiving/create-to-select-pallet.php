@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\URL;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 
@@ -127,8 +128,7 @@ $this->title = 'Create T.O.';
     					    <button class="btn btn-primary"
     					       onclick="js: createToSelectPallet(getFieldValueById('trxtransactiondetails-pallet_no')); return false;"
     					       name="btn-view-pallets">Continue</button>
-                            <button class="btn btn-primary cancel-button"
-                                    name="cancel">Cancel</button>   
+							   <button class="btn btn-primary" onclick="js: window.location.assign('<?= URL::to('index'); ?>'); return false;" name="btn-view-pallets">Cancel</button>
     		        	</div>
     		        </div>
     		    </div>

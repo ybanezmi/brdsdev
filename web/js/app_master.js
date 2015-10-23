@@ -1186,7 +1186,7 @@ function viewTransactionSummary(transaction_id) {
 }
 
 /* function to view pallet details */
-function viewPalletDetails(transaction_id, pallet_no) {
+function viewPalletDetails(pallet_no, transaction_id) {
 	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
 		if (null != pallet_no && "" != pallet_no) {
 			window.location = "view-entries?TrxTransactionDetailsSearch[pallet_no]=" + pallet_no + "&id=" + transaction_id;

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\URL;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 
@@ -125,13 +126,12 @@ $this->title = 'View & Close Pallet';
     		    	<div class="one-column-button">
     					<div class="submit-button ie6-submit-button">
     					    <button class="btn btn-primary"
-    					       onclick="js: viewPalletDetails(getFieldValueById('trxtransactiondetails-pallet_no')); return false;"
+    					       onclick="js: viewPalletDetails(getFieldValueById('trxtransactiondetails-pallet_no'), getFieldValueById('transaction-id')); return false;"
     					       name="btn-view-pallets">View Pallets</button>
     		        		<?= Html::submitButton('Close Pallet', ['class' => 'btn btn-primary',
     		        												'name'  => 'close-pallet',
     		        												'id'    => 'btn-close-pallet',]) ?>
-    		        		<?= Html::submitButton('Cancel', ['class' => 'btn btn-primary cancel-button',
-    		        										  'name'  => 'cancel']) ?>
+							<button class="btn btn-primary" onclick="js: window.location.assign('<?= URL::to('index'); ?>'); return false;" name="btn-view-pallets">Cancel</button>
     		        	</div>
     		        </div>
     		    </div>
