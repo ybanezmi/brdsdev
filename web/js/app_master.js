@@ -316,6 +316,20 @@ function getFieldValueById(id) {
 	return document.getElementById(id).value;
 }
 
+function getFieldValueRadioByName(name) {
+	var radioFields = document.getElementsByName(name);
+	var radioValue = '';
+	
+	for(var i = 0; i < radioFields.length; i++){
+		if(radioFields[i].checked){
+			radioValue = radioFields[i].value;
+			break;
+		}
+	}
+	
+	return radioValue;
+}
+
 /* function to get value of any HTML field by name */
 function getFieldValueByName(name) {
 	return document.getElementsByName(name)[0].value;
@@ -1177,9 +1191,9 @@ function calculateNOWorNEVER(){
 }
 
 /* function to view transaction summary */
-function viewTransactionSummary(transaction_id) {
+function viewTransactionSummary(transaction_id, transaction_type) {
 	if (null != transaction_id && "" != transaction_id && "-- Select a transaction --" != transaction_id) {
-		window.location = "view-entries?id=" + transaction_id;
+		window.location = "view-entries?id=" + transaction_id + "&transaction_type=" + transaction_type;
 	} else {
 		alert('Please select a transaction.');
 	}

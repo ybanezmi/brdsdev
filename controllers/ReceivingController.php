@@ -298,8 +298,18 @@ class ReceivingController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionViewEntries($id)
+    public function actionViewEntries($id, $transaction_type = 'brds')
     {
+		if('sap' == $transaction_type)
+		{
+			 $sap_transaction =  Yii::$app->modelFinder->getTransaction(['sap_no' => $id]);
+			 
+			 if($sap_transaction)
+			 {
+				 $id = $sap_transaction->id;
+			 }
+		}
+		
     	$data_provider = new ActiveDataProvider([
 							  						'query' => Yii::$app->modelFinder->getTransactionDetailList(null, null, null,
 							  																					['transaction_id' => $id,

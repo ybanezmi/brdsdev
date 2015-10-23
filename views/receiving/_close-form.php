@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 			</div>
 		    <?= $form->field($transaction_model, 'transaction_id',
 						['template' 	=> '<div class="control-group">{label}<div>{input}
-											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\')); return false;"
+											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\'), getFieldValueRadioByName(\'transaction_type\')); return false;"
 											name="btn-transaction-summary">Summary</button>
 											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --',
@@ -114,7 +114,7 @@ use yii\widgets\ActiveForm;
 		            									   		   			 'disabled' => 'disabled']); ?> PP
 								<?= Html::button('View', ['class' => 'btn btn-primary help-20percent',
 													      'name'  => 'view-entries',
-													      'onclick' => 'js: viewTransactionSummary(getFieldValueById("trxtransactiondetails-transaction_id")); return false;',]) ?>
+													      'onclick' => 'js: viewTransactionSummary(getFieldValueById("trxtransactiondetails-transaction_id"),getFieldValueRadioByName("transaction_type")); return false;',]) ?>
 		            		</div>
 		            	</div>
 		            	<div class="control-group" style="margin-bottom: 10px;">
