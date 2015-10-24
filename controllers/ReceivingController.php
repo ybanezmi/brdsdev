@@ -489,7 +489,7 @@ class ReceivingController extends Controller
     	} else {
 			$transaction_model = Yii::$app->modelFinder->findTransactionModel($id);
 			$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
-			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $transaction_model->customer_code]);
+			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $transaction_model->customer_code],['like','plant_location',$transaction_model->plant_location]]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
             $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
                  ['like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
