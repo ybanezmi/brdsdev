@@ -1240,10 +1240,10 @@ function ajax (url, method, params, container_id, loading_text) {
 	}
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4) {
-			toggleSync();
+			toggleSync('hide');
 			document.getElementById(container_id).innerHTML = xhr.responseText;
 		} else {
-			toggleSync();
+			toggleSync('show');
 			document.getElementById(container_id).innerHTML = loading_text;
 
 
@@ -1251,6 +1251,7 @@ function ajax (url, method, params, container_id, loading_text) {
 	}
 	xhr.open(method, url, true);
 	xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	//xhr.setRequestHeader("Access-Control-Allow-Origin",brdsapi_site_url);
 	xhr.send(params);
 }
 
@@ -1278,14 +1279,31 @@ function ajax_view (url, method, params, container_id, loading_text) {
     }
     xhr.open(method, url, true);
     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	//xhr.setRequestHeader("Access-Control-Allow-Origin","");
     xhr.send(params);
 }
 
-function toggleSync() {
+function toggleSync(display_type) {
     var e = document.getElementById("sync-progress");
     var m = document.getElementById("sync-bg");
-    e.style.display = (e.style.display == "block") ? "none" : "block";
-    m.style.display = (m.style.display == "block") ? "none" : "block";
+	
+	if(display_type)
+	{
+		var syncDisplay = ('show' == display_type) ? 'block' : 'none';
+		
+		if('show' == display_type)
+		{
+			syncDisplay = 'block';
+		}
+		
+		e.style.display = syncDisplay;
+		m.style.display = syncDisplay;
+	}
+	else
+	{
+		e.style.display = (e.style.display == "block") ? "none" : "block";
+		m.style.display = (m.style.display == "block") ? "none" : "block";
+	}
 }
 
 
