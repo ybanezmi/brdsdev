@@ -62,9 +62,9 @@ $this->title = 'Synch Materials';
 			hideHTMLById("material-list_id"); hideHTMLById("list-materials");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']);
 			?>
 
-			<select id="material-list_id"><option></option></select>
+			<select id="material-list_id" class="uborder help-80percent"><option></option></select>
 
-			<div class="one-column-button pdt-one-column-button" style="wdith:100%;">
+			<div class="one-column-button pdt-one-column-button" style="width:100%;">
 			<div class="submit-button ie6-submit-button">
 			<button class="btn btn-primary" style="width:35%;" id="syncAllMaterials">Sync All Materials</button>
 			<button class="btn btn-primary" style="width:35%;" id="view_materials" name="view_materials">View Details</button>
