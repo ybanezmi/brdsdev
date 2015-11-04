@@ -69,11 +69,36 @@ class WeightCaptureController extends Controller
 	public function actionGetMaterialList($item_code)
 	{
 		$material_model = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $item_code]);
-		$material_list = ArrayHelper::toArray($material_model);
+		$material_list = $this->formatMaterialList($material_model);
 		echo json_encode($material_list);
 	}
 
+	public function formatMaterialList($material_model)
+	{
+		$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
 
+		$description_max_length = 40;
+		$space_char = '&nbsp;';
+		foreach ($material_list as $key => $value)
+		{
+			$value_length = strlen($value);
+			
+			if($description_max_length < $value_length)
+			{
+				$value = substr($value, 0, $description_max_length);
+			}
+			else
+			{
+				$space_padding = $description_max_length - $value_length;
+				$value = $value . str_repeat($space_char, $space_padding);
+			}
+			
+			$material_list[$key] = html_entity_decode("{$value}{$space_char}{$space_char}-{$space_char}{$space_char}{$key}");
+		}
+		
+		return $material_list;
+	}
+	
 	public function actionPdf(){
         Yii::$app->response->format = 'pdf';
 
@@ -88,14 +113,13 @@ class WeightCaptureController extends Controller
     }
 
     public function actionGetMaterial($id, $desc) {
-        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', $desc]]);
+        $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['like', 'description', "{$desc}%", false]]);
 
         if ($material_model == null || count($material_model) == 0) {
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['barcode' => $desc]);
         }
-
-        $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
-        $material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
+		
+		$material_list = $this->formatMaterialList($material_model);
 
         echo json_encode($material_list);
     }

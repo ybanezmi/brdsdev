@@ -47,6 +47,7 @@ use kartik\widgets\DatePicker;
 			<?= Html::dropDownList
 			('material', null, [],
 					   ['id'        => 'material',
+					    'style' => 'font-family: consolas;',
 						'class'	    => 'uborder',
 						'label'	    => 'Material',
 						'required'	    => 'required',

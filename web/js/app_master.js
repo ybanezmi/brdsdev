@@ -693,7 +693,8 @@ function searchMaterial(value, customer_code, id) {
 
         // set prompt value
         var promptOption = document.createElement('option');
-        promptOption.text = "-- Select a product --";
+        promptOption.value = '';
+        promptOption.text = "-- Select a material --";
         x.add(promptOption);
 
 		if(jsonData) {
@@ -708,7 +709,7 @@ function searchMaterial(value, customer_code, id) {
 				i++;
 			}
         }
-
+		x.onchange();
     });
 }
 
@@ -847,19 +848,23 @@ function getMateriaList(code){
         var promptOption = document.createElement('option');
         removeOptions(x);
 
-        if(isEmpty(jsonData)){
-            for(var i = 0; i < jsonData.length; i++){
-                var option  = document.createElement('option');
-                option.value = jsonData[i].item_code;
-                /*option.text = jsonData[i].description;*/
-                option.text = jsonData[i].item_code + ' - ' + jsonData[i].description;
-                x.add(option, x[i+1]);
-            }
-            x.style.display = "block";
-            promptOption.text = "-- Select a materials --";
-            promptOption.value = "";
-            promptOption.selected = true;
-            x.add(promptOption, x[0]);
+		x.style.display = "block";
+		promptOption.text = "-- Select a materials --";
+		promptOption.value = "";
+		promptOption.selected = true;
+		x.add(promptOption, x[0]);
+		
+		if(jsonData) {
+			var i  = 1;
+			for(var key in jsonData)
+			{
+				var option  = document.createElement('option');
+				option.value = key;
+				option.text = jsonData[key];
+
+				x.add(option, x[i]);
+				i++;
+			}
         } else {
             x.style.display = "none";
         }
@@ -1084,14 +1089,19 @@ function getMaterialList(code) {
 		promptOption.innerHTML = "-- Select a material --";
 		x.add(promptOption);
 
-		if(null != jsonData){
-			for(var i = 0; i < jsonData.length; i++){
+		if(jsonData) {
+			var i  = 1;
+			for(var key in jsonData)
+			{
 				var option  = document.createElement('option');
-				option.value = jsonData[i]['item_code'];
-				option.innerHTML = jsonData[i]['description'];
-				x.add(option, x[i+1]);
+				option.value = key;
+				option.text = jsonData[key];
+
+				x.add(option, x[i]);
+				i++;
 			}
-		}
+        }
+		
 	});
 }
 
