@@ -1,4 +1,11 @@
 <?php
+
+$netWeight = str_replace(',', '', Yii::$app->request->post('net_weight'));
+$decimalPlaces = 3;
+
+$netWeightFontSize = (999 < $netWeight) ? '28px;':'30px;';
+$netWeight = number_format((float)$netWeight, $decimalPlaces, '.', ',');
+
 	//use Dinesh\Barcode\DNS1D;
 function truncate($str, $len) {
   $tail = max(0, $len-10);
@@ -15,10 +22,10 @@ function truncate($str, $len) {
 				<b>TOTAL TARE:</b>
 			</td>
 			<td>
-				<b><?php echo number_format((float)Yii::$app->request->post('pallet_packaging_tare'), 2, '.', ','); ?> KG</b>
+				<b><?php echo number_format((float)Yii::$app->request->post('pallet_packaging_tare'), $decimalPlaces, '.', ','); ?> KG</b>
 			</td>
 			<td width="55%" rowspan="3" class="net-weight">
-				<b><?php echo number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ','); ?>KG</b>
+				<b><?php echo $netWeight; ?>KG</b>
 			</td>
 		</tr>
 		<tr>
@@ -38,14 +45,14 @@ function truncate($str, $len) {
 	</table>
 	<div class="code-bars-dns1d">
 		<?php 
-			$barcode = Yii::$app->request->post('material_code') . str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT);
+			$barcode = Yii::$app->request->post('material_code') . str_pad(number_format((float)Yii::$app->request->post('net_weight'), $decimalPlaces, '.', ''), 8, '0', STR_PAD_LEFT);
 			echo Yii::$app->DNS1D->getBarcodeSVG($barcode, 'C39',1,78);
 		?>
 	</div>
 	<table class="footer-bar">
 		<tr>
 		<td align="left">
-			<b><?php echo Yii::$app->request->post('material_code'); ?><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), 2, '.', ''), 8, '0', STR_PAD_LEFT); ?></b>
+			<b><?php echo Yii::$app->request->post('material_code'); ?><?php echo str_pad(number_format((float)Yii::$app->request->post('net_weight'), $decimalPlaces, '.', ''), 8, '0', STR_PAD_LEFT); ?></b>
 		</td>
 		<td align="right">
 			<b>Big <span style="background:#000; display:block; float:left; color:#fff;">&nbsp;Blue&nbsp;</span></b>
@@ -74,7 +81,7 @@ function truncate($str, $len) {
 		display:inline; 
 	}
 	.net-weight {
-		font-size: 30px;
+		font-size: <?php echo $netWeightFontSize;?>
 	}
 	.code-bars-dns1d{
 		width:90%; 

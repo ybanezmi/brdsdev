@@ -1180,16 +1180,36 @@ function calculateNOWorNEVER(){
     ppt = (parseFloat(palletTare) + parseFloat(ptt)).toFixed(3);
     nt  = (parseFloat(grossWeight) - parseFloat(ppt)).toFixed(3);
 
+	if(1 > palletTare)
+	{
+		setFieldValueById('units', 0);
+	}
+	
     setFieldValueById('product_tare_total', ptt);
     setFieldValueById('pallet_packaging_tare', ppt);
-
+	document.getElementsByName('print')[0].disabled = false;
+	
     if(nt >= 0) {
-        setFieldValueById('net_weight', nt);
+		if(nt > 1000)
+		{
+			document.getElementsByName('print')[0].disabled = true;
+			alert('NET Weight should not be greater than 1000');
+		}
+		else
+		{
+			 setFieldValueById('net_weight', numberWithCommas(nt));
+		}
     } else {
         setFieldValueById('net_weight', '0');
-        alert('NET WEIGHT should not be negative value, NET WEIGHT has changed to ZERO!');
+        alert('NET Weight should not be negative value. NET Weight has changed to ZERO!');
     }
 
+}
+
+function numberWithCommas(number) {
+    var parts = number.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
 }
 
 /* function to view transaction summary */
