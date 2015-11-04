@@ -696,15 +696,17 @@ function searchMaterial(value, customer_code, id) {
         promptOption.text = "-- Select a product --";
         x.add(promptOption);
 
-        if (null != jsonData && jsonData.item_code.length > 0) {
-            for(var i = 0; i < jsonData.item_code.length; i++){
-                var option  = document.createElement('option');
-                option.value = jsonData.item_code[i];
-                option.text = jsonData.description[i] + ' - ' + jsonData.item_code[i];
-                x.add(option, x[i+1]);
-            }
-            // set initial value
-            //setFieldValueById(id, jsonData.item_code[0], true);
+		if(jsonData) {
+			var i  = 1;
+			for(var key in jsonData)
+			{
+				var option  = document.createElement('option');
+				option.value = key;
+				option.text = jsonData[key];
+
+				x.add(option, x[i]);
+				i++;
+			}
         }
 
     });

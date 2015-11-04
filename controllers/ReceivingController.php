@@ -501,26 +501,8 @@ class ReceivingController extends Controller
 
             $packaging_type_list = ArrayHelper::map($packaging_type_model, 'material_code', 'description');
             $kitting_type_list = ArrayHelper::map($kitting_type_model, 'material_code', 'description');
-			$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
-
-			$description_max_length = 40;
-			$space_char = '&nbsp;';
-			foreach ($material_list as $key => $value)
-			{
-				$value_length = strlen($value);
-				
-				if($description_max_length < $value_length)
-				{
-					$value = substr($value, 0, $description_max_length);
-				}
-				else
-				{
-					$space_padding = $description_max_length - $value_length;
-					$value = $value . str_repeat($space_char, $space_padding);
-				}
-				
-				$material_list[$key] = html_entity_decode("{$value}{$space_char}{$space_char}-{$space_char}{$space_char}{$key}");
-			}
+			
+			$material_list = $this->formatMaterialList($material_model);
 
 			// retrieve and convert sled in days unit
 			$material_sled_properties = [
@@ -780,6 +762,32 @@ class ReceivingController extends Controller
     	}
     }
 
+	public function formatMaterialList($material_model)
+	{
+		$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
+
+		$description_max_length = 40;
+		$space_char = '&nbsp;';
+		foreach ($material_list as $key => $value)
+		{
+			$value_length = strlen($value);
+			
+			if($description_max_length < $value_length)
+			{
+				$value = substr($value, 0, $description_max_length);
+			}
+			else
+			{
+				$space_padding = $description_max_length - $value_length;
+				$value = $value . str_repeat($space_char, $space_padding);
+			}
+			
+			$material_list[$key] = html_entity_decode("{$value}{$space_char}{$space_char}-{$space_char}{$space_char}{$key}");
+		}
+		
+		return $material_list;
+	}
+	
 	public function actionEdit()
 	{
 		$this->initUser();
@@ -1225,8 +1233,9 @@ class ReceivingController extends Controller
             $material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $id], ['upc_2' => $desc]]);
         }
 
-        $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
-        $material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
+		$material_list = $this->formatMaterialList($material_model);
+      //  $material_list['item_code'] = ArrayHelper::getColumn($material_model, 'item_code');
+        //$material_list['description'] = ArrayHelper::getColumn($material_model, 'description');
 
         echo json_encode($material_list);
     }
