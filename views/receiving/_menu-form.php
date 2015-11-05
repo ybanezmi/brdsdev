@@ -315,6 +315,7 @@ window.onload=function() {
     onSelectMaterial(true);
     validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"), getFieldValueById("trxtransactiondetails-material_code"), getFieldValueById("trxtransactions-id"));
 }
+setTimeout(function(){calculateTotalWeight();},1000);
 
 </script>
 

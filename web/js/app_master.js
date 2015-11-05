@@ -1396,6 +1396,8 @@ function calculateTotalWeight() {
     var palletWeight = parseFloat(getMaterialTotalWeight()) + parseFloat(getTransactionPalletWeight());
     setFieldValueById("trxtransactiondetails-pallet_weight", palletWeight.toFixed(decimalPlaces));
 
+	/*
+	Commenting this since it is not appended in the DOM
     // add unit span element
 	var spanElem = document.getElementById('unit-label');
 	if (!spanElem) {
@@ -1405,6 +1407,7 @@ function calculateTotalWeight() {
 
 	spanElem.innerHTML = ' (' + (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
 					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']) + ' KG)';
+	*/
 }
 
 var useFlag = 0;
