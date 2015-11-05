@@ -1200,20 +1200,25 @@ function calculateNOWorNEVER(){
 	document.getElementsByName('print')[0].disabled = false;
 	
     if(nt >= 0) {
-		if(nt > 1000)
-		{
-			document.getElementsByName('print')[0].disabled = true;
-			alert('NET Weight should not be greater than 1000');
-		}
-		else
-		{
-			 setFieldValueById('net_weight', numberWithCommas(nt));
-		}
+		setFieldValueById('net_weight', numberWithCommas(nt));
     } else {
         setFieldValueById('net_weight', '0');
         alert('NET Weight should not be negative value. NET Weight has changed to ZERO!');
     }
+}
 
+function validateNetWeight()
+{
+	var netWeight = getFieldValueById('net_weight');
+	netWeight = parseFloat(netWeight.replace(',',''));
+
+	if(1000 < netWeight)
+	{
+		alert('NET Weight should not be greater than 1000');
+		return false;
+	}
+	
+	return true;
 }
 
 function numberWithCommas(number) {

@@ -198,6 +198,7 @@ use kartik\widgets\DatePicker;
 		<button class="btn btn-primary" type="button" onclick="window.location.assign(window.location.origin+ '<?php echo Url::home() ?>'); return false;">CANCEL</button>
 		<?= Html::submitButton('PRINT', ['class' 	=> 'btn btn-primary',
 										 'style'	=> '',
+										 'onclick'	=> 'return validateNetWeight();',
         								 'name'  	=> 'print']) ?>
 	</div>
 	</div>
