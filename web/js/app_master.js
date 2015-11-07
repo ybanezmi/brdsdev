@@ -1377,6 +1377,16 @@ function onSelectMaterial(shouldNotClear) {
     populateKittingType();
     getMaterialConversion();
     populateBatchDropdown(getFieldValueById("trxtransactiondetails-material_code"), getQueryVariable('id'));
+	
+	var sledValue =Number(getMaterialSled());
+	if(0 < sledValue)
+	{
+		document.getElementById("trxtransactiondetails-manufacturing_date").nextSibling.style.display = 'none';
+	}
+	else
+	{
+		document.getElementById("trxtransactiondetails-manufacturing_date").nextSibling.style.display = 'inline';
+	}
 }
 
 function clearAllFields() {
