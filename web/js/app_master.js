@@ -474,17 +474,10 @@ function getMaterialTotalWeight() {
 			    material_total_weight = convertToDecimalFormat(material_total_weight, decimalPlaces);
                 setFieldValueById("trxtransactiondetails-net_weight", material_total_weight);
 				break;
-		    case 'PCS':
-			case 'CBM':
-			case 'BXS':
-			case 'BAG':
+			default:
 				material_total_weight = parseFloat(getFieldValueById("trxtransactiondetails-net_weight")) * (material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['den'] /
 					   material_conversion[getFieldValueById('trxtransactiondetails-net_unit')]['num']);
 			    material_total_weight = material_total_weight.toFixed(decimalPlaces);
-				break;
-			default:
-				material_total_weight = convertToDecimalFormat(material_total_weight, decimalPlaces);
-                setFieldValueById("trxtransactiondetails-net_weight", material_total_weight);
 				break;
 		}
 	} else {
