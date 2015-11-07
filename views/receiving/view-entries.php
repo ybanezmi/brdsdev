@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TrxTransactions */
@@ -40,6 +40,9 @@ $this->title = 'View Entries';
     <?= GridView::widget([
         'dataProvider' => $data_provider,
         'filterModel'  => $search_model,
+        'bootstrap'=>true,
+		'options' => [],
+		'containerOptions'=>['style'=>'overflow: auto'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'], // @TODO: Remove id column
             'transaction_id',
@@ -63,21 +66,7 @@ $this->title = 'View Entries';
                                 }
             ],
             'batch',
-            ['attribute'    =>  'packaging_code',
-             'label'        =>  'Packaging Type',
-             'value'        =>  function ($model) {
-                                    if ($model['packaging_code'] != null && $model['pallet_type'] != null) {
-                                        $transaction = Yii::$app->modelFinder->findTransactionModel($model['transaction_id']);
-                                        if ($transaction != null) {
-                                            $packagingMaterial = Yii::$app->modelFinder->getPackagingMaterial(['material_code'     =>  $model['packaging_code'],
-                                                                                                                'plant_location'    =>  $transaction->plant_location,
-                                                                                                                'pallet_type'       =>  $model['pallet_type']]);
-                                            return $packagingMaterial->description;
-                                        }
-                                    }
-                                }
-            ],
-            'pallet_no',
+			'pallet_no',
             ['attribute'    =>  'net_weight',
              'label'        =>  'Quantity',
              'value'        =>  function ($model) {
@@ -103,13 +92,6 @@ $this->title = 'View Entries';
                                     }
                                 }
             ],
-            ['attribute'    =>  'pallet_weight',
-             'value'        =>  function ($model) {
-                                    if ($model['pallet_weight'] != null) {
-                                        return $model['pallet_weight'] . ' KG';
-                                    }
-                                }
-            ],
             ['attribute'    => 'manufacturing_date',
              'label'        => 'Manuf. Date',
              'value'        =>  function ($model) {
@@ -123,6 +105,27 @@ $this->title = 'View Entries';
              'value'        =>  function ($model) {
                                     if ($model['expiry_date'] != null) {
                                         return date('d-M-Y', strtotime($model['expiry_date']));
+                                    }
+                                }
+            ],
+            ['attribute'    =>  'pallet_weight',
+             'value'        =>  function ($model) {
+                                    if ($model['pallet_weight'] != null) {
+                                        return $model['pallet_weight'] . ' KG';
+                                    }
+                                }
+            ],
+            ['attribute'    =>  'packaging_code',
+             'label'        =>  'Packaging Type',
+             'value'        =>  function ($model) {
+                                    if ($model['packaging_code'] != null && $model['pallet_type'] != null) {
+                                        $transaction = Yii::$app->modelFinder->findTransactionModel($model['transaction_id']);
+                                        if ($transaction != null) {
+                                            $packagingMaterial = Yii::$app->modelFinder->getPackagingMaterial(['material_code'     =>  $model['packaging_code'],
+                                                                                                                'plant_location'    =>  $transaction->plant_location,
+                                                                                                                'pallet_type'       =>  $model['pallet_type']]);
+                                            return $packagingMaterial->description;
+                                        }
                                     }
                                 }
             ],
