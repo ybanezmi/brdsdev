@@ -1372,14 +1372,8 @@ function onSelectMaterial(shouldNotClear) {
     populateBatchDropdown(getFieldValueById("trxtransactiondetails-material_code"), getQueryVariable('id'));
 	
 	var sledValue =Number(getMaterialSled());
-	if(0 < sledValue)
-	{
-		document.getElementById("trxtransactiondetails-manufacturing_date").nextSibling.style.display = 'none';
-	}
-	else
-	{
-		document.getElementById("trxtransactiondetails-manufacturing_date").nextSibling.style.display = 'inline';
-	}
+	var disableManuDate = (0 < sledValue) ? true:false;
+	$( "#trxtransactiondetails-manufacturing_date" ).datepicker( "option", "disabled", disableManuDate );
 }
 
 function clearAllFields() {
