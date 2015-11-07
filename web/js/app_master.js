@@ -1370,10 +1370,15 @@ function onSelectMaterial(shouldNotClear) {
     populateKittingType();
     getMaterialConversion();
     populateBatchDropdown(getFieldValueById("trxtransactiondetails-material_code"), getQueryVariable('id'));
-	
-	var sledValue =Number(getMaterialSled());
-	var disableManuDate = (0 < sledValue) ? true:false;
-	$( "#trxtransactiondetails-manufacturing_date" ).datepicker( "option", "disabled", disableManuDate );
+
+    enableDisableManufacturingDate();
+}
+
+function enableDisableManufacturingDate()
+{
+    var sledValue =Number(getMaterialSled());
+    var disableManuDate = (0 < sledValue) ? true:false;
+    $( "#trxtransactiondetails-manufacturing_date" ).datepicker( "option", "disabled", disableManuDate );
 }
 
 function clearAllFields() {
@@ -1427,6 +1432,10 @@ function toggleUse(id) {
         document.getElementById('batch-text').children[1].children[0].disabled = false;
         document.getElementById('batch-text').children[1].children[0].setAttribute('class', 'uborder help-25percent');
     }
+
+    $('#trxtransactiondetails-expiry_date').datepicker('option','disabled',useFlag);
+    $('#trxtransactiondetails-manufacturing_date').datepicker('option','disabled',useFlag);
+    enableDisableManufacturingDate();
     populateManufacturingExpiryDateFromBatch($("#trxtransactiondetails-batch:enabled").val(), getFieldValueById("material_code"));
 }
 
