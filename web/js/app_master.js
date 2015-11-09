@@ -395,18 +395,29 @@ function checkMaterialSled(dateType) {
     var materialSled = getMaterialSled();
 
 	if (null != materialSled && materialSled != 0 && dateType == "manufacturing_date") {
-		setFieldValueById("trxtransactiondetails-expiry_date",
-			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),materialSled,"add"));
+		var calculatedDate = calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),materialSled,"add");
+		if(calculatedDate)
+		{
+			setFieldValueById("trxtransactiondetails-expiry_date",calculatedDate);
+		}
 	}
 
     if (null != materialSled && materialSled != 0 && dateType == "expiry_date") {
-        setFieldValueById("trxtransactiondetails-manufacturing_date",
-            calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),materialSled,"subtract"));
+		var calculatedDate = calculateDate(getFieldValueById("trxtransactiondetails-expiry_date"),materialSled,"subtract");
+		if(calculatedDate)
+		{
+			setFieldValueById("trxtransactiondetails-manufacturing_date",calculatedDate);
+		}
     }
 }
 
 /* function to add/subtract days in a date string */
 function calculateDate(strDate, days, type) {
+	if(!strDate)
+	{
+		return;
+	}
+	
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var date = strDate.split('-');
     
@@ -1427,6 +1438,8 @@ function calculateTotalWeight() {
 var useFlag = 0;
 function toggleUse(id) {
     var btnLabel = document.getElementById('btn-use').innerHTML;
+	var materialSled =  getMaterialSled();
+	
     if (!useFlag) {
         useFlag = 1;
         document.getElementById('batch-dropdown').style.display = 'block';
@@ -1435,6 +1448,11 @@ function toggleUse(id) {
         document.getElementById('batch-text').style.display = 'none';
         document.getElementById('batch-text').children[1].children[0].disabled = true;
         document.getElementById('batch-text').children[1].children[0].setAttribute('class', 'uborder help-25percent disabled');
+		
+		if(materialSled)
+		{
+			checkMaterialSled("expiry_date");
+		}
     } else {
         useFlag = 0;
         document.getElementById('batch-dropdown').style.display = 'none';
@@ -1447,7 +1465,12 @@ function toggleUse(id) {
 
     $('#trxtransactiondetails-expiry_date').datepicker('option','disabled',useFlag);
     $('#trxtransactiondetails-manufacturing_date').datepicker('option','disabled',useFlag);
-    enableDisableManufacturingDate();
+	
+	if( materialSled > 0 )
+	{
+		enableDisableManufacturingDate();
+	}
+    
     populateManufacturingExpiryDateFromBatch($("#trxtransactiondetails-batch:enabled").val(), getFieldValueById("material_code"));
 }
 
@@ -1518,6 +1541,8 @@ function populateManufacturingExpiryDateFromBatch(batch, materialCode) {
                 // set expiry date
                 if (jsonData.expiry_date) {
                     setFieldValueById('trxtransactiondetails-expiry_date', jsonData.expiry_date);
+					
+					checkMaterialSled("expiry_date");
                 } else {
                     setFieldValueById('trxtransactiondetails-expiry_date', '');
                 }

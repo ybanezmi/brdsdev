@@ -1422,8 +1422,8 @@ class ReceivingController extends Controller
 
         if ($transactionDetailsModel != null && count($transactionDetailsModel) > 0) {
             $response['material_code'] = $transactionDetailsModel->material_code;
-            $response['manufacturing_date'] = date('d-M-y', strtotime($transactionDetailsModel->manufacturing_date));
-            $response['expiry_date'] = date('d-M-y', strtotime($transactionDetailsModel->expiry_date));
+            $response['manufacturing_date'] = date('d-M-Y', strtotime($transactionDetailsModel->manufacturing_date));
+            $response['expiry_date'] = date('d-M-Y', strtotime($transactionDetailsModel->expiry_date));
         }
 
         echo json_encode($response);
