@@ -1402,6 +1402,10 @@ function enableDisableManufacturingDate()
     var sledValue =Number(getMaterialSled());
     var disableManuDate = (0 < sledValue) ? true:false;
     $( "#trxtransactiondetails-manufacturing_date" ).datepicker( "option", "disabled", disableManuDate );
+    
+    // Set back from disabled to read-only
+    $('#trxtransactiondetails-expiry_date').attr('disabled', false);
+    $('#trxtransactiondetails-manufacturing_date').attr('disabled', false);
 }
 
 function clearManufacturingExpiryDates()
@@ -1471,7 +1475,7 @@ function toggleUse(id) {
 
     $('#trxtransactiondetails-expiry_date').datepicker('option','disabled',useFlag);
     $('#trxtransactiondetails-manufacturing_date').datepicker('option','disabled',useFlag);
-	
+
 	if( materialSled > 0 )
 	{
 		enableDisableManufacturingDate();
