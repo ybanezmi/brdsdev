@@ -127,7 +127,7 @@ use yii\bootstrap\Alert;
                  'template' => '<div class="control-group" id="batch-text">{label}
                                     <div class="f-inline-size">{input}
                                     <button class="btn btn-primary help-15percent"
-                                        onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());"
+                                        onclick="setFieldValueById(&quot;trxtransactiondetails-batch&quot;,getTimestamp());clearManufacturingExpiryDates();"
                                         type="button">INT</button>
                                     <button id="btn-use" class="btn btn-primary help-15percent"
                                         onclick="toggleUse(this.id);"

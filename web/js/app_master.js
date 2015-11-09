@@ -1404,6 +1404,12 @@ function enableDisableManufacturingDate()
     $( "#trxtransactiondetails-manufacturing_date" ).datepicker( "option", "disabled", disableManuDate );
 }
 
+function clearManufacturingExpiryDates()
+{
+    setFieldValueById("trxtransactiondetails-manufacturing_date", "");
+    setFieldValueById("trxtransactiondetails-expiry_date", "");		
+}
+
 function clearAllFields() {
     setFieldValueById("trxtransactiondetails-batch", "");
     setFieldValueById("trxtransactiondetails-manufacturing_date", "");
