@@ -1569,8 +1569,11 @@ function scanPalletBarcode(materialCodeId, netWTId) {
         var barcode = getFieldValueById(materialCodeId).substring(0, 12);
         var netWT = getFieldValueById(materialCodeId).substring(12, 20).replace(/^0+/, '');
 
-        setFieldValueById(materialCodeId, barcode, true);
-        setFieldValueById(netWTId, netWT, true);
+        setFieldValueById(materialCodeId, "", true);
+        setTimeout(function(){
+            setFieldValueById("trxtransactiondetails-material_code", barcode, true);
+            setFieldValueById(netWTId, netWT, true);
+        },5000);
     }
 }
 
