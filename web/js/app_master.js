@@ -393,6 +393,7 @@ function getTimestamp() {
 /* function to check material sled */
 function checkMaterialSled(dateType) {
     var materialSled = getMaterialSled();
+
 	if (null != materialSled && materialSled != 0 && dateType == "manufacturing_date") {
 		setFieldValueById("trxtransactiondetails-expiry_date",
 			calculateDate(getFieldValueById("trxtransactiondetails-manufacturing_date"),materialSled,"add"));
@@ -408,9 +409,20 @@ function checkMaterialSled(dateType) {
 function calculateDate(strDate, days, type) {
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var date = strDate.split('-');
-    var year = date[2];
-    var month = monthNames.indexOf(date[1]);
-    var day = date[0];
+    
+	if(isNaN(date[1])) //js formatted date
+	{
+		var year = date[2];
+		var month = monthNames.indexOf(date[1]);
+		 var day = date[0];
+	}
+	else //mysql formatted date
+	{
+		var year = date[0];
+		var day = date[2];
+		var month = date[1] - 1;
+	}
+
 	var newDate = new Date(year, month, day);
 
 	if (type == 'add') {
