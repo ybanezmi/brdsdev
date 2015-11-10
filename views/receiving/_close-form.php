@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 		    	$form = ActiveForm::begin([
 		    	'options' => ['class' => 'form-horizontal'],
 		    	'fieldConfig' => [
-		    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div></div>',
+		    		'template' => '<div class="control-group">{label}<div class="f-full-size">{input}</div><div class=\"col-lg-8\">{error}</div></div>',
 		    	]
 		    ]); ?>
 
@@ -40,7 +40,7 @@ use yii\widgets\ActiveForm;
 						['template' 	=> '<div class="control-group">{label}<div>{input}
 											<button class="btn btn-primary help-20percent" onclick="js: viewTransactionSummary(getFieldValueById(\'trxtransactiondetails-transaction_id\'), getFieldValueRadioByName(\'transaction_type\')); return false;"
 											name="btn-transaction-summary">Summary</button>
-											</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
+											</div><div class=\"col-lg-8\">{error}</div></div>'])->dropDownList($transaction_list, ['class'	=> 'uborder help-50percent',
 																							  'prompt'	=> '-- Select a transaction --',
 																							  'onchange' => 'getTransactionByType(getFieldValueById("trxtransactiondetails-transaction_id"),
 																							  					document.getElementsByName("transaction_type")[0].checked,

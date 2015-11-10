@@ -815,22 +815,17 @@ function getTransactionListByType(code, brds_type, sap_type){
         transaction_type = 'sap';
     }
     load('get-transaction-list?id=' + code + '&type=' + transaction_type,function(xhr) {
-        document.getElementById('trxtransactiondetails-transaction_id').innerHTML='';
-
         var jsonData = JSON.parse(xhr.responseText);
         var x  = document.getElementById('trxtransactiondetails-transaction_id');
-        //setFieldValueByName('transaction-list', ['']);
 
-        // set prompt value
-        var promptOption = document.createElement('option');
-        promptOption.text = "-- Select a transaction --";
-        x.add(promptOption);
+        // clear options
+		x.options.length = 1;
 
         if(null != jsonData){
             for(var i = 0; i < jsonData.length; i++){
                 var option  = document.createElement('option');
                 option.text = jsonData[i];
-                x.add(option, x[i+1]);
+                x[i+1] = option;
             }
         }
 
