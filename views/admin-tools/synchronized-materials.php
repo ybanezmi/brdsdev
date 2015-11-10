@@ -56,13 +56,13 @@ $this->title = 'Synch Materials';
 
 
 			<?= $form->field($customer_model, 'name')->dropDownList($customer_list,
-			['class'	=> 'uborder help-80percent',
+			['class'	=> 'uborder help-100percent',
 			'prompt'	=> '-- Select a customer --',
 			'onchange'	=> 'getMateriaList(getFieldValueById("mstcustomer-name"));
 			hideHTMLById("material-list_id"); hideHTMLById("list-materials");'])->label('CUSTOMER PRODUCT', ['class' => 'control-label-f']);
 			?>
 
-			<select id="material-list_id" class="uborder help-80percent"><option></option></select>
+			<select id="material-list_id" class="uborder help-80percent" style="font-family: consolas;"><option></option></select>
 
 			<div class="one-column-button pdt-one-column-button" style="width:100%;">
 			<div class="submit-button ie6-submit-button">

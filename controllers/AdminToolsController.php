@@ -442,9 +442,7 @@ class AdminToolsController extends Controller
 
 	public function actionGetMaterialList($id) {
 		$material_list = Yii::$app->modelFinder->getMaterialList(null, ['like', 'item_code', $id]);
-		$material_list_result = ArrayHelper::toArray($material_list);
-
-		echo json_encode($material_list_result);
+		echo json_encode($this->formatMaterialList($material_list));
 	}
 
     public function actionGetTransactionList($id) {
@@ -580,4 +578,30 @@ class AdminToolsController extends Controller
     	return $this->render('view-transaction', ['dataProvider' => $trxDataProvider,
     											  'searchModel' => $trxSearchModel,]);
     }
+	
+	public function formatMaterialList($material_model)
+	{
+		$material_list = ArrayHelper::map($material_model, 'item_code', 'description');
+
+		$description_max_length = 40;
+		$space_char = '&nbsp;';
+		foreach ($material_list as $key => $value)
+		{
+			$value_length = strlen($value);
+			
+			if($description_max_length < $value_length)
+			{
+				$value = substr($value, 0, $description_max_length);
+			}
+			else
+			{
+				$space_padding = $description_max_length - $value_length;
+				$value = $value . str_repeat($space_char, $space_padding);
+			}
+			
+			$material_list[$key] = html_entity_decode("{$value}{$space_char}{$space_char}-{$space_char}{$space_char}{$key}");
+		}
+		
+		return $material_list;
+	}
 }
