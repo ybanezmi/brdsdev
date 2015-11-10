@@ -489,7 +489,7 @@ class ReceivingController extends Controller
     	} else {
 			$transaction_model = Yii::$app->modelFinder->findTransactionModel($id);
 			$customer_model = Yii::$app->modelFinder->findCustomerModel($transaction_model->customer_code);
-			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $transaction_model->customer_code],['like','plant_location',$transaction_model->plant_location]]);
+			$material_model = Yii::$app->modelFinder->getMaterialList(null, ['and',['like', 'item_code', $transaction_model->customer_code]]);
             $packaging_model = Yii::$app->modelFinder->getPackagingList(null, null, 'pallet_type');
             $packaging_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
                  ['like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
@@ -1023,7 +1023,7 @@ class ReceivingController extends Controller
                 }
             }
 			
-			if(!$createToFlag['to_error'])
+			if(!isset($createToFlag['to_error']))
 			{
 				$session = Yii::$app->session;
 				$session->set('createToFlag', $createToFlag);
@@ -1222,8 +1222,7 @@ class ReceivingController extends Controller
 
     public function actionGetKittingType($id) {
         $kitting_type_model = Yii::$app->modelFinder->getPackagingMaterialList(null, ['and',
-            ['pallet_type' => Yii::$app->request->get('id'),
-             'plant_location' => Yii::$app->request->get('plant_location')],
+            ['pallet_type' => Yii::$app->request->get('id')],
             ['not like', 'description', Yii::$app->params['PALLET']],['like', 'material_code', 'VERP%',false]]);
 
         $kitting_type_list['material_code'] = ArrayHelper::getColumn($kitting_type_model, 'material_code');
@@ -1409,6 +1408,30 @@ class ReceivingController extends Controller
         echo json_encode($response);
     }
 
+	public function actionValidateMaterialLocation($material_code)
+	{
+		$material_model = Yii::$app->modelFinder->findMaterialModel($material_code);
+		
+		if(false === stripos($material_model->plant_location,Yii::$app->user->identity->assignment))
+		{
+			$response['error'] =  'Material has not initially configured at this plant. Selection not allowed.';
+		}
+		
+		echo json_encode($response);
+	}
+	
+	public function actionValidateKittingTypeLocation($material_code)
+	{
+		$packaging_material_model = Yii::$app->modelFinder->getPackagingMaterial(['material_code' => $material_code]);
+		
+		if(false === stripos($packaging_material_model->plant_location,Yii::$app->user->identity->assignment))
+		{
+			$response['error'] =  'Kitting Type has not initially configured at this plant. Selection not allowed.';
+		}
+		
+		echo json_encode($response);
+	}
+	
     public function actionGetBatch($id, $desc) {
         $batchList = null;
         $transactionDetailsModel = Yii::$app->modelFinder->getTransactionDetailList(null, null, null,

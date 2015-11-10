@@ -217,7 +217,7 @@ use yii\bootstrap\Alert;
                                                     'style' => 'font-size: 16px',
                                                     'prompt'    => '-- Select a kitting type --',
                                                     'value'    => Yii::$app->request->post('TrxTransactionDetails[kitting_type]'),
-                                                    'onchange'  => 'validateTransactionPalletType();'])->label('KITTING TYPE'); ?>
+                                                    'onchange'  => 'validateTransactionPalletType();validateKittingTypeLocation(this.value);'])->label('KITTING TYPE'); ?>
         <?= $form->field($transaction_detail_model, 'kitted_unit',
                 ['inputOptions' => ['class' => 'uborder help-25percent'],
                 'labelOptions' => ['class' => 'control-label',

@@ -574,6 +574,40 @@ function validatePalletType(palletNo, materialCode, transactionId) {
     }
 }
 
+function validateMaterialLocation(materialCode)
+{
+	if(materialCode)
+	{
+        load('validate-material-location?&material_code=' + materialCode, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                if (jsonData.error) {
+                    alert(jsonData.error);
+					setFieldValueById('trxtransactiondetails-material_code', '', false);
+                }
+            }
+        });
+	}
+}
+
+function validateKittingTypeLocation(materialCode)
+{
+	if(materialCode)
+	{
+        load('validate-kitting-type-location?&material_code=' + materialCode, function(xhr) {
+            var jsonData = JSON.parse(xhr.responseText);
+
+            if (null != jsonData) {
+                if (jsonData.error) {
+                    alert(jsonData.error);
+					setFieldValueById('trxtransactiondetails-kitting_code', '', false);
+                }
+            }
+        });
+	}
+}
+
 /* new function to validate kitting type of material and transaction_detail */
 function validateKittingType(palletNo, materialCode, transactionId) {
     if (palletNo && transactionId) {
@@ -760,7 +794,8 @@ function populateKittingType() {
 
         // set prompt value
         var promptOption = document.createElement('option');
-        promptOption.text = "-- Select a kitting type --";
+         promptOption.text = "-- Select a kitting type --";
+		 promptOption.value = '';
         x.add(promptOption);
 
         if(null != jsonData){
@@ -1381,6 +1416,9 @@ function onSelectMaterial(shouldNotClear) {
     if (!shouldNotClear) {
         clearAllFields();
     }
+	
+	validateMaterialLocation(getFieldValueById("trxtransactiondetails-material_code"));
+	
     if (getFieldValueById("trxtransactiondetails-material_code") != '-- Select a product --') {
         setFieldValueById("material_code",getFieldValueById("trxtransactiondetails-material_code"));
     }
