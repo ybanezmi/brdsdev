@@ -909,11 +909,18 @@ class ReceivingController extends Controller
         } else {
             // Do nothing
         }
-
-        return $this->render('create-to-select-pallet', [
-                'transactionModel'  => $transactionModel,
-                'palletStatus'      => $palletStatus,
-        ]);
+		
+		$params = ['transactionModel' => $transactionModel, 'palletStatus'=>$palletStatus];
+		
+		$session = Yii::$app->session;
+		$createToFlag = $session->get('createToFlag');
+		if($createToFlag)
+		{
+			$session->remove('createToFlag');
+			$params['createToFlag'] = $createToFlag;
+		}
+		
+        return $this->render('create-to-select-pallet', $params);
 	}
 
     public function actionCreateTo()
@@ -1015,6 +1022,13 @@ class ReceivingController extends Controller
                     $createToFlag['to_error'][$palletKey] = 'Failed to create Transfer Order for Pallet #: ' . $palletKey . ' Error: ' . $palletValue['to_error'] . '<br/>';
                 }
             }
+			
+			if(!$createToFlag['to_error'])
+			{
+				$session = Yii::$app->session;
+				$session->set('createToFlag', $createToFlag);
+				$this->redirect(['create-to-select-pallet']);
+			}
         } else if (null !== Yii::$app->request->post('reject') && null !== Yii::$app->request->post('selection')) {
             $pallets = array_unique(Yii::$app->request->post('selection'));
             $palletsStatus = array();

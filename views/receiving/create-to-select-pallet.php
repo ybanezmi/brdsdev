@@ -13,7 +13,26 @@ $this->title = 'Create T.O.';
 
 	<div class="wrapper-150">
         <h1 class="page-title">Create T.O.</h1>
+		
+		<div class="one-column pdt-one-column" >
+		<?php
+			  if (isset($createToFlag['to_success']) && count($createToFlag['to_success']) > 0) {
 
+				foreach ($createToFlag['to_success'] as $key => $value) {
+					Alert::begin([
+						'options' => [
+							'class' => 'alert-success',
+						],
+						'body' => $value,
+					]);
+
+					Alert::end();
+				}
+
+			  }
+		?>
+		</div>
+		
 		<div class="one-column help-bg-gray pdt-one-column" >
 		    <?php
     		      if ($palletStatus['close_success']) {
@@ -75,27 +94,6 @@ $this->title = 'Create T.O.';
                                 <?= Html::textInput('customer', null, ['class'    => 'uborder disabled help-40percent',
                                                                        'disabled' => 'disabled',
                                                                        'id'       => 'customer']); ?>
-                            </div>
-                        </div>
-		            	<div class="control-group">
-		            		<?= Html::label('Number of PALLET(S)', 'pallet_count', ['class' => 'control-label']) ?>
-		            		<div class="f-inline-size">
-		            			<?= Html::textInput('pallet_count', null, ['class'     => 'uborder disabled help-20percent',
-		            			                                           'disabled'  => 'disabled']); ?>
-		            		</div>
-		            	</div>
-		            	<div class="control-group">
-		            		<?= Html::label('PALLET WEIGHT', 'pallet_weight', ['class' => 'control-label']) ?>
-		            		<div class="f-inline-size">
-		            			<?= Html::textInput('pallet_weight', null, ['class'    => 'uborder disabled help-20percent',
-		            									   		   			'disabled' => 'disabled']); ?>
-		            		</div>
-		            	</div>
-                        <div class="control-group">
-                            <?= Html::label('PALLET TYPE', 'pallet_type', ['class' => 'control-label']) ?>
-                            <div class="f-inline-size">
-                                <?= Html::textInput('pallet_type', null, ['class'       => 'uborder disabled help-40percent',
-                                                                          'disabled'    => 'disabled']); ?>
                             </div>
                         </div>
                         <div class="control-group">
