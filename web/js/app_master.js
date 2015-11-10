@@ -1023,7 +1023,7 @@ function getPalletDetailsForEdit(id) {
                 setFieldValueById('mstcustomer-name', jsonData.customer_code, true);
                 setTimeout (function() {
                   setFieldValueById('trxtransactiondetails-transaction_id', jsonData.transaction_id);
-                }, 200);
+                }, 1000);
             } else {
                 // hide pallet details panel
                 hideHTMLById("pallet-details");

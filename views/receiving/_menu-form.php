@@ -315,7 +315,7 @@ window.onload=function() {
     onSelectMaterial(true);
     validatePalletType(getFieldValueById("trxtransactiondetails-pallet_no"), getFieldValueById("trxtransactiondetails-material_code"), getFieldValueById("trxtransactions-id"));
 }
-setTimeout(function(){calculateTotalWeight();checkMaterialSled("expiry_date");},1000);
+setTimeout(function(){calculateTotalWeight();checkMaterialSled("expiry_date");},2000);
 
 </script>
 
